@@ -29,7 +29,7 @@ If you don't want to wait, you can download and install some sheep manually. The
 <p><br>
 ==Problems with Old Laptops and PCs==
 
-If on Windows, Electric Sheep crashes instantly when run, try turning on "Direct Draw" in the advanced settings tab. If that doesn't work, check the log file (in Windows it is in C:\Documents and Settings\All Users\Application Data\ElectricSheep\Logs). If you get 'Failed to create Direct3D 9 device', your graphics chipset probably can't run it.
+If on Windows, Electric Sheep crashes instantly when run, try turning on "Direct Draw" in the advanced settings tab. If that doesn't work, turn on logging then check the log file (in Windows it is in C:\Documents and Settings\All Users\Application Data\ElectricSheep\Logs). If you get 'Failed to create Direct3D 9 device', your graphics chipset probably can't run it.
 <p><br>
 ----
 <p><br>

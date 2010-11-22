@@ -1,0 +1,66 @@
+=Electric Sheep Frequently Asked Questions= 
+
+===Top Questions=== 
+ * [FAQ#Getting_Sheep Why don't I see any sheep, or just one or two sheep?]
+ * [FAQ#Problems_with_Old_Laptops_and_PCs Does it crash on your old PC?]
+ * [FAQ#Credit_Vanishes_or_Missing I don't see my name on the credit page, am I rendering?]
+ * [FAQ#Security_and_Viruses Do the Sheep put my computer at risk to viruses?]
+ * [FAQ#BitTorrent Why not use BitTorrent?]
+<p><br>
+----
+<p><br>
+==Getting Sheep==
+
+Are you not getting enough sheep? If you just installed the software your cache directory is empty, the client needs to download its first sheep. Leave the screen saver running overnight (make sure to disable power settings that might hibernate your computer).
+
+The server is heavily loaded, it might take some time before it downloads many sheep. Please be patient.
+
+If you have a laptop make sure the power saving settings are not turning off the screen-saver.
+
+===Manual Download=== 
+
+If you don't want to wait, you can download and install some sheep manually. There are two ways to do this:
+
+1. To download a packs of 100s, follow the directions in the [http://community.electricsheep.org/node/247 forum].
+
+2. To download one at a time, go to the [http://v2d7c.sheepserver.net/cgi/status.cgi server] , pick a sheep, click on the icon to go to its own page. Then click again on the full-size image to save it to your hard disk in the same location as you put the packs (see the link above).
+<p><br>
+----
+<p><br>
+==Problems with Old Laptops and PCs==
+
+If on Windows, Electric Sheep crashes instantly when run, try turning on "Direct Draw" in the advanced settings tab. If that doesn't work, check the log file (in Windows it is in C:\Documents and Settings\All Users\Application Data\ElectricSheep\Logs). If you get 'Failed to create Direct3D 9 device', your graphics chipset probably can't run it.
+<p><br>
+----
+<p><br>
+==Credit Vanishes or Missing==
+
+The [http://v2d7c.sheepserver.net/cgi/status.cgi?&detail=credit credits page] only tallies the contributions to the current flock. Your credit dies with the sheep. If it's downloading your client is probably rendering fine.
+
+There's also a bug in how the server tallies renders where only 1 in 4 frames is counted. That's a lot, but it is fair, so it should not affect the ranking.
+<p><br>
+----
+<p><br>
+==Security and Viruses==
+
+===Do the Sheep put my computer at risk to viruses?=== 
+
+Nobody's had any problems, and the Linux version was audited by a security company, so I think it's safe.  However, I cannot guarantee that a criminal hasn't broken into my web site and infected the installer. The Electric Sheep is listed on [http://www.nonags.com/ nonags.com], which screens its content for spam and virus risks.
+
+Anytime you download and run software from the internet there's a risk.
+
+Some people have reported that their firewall alerted on the Sheep, but that was the and old version many years ago that had P2P networking.  We think that confuses some security software.
+
+===Does it share or use any information from my computer?===
+
+No it does not violate your privacy in any way.  The only data sent to the server are your votes (if you choose to). And the rendered frames, which are made according to instructions received on the server, and are the same no matter who would have done them.
+<p><br>
+----
+<p><br>
+==BitTorrent==
+
+===Why not use BitTorrent to download the sheep?===
+
+We tried that already and only 10-15% of our users were able to seed, which wasn't enough to make it work. Instead we are focusing on the HTTP which is much more reliable, and adding a subscription system to pay for our bandwidth. Our goal is to keep it free for everyone, and at the same time make it sustainable ie pay our own bills. This is the [http://en.wikipedia.org/wiki/Freemium freemium] model.
+
+See http://community.electricsheep.org/node/787

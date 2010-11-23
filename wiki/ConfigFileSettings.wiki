@@ -1,0 +1,9 @@
+The Mac and Windows clients have a config file that saves the settings from the UI, and also a bunch of stuff that isn't exposed. If the program isn't running it's safe to edit this file with any text editor. Some of the values are internal and you should not touch them. Floating point values are not allowed. The values that you can change and what they do are documented below:
+
+  * *MedianLevel* 0-100 The percent of sheep when sorted by play count that are permissible to play. The default is 80, which means that 80% of the sheep are playable, and the 20% most played sheep are not playable. The sheep are only sorted periodically according to NormalInterval, see below.
+  * *AutoMedianLevel* true/false Determine the MedianLevel automatically based on the size of the flock instead of the above setting. If true then set the MedianLevel to 100% if the flock is 100MB or less, and 25% if 1000MB or more, and linear in between.
+  * *PlayCountDecayZ* 0-100 The percent rate to decay the play counts. If less than 100, then after the total plays exceeds PlayCountDecayY, then multiply all play counts by PlayCountDecayZ. The default value is 100, which disables this feature.
+  * *PlayCountDecayY* After playing this many sheep (a positive integer, default 2000) then apply PlayCountDecayZ as described above.
+  * *NormalInterval* How often in seconds to resort the sheep according to playcount (see MedianLevel above). The default is 600, which means 10 minutes.
+  * *DelayAfterRenderSeconds* How long to delay after completing rendering a frame before starting a new render. The default is 1 second.
+  * *RandomMedianLevel* true/false The effective MedianLevel (see above) is picked randomly between 100 and the regular value (as set by MedianLevel and AutoMedianLevel). It picks a new value once per NormalInterval.

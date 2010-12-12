@@ -33,6 +33,10 @@ reply is gzipped XML:
 {{{
 <list gen="244" size="800 592" retry="600">
 <sheep id="27045" type="0" state="done" time="1283912914" size="1688352" rating="102" first="27045" last="27045" url="http://v2d7c.sheepserver.net.nyud.net/gen/244/27045/sheep.avi"/>
+<sheep id="33860" type="0" state="done" time="1291465044" size="2513326" rating="91" first="33259" last="27045" url="http://v2d7c.sheepserver.net.nyud.net/gen/244/33860/sheep.avi"/>
 ...
 </list>
 }}}
+The first line has the generation and resolution for this flock.
+
+Each {{{sheep}}} element stands for a video that can be downloaded.  It should be stored as a file named like 00244=27045=27045=27045.avi or 00244=33860=33259=27045.avi for the two examples above.

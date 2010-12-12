@@ -1,0 +1,18 @@
+#summary The Client/Server Protocol
+
+= Introduction =
+
+The client and the server communicate with HTTP.  The server replies with XML structured data, images, and animations.
+
+= Details =
+
+When the client is installed it generates a 8-byte random unique ID, written with hex digits, eg FDB1C06A94A0FC87.  It is passed to all subsequent queries.
+
+When the client starts up it makes a redirection query.  the resulting hostname is used for all subsequent queries.  The redirection is cached.
+{{{
+http://community.sheepserver.net/query.php?q=redir&u=matthewcheartfield&p=BA16481C7087935615856F2EC0C3683B&v=FDB1C06A94A0FC87
+}}}
+reply:
+{{{
+<query><redir host="http://v2d7c.sheepserver.net/"/></query>
+}}}

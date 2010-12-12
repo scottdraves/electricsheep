@@ -4,9 +4,11 @@
 
 The client and the server communicate with HTTP.  The server replies with XML structured data, images, and animations.
 
-= Details =
+= On Install =
 
 When the client is installed it generates a 8-byte random unique ID, written with hex digits, eg FDB1C06A94A0FC87.  It is passed to all subsequent queries.
+
+= On Startup =
 
 When the client starts up it makes a redirection query.  the resulting hostname is used for all subsequent queries.  The redirection is cached.
 {{{
@@ -14,7 +16,7 @@ http://community.sheepserver.net/query.php?q=redir&u=$ACCOUNT&p=$HASH&v=$VERSION
 }}}
 For example:
 {{{
-http://community.sheepserver.net/query.php?q=redir&u=spot&p=D41D8CD98F00B204E9800998ECF8427E&v=LNX_2.7b12&i=8D94A5E812F4D8E9
+http://community.sheepserver.net/query.php?q=redir&u=spot&p=E42D7CD78F00B204E9800998ECF8427E&v=LNX_2.7b12&i=8D94A5E812F4D8E9
 }}}
 reply:
 {{{

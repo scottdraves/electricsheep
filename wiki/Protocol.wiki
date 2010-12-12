@@ -48,8 +48,9 @@ The files names have 4 components, each a 5 digit number.  The first is the gene
 A sheep that is a loop has the same number in all 3 places.
 
 A sheep that is an edge two different numbers for its first and last fields.  Sheep will play seamlessly if the keyframes match.  So if the last field of one sheep is the same as the first field of the next, then they will fit together.  For example, the following files make a continuous sequence:
-
+{{{
 00244=01423=01324=01251.avi
 00244=01368=01251=01260.avi
 00244=01260=01260=01260.avi
 00244=01314=01260=01229.avi
+}}}

@@ -10,7 +10,7 @@ When the client is installed it generates a 8-byte random unique ID, written wit
 
 When the client starts up it makes a redirection query.  the resulting hostname is used for all subsequent queries.  The redirection is cached.
 {{{
-http://community.sheepserver.net/query.php?q=redir&u=matthewcheartfield&p=BA16481C7087935615856F2EC0C3683B&v=FDB1C06A94A0FC87
+http://community.sheepserver.net/query.php?q=redir&u=$ACCOUNT&p=$HASH&v=$UID
 }}}
 reply:
 {{{

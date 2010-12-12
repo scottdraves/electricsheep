@@ -59,6 +59,6 @@ A sheep that is a loop has the same number for components 2, 3, and 4.  A sheep 
 
 To vote for a sheep issue this:
 {{{
-$HOST/list?u=$UID&v=$VERSION&id=$ID&vote=1
+$HOST/vote?u=$UID&v=$VERSION&id=$ID&vote=1
 }}}
 and against replace vote=1 with vote=-1.

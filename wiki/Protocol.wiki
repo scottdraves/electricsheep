@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The client and the server communicate with HTTP.  The server replies with XML structured data, images, and animations.
+The client and the server communicate with HTTP.  The server replies with XML structured data, images, and animations.  After the redirection, if the user has entered credentials, then they included in the HTTP requests using the Basic Authentication.
 
 = On Install =
 

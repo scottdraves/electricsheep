@@ -24,6 +24,12 @@ reply:
 <query><redir host="http://v2d7c.sheepserver.net/"/></query>
 }}}
 
+== Password Hash and Salt ==
+
+The password is stored and transmitted with "per-row salt".  We use md5 of the concatenation of the password, the username, and the salt string which is the constant "sh33p".  In pseudocode:
+{{{
+hash = md5(password + username + "sh33p")
+}}}
 = List Sheep =
 To get a directory of current live sheep the client fetches:
 {{{

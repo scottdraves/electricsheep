@@ -33,7 +33,7 @@ hash = md5(password + username + "sh33p")
 = List Sheep =
 To get a directory of current live sheep the client fetches:
 {{{
-$HOST/list?u=$UID&v=$VERSION
+$HOST/cgi/list?u=$UID&v=$VERSION
 }}}
 reply is gzipped XML:
 {{{
@@ -65,6 +65,6 @@ A sheep that is a loop has the same number for components 2, 3, and 4.  A sheep 
 
 To vote for a sheep issue this:
 {{{
-$HOST/vote?u=$UID&v=$VERSION&id=$ID&vote=1
+$HOST/cgi/vote?u=$UID&v=$VERSION&id=$ID&vote=1
 }}}
 and against replace vote=1 with vote=-1.

@@ -54,6 +54,16 @@ Some people have reported that their firewall alerted on the Sheep, but that was
 ===Does it share or use any information from my computer?===
 
 No it does not violate your privacy in any way.  The only data sent to the server are your votes (if you choose to). And the rendered frames, which are made according to instructions received on the server, and are the same no matter who would have done them.
+
+===What does it do over the network, and what servers does it contact?===
+
+The screensaver client does access a number of servers over the internet, in order to coordinate the work of creating the sheep, as well as downloading them.  It uses the HTTP protocol over port 80, which is quite generic and standard.  You can set a proxy in the settings dialog as needed.  Since it only makes outgoing connections, you shouldn't need to configure any firewall you might have.  But if you are curious, or you use something like the Little Snitch to monitor and control your network access, the domain names and IP#s used are listed here:
+
+|| number || name || 
+|| 74.207.242.239 || {{{*}}}.sheepserver.net ||
+|| 207.241.{{{*}}}.{{{*}}} || {{{*}}}.us.archive.org ||
+
+
 <p><br>
 ----
 <p><br>

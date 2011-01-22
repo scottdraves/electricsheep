@@ -45,11 +45,9 @@ There's also a bug in how the server tallies renders where only 1 in 4 frames is
 
 ===Do the Sheep put my computer at risk to viruses?=== 
 
-Nobody's had any problems, and the Linux version was audited by a security company, so I think it's safe.  However, I cannot guarantee that a criminal hasn't broken into my web site and infected the installer. The Electric Sheep is listed on [http://www.nonags.com/ nonags.com], which screens its content for spam and virus risks.
+Nobody's had any problems, and the Linux version was audited by a security company, so I think it's safe.  The Electric Sheep is listed on [http://www.nonags.com/ nonags.com], which screens its content for spam and virus risks.  However, I cannot guarantee that a criminal hasn't broken into my web site and infected the installer. Anytime you download and run software from the internet there's a risk.
 
-Anytime you download and run software from the internet there's a risk.
-
-Some people have reported that their firewall alerted on the Sheep, but that was the and old version many years ago that had P2P networking.  We think that confuses some security software.
+Some people have reported that their firewall alerted on the Sheep, but that was an old version many years ago that had P2P networking.  We think that confused some security software.
 
 ===Does it share or use any information from my computer?===
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="curlTest" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug Win32">
+				<Option output="..\Runtime\curlTest" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\Runtime" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="..\Runtime\curlTest" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\Runtime" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="..\Common" />
+			<Add directory="..\lua5.1\include" />
+			<Add directory="..\Networking" />
+		</Compiler>
+		<Linker>
+			<Add library="..\Common\libCommon.a" />
+			<Add library="..\tinyXml\libtinyXml.a" />
+			<Add library="..\Runtime\liblua5.a" />
+			<Add library="..\Networking\libNetworking.a" />
+			<Add library="C:\Program Files (x86)\CodeBlocks\DevPacks\lib\libcurldll.a" />
+			<Add library="zlib" />
+		</Linker>
+		<Unit filename="luacurl.cpp" />
+		<Unit filename="luacurl.h" />
+		<Unit filename="luazlib.cpp" />
+		<Unit filename="luazlib.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="myapp.cpp" main="-- None --" init_handlers="necessary" language="CPP" />
+			</wxsmith>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

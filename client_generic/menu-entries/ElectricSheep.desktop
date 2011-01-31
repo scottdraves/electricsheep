@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=ElectricSheep
+Comment=Electric Sheep is a distributed screen-saver that harnesses idle computers into a render farm with the purpose of animating and evolving artificial life-forms. See www.electricsheep.org.  This is version 2.7b12
+TryExec=electricsheep
+Exec=electricsheep
+Terminal=false
+Type=Application
+Categories=AudioVideo;

@@ -1,0 +1,103 @@
+# depslib dependency file v1.0
+1149266230 source:q:\work\public\electricsheep\lua5.1\src\luac.c
+	<errno.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"lua.h"
+	"lauxlib.h"
+	"ldo.h"
+	"lfunc.h"
+	"lmem.h"
+	"lobject.h"
+	"lopcodes.h"
+	"lstring.h"
+	"lundump.h"
+
+1199374874 q:\work\public\electricsheep\lua5.1\src\lua.h
+	<stdarg.h>
+	<stddef.h>
+	"luaconf.h"
+
+1200676068 q:\work\public\electricsheep\lua5.1\src\luaconf.h
+	<limits.h>
+	<stddef.h>
+	<unistd.h>
+	<io.h>
+	<stdio.h>
+	<stdio.h>
+	<readline/readline.h>
+	<readline/history.h>
+	<assert.h>
+	<math.h>
+	<unistd.h>
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lauxlib.h
+	<stddef.h>
+	<stdio.h>
+	"lua.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\ldo.h
+	"lobject.h"
+	"lstate.h"
+	"lzio.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lobject.h
+	<stdarg.h>
+	"llimits.h"
+	"lua.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\llimits.h
+	<limits.h>
+	<stddef.h>
+	"lua.h"
+
+1199373638 q:\work\public\electricsheep\lua5.1\src\lstate.h
+	"lua.h"
+	"lobject.h"
+	"ltm.h"
+	"lzio.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\ltm.h
+	"lobject.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lzio.h
+	"lua.h"
+	"lmem.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lmem.h
+	<stddef.h>
+	"llimits.h"
+	"lua.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lfunc.h
+	"lobject.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lopcodes.h
+	"llimits.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lstring.h
+	"lgc.h"
+	"lobject.h"
+	"lstate.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lgc.h
+	"lobject.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\lundump.h
+	"lobject.h"
+	"lzio.h"
+
+1174864658 source:q:\work\public\electricsheep\lua5.1\src\print.c
+	<ctype.h>
+	<stdio.h>
+	"ldebug.h"
+	"lobject.h"
+	"lopcodes.h"
+	"lundump.h"
+
+1198760544 q:\work\public\electricsheep\lua5.1\src\ldebug.h
+	"lstate.h"
+
+1202094046 source:q:\work\public\electricsheep\lua5.1\src\lua.rc
+

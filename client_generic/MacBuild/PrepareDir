@@ -1,0 +1,3 @@
+#!/bin/sh
+
+sudo -u "$USER" mkdir -p "$2"

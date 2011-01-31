@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1134052750 source:q:\work\public\electricsheep\lua5.1\etc\bin2c.c
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+

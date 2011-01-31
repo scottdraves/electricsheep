@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ContentDownloader" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libContentDownloader" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="libContentDownloader" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Debug Win32">
+				<Option output="libContentDownloader" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="libContentDownloader" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-g" />
+					<Add option="-DNDEBUG" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32 Evoke">
+				<Option output="libContentDownloader" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O" />
+					<Add option="-DNDEBUG" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-W" />
+			<Add option="-D_LIB" />
+			<Add option="-DBOOST_ALL_NO_LIB" />
+			<Add option="-D_FILE_OFFSET_BITS=64" />
+			<Add option="-DBOOST_THREAD_USE_LIB" />
+			<Add option="-DTORRENT_BUILDING_STATIC" />
+			<Add option="-DTORRENT_LINKING_STATIC" />
+			<Add option="-DLIBXML_STATIC" />
+			<Add option="-DVERSION=270" />
+			<Add option="-DTIXML_USE_STL" />
+			<Add option="-DWIN32" />
+			<Add option="-D_WINDOWS" />
+			<Add option="-D_MBCS" />
+			<Add directory="..\upnp" />
+			<Add directory="..\Common" />
+			<Add directory="..\test" />
+			<Add directory="..\TupleStorage" />
+			<Add directory="..\tinyXml" />
+			<Add directory="..\Flam3\flam3-2.7.8" />
+			<Add directory="..\ContentDecoder" />
+			<Add directory="..\Networking" />
+		</Compiler>
+		<Unit filename="ContentDownloader.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="ContentDownloader.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="Sheep.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="Sheep.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="SheepDownloader.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="SheepDownloader.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="SheepGenerator.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="SheepGenerator.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="SheepUploader.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="SheepUploader.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="Shepherd.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="Shepherd.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

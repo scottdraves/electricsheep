@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Common" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libCommon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="\usr\include\lua5.1\" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="libCommon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-O2" />
+					<Add option="-O1" />
+					<Add option="-O" />
+					<Add directory="\usr\include\lua5.1\" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Debug Win32">
+				<Option output="libCommon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add option="-DWIN32" />
+					<Add directory="..\lua5.1\include" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="libCommon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-g" />
+					<Add option="-DWIN32" />
+					<Add directory="..\lua5.1\include" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32 Evoke">
+				<Option output="libCommon" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O" />
+					<Add option="-DWIN32" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-W" />
+			<Add option="-Wno-unused-parameter" />
+			<Add option="-DTIXML_USE_STL" />
+			<Add directory="..\Common" />
+		</Compiler>
+		<Unit filename="AlignedBuffer.cpp" />
+		<Unit filename="Common.cpp" />
+		<Unit filename="Common.h" />
+		<Unit filename="Exception.cpp" />
+		<Unit filename="Exception.h" />
+		<Unit filename="Log.cpp" />
+		<Unit filename="Log.h" />
+		<Unit filename="LuaState.cpp" />
+		<Unit filename="LuaState.h" />
+		<Unit filename="MathBase.h" />
+		<Unit filename="Math\Matrix.h" />
+		<Unit filename="Math\Matrix3x3_x86.h" />
+		<Unit filename="Math\Matrix4x4_x86.h" />
+		<Unit filename="Math\MatrixDefs.h" />
+		<Unit filename="Math\Rect.cpp" />
+		<Unit filename="Math\Rect.h" />
+		<Unit filename="Math\Vector2.h" />
+		<Unit filename="Math\Vector2_X86.h" />
+		<Unit filename="Math\Vector3.h" />
+		<Unit filename="Math\Vector3_X86.h" />
+		<Unit filename="Math\Vector4.h" />
+		<Unit filename="Math\Vector4_X86.h" />
+		<Unit filename="Math\fastbez.h" />
+		<Unit filename="ProcessForker.h" />
+		<Unit filename="Singleton.h" />
+		<Unit filename="SmartPtr.h" />
+		<Unit filename="Timer.h" />
+		<Unit filename="WTimer.h" />
+		<Unit filename="XTimer.h" />
+		<Unit filename="base.h" />
+		<Unit filename="clientversion.h" />
+		<Unit filename="linkpool.h" />
+		<Unit filename="luaxml.cpp" />
+		<Unit filename="luaxml.h" />
+		<Unit filename="md5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pool.cpp" />
+		<Unit filename="pool.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

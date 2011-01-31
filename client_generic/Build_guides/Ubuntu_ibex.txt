@@ -1,0 +1,23 @@
+* apt-get install
+	code::blocks
+	build-essential
+	ffmpeg
+	libavcodec-dev
+	libavformat-dev
+	libswscale-dev
+	libboost-dev
+	libx11-dev
+	liblua5.1-dev
+	libpng-dev
+	mesa-common-dev
+	freeglut-dev
+	libxrender-dev
+	libexpat-dev
+	libjpeg-dev
+	libmotif-dev
+	libfreetype6-dev
+
+
+* checkout svn
+
+* Start C::B, open ElectricSheep.workspace, build 'Client'-project using 'Debug' target.

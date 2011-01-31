@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="luac5.1_exe" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug Win32">
+				<Option output="..\bin\luac5.1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="..\obj\luac5.1_exe\Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add option="-DDEBUG" />
+					<Add directory="..\include" />
+					<Add directory="..\src" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="..\include" />
+					<Add directory="..\src" />
+				</ResourceCompiler>
+				<Linker>
+					<Add library="..\bin\liblua5.1.a" />
+					<Add directory="..\lib\static" />
+				</Linker>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="..\bin\luac5.1" prefix_auto="1" extension_auto="1" />
+				<Option object_output="..\obj\luac5.1_exe\Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-W" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add directory="..\include" />
+					<Add directory="..\src" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="..\include" />
+					<Add directory="..\src" />
+				</ResourceCompiler>
+				<Linker>
+					<Add library="..\..\Runtime\liblua5.1.a" />
+					<Add directory="..\lib\static" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="..\src\lua.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="..\src\luac.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\print.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

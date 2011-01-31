@@ -1,0 +1,17 @@
+1) install code::blocks
+
+2) checkout from svn
+
+3) start code::blocks. (Elevated, otherwise windows might virtualize the app...)
+
+4) install devpacks, with plugin or http://devpaks.org
+	boost		1.33.1
+	zlib		1.2.3
+	expat		2.0.1
+	libpng		1.2.8
+	libjpg		6b-4
+	libiconv	1.9.1
+
+5) copy glut.h from client_generic/DisplayOutput/OpenGL/ to <GL/>
+
+6) Start C::B, open ElectricSheep.workspace, build 'Client'-project using 'Debug Win32' target.

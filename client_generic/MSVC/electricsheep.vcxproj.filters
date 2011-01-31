@@ -1,0 +1,552 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ContentDownloader">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ContentDownloader\Code">
+      <UniqueIdentifier>{59f31480-a5ea-4f5e-a49f-659057e2afe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentDownloader\Headers">
+      <UniqueIdentifier>{8fd82334-b1bf-4e38-833c-b98470cf4fcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Common\Math">
+      <UniqueIdentifier>{16d8ce8b-93a0-4f19-b13c-36905127b21c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Code">
+      <UniqueIdentifier>{e8275963-7410-4e9f-a801-5b022bba66b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Headers">
+      <UniqueIdentifier>{c9094536-c2f4-4759-b096-987386c83854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\ISAAC">
+      <UniqueIdentifier>{a868cbca-1716-40c5-b6c0-019d9743219b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentDecoder">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="ContentDecoder\Code">
+      <UniqueIdentifier>{bd39a8de-e3b8-4609-bbcd-0689ea2cd3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ContentDecoder\Headers">
+      <UniqueIdentifier>{921e8fba-88ee-438c-93b3-a0711a260efd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{8ec07090-3f70-47fb-b9a9-a8d252bcc3ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Code">
+      <UniqueIdentifier>{f057081d-4450-4ef7-924e-a3db80b98198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\Headers">
+      <UniqueIdentifier>{5bde099f-f601-4a68-a5d3-5bfa67aa31fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client\SettingsGUI">
+      <UniqueIdentifier>{2b0b1b4b-cee0-4595-a5c3-87d937faf88c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DisplayOutput">
+      <UniqueIdentifier>{5eda84c0-acc4-4c73-bf03-416303ebc56a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DisplayOutput\DirectX9">
+      <UniqueIdentifier>{6d7dfb46-f151-4d2f-95d4-ca8a56c5a53a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DisplayOutput\Renderer">
+      <UniqueIdentifier>{8cc0b87d-45a9-4f88-9375-6132e691a22a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DisplayOutput\DirectX7">
+      <UniqueIdentifier>{15840962-d6d6-4d0d-bff5-d532373704ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DisplayOutput\DirectX10">
+      <UniqueIdentifier>{a3f74fc0-9096-490e-800a-57cd695420fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking">
+      <UniqueIdentifier>{e83ae6a5-d039-44d4-af4c-b18df9a0f110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TupleStorage">
+      <UniqueIdentifier>{214405d8-9f27-415c-ac3d-bd713518b582}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ContentDownloader\ContentDownloader.cpp">
+      <Filter>ContentDownloader\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ContentDownloader\Sheep.cpp">
+      <Filter>ContentDownloader\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ContentDownloader\SheepDownloader.cpp">
+      <Filter>ContentDownloader\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ContentDownloader\SheepGenerator.cpp">
+      <Filter>ContentDownloader\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ContentDownloader\SheepUploader.cpp">
+      <Filter>ContentDownloader\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ContentDownloader\Shepherd.cpp">
+      <Filter>ContentDownloader\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Math\Rect.cpp">
+      <Filter>Common\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\AlignedBuffer.cpp">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Common.cpp">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Exception.cpp">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Log.cpp">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\LuaState.cpp">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\luaxml.cpp">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\md5.c">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\pool.cpp">
+      <Filter>Common\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\isaac.cpp">
+      <Filter>Common\ISAAC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ContentDecoder\ContentDecoder.cpp">
+      <Filter>ContentDecoder\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Client\Hud.cpp">
+      <Filter>Client\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Client\main.cpp">
+      <Filter>Client\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="msvc_fix.cpp">
+      <Filter>Client\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Client\Player.cpp">
+      <Filter>Client\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Client\Voting.cpp">
+      <Filter>Client\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsGUI\config.cpp">
+      <Filter>Client\SettingsGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsGUI\electricsheepguiMyDialog2.cpp">
+      <Filter>Client\SettingsGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="wxApp_main.cpp">
+      <Filter>Client\SettingsGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DisplayOutput.cpp">
+      <Filter>DisplayOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\Image.cpp">
+      <Filter>DisplayOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\LoadDDS.cpp">
+      <Filter>DisplayOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\LoadPNG.cpp">
+      <Filter>DisplayOutput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\DisplayDX.cpp">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\FontDX.cpp">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\RendererDX.cpp">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\ShaderDX.cpp">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\TextureFlatDX.cpp">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\Renderer\Font.cpp">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\Renderer\Renderer.cpp">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\Renderer\Shader.cpp">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\Renderer\Texture.cpp">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\Renderer\TextureFlat.cpp">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="BackBufDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureFlatDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\DisplayDX10.cpp">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\FontDX10.cpp">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\RendererDX10.cpp">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\ShaderDX10.cpp">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\TextureFlatDX10.cpp">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Networking\Download.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Networking\Networking.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Networking\Upload.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TupleStorage\diriterator.cpp">
+      <Filter>TupleStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TupleStorage\luastorage.cpp">
+      <Filter>TupleStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TupleStorage\storage.cpp">
+      <Filter>TupleStorage</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ContentDownloader\ContentDownloader.h">
+      <Filter>ContentDownloader\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDownloader\Sheep.h">
+      <Filter>ContentDownloader\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDownloader\SheepDownloader.h">
+      <Filter>ContentDownloader\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDownloader\SheepGenerator.h">
+      <Filter>ContentDownloader\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDownloader\SheepUploader.h">
+      <Filter>ContentDownloader\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDownloader\Shepherd.h">
+      <Filter>ContentDownloader\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\fastbez.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Matrix.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Matrix3x3_x86.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Matrix4x4_x86.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\MatrixDefs.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Rect.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Vector2.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Vector2_X86.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Vector3.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Vector3_X86.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Vector4.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Math\Vector4_X86.h">
+      <Filter>Common\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\AlignedBuffer.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\base.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\clientversion.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Common.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Exception.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\linkpool.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Log.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\LuaState.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\luaxml.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\MathBase.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\md5.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\MTimer.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\pool.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\ProcessForker.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Singleton.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\SmartPtr.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Timer.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\WTimer.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\XTimer.h">
+      <Filter>Common\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\isaac.h">
+      <Filter>Common\ISAAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\isaacs.h">
+      <Filter>Common\ISAAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDecoder\ContentDecoder.h">
+      <Filter>ContentDecoder\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDecoder\DirectoryPlaylist.h">
+      <Filter>ContentDecoder\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDecoder\Frame.h">
+      <Filter>ContentDecoder\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDecoder\graph_playlist.h">
+      <Filter>ContentDecoder\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDecoder\LoopingPlaylist.h">
+      <Filter>ContentDecoder\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDecoder\Playlist.h">
+      <Filter>ContentDecoder\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ContentDecoder\SimplePlaylist.h">
+      <Filter>ContentDecoder\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\client.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\client_win32.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\Console.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\CrossFade.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\CubicFrameDisplay.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\FrameDisplay.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\Hud.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\LinearFrameDisplay.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\lua_playlist.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\MonoInstance.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="msvc_fix.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\PlayCounter.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\Player.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\ServerMessage.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\Splash.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\StartupScreen.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\StatsConsole.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client\Voting.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\DisplayOutput.h">
+      <Filter>DisplayOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\Image.h">
+      <Filter>DisplayOutput</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX_DLL_functions.h">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\DirectX\DisplayDX.h">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\DirectX\FontDX.h">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\DirectX\RendererDX.h">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\DirectX\ShaderDX.h">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\DirectX\TextureFlatDX.h">
+      <Filter>DisplayOutput\DirectX9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\Renderer\Font.h">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\Renderer\Renderer.h">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\Renderer\Shader.h">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\Renderer\Texture.h">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DisplayOutput\Renderer\TextureFlat.h">
+      <Filter>DisplayOutput\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="BackBufDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="DirDrawErrs.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="FontDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureFlatDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="WObject.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Networking\Networking.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TupleStorage\diriterator.h">
+      <Filter>TupleStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TupleStorage\luastorage.h">
+      <Filter>TupleStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TupleStorage\Settings.h">
+      <Filter>TupleStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TupleStorage\storage.h">
+      <Filter>TupleStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="cpu_usage_win32.h">
+      <Filter>Client\Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Client\app.ico">
+      <Filter>Common</Filter>
+    </None>
+    <None Include="..\RuntimeMSVC\logo256256.png">
+      <Filter>Common</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sheepicon.rc">
+      <Filter>Common</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuildStep Include="SettingsGUI\config.h">
+      <Filter>Client\SettingsGUI</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="SettingsGUI\electricsheepguiMyDialog2.h">
+      <Filter>Client\SettingsGUI</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="wxApp_main.h">
+      <Filter>Client\SettingsGUI</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\DisplayDX10.h">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\FontDX10.h">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\RendererDX10.h">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\ShaderDX10.h">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\TextureFlatDX10.h">
+      <Filter>DisplayOutput\DirectX10</Filter>
+    </CustomBuildStep>
+  </ItemGroup>
+</Project>

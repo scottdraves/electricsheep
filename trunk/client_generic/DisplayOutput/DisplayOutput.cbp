@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="DisplayOutput" />
+		<Option pch_mode="2" />
+		<Option default_target="Debug Win32" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libDisplayOutput" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="..\Common" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="libDisplayOutput" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-O2" />
+					<Add option="-O1" />
+					<Add option="-O" />
+					<Add directory="..\Common" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="Debug Win32">
+				<Option output="libDisplayOutput" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Debug\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option parameters="/s" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add option="-DWIN32" />
+					<Add option="-D_WIN32" />
+					<Add directory="..\Common" />
+					<Add directory="..\Dx9\DirectX90c\include" />
+				</Compiler>
+				<Linker>
+					<Add library="glut32.lib" />
+				</Linker>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="libDisplayOutput" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-W" />
+					<Add option="-g" />
+					<Add option="-DWIN32" />
+					<Add option="-D_WIN32" />
+					<Add directory="C:\Program Files (x86)\Microsoft DirectX SDK (June 2008)\Include" />
+					<Add directory="..\Common" />
+					<Add directory="..\Dx9\DirectX90c\include" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32 Evoke">
+				<Option output="libDisplayOutput" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj\Release\" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O" />
+					<Add option="-DWIN32" />
+					<Add directory="..\Common" />
+					<Add directory="C:\Program Files (x86)\Microsoft DirectX SDK (June 2008)\Include" />
+					<Add directory="..\Dx9\DirectX90c\include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-W" />
+			<Add directory="..\Common" />
+			<Add directory="..\Common\Math" />
+			<Add directory="FTGL\include" />
+			<Add directory="..\DisplayOutput" />
+			<Add directory="OpenGL" />
+			<Add directory="Renderer" />
+		</Compiler>
+		<Unit filename="DirectX\DisplayDX.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\DisplayDX.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\FontDX.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\FontDX.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\RendererDX.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\RendererDX.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\ShaderDX.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\ShaderDX.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\TextureFlatDX.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DirectX\TextureFlatDX.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="DisplayOutput.cpp" />
+		<Unit filename="DisplayOutput.h" />
+		<Unit filename="Image.cpp" />
+		<Unit filename="Image.h" />
+		<Unit filename="LoadDDS.cpp" />
+		<Unit filename="LoadPNG.cpp" />
+		<Unit filename="OpenGL\DisplayGL.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\GLee.c">
+			<Option compilerVar="CC" />
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\GLee.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\RendererGL.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\RendererGL.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\ShaderGL.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\ShaderGL.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\TextureFlatGL.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\TextureFlatGL.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\glx.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\glx.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="OpenGL\wgl.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="OpenGL\wgl.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+			<Option target="Release Win32 Evoke" />
+		</Unit>
+		<Unit filename="Renderer\Font.cpp" />
+		<Unit filename="Renderer\Font.h" />
+		<Unit filename="Renderer\Renderer.cpp" />
+		<Unit filename="Renderer\Renderer.h" />
+		<Unit filename="Renderer\Shader.cpp" />
+		<Unit filename="Renderer\Shader.h" />
+		<Unit filename="Renderer\Texture.cpp" />
+		<Unit filename="Renderer\Texture.h" />
+		<Unit filename="Renderer\TextureFlat.cpp" />
+		<Unit filename="Renderer\TextureFlat.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

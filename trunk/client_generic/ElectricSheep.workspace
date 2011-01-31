@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="ElectricSheep">
+		<Project filename="lua5.1\mak.vs2005\lua5.1_dll.cbp" />
+		<Project filename="Common\Common.cbp">
+			<Depends filename="lua5.1\mak.vs2005\lua5.1_dll.cbp" />
+		</Project>
+		<Project filename="Networking\Networking.cbp">
+			<Depends filename="Common\Common.cbp" />
+		</Project>
+		<Project filename="tinyXml\tinyXml.cbp" />
+		<Project filename="curlTest\curlTest.cbp">
+			<Depends filename="lua5.1\mak.vs2005\lua5.1_dll.cbp" />
+			<Depends filename="Common\Common.cbp" />
+			<Depends filename="tinyXml\tinyXml.cbp" />
+			<Depends filename="Networking\Networking.cbp" />
+		</Project>
+		<Project filename="Flam3\Flam3.cbp" />
+		<Project filename="TupleStorage\TupleStorage.cbp" />
+		<Project filename="ContentDownloader\ContentDownloader.cbp">
+			<Depends filename="Common\Common.cbp" />
+			<Depends filename="tinyXml\tinyXml.cbp" />
+			<Depends filename="Networking\Networking.cbp" />
+		</Project>
+		<Project filename="ContentDecoder\ContentDecoder.cbp" />
+		<Project filename="DisplayOutput\DisplayOutput.cbp" />
+		<Project filename="Client\client.cbp" active="1">
+			<Depends filename="lua5.1\mak.vs2005\lua5.1_dll.cbp" />
+			<Depends filename="Common\Common.cbp" />
+			<Depends filename="Networking\Networking.cbp" />
+			<Depends filename="tinyXml\tinyXml.cbp" />
+			<Depends filename="TupleStorage\TupleStorage.cbp" />
+			<Depends filename="ContentDownloader\ContentDownloader.cbp" />
+			<Depends filename="ContentDecoder\ContentDecoder.cbp" />
+			<Depends filename="DisplayOutput\DisplayOutput.cbp" />
+		</Project>
+		<Project filename="testdxsaver\testdxsaver.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

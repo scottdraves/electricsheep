@@ -1,0 +1,8 @@
+#include "resource.h"
+
+1                       ICON                    "..\\RuntimeMSVC\\logo256256.ico"
+
+STRINGTABLE LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+BEGIN
+    IDS_DESCRIPTION         "Electric Sheep"
+END

@@ -1,0 +1,23 @@
+This source code is distributed by the LuaBinaries project:
+
+    http://luabinaries.luaforge.net/
+    
+No changes are made to the Lua.org source code.
+
+But the makefiles are changed to include a "5.1" suffix in all library names and executables.
+
+Also "etc/bin2c" is re-added to the distribution.
+
+All binaries are generated using Tecmake. If you need to build the binaries yourself 
+consider using Tecmake. It is easier to install and will make your life easier.
+
+    http://www.tecgraf.puc-rio.br/tecmake
+
+IDE project files are also included. They were build using Premake and they are not used to
+build the standard distribution. They are intended for those who want to debug Lua code
+using the LuaBinaries configuration.
+
+The standard Lua.org makefiles are still available but they do not build the dynamic libraries.
+
+Best Regards,
+LuaBinaries Team

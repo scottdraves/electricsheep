@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Client" />
+		<Option pch_mode="2" />
+		<Option default_target="Debug Win32" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option platforms="Unix;" />
+				<Option output="..\Runtime\client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\Runtime" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+					<Add directory="\usr\include\ffmpeg\" />
+				</Compiler>
+				<Linker>
+					<Add library="Xrender" />
+					<Add library="GLU" />
+					<Add library="boost_thread" />
+					<Add library="libavformat" />
+					<Add library="libavcodec" />
+					<Add library="libavutil" />
+					<Add library="libswscale" />
+					<Add library="libz" />
+					<Add library="liblua5.1.a" />
+					<Add library="glut" />
+					<Add directory="..\iup\iup_2_7_Linux26_x64_lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option platforms="Unix;" />
+				<Option output="..\Runtime\client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\Runtime" />
+				<Option object_output="obj\Release\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-Os" />
+					<Add option="-O3" />
+					<Add option="-O2" />
+					<Add option="-O1" />
+					<Add option="-O" />
+					<Add directory="\usr\include\ffmpeg\" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="Xrender" />
+					<Add library="GLU" />
+					<Add library="boost_thread" />
+					<Add library="libavformat" />
+					<Add library="libavcodec" />
+					<Add library="libavutil" />
+					<Add library="libswscale" />
+					<Add library="libz" />
+					<Add library="..\iup\iup2_6_Linux26_lib\libiupcontrols.a" />
+					<Add library="iupluacontrols51" />
+					<Add library="cdlua51" />
+					<Add library="iuplua51" />
+					<Add library="iup" />
+					<Add library="iupcontrols" />
+					<Add library="cd" />
+					<Add library="cdiup" />
+					<Add library="liblua5.1.a" />
+					<Add library="glut" />
+					<Add directory="..\iup\iup2_6_Linux26_lib" />
+					<Add directory="..\iup\cd5_0_Linux26_lib" />
+				</Linker>
+			</Target>
+			<Target title="Debug Win32">
+				<Option output="..\Runtime\client_debug" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\Runtime\" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Option parameters="/t" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-mthreads" />
+					<Add option="-DDEBUG" />
+					<Add directory="..\ffmpeg\ffmpeg-r13712-gpl-lstatic-win32\include" />
+					<Add directory="..\Dx9\DirectX90c\include" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="shlwapi" />
+					<Add library="boost_thread" />
+					<Add library="boost_filesystem" />
+					<Add library="boost_system" />
+					<Add library="..\ContentDownloader\libContentDownloader.a" />
+					<Add library="..\Networking\libNetworking.a" />
+					<Add library="libiconv" />
+					<Add library="winmm" />
+					<Add library="expat" />
+					<Add library="curldll" />
+					<Add library="..\lua5.1\liblua5.a" />
+					<Add library="gdi32" />
+					<Add library="ole32" />
+					<Add library="comctl32" />
+					<Add library="comdlg32" />
+					<Add library="swscale" />
+					<Add library="avdevice" />
+					<Add library="avformat" />
+					<Add library="avcodec" />
+					<Add library="avutil" />
+					<Add library="z" />
+					<Add library="pthreadGC2" />
+					<Add library="ws2_32" />
+					<Add library="vfw32" />
+					<Add library="a52" />
+					<Add library="faac" />
+					<Add library="faad" />
+					<Add library="gsm" />
+					<Add library="mp3lame" />
+					<Add library="theora" />
+					<Add library="ogg" />
+					<Add library="vorbisenc" />
+					<Add library="vorbis" />
+					<Add library="x264" />
+					<Add library="xvidcore" />
+					<Add library="d3d9" />
+					<Add library="d3dx9" />
+					<Add library="..\tinyXml\libtinyXml.a" />
+					<Add directory="..\iup\iup2_6_Win32_mingw4_lib" />
+					<Add directory="..\iup\cd5_0_Win32_mingw4_lib" />
+					<Add directory="..\ffmpeg\ffmpeg-r13712-gpl-lstatic-win32\lib" />
+					<Add directory="..\Dx9\DirectX90c\lib" />
+				</Linker>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="..\Runtime\Client" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="..\Runtime\" />
+				<Option object_output="obj\Release" />
+				<Option external_deps="..\ContentDecoder\ContentDecoder.depend;" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option parameters="/t" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-W" />
+					<Add option="-g" />
+					<Add option="-mthreads" />
+					<Add option="-DNDEBUG" />
+					<Add directory="..\ffmpeg\ffmpeg-r13712-gpl-lstatic-win32\include" />
+					<Add directory="..\Dx9\DirectX90c\include" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="shlwapi" />
+					<Add library="boost_thread" />
+					<Add library="boost_filesystem" />
+					<Add library="boost_system" />
+					<Add library="..\ContentDownloader\libContentDownloader.a" />
+					<Add library="..\Networking\libNetworking.a" />
+					<Add library="libiconv" />
+					<Add library="winmm" />
+					<Add library="expat" />
+					<Add library="curldll" />
+					<Add library="..\lua5.1\liblua5.a" />
+					<Add library="gdi32" />
+					<Add library="ole32" />
+					<Add library="comctl32" />
+					<Add library="comdlg32" />
+					<Add library="swscale" />
+					<Add library="avdevice" />
+					<Add library="avformat" />
+					<Add library="avcodec" />
+					<Add library="avutil" />
+					<Add library="z" />
+					<Add library="pthreadGC2" />
+					<Add library="ws2_32" />
+					<Add library="vfw32" />
+					<Add library="a52" />
+					<Add library="faac" />
+					<Add library="faad" />
+					<Add library="gsm" />
+					<Add library="mp3lame" />
+					<Add library="theora" />
+					<Add library="ogg" />
+					<Add library="vorbisenc" />
+					<Add library="vorbis" />
+					<Add library="x264" />
+					<Add library="xvidcore" />
+					<Add library="d3d9" />
+					<Add library="d3dx9" />
+					<Add library="..\tinyXml\libtinyXml.a" />
+					<Add directory="..\ffmpeg\ffmpeg-r13712-gpl-lstatic-win32\lib" />
+					<Add directory="..\iup\iup2_6_Win32_mingw4_lib" />
+					<Add directory="..\iup\cd5_0_Win32_mingw4_lib" />
+					<Add directory="..\Dx9\DirectX90c\lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-W" />
+			<Add option="-Wno-deprecated-declarations" />
+			<Add option="-D_LIB" />
+			<Add option="-D_FILE_OFFSET_BITS=64" />
+			<Add option="-DTORRENT_BUILDING_STATIC" />
+			<Add option="-DTORRENT_LINKING_STATIC" />
+			<Add option="-DTIXML_USE_STL" />
+			<Add option="-D_MBCS" />
+			<Add directory="..\Common" />
+			<Add directory="..\Common\Math" />
+			<Add directory="..\DisplayOutput" />
+			<Add directory="..\ContentDecoder" />
+			<Add directory="..\Torrents\libtorrent-0.12\include" />
+			<Add directory="..\Torrents\libtorrent-0.12\include\libtorrent" />
+			<Add directory="..\ContentDownloader" />
+			<Add directory="..\TupleStorage" />
+			<Add directory="..\tinyXml" />
+			<Add directory="..\DisplayOutput\FTGL\include" />
+			<Add directory="..\lua5.1\include" />
+			<Add directory="..\DisplayOutput\OpenGL" />
+			<Add directory="..\DisplayOutput\Renderer" />
+			<Add directory="..\DisplayOutput\DirectX" />
+			<Add directory="..\Networking" />
+		</Compiler>
+		<Linker>
+			<Add library="..\DisplayOutput\libDisplayOutput.a" />
+			<Add library="..\ContentDecoder\libContentDecoder.a" />
+			<Add library="..\Common\libCommon.a" />
+			<Add library="..\TupleStorage\libTupleStorage.a" />
+			<Add library="..\tinyXml\libtinyXml.a" />
+			<Add library="expat" />
+			<Add library="jpeg" />
+			<Add library="png" />
+		</Linker>
+		<Unit filename="Console.h" />
+		<Unit filename="CubicFrameDisplay.h" />
+		<Unit filename="FrameDisplay.h" />
+		<Unit filename="Hud.cpp" />
+		<Unit filename="Hud.h" />
+		<Unit filename="LinearFrameDisplay.h" />
+		<Unit filename="MonoInstance.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+		</Unit>
+		<Unit filename="Player.cpp" />
+		<Unit filename="Player.h" />
+		<Unit filename="ServerMessage.h" />
+		<Unit filename="Splash.h" />
+		<Unit filename="StatsConsole.h" />
+		<Unit filename="Voting.cpp" />
+		<Unit filename="Voting.h" />
+		<Unit filename="client.h" />
+		<Unit filename="client.rc">
+			<Option compilerVar="WINDRES" />
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+		</Unit>
+		<Unit filename="client_evoke.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+		</Unit>
+		<Unit filename="client_linux.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="client_win32.h">
+			<Option target="Debug Win32" />
+			<Option target="Release Win32" />
+		</Unit>
+		<Unit filename="demangle.h" />
+		<Unit filename="lua_playlist.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="..\Common\md5.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\Runtime\Scripts\Dictionary\Deutsch.lua" />
+		<Unit filename="..\Runtime\Scripts\Dictionary\English.lua" />
+		<Unit filename="..\Runtime\Scripts\Dictionary\Español.lua" />
+		<Unit filename="..\Runtime\Scripts\Dictionary\Français.lua" />
+		<Unit filename="..\Runtime\Scripts\Dictionary\Portuguese.lua" />
+		<Unit filename="..\Runtime\Scripts\Dictionary\Svenska.lua" />
+		<Unit filename="..\Runtime\Scripts\class.lua" />
+		<Unit filename="..\Runtime\Scripts\config.lua" />
+		<Unit filename="..\Runtime\Scripts\desc.lua" />
+		<Unit filename="..\Runtime\Scripts\histogram.lua" />
+		<Unit filename="..\Runtime\Scripts\logging\console.lua" />
+		<Unit filename="..\Runtime\Scripts\logging\file.lua" />
+		<Unit filename="..\Runtime\Scripts\logging\localized.lua" />
+		<Unit filename="..\Runtime\Scripts\logging\logging.lua" />
+		<Unit filename="..\Runtime\Scripts\logging\null.lua" />
+		<Unit filename="..\Runtime\Scripts\playlist.lua" />
+		<Unit filename="..\Runtime\Scripts\pq.lua" />
+		<Unit filename="..\Runtime\Scripts\serialize.lua" />
+		<Unit filename="..\Runtime\Scripts\wx_config.lua" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger>
+				<search_path add="..\DisplayOutput" />
+				<search_path add="..\DisplayOutput\Renderer" />
+				<search_path add="..\DisplayOutput\OpenGL" />
+			</debugger>
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
+			</wxsmith>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

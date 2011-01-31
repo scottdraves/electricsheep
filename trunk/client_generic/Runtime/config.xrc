@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
+	<object class="wxDialog" name="MyDialog2">
+		<style>wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER</style>
+		<size>400,-1</size>
+		<title>Configuration</title>
+		<object class="wxBoxSizer">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxEXPAND</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxStaticBitmap" name="m_bitmap12">
+							<bitmap>logo.png</bitmap>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<object class="wxStaticText" name="m_staticText4">
+							<font>
+								<size>20</size>
+								<family>default</family>
+								<style>italic</style>
+								<weight>bold</weight>
+								<underlined>0</underlined>
+								<face>Nice</face>
+							</font>
+							<label>Electric Sheep</label>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxStaticText" name="m_staticVersion">
+							<font>
+								<family>default</family>
+								<style>italic</style>
+								<weight>normal</weight>
+								<underlined>0</underlined>
+							</font>
+							<label>version</label>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>1</border>
+						<object class="wxButton" name="m_RunButton">
+							<font>
+								<family>default</family>
+								<style>normal</style>
+								<weight>normal</weight>
+								<underlined>0</underlined>
+							</font>
+							<tooltip>Start the client in standalone mode</tooltip>
+							<label>Run</label>
+							<default>0</default>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>1</border>
+						<object class="wxButton" name="m_HelpButton">
+							<tooltip>Launch the online help</tooltip>
+							<label>Help</label>
+							<default>0</default>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALIGN_TOP|wxALL</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxNotebook" name="m_notebook2">
+							<object class="notebookpage">
+								<label>Basic</label>
+								<selected>1</selected>
+								<object class="wxPanel" name="m_Basic">
+									<style>wxTAB_TRAVERSAL</style>
+									<tooltip>Basic client settings</tooltip>
+									<object class="wxBoxSizer">
+										<orient>wxVERTICAL</orient>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<object class="wxStaticBoxSizer">
+												<orient>wxVERTICAL</orient>
+												<label>Drupal authentication</label>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText3">
+																<label>Name:</label>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL|wxFIXED_MINSIZE</flag>
+															<border>5</border>
+															<object class="wxTextCtrl" name="m_textName">
+																<style>wxTE_CENTRE</style>
+																<size>256,-1</size>
+																<tooltip>Your Drupal login name</tooltip>
+																<value></value>
+																<maxlength>256</maxlength>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText41">
+																<label>Password:</label>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL|wxFIXED_MINSIZE</flag>
+															<border>5</border>
+															<object class="wxTextCtrl" name="m_textPassword">
+																<style>wxTE_CENTRE|wxTE_PASSWORD</style>
+																<size>256,-1</size>
+																<tooltip>Your Drupal login password</tooltip>
+																<value></value>
+																<maxlength>256</maxlength>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>1</option>
+													<flag>wxALIGN_LEFT|wxSHAPED</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALIGN_CENTER|wxALL</flag>
+															<border>5</border>
+															<object class="wxButton" name="m_DrupalTestButton">
+																<tooltip>Test the connection to verify that authentication worked</tooltip>
+																<label>Login</label>
+																<default>0</default>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALIGN_CENTER|wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText6">
+																<style>wxALIGN_CENTRE</style>
+																<font>
+																	<family>default</family>
+																	<style>italic</style>
+																	<weight>normal</weight>
+																	<underlined>0</underlined>
+																</font>
+																<tooltip>Authentication status</tooltip>
+																<label>...authentication unverified...</label>
+															</object>
+														</object>
+													</object>
+												</object>
+											</object>
+										</object>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag>wxEXPAND</flag>
+											<border>5</border>
+											<object class="wxStaticBoxSizer">
+												<orient>wxVERTICAL</orient>
+												<label>Misc</label>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText7">
+																<label>Max diskspace used by flock:</label>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL|wxSHAPED</flag>
+															<border>3</border>
+															<object class="wxTextCtrl" name="m_spinCache">
+																<style>wxTE_CENTRE</style>
+																<size>64,-1</size>
+																<tooltip>Maximum amount of storage allowed by the sheep on your harddrive</tooltip>
+																<value>2000</value>
+																<maxlength>5</maxlength>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText10">
+																<label>MB    </label>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText8">
+																<label>Video decoding rate:</label>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL|wxSHAPED</flag>
+															<border>3</border>
+															<object class="wxTextCtrl" name="m_spinDecodeFps">
+																<style>wxTE_CENTRE</style>
+																<size>32,-1</size>
+																<tooltip>The rate at which sheep are decoded</tooltip>
+																<value>23</value>
+																<maxlength>2</maxlength>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText11">
+																<label>fps    </label>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText9">
+																<label>Repeat loops</label>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL|wxSHAPED</flag>
+															<border>3</border>
+															<object class="wxSpinCtrl" name="m_spinRepeatLoops">
+																<style>wxSP_ARROW_KEYS</style>
+																<tooltip>The number of times a loop will repeat itself before continuing</tooltip>
+																<value>2</value>
+																<min>0</min>
+																<max>100</max>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText12">
+																<label>times</label>
+															</object>
+														</object>
+													</object>
+												</object>
+											</object>
+										</object>
+									</object>
+								</object>
+							</object>
+							<object class="notebookpage">
+								<label>Advanced</label>
+								<selected>0</selected>
+								<object class="wxPanel" name="m_Advanced">
+									<style>wxTAB_TRAVERSAL</style>
+									<tooltip>Advanced client settings</tooltip>
+									<object class="wxBoxSizer">
+										<orient>wxVERTICAL</orient>
+										<object class="sizeritem">
+											<option>0</option>
+											<flag>wxALL|wxEXPAND</flag>
+											<border>5</border>
+											<object class="wxBoxSizer">
+												<orient>wxVERTICAL</orient>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText13">
+																<label>Display Monitor</label>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxSpinCtrl" name="m_spinMonitor">
+																<style>wxSP_ARROW_KEYS</style>
+																<tooltip>All monitors will be black except this one.\n0 is the primary monitor, and the rest are subject to \nyour current display configuration.\nIf you have one additional display, such as a secondary monitor or a projector, that will be 1.\nIf you only have one monitor enabled, this setting is redundant.</tooltip>
+																<value>0</value>
+																<min>0</min>
+																<max>3</max>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT</flag>
+													<border>3</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>3</option>
+															<flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+															<border>5</border>
+															<object class="wxStaticText" name="m_staticText111">
+																<label>Display framerate</label>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxTextCtrl" name="m_spinDisplayFps">
+																<style>wxTE_CENTRE</style>
+																<size>32,-1</size>
+																<tooltip>This is only used by the linear _ cubic display modes. Normal more will display at the same rate as the video is decoded(see the Basic tab).</tooltip>
+																<value>60</value>
+																<maxlength>3</maxlength>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_CENTER_HORIZONTAL|wxEXPAND</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL|wxEXPAND</flag>
+															<border>5</border>
+															<object class="wxRadioBox" name="m_radioDisplayMode">
+																<style>wxRA_SPECIFY_ROWS</style>
+																<tooltip>&apos;Normal&apos; displays decoded video at the same rate it&apos;s decoded.\n&apos;Piecewise Linear&apos; mode will interpolate between two decoded videoframes at the display framerate,\nand &apos;Piecewise Cubic&apos; will interpolate over four decoded videoframes \nusing a Mitchell-Natravali reconstruction curve, \nand will provide the best experience, especially if the video decoding rate is set low. \nBoth Linear _ Cubic modes use pixelshaders, so you need a decent GPU for this.</tooltip>
+																<label>Display mode</label>
+																<selection>1</selection>
+																<content>
+																	<item>Normal</item>
+																	<item>Piecewise Linear</item>
+																	<item>Piecewise Cubic</item>
+																</content>
+																<dimension>1</dimension>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxCheckBox" name="m_checkHttp">
+																<style>wxALIGN_RIGHT</style>
+																<tooltip>Enables/Disables the downloading of new sheep from the server via the HTTP protocol</tooltip>
+																<label>HTTP download</label>
+																<checked>1</checked>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxCheckBox" name="m_checkRenderFrames">
+																<style>wxALIGN_RIGHT</style>
+																<tooltip>Enables/Disables your computer to contribute to the flock by rendering new frames</tooltip>
+																<label>Render frames</label>
+																<checked>1</checked>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxCheckBox" name="m_checkMulticore">
+																<style>wxALIGN_RIGHT</style>
+																<tooltip>Use all the processor cores available in your computer to render sheep frames.\nNote that this will take quite a bit of cpu, and the display may not be able to update at full framerate!</tooltip>
+																<label>Multicore rendering</label>
+																<checked>0</checked>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>0</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALIGN_RIGHT|wxALL</flag>
+															<border>5</border>
+															<object class="wxCheckBox" name="m_checkKeepFrames">
+																<style>wxALIGN_RIGHT</style>
+																<tooltip>Stores the rendered frames on your harddrive</tooltip>
+																<label>Keep rendered frames</label>
+																<checked>1</checked>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>1</option>
+													<flag>wxALIGN_RIGHT|wxALL</flag>
+													<border>5</border>
+													<object class="wxBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxCheckBox" name="m_checkNegVoteDeletes">
+																<style>wxALIGN_RIGHT</style>
+																<tooltip>If you press the down arrow key, then delete the currently displayed sheep in addition to notifying the server not to make more sheep like it</tooltip>
+																<label>Negative vote deletes sheep</label>
+																<checked>1</checked>
+															</object>
+														</object>
+													</object>
+												</object>
+												<object class="sizeritem">
+													<option>1</option>
+													<flag>wxALIGN_CENTER_HORIZONTAL|wxEXPAND</flag>
+													<border>5</border>
+													<object class="wxStaticBoxSizer">
+														<orient>wxHORIZONTAL</orient>
+														<label>Content directory</label>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxDirPickerCtrl" name="m_dirContent">
+																<value></value>
+																<message>Select a folder</message>
+																<style>wxDIRP_DEFAULT_STYLE|wxDIRP_DIR_MUST_EXIST</style>
+															</object>
+														</object>
+														<object class="sizeritem">
+															<option>0</option>
+															<flag>wxALL</flag>
+															<border>5</border>
+															<object class="wxButton" name="m_buttonOpenContent">
+																<tooltip>Opens the content directory in an external exporer window</tooltip>
+																<label>Open this folder</label>
+																<default>0</default>
+															</object>
+														</object>
+													</object>
+												</object>
+											</object>
+										</object>
+									</object>
+								</object>
+							</object>
+						</object>
+					</object>
+				</object>
+			</object>
+			<object class="sizeritem">
+				<option>0</option>
+				<flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+				<border>5</border>
+				<object class="wxBoxSizer">
+					<orient>wxHORIZONTAL</orient>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+						<border>5</border>
+						<object class="wxButton" name="m_Cancel">
+							<tooltip>Discard all changes and exit</tooltip>
+							<label>Cancel</label>
+							<default>0</default>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>0</option>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<object class="wxButton" name="m_Ok">
+							<tooltip>Confirm all changes and exit</tooltip>
+							<label>OK</label>
+							<default>1</default>
+						</object>
+					</object>
+				</object>
+			</object>
+		</object>
+	</object>
+</resource>

@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: flam3
+Description: Renders and animates fractal flames and manipulates their genetic codes, see www.flam3.com for more info.
+Version: @VERSION@
+Requires: libpng12 >= 1.0 libxml-2.0
+Libs: -L${libdir} -lflam3 -ljpeg -lpthread
+Cflags: -I${includedir}

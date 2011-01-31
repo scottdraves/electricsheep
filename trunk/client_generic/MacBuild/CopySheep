@@ -1,0 +1,10 @@
+#!/bin/sh
+
+TAR_DIR="$HOME/Library/Application Support/ElectricSheep/content/mpeg"
+
+#/bin/mkdir -p "$TAR_DIR"
+sudo -u "$USER" /usr/bin/ditto "$2" "$TAR_DIR"
+
+pushd "$2/../../"
+rm -rf "ElectricSheep-tmp-!!-123"
+popd

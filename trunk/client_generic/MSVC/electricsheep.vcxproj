@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>es</ProjectName>
+    <ProjectGuid>{C117F50C-4724-48CF-8C5C-193FB1A0F26A}</ProjectGuid>
+    <RootNamespace>electricsheep</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\boost_1_45_0\stage\lib;$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\boost_1_45_0;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\boost_1_45_0;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)d</TargetName>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\boost_1_45_0\stage\lib;$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.scr</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>mkdir ..\runtimemsvc\scripts
+mkdir ..\runtimemsvc\scripts\dictionary
+mkdir ..\runtimemsvc\scripts\logging
+copy ..\runtime\scripts\*.* ..\runtimemsvc\scripts\*.*  /y
+copy ..\runtime\scripts\dictionary\*.* ..\runtimemsvc\scripts\Dictionary\*.*  /y
+copy ..\runtime\scripts\logging\*.* ..\runtimemsvc\scripts\logging\*.*  /y
+copy ..\runtime\electricsheep-frown.png ..\runtimemsvc /y
+copy ..\runtime\electricsheep-smile.png ..\runtimemsvc /y
+copy ..\runtime\electricsheep-attr.png ..\runtimemsvc /y
+copy ..\runtime\exchndl.dll ..\runtimemsvc /y
+copy ..\runtime\flam3-animate.exe ..\runtimemsvc /y
+copy ..\runtime\Instructions.rtf ..\runtimemsvc /y
+copy ..\runtime\License.rtf ..\runtimemsvc /y
+copy ..\runtime\logo.png ..\runtimemsvc /y
+copy ..\runtime\pthreadGC2.dll ..\runtimemsvc /y
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\ffmpeg\ffmpeg-static\include;..\curl\include;..\ContentDownloader;..\Client;..\Common;..\Common\Math;..\ContentDecoder;..\DisplayOutput\Renderer;..\DisplayOutput;..\libxml\include;..\lua5.1\include;..\Networking;..\tinyXml;..\TupleStorage;..\DisplayOutput\DirectX;..\DisplayOutput\OpenGL;C:\wxWidgets-2.9.1\include;C:\wxWidgets-2.9.1\include\msvc;C:\wxWidgets-2.9.1\src\zlib;C:\wxWidgets-2.9.1\src\png;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;D3D_DEBUG_INFO;COMPILE_MULTIMON_STUBS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libgcc.lib;libmingwex.lib;libmoldname.lib;libavcodec.lib;libavcore.lib;libavfilter.lib;libswscale.lib;libavdevice.lib;libavformat.lib;libavutil.lib;user32.lib;shlwapi.lib;wxzlibd.lib;wxpngd.lib;libcurld.lib;tinyxmld.lib;lua5.1d.lib;d3d9.lib;ws2_32.lib;wldap32.lib;ddraw.lib;dxguid.lib;psapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)d.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\curl\lib\debug-zlib;..\tinyXml\Debug;..\lua5.1\lib\static;..\ffmpeg\ffmpeg-static\lib;C:\wxWidgets-2.9.1\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <DelayLoadDLLs>d3d9.dll;ddraw.dll;wldap32.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy .\debug\esd.exe ..\RuntimeMSVC /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>mkdir ..\runtimemsvc\scripts
+mkdir ..\runtimemsvc\scripts\dictionary
+mkdir ..\runtimemsvc\scripts\logging
+copy ..\runtime\scripts\*.* ..\runtimemsvc\scripts\*.*
+copy ..\runtime\scripts\dictionary\*.* ..\runtimemsvc\scripts\Dictionary\*.*
+copy ..\runtime\scripts\logging\*.* ..\runtimemsvc\scripts\logging\*.*
+copy ..\runtime\electricsheep-frown.png ..\runtimemsvc
+copy ..\runtime\electricsheep-smile.png ..\runtimemsvc
+copy ..\runtime\electricsheep-attr.png ..\runtimemsvc
+copy ..\runtime\exchndl.dll ..\runtimemsvc
+copy ..\runtime\flam3-animate.exe ..\runtimemsvc
+copy ..\runtime\Instructions.rtf ..\runtimemsvc
+copy ..\runtime\License.rtf ..\runtimemsvc
+copy ..\runtime\logo.png ..\runtimemsvc
+copy ..\runtime\pthreadGC2.dll ..\runtimemsvc
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>false</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>..\ffmpeg\ffmpeg-static\include;..\curl\include;..\ContentDownloader;..\Client;..\Common;..\Common\Math;..\ContentDecoder;..\DisplayOutput\Renderer;..\DisplayOutput;..\lua5.1\include;..\Networking;..\tinyXml;..\TupleStorage;..\DisplayOutput\DirectX;..\DisplayOutput\OpenGL;C:\wxWidgets-2.9.1\include\msvc;C:\wxWidgets-2.9.1\include;C:\wxWidgets-2.9.1\src\png;C:\wxWidgets-2.9.1\src\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NOMINMAX;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;WIN32_LEAN_AND_MEAN;VC_EXTRALEAN;COMPILE_MULTIMON_STUBS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>libgcc.lib;libmingwex.lib;libmoldname.lib;libavcodec.lib;libavcore.lib;libavformat.lib;libswscale.lib;libavdevice.lib;libavutil.lib;wxzlib.lib;wxpng.lib;kernel32.lib;user32.lib;shlwapi.lib;libcurl.lib;tinyxml.lib;lua5.1.lib;d3d9.lib;ws2_32.lib;wldap32.lib;ddraw.lib;dxguid.lib;psapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>NotSet</ShowProgress>
+      <OutputFile>$(OutDir)$(ProjectName).scr</OutputFile>
+      <AdditionalLibraryDirectories>..\curl\lib\release-zlib;..\tinyXml\Release;..\lua5.1\lib\static;..\ffmpeg\ffmpeg-static\lib;C:\wxWidgets-2.9.1\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+      <DelayLoadDLLs>d3d9.dll;ddraw.dll;wldap32.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>
+      </AssemblyDebug>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>es.map</MapFileName>
+      <MapExports>true</MapExports>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>
+      </LargeAddressAware>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <SetChecksum>true</SetChecksum>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy .\release\es.scr ..\RuntimeMSVC\es.scr /y
+copy .\release\es.scr ..\RuntimeMSVC\es.exe /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ContentDownloader\ContentDownloader.cpp" />
+    <ClCompile Include="..\ContentDownloader\Sheep.cpp" />
+    <ClCompile Include="..\ContentDownloader\SheepDownloader.cpp" />
+    <ClCompile Include="..\ContentDownloader\SheepGenerator.cpp" />
+    <ClCompile Include="..\ContentDownloader\SheepUploader.cpp" />
+    <ClCompile Include="..\ContentDownloader\Shepherd.cpp" />
+    <ClCompile Include="..\Common\Math\Rect.cpp" />
+    <ClCompile Include="..\Common\AlignedBuffer.cpp" />
+    <ClCompile Include="..\Common\Common.cpp" />
+    <ClCompile Include="..\Common\Exception.cpp" />
+    <ClCompile Include="..\Common\Log.cpp" />
+    <ClCompile Include="..\Common\LuaState.cpp" />
+    <ClCompile Include="..\Common\luaxml.cpp" />
+    <ClCompile Include="..\Common\md5.c" />
+    <ClCompile Include="..\Common\pool.cpp" />
+    <ClCompile Include="..\Common\isaac.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\ContentDecoder\ContentDecoder.cpp" />
+    <ClCompile Include="..\Client\Hud.cpp" />
+    <ClCompile Include="..\Client\main.cpp" />
+    <ClCompile Include="msvc_fix.cpp" />
+    <ClCompile Include="..\Client\Player.cpp" />
+    <ClCompile Include="..\Client\Voting.cpp" />
+    <ClCompile Include="SettingsGUI\config.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="SettingsGUI\electricsheepguiMyDialog2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="wxApp_main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DisplayOutput.cpp" />
+    <ClCompile Include="..\DisplayOutput\Image.cpp" />
+    <ClCompile Include="..\DisplayOutput\LoadDDS.cpp" />
+    <ClCompile Include="..\DisplayOutput\LoadPNG.cpp" />
+    <ClCompile Include="..\DisplayOutput\DirectX\DisplayDX.cpp" />
+    <ClCompile Include="..\DisplayOutput\DirectX\FontDX.cpp" />
+    <ClCompile Include="..\DisplayOutput\DirectX\RendererDX.cpp" />
+    <ClCompile Include="..\DisplayOutput\DirectX\ShaderDX.cpp" />
+    <ClCompile Include="..\DisplayOutput\DirectX\TextureFlatDX.cpp" />
+    <ClCompile Include="..\DisplayOutput\Renderer\Font.cpp" />
+    <ClCompile Include="..\DisplayOutput\Renderer\Renderer.cpp" />
+    <ClCompile Include="..\DisplayOutput\Renderer\Shader.cpp" />
+    <ClCompile Include="..\DisplayOutput\Renderer\Texture.cpp" />
+    <ClCompile Include="..\DisplayOutput\Renderer\TextureFlat.cpp" />
+    <ClCompile Include="BackBufDD.cpp" />
+    <ClCompile Include="DisplayDD.cpp" />
+    <ClCompile Include="RendererDD.cpp" />
+    <ClCompile Include="TextureFlatDD.cpp" />
+    <ClCompile Include="..\DisplayOutput\DirectX\DisplayDX10.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\FontDX10.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\RendererDX10.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\ShaderDX10.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\DisplayOutput\DirectX\TextureFlatDX10.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Networking\Download.cpp" />
+    <ClCompile Include="..\Networking\Networking.cpp" />
+    <ClCompile Include="..\Networking\Upload.cpp" />
+    <ClCompile Include="..\TupleStorage\diriterator.cpp" />
+    <ClCompile Include="..\TupleStorage\luastorage.cpp" />
+    <ClCompile Include="..\TupleStorage\storage.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ContentDownloader\ContentDownloader.h" />
+    <ClInclude Include="..\ContentDownloader\Sheep.h" />
+    <ClInclude Include="..\ContentDownloader\SheepDownloader.h" />
+    <ClInclude Include="..\ContentDownloader\SheepGenerator.h" />
+    <ClInclude Include="..\ContentDownloader\SheepUploader.h" />
+    <ClInclude Include="..\ContentDownloader\Shepherd.h" />
+    <ClInclude Include="cpu_usage_win32.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\Common\Math\fastbez.h" />
+    <ClInclude Include="..\Common\Math\Matrix.h" />
+    <ClInclude Include="..\Common\Math\Matrix3x3_x86.h" />
+    <ClInclude Include="..\Common\Math\Matrix4x4_x86.h" />
+    <ClInclude Include="..\Common\Math\MatrixDefs.h" />
+    <ClInclude Include="..\Common\Math\Rect.h" />
+    <ClInclude Include="..\Common\Math\Vector2.h" />
+    <ClInclude Include="..\Common\Math\Vector2_X86.h" />
+    <ClInclude Include="..\Common\Math\Vector3.h" />
+    <ClInclude Include="..\Common\Math\Vector3_X86.h" />
+    <ClInclude Include="..\Common\Math\Vector4.h" />
+    <ClInclude Include="..\Common\Math\Vector4_X86.h" />
+    <ClInclude Include="..\Common\AlignedBuffer.h" />
+    <ClInclude Include="..\Common\base.h" />
+    <ClInclude Include="..\Common\clientversion.h" />
+    <ClInclude Include="..\Common\Common.h" />
+    <ClInclude Include="..\Common\Exception.h" />
+    <ClInclude Include="..\Common\linkpool.h" />
+    <ClInclude Include="..\Common\Log.h" />
+    <ClInclude Include="..\Common\LuaState.h" />
+    <ClInclude Include="..\Common\luaxml.h" />
+    <ClInclude Include="..\Common\MathBase.h" />
+    <ClInclude Include="..\Common\md5.h" />
+    <ClInclude Include="..\Common\MTimer.h" />
+    <ClInclude Include="..\Common\pool.h" />
+    <ClInclude Include="..\Common\ProcessForker.h" />
+    <ClInclude Include="..\Common\Singleton.h" />
+    <ClInclude Include="..\Common\SmartPtr.h" />
+    <ClInclude Include="..\Common\Timer.h" />
+    <ClInclude Include="..\Common\WTimer.h" />
+    <ClInclude Include="..\Common\XTimer.h" />
+    <ClInclude Include="..\Common\isaac.h" />
+    <ClInclude Include="..\Common\isaacs.h" />
+    <ClInclude Include="..\ContentDecoder\ContentDecoder.h" />
+    <ClInclude Include="..\ContentDecoder\DirectoryPlaylist.h" />
+    <ClInclude Include="..\ContentDecoder\Frame.h" />
+    <ClInclude Include="..\ContentDecoder\graph_playlist.h" />
+    <ClInclude Include="..\ContentDecoder\LoopingPlaylist.h" />
+    <ClInclude Include="..\ContentDecoder\Playlist.h" />
+    <ClInclude Include="..\ContentDecoder\SimplePlaylist.h" />
+    <ClInclude Include="..\Client\client.h" />
+    <ClInclude Include="..\Client\client_win32.h" />
+    <ClInclude Include="..\Client\Console.h" />
+    <ClInclude Include="..\Client\CrossFade.h" />
+    <ClInclude Include="..\Client\CubicFrameDisplay.h" />
+    <ClInclude Include="..\Client\FrameDisplay.h" />
+    <ClInclude Include="..\Client\Hud.h" />
+    <ClInclude Include="..\Client\LinearFrameDisplay.h" />
+    <ClInclude Include="..\Client\lua_playlist.h" />
+    <ClInclude Include="..\Client\MonoInstance.h" />
+    <ClInclude Include="msvc_fix.h" />
+    <ClInclude Include="..\Client\PlayCounter.h" />
+    <ClInclude Include="..\Client\Player.h" />
+    <ClInclude Include="..\Client\ServerMessage.h" />
+    <ClInclude Include="..\Client\Splash.h" />
+    <ClInclude Include="..\Client\StartupScreen.h" />
+    <ClInclude Include="..\Client\StatsConsole.h" />
+    <ClInclude Include="..\Client\Voting.h" />
+    <CustomBuildStep Include="SettingsGUI\config.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="SettingsGUI\electricsheepguiMyDialog2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="wxApp_main.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <ClInclude Include="..\DisplayOutput\DisplayOutput.h" />
+    <ClInclude Include="..\DisplayOutput\Image.h" />
+    <ClInclude Include="DirectX_DLL_functions.h" />
+    <ClInclude Include="..\DisplayOutput\DirectX\DisplayDX.h" />
+    <ClInclude Include="..\DisplayOutput\DirectX\FontDX.h" />
+    <ClInclude Include="..\DisplayOutput\DirectX\RendererDX.h" />
+    <ClInclude Include="..\DisplayOutput\DirectX\ShaderDX.h" />
+    <ClInclude Include="..\DisplayOutput\DirectX\TextureFlatDX.h" />
+    <ClInclude Include="..\DisplayOutput\Renderer\Font.h" />
+    <ClInclude Include="..\DisplayOutput\Renderer\Renderer.h" />
+    <ClInclude Include="..\DisplayOutput\Renderer\Shader.h" />
+    <ClInclude Include="..\DisplayOutput\Renderer\Texture.h" />
+    <ClInclude Include="..\DisplayOutput\Renderer\TextureFlat.h" />
+    <ClInclude Include="BackBufDD.h" />
+    <ClInclude Include="DirDrawErrs.h" />
+    <ClInclude Include="DisplayDD.h" />
+    <ClInclude Include="FontDD.h" />
+    <ClInclude Include="RendererDD.h" />
+    <ClInclude Include="TextureFlatDD.h" />
+    <ClInclude Include="WObject.h" />
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\DisplayDX10.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\FontDX10.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\RendererDX10.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\ShaderDX10.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <CustomBuildStep Include="..\DisplayOutput\DirectX\TextureFlatDX10.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </CustomBuildStep>
+    <ClInclude Include="..\Networking\Networking.h" />
+    <ClInclude Include="..\TupleStorage\diriterator.h" />
+    <ClInclude Include="..\TupleStorage\luastorage.h" />
+    <ClInclude Include="..\TupleStorage\Settings.h" />
+    <ClInclude Include="..\TupleStorage\storage.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Client\app.ico" />
+    <None Include="..\RuntimeMSVC\logo256256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sheepicon.rc">
+      <Culture Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">0x0409</Culture>
+    </ResourceCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

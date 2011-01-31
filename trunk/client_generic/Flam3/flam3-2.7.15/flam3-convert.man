@@ -1,0 +1,36 @@
+.TH flam3-animate 1 "" ""
+.SH NAME
+flam3-animate
+flam3-render
+flam3-genome
+flam3-convert - render and animate FLAM3s and manipulate their genomes
+.SH SYNOPSIS
+.B flam3-render < input
+
+.SH DESCRIPTION
+
+FLAM3 implements a visual language based on a recursive set equation.
+
+Flam3-genome creates and manipulates genomes (xml parameter sets) in
+this language.  Flam3-render turns genomes into still images, and
+Flam3-animate renders motion-blurred frames of animation.
+
+Flam3-convert reads from stdin files in the old format used by the
+flame GIMP plugin, and writes the new format to stdout.
+
+.SH OPTIONS
+
+Any command line option will cause the program to write its
+documentation to standard out.
+
+.SH ENVIRONMENT
+
+The environment variables are in the documention written to standard
+out given any command line option.
+
+.SH SEE ALSO
+.BR WWW.FLAM3.COM,
+.BR electricsheep (1),
+
+.SH AUTHOR
+spot aka Scott Draves, Erik Reckase

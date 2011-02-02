@@ -162,32 +162,29 @@ class	CElectricSheep
 
 				if (m_MultipleInstancesMode == false)
 				{
-					m_pVoter = new CVote();
 					g_NetworkManager->Startup();
 
+					//	Set proxy info.
+					if( g_Settings()->Get( "settings.content.use_proxy", false ) )
+					{
+						g_Log->Info( "Using proxy server..." );
+						g_NetworkManager->Proxy( g_Settings()->Get( "settings.content.proxy", std::string("") ),
+												 g_Settings()->Get( "settings.content.proxy_username", std::string("") ),
+												 g_Settings()->Get( "settings.content.proxy_password", std::string("") ) );
+					}
+					
+					//if some user has a legacy clear-text password, lets convert it to md5 one.  (should we remove the old one ???)
+					if (g_Settings()->Get( "settings.content.password_md5", std::string("") ) == "") {
+						g_Settings()->Set( "settings.content.password_md5", ContentDownloader::Shepherd::computeMD5( g_Settings()->Get( "settings.content.password", std::string("") ) ) );
+						//g_Settings()->Set( "settings.content.password", "" );
+					}
+
+					g_NetworkManager->Login( g_Settings()->Get( "settings.generator.nickname", std::string("") ), g_Settings()->Get( "settings.content.password_md5", std::string("") ) );
+					
+					m_pVoter = new CVote();
 				}
 
-                //	Set proxy info.
-                if( g_Settings()->Get( "settings.content.use_proxy", false ) )
-                {
-                    g_Log->Info( "Using proxy server..." );
-                    g_NetworkManager->Proxy( g_Settings()->Get( "settings.content.proxy", std::string("") ),
-                                             g_Settings()->Get( "settings.content.proxy_username", std::string("") ),
-                                             g_Settings()->Get( "settings.content.proxy_password", std::string("") ) );
-                }
-				
 				g_Player().SetMultiDisplayMode( (CPlayer::MultiDisplayMode)g_Settings()->Get( "settings.player.MultiDisplayMode", 0 ) );
-
-                //	Authentication.
-				//We don't use the registration like that anymore.
-                /*if( g_Settings()->Get( "settings.content.registered", false ) )
-                {
-                    g_Log->Info( "Registered, logging in." );
-                    g_NetworkManager->Login( g_Settings()->Get( "settings.generator.nickname", std::string("") ), g_Settings()->Get( "settings.content.password", std::string("") ) );
-
-                    //	Change server if we're registered.
-                    g_Settings()->Set( "settings.content.server", std::string(CLIENT_SERVER_REGISTERED) );
-                }*/
 
                 //	Init the display and create decoder.
                 if( !g_Player().Startup() )
@@ -326,10 +323,8 @@ class	CElectricSheep
 				
                 //	Start downloader.
                 g_Log->Info( "Starting downloader..." );
-				if (m_MultipleInstancesMode == false)
-					g_ContentDownloader().Startup( false );
-				else
-					g_ContentDownloader().Startup( false, true );
+
+				g_ContentDownloader().Startup( false, m_MultipleInstancesMode );
 
 				//call static method to fill sheep counts
 				ContentDownloader::Shepherd::GetFlockSizeMBsRecount(0);
@@ -359,11 +354,12 @@ class	CElectricSheep
 				m_HudManager = NULL;
 				
 				if( !m_bConfigMode )
-				{
+				{	
+					g_ContentDownloader().Shutdown();
+					
 					//	This stuff was never started in config mode.
 					if (m_MultipleInstancesMode == false)
 					{
-						g_ContentDownloader().Shutdown();
 						g_NetworkManager->Shutdown();
 					}
 					g_Player().Shutdown();

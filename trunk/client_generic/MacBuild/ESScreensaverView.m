@@ -1,5 +1,3 @@
-/* (c) 2008, Daniel Svoboda */
-
 #import "ESScreensaverView.h"
 #import "ESScreensaver.h"
 #import <OpenGL/OpenGL.h>

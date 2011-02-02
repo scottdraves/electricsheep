@@ -1,5 +1,3 @@
-/* (c) 2008, Daniel Svoboda */
-
 #import <Cocoa/Cocoa.h>
 #import <OpenGL/gl.h>
 #import <Carbon/Carbon.h>

@@ -1,5 +1,3 @@
-/* (c) 2008, Daniel Svoboda */
-
 #import <Cocoa/Cocoa.h>
 
 @interface ESOpenGLView : NSOpenGLView

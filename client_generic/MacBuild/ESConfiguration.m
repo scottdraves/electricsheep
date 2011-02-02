@@ -149,9 +149,19 @@
 
 - (void)saveSettings
 {
-	ESScreensaver_SetIntSetting("settings.player.player_fps", [playerFPS intValue]);
+	int player_fps = [playerFPS intValue];
 	
-	ESScreensaver_SetIntSetting("settings.player.display_fps", [displayFPS intValue]);
+	if (player_fps <= 0)
+		player_fps = 1;
+	
+	ESScreensaver_SetIntSetting("settings.player.player_fps", player_fps);
+	
+	int display_fps = [displayFPS intValue];
+	
+	if (display_fps <= 0)
+		display_fps = 1;
+	
+	ESScreensaver_SetIntSetting("settings.player.display_fps", display_fps);
 
 	ESScreensaver_SetIntSetting("settings.player.LoopIterations", [loopIterations intValue]);
 

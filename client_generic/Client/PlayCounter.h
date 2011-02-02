@@ -1,9 +1,6 @@
 /*
  *  PlayCounter.h
  *  ElectricSheep
- *
- *  Created by Daniel Svoboda on 4/25/09.
- *
  */
 
 #ifndef _PLAYCOUNTER_H

@@ -1,5 +1,3 @@
-/* (c) 2008, Daniel Svoboda */
-
 #import <ScreenSaver/ScreenSaver.h>
 #import "ESOpenGLView.h"
 #import "ESConfiguration.h"

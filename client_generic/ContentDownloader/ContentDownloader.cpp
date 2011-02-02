@@ -92,10 +92,7 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 		Shepherd::setCacheSize( 0, 0 );
 	if (g_Settings()->Get( "settings.content.unlimited_cache_gold", false) == true)
 		Shepherd::setCacheSize( 0, 1 );
-	if (g_Settings()->Get( "settings.content.password_md5", std::string("") ) == "")
-		Shepherd::setPassword( Shepherd::computeMD5( g_Settings()->Get( "settings.content.password", std::string("") ) ).c_str() );
-	else
-		Shepherd::setPassword( g_Settings()->Get( "settings.content.password_md5", std::string("") ).c_str() );
+	Shepherd::setPassword( g_Settings()->Get( "settings.content.password_md5", std::string("") ).c_str() );
 	Shepherd::setUniqueID( g_Settings()->Get( "settings.content.unique_id", generateID() ).c_str() );
 	Shepherd::setUseProxy( g_Settings()->Get( "settings.content.use_proxy", false ) );
 	Shepherd::setRegistered( g_Settings()->Get( "settings.content.registered", false ) );
@@ -108,16 +105,7 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 	SheepGenerator::setURL( g_Settings()->Get( "settings.generator.user_url", std::string("") ).c_str() );
 
     m_gDownloader = NULL;
-	
-	if (!_bReadOnlyInstance)
-	{
-		//if( g_Settings()->Get( "settings.content.registered", false ) )
-		{
-			if (g_NetworkManager != NULL)
-				g_NetworkManager->Login( SheepGenerator::nickName(), Shepherd::password() );
-		}
-	}
-	
+		
 	if( g_Settings()->Get( "settings.content.download_mode", true ) && _bReadOnlyInstance == false)
 	{
 		m_gDownloader = new SheepDownloader();

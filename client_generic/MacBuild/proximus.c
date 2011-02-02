@@ -1,9 +1,6 @@
 /*
  *  proximus.c
  *  ElectricSheep
- *
- *  Created by Daniel Svoboda on 3/16/09.
- *
  */
 
 #include <CoreServices/CoreServices.h>

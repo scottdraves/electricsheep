@@ -41,6 +41,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 	UInt8 m_proxyPass[32];
 	Boolean m_proxyEnabled;
 	std::string m_verStr;
+	int m_lckFile;
 	
 	typedef Boolean (*get_proxy_for_serverT)( const UInt8 *server, UInt8 *host, const UInt32 host_len, UInt8* user, const UInt32 user_len, UInt8 *pass, const UInt32 pass_len );
 		
@@ -54,6 +55,8 @@ class	CElectricSheep_Mac : public CElectricSheep
 				*m_proxyHost = 0;
 				*m_proxyUser = 0;
 				*m_proxyPass = 0;
+				
+				m_lckFile = -1;
 				
 				FSRef foundRef;
 				
@@ -309,8 +312,26 @@ class	CElectricSheep_Mac : public CElectricSheep
 				}
 					
 				m_glContextList.clear();
+				
+				//check the exclusive file lock to see if we are running alone...
+				std::string lockfile = m_AppData + ".instance-lock";
+								
+				m_lckFile = open( lockfile.c_str(), O_WRONLY + O_EXLOCK + O_NONBLOCK + O_CREAT, S_IWUSR + S_IWGRP + S_IWOTH );
 																
+				m_MultipleInstancesMode = ( m_lckFile < 0 );
+													
 				return CElectricSheep::Startup();
+			}
+			
+			virtual void	Shutdown()
+			{
+				CElectricSheep::Shutdown();
+								
+				if (m_lckFile >= 0)
+				{
+					close(m_lckFile);
+					m_lckFile = -1;
+				}
 			}
 
 

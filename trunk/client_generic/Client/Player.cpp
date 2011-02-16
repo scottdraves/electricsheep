@@ -126,14 +126,11 @@ bool CPlayer::AddDisplay( uint32 screen )
 	spCFrameDisplay						spFrameDisplay;
 
 	// modify aspect ratio and/or window size hint
-#ifndef MAC	
 	uint32	w = 1280;
 	uint32 h = 720;
-#endif
 	switch ( g_Settings()->Get( "settings.player.PlaybackMixingMode", 0 ) )
 	{
 	case 0: // only gold, if any
-#ifndef MAC
 		{
 			std::string content = g_Settings()->Root() + "content/";
 			std::string watchFolder = g_Settings()->Get( "settings.content.sheepdir", content ) + "/mpeg/";
@@ -144,13 +141,10 @@ bool CPlayer::AddDisplay( uint32 screen )
 				h = 592;
 			}
 		}
-#endif
 		break;
 	case 1: // free sheep only
-#ifndef MAC	
 		w = 800;
 		h = 592;
-#endif
 		break;
 	case 2: // all sheep
 		break;
@@ -239,6 +233,8 @@ bool CPlayer::AddDisplay( uint32 screen )
 	{
 		if( !spDisplay->Initialize( _glContext, true ) )
 			return false;
+			
+		spDisplay->ForceWidthAndHeight(w, h);
 	}
 #else
  	if( !spDisplay->Initialize( w, h, m_bFullscreen ) )
@@ -416,8 +412,6 @@ void	CPlayer::Start()
 		{
 			boost::mutex::scoped_lock lockthis( m_displayListMutex );
 			
-			uint32 sz = m_displayUnits.size(); 
-
 			DisplayUnitIterator it = m_displayUnits.begin();
 			
 			for ( ; it != m_displayUnits.end(); it++ )

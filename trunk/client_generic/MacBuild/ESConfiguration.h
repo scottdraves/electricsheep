@@ -1,12 +1,16 @@
 #import <Cocoa/Cocoa.h>
 #import "Sparkle/Sparkle.h"
 
-@interface ESConfiguration : NSWindowController {
-    IBOutlet NSMatrix* displayMode;	
+@interface ESConfiguration : NSWindowController
+#if defined(MAC_OS_X_VERSION_10_6) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6 
+ <NSTextFieldDelegate> 
+#endif
+{
+    IBOutlet NSMatrix* displayMode;
 	
-    IBOutlet NSFormCell* playerFPS;
-    IBOutlet NSFormCell* displayFPS;
-    IBOutlet NSFormCell* loopIterations;
+    IBOutlet NSTextField* playerFPS;
+    IBOutlet NSTextField* displayFPS;
+    IBOutlet NSTextField* loopIterations;
 	IBOutlet NSPopUpButton* display;
 	IBOutlet NSPopUpButton* multiDisplayMode;
 	IBOutlet NSButton* seamlessPlayback;
@@ -14,6 +18,7 @@
 	IBOutlet NSSlider* playEvenly;
 	IBOutlet NSButton* showAttribution;
 	IBOutlet NSButton* autoUpdates;
+	IBOutlet NSButton* negVoteKills;
 			
     IBOutlet NSTextField* drupalLogin;
     IBOutlet NSSecureTextField* drupalPassword;
@@ -32,22 +37,53 @@
 	IBOutlet NSButton* debugLog;
 	IBOutlet NSButton* silentMode;
 	
+	IBOutlet NSMatrix* playbackMixingMode;
+	IBOutlet NSMatrix* goldCacheType;
+	IBOutlet NSFormCell* goldCacheSize;
+    IBOutlet NSTextField* goldPlayerFPS;
+
+	
+	IBOutlet NSTextField* aboutText;
+	
+	IBOutlet NSTextField* goldText;
+	
 	IBOutlet NSTextField* version;	
 	
-	NSString *origNickname;
-	NSString *origPassword;
+	IBOutlet NSTextField* flockSizeText;
+	
+	IBOutlet NSTextField* goldFlockSizeText;
+	
+	IBOutlet NSTextField* loginTestStatusText;
+	
+	IBOutlet NSImageView* loginStatusImage;
+	
+	NSString *m_origNickname;
+	NSString *m_origPassword;
+	
+	NSMutableData *m_httpData;
+	
+	NSImage* redImage;
+	NSImage* yellowImage;
+	NSImage* greenImage;
 	
 	SUUpdater *m_updater;
+	
+	NSTimer *m_checkTimer;
+		
+	BOOL m_checkingLogin;
 }
 
 
 - (IBAction)ok:(id)sender;
 - (IBAction)cancel:(id)sender;
-- (IBAction)goToHelpPage:(id)sender;
+- (IBAction)goToCreateAccountPage:(id)sender;
 - (IBAction)chooseContentFolder:(id)sender;
 - (IBAction)doManualUpdate:(id)sender;
 
 - (ESConfiguration*)initWithWindowNibName:(NSString*)nibName updater:(SUUpdater*)updater;
+
+- (void)htmlifyEditFields;
+- (void)fixFlockSize;
 
 - (void)awakeFromNib;
 - (void)loadSettings;

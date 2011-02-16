@@ -32,6 +32,11 @@ extern "C" {
 	void ESScreensaver_DeinitClientStorage( void );
 	
 	void ESScreensaver_SetUpdateAvailable( const char *verinfo );
+	
+	size_t ESScreensaver_GetFlockSizeMBs(const char *mpegpath, int sheeptype);
+	
+	CFStringRef ESScreensaver_GetRoleFromXML(const char *xml);
+	
 #ifdef __cplusplus
 }
 #endif

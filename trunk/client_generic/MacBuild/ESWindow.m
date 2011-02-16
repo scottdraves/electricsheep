@@ -1,4 +1,5 @@
 #import "ESWindow.h"
+#import "ESScreensaver.h" 
 
 @implementation ESController
 
@@ -28,10 +29,21 @@
 	
 	mOriginalWindow = nil;
 	
-#warning dasvo:FIXME read the size from settings!!!	
+	ESScreensaver_InitClientStorage();
 	
-	frame.size.width = 800;
-	frame.size.height = 592; 
+	SInt32 pmm = ESScreensaver_GetIntSetting("settings.player.PlaybackMixingMode", 0);
+	
+	if (pmm == 1) //playing only free sheep???
+	{
+		frame.size.width = 800;
+		frame.size.height = 592;
+	}
+	else {
+		frame.size.width = 1280;
+		frame.size.height = 720; 
+	}
+
+	ESScreensaver_DeinitClientStorage();
 	
 	[self setFrame: [self frameRectForContentRect:frame] display:NO];
 

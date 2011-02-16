@@ -394,10 +394,14 @@ const CURLcode	CManager::Prepare( CURL *_pCurl )
 
 	//	Set http authentication if there is one.
 	if( m_UserPass != "" )
-		code = curl_easy_setopt( _pCurl, CURLOPT_USERPWD, m_UserPass.c_str() );
+	{
+		curl_easy_setopt(_pCurl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC); 
 
-	if( code != CURLE_OK )
-		return code;
+		code = curl_easy_setopt( _pCurl, CURLOPT_USERPWD, m_UserPass.c_str() );
+	
+		if( code != CURLE_OK )
+			return code;
+	}
 
 	//	Set proxy url and user/pass if they're defined.
 	if( m_ProxyUrl != "" )

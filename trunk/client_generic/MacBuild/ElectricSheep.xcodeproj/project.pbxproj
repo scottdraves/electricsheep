@@ -205,6 +205,12 @@
 		219AB85611F3336F00A01A7B /* proximus.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21CE8B860F6ECFBA00DDF96A /* proximus.bundle */; };
 		21AAA0BD0F7040B500AC23A8 /* ElectricSheep.nib in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA09E0F70400D00AC23A8 /* ElectricSheep.nib */; };
 		21AAA0EF0F70453200AC23A8 /* ESConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AAA0EE0F70453200AC23A8 /* ESConfiguration.m */; };
+		21ADBB241305D380000A9F20 /* green.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB211305D380000A9F20 /* green.tif */; };
+		21ADBB251305D380000A9F20 /* red.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB221305D380000A9F20 /* red.tif */; };
+		21ADBB261305D380000A9F20 /* yellow.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB231305D380000A9F20 /* yellow.tif */; };
+		21ADBB271305D380000A9F20 /* green.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB211305D380000A9F20 /* green.tif */; };
+		21ADBB281305D380000A9F20 /* red.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB221305D380000A9F20 /* red.tif */; };
+		21ADBB291305D380000A9F20 /* yellow.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB231305D380000A9F20 /* yellow.tif */; };
 		21C5D0940F9CF6D9001657E7 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 21C5D0930F9CF6D9001657E7 /* md5.c */; };
 		21C5D0950F9CF6D9001657E7 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 21C5D0930F9CF6D9001657E7 /* md5.c */; };
 		21CE8B8F0F6ECFFC00DDF96A /* proximus.c in Sources */ = {isa = PBXBuildFile; fileRef = 21CE8B8E0F6ECFFC00DDF96A /* proximus.c */; };
@@ -518,6 +524,9 @@
 		2199D0DB0F575949007CEB9C /* SheepUploader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SheepUploader.cpp; sourceTree = "<group>"; };
 		21AAA0ED0F70453200AC23A8 /* ESConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESConfiguration.h; sourceTree = "<group>"; };
 		21AAA0EE0F70453200AC23A8 /* ESConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESConfiguration.m; sourceTree = "<group>"; };
+		21ADBB211305D380000A9F20 /* green.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = green.tif; sourceTree = SOURCE_ROOT; };
+		21ADBB221305D380000A9F20 /* red.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = red.tif; sourceTree = SOURCE_ROOT; };
+		21ADBB231305D380000A9F20 /* yellow.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = yellow.tif; sourceTree = SOURCE_ROOT; };
 		21C5D0920F9CF6D9001657E7 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = md5.h; path = ../Common/md5.h; sourceTree = SOURCE_ROOT; };
 		21C5D0930F9CF6D9001657E7 /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = md5.c; path = ../Common/md5.c; sourceTree = SOURCE_ROOT; };
 		21CE8B860F6ECFBA00DDF96A /* proximus.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = proximus.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -845,6 +854,9 @@
 				2160FE1A0F30F82800B2C27A /* electricsheep-smile.png */,
 				2160FE230F30F82800B2C27A /* License.rtf */,
 				2160FE240F30F82800B2C27A /* logo.png */,
+				21ADBB211305D380000A9F20 /* green.tif */,
+				21ADBB221305D380000A9F20 /* red.tif */,
+				21ADBB231305D380000A9F20 /* yellow.tif */,
 				2160FE290F30F82800B2C27A /* Scripts */,
 			);
 			name = Runtime;
@@ -1002,6 +1014,9 @@
 			files = (
 				21AAA0BD0F7040B500AC23A8 /* ElectricSheep.nib in Resources */,
 				215545AA12620D3000AB51BF /* dsa_pub.pem in Resources */,
+				21ADBB271305D380000A9F20 /* green.tif in Resources */,
+				21ADBB281305D380000A9F20 /* red.tif in Resources */,
+				21ADBB291305D380000A9F20 /* yellow.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1020,6 +1035,9 @@
 				21EE636210139D68000CE53E /* MainMenu.xib in Resources */,
 				21EE636310139D68000CE53E /* ElectricSheep.nib in Resources */,
 				215545A912620D3000AB51BF /* dsa_pub.pem in Resources */,
+				21ADBB241305D380000A9F20 /* green.tif in Resources */,
+				21ADBB251305D380000A9F20 /* red.tif in Resources */,
+				21ADBB261305D380000A9F20 /* yellow.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

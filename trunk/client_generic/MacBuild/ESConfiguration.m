@@ -14,15 +14,37 @@
 	ESScreensaver_DeinitClientStorage();
 	
 	[NSApp endSheet:[self window]];
-};
+}
 
 - (IBAction)cancel:(id)sender
 {
 	[NSApp endSheet:[self window]];
-};
+}
 
 - (void)awakeFromNib  // was - (NSWindow *)window
 {
+	CFBundleRef bndl = dlbundle_ex();
+	
+	NSURL *imgUrl = (NSURL*)CFBundleCopyResourceURL(bndl, CFSTR("red.tif"), NULL, NULL);
+	
+	redImage = [[NSImage alloc] initWithContentsOfURL:imgUrl]; 
+	
+	[imgUrl release];
+	
+	imgUrl = (NSURL*)CFBundleCopyResourceURL(bndl, CFSTR("yellow.tif"), NULL, NULL);
+
+	yellowImage = [[NSImage alloc] initWithContentsOfURL:imgUrl];
+	
+	[imgUrl release];
+	
+	imgUrl = (NSURL*)CFBundleCopyResourceURL(bndl, CFSTR("green.tif"), NULL, NULL);
+	
+	greenImage = [[NSImage alloc] initWithContentsOfURL:imgUrl];
+	
+	[imgUrl release];
+	
+	m_checkTimer = nil;
+	
 	ESScreensaver_InitClientStorage();
 
 	[self loadSettings];
@@ -53,8 +75,224 @@
 	return retStr;
 }
 
+
+- (void)htmlifyEditFields
+{
+	// both are needed, otherwise hyperlink won't accept mousedown
+    [aboutText setAllowsEditingTextAttributes: YES];
+    [aboutText setSelectable: YES];
+
+    NSAttributedString* string = [[NSMutableAttributedString alloc] initWithHTML:[[aboutText stringValue] dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:NULL];
+
+    // set the attributed string to the NSTextField
+    [aboutText setAttributedStringValue: string];
+	
+	[string release];
+	
+	[goldText setAllowsEditingTextAttributes: YES];
+    [goldText setSelectable: YES];
+	
+
+    string = [[NSMutableAttributedString alloc] initWithHTML:[[goldText stringValue] dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:NULL];
+
+    // set the attributed string to the NSTextField
+    [goldText setAttributedStringValue: string];
+	
+	[string release];
+
+}
+
+- (void)fixFlockSize
+{	 
+	const char *mpegpath = [[[contentFldr stringValue] stringByStandardizingPath] UTF8String];
+	 
+	if (mpegpath != NULL && *mpegpath)
+	{
+		NSMutableString *str = [NSMutableString stringWithString:[flockSizeText stringValue]];
+
+		size_t flockSize = ESScreensaver_GetFlockSizeMBs(mpegpath, 0);
+		
+		[str replaceOccurrencesOfString:@"^1" withString:[NSString stringWithFormat:@"%ld", flockSize] options:0 range:NSMakeRange(0, [str length])];
+		
+		[flockSizeText setStringValue:str];
+		
+		
+		str = [NSMutableString stringWithString:[goldFlockSizeText stringValue]];
+
+		size_t goldFlockSize = ESScreensaver_GetFlockSizeMBs(mpegpath, 1);
+		
+		[str replaceOccurrencesOfString:@"^1" withString:[NSString stringWithFormat:@"%ld", goldFlockSize] options:0 range:NSMakeRange(0, [str length])];
+		
+		[goldFlockSizeText setStringValue:str];  
+	}
+}
+
+- (void)setCheckingLogin:(Boolean)cl
+{
+	
+}
+
+
+- (void)connection:(NSURLConnection *)connection
+  didFailWithError:(NSError *)error
+{ 
+	[loginStatusImage setImage:yellowImage];
+	[loginTestStatusText setStringValue:@"The server is unreachable."];
+	
+	m_checkingLogin = NO;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+	// do something with the data
+	// receivedData is declared as a method instance elsewhere
+	// NSLog(@"Succeeded! Received bytes of data");
+	
+	int len = [m_httpData length];
+	
+	if (len > 0)
+	{
+		char xml[1024];
+	   
+		[m_httpData getBytes:xml length:sizeof(xml) - 1];
+	   
+		if ([m_httpData length] < sizeof(xml))
+			xml[ [m_httpData length] ] = 0;
+		else
+			xml[sizeof(xml) - 1] = 0;
+			
+		NSString *rolestr = (NSString*)ESScreensaver_GetRoleFromXML(xml);
+		   
+		[loginStatusImage setImage:greenImage];
+		[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Logged in (role: %@).", rolestr ? rolestr : @"N/A"]];
+	}
+	else
+	{
+		[loginStatusImage setImage:yellowImage];
+		[loginTestStatusText setStringValue:@"Incorrect response from the server."];
+	}
+	
+	[m_httpData release];
+	
+	m_checkingLogin = NO;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    // This method is called when the server has determined that it
+    // has enough information to create the NSURLResponse.
+ 
+    // It can be called multiple times, for example in the case of a
+    // redirect, so each time we reset the data.
+ 
+    // receivedData is an instance variable declared elsewhere.
+    //[receivedData setLength:0];
+	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+    
+    if (![httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+        NSLog(@"Unknown response type: %@", response);
+        return;
+    }
+		
+	int _statusCode = [httpResponse statusCode];	
+
+	
+	if (_statusCode == 200)
+	{
+	}
+	else 
+	{
+		[loginStatusImage setImage:redImage];
+		[loginTestStatusText setStringValue:@"Login Failed :("];
+	}
+
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    // Append the new data to receivedData.
+    // receivedData is an instance variable declared elsewhere.
+    [m_httpData appendData:data];
+}
+
+
+- (void)startTest:(NSTimer *)timer
+{
+	if (m_checkingLogin)
+		[m_checkTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+		
+	m_checkingLogin = YES;
+
+	[m_checkTimer invalidate];
+	m_checkTimer = nil;
+	
+
+	[loginStatusImage setImage:nil];
+
+	[loginTestStatusText setStringValue:@"Testing Login..."];
+	
+	m_httpData = [[NSMutableData dataWithCapacity:10] retain];
+	
+	CFStringRef username = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)[drupalLogin stringValue], NULL, NULL, kCFStringEncodingUTF8);
+	CFStringRef pass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)[drupalPassword stringValue], NULL, NULL, kCFStringEncodingUTF8);
+	CFStringRef ver = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, CFSTR(CLIENT_VERSION), NULL, NULL, kCFStringEncodingUTF8);
+	
+	NSString *urlstr = [NSString stringWithFormat:@"http://%s/query.php?q=redir&u=%@&p=%@&v=%@", REDIRECT_SERVER, username, pass, ver ];
+	
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlstr]];
+	
+	CFRelease(username);
+	CFRelease(pass);
+	CFRelease(ver);
+	
+	/*CFHTTPMessageRef dummyRequest =
+		CFHTTPMessageCreateRequest(
+			kCFAllocatorDefault,
+			CFSTR("GET"),
+			(CFURLRef)[request URL],
+			kCFHTTPVersion1_1);
+			
+	CFHTTPMessageAddAuthentication(
+		dummyRequest,
+		nil,
+		(CFStringRef)[drupalLogin stringValue],
+		(CFStringRef)[drupalPassword stringValue],
+		kCFHTTPAuthenticationSchemeBasic,
+		FALSE);
+		
+	NSString *authorizationString =
+		(NSString *)CFHTTPMessageCopyHeaderFieldValue(
+			dummyRequest,
+			CFSTR("Authorization"));
+						
+	CFRelease(dummyRequest);
+	
+	[request setValue:authorizationString forHTTPHeaderField:@"Authorization"];*/
+	
+	[NSURLConnection connectionWithRequest:request delegate:self];
+}
+
+- (void)controlTextDidChange:(NSNotification *)aNotification
+{
+	if (m_checkTimer != nil)
+	{
+		if ([m_checkTimer isValid])
+		{
+			[m_checkTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+			return;
+		}
+		else
+			[m_checkTimer release];
+	}
+			
+	m_checkTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(startTest:) userInfo:nil repeats:NO];
+}
+
+
 - (void)loadSettings
 {
+	[self htmlifyEditFields];
+	
 	[playerFPS setIntValue: ESScreensaver_GetIntSetting("settings.player.player_fps", 23)];
 	
 	[displayFPS setIntValue: ESScreensaver_GetIntSetting("settings.player.display_fps", 60)];
@@ -91,30 +329,36 @@
 
 	[showAttribution setState: ESScreensaver_GetBoolSetting("settings.app.attributionpng", true)];
 	
+	[negVoteKills setState: ESScreensaver_GetBoolSetting("settings.content.negvotedeletes", true)];
+	
 	SUUpdater *upd = [self updater];
 
 	if (upd)
 		[autoUpdates setState:[upd automaticallyChecksForUpdates]];
 
 	[useProxy setState: ESScreensaver_GetBoolSetting("settings.content.use_proxy", false)];
+			
+	[proxyHost setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.proxy", "") autorelease]];
 		
-	[proxyHost setStringValue: (NSString*)ESScreensaver_GetStringSetting("settings.content.proxy", "")];
+	m_origNickname = (NSString*)ESScreensaver_GetStringSetting("settings.generator.nickname", "");
 	
-	origNickname = (NSString*)ESScreensaver_GetStringSetting("settings.generator.nickname", "");
+	//[m_origNickname retain];
 	
-	[origNickname retain];
+	[drupalLogin setStringValue: m_origNickname];
 	
-	[drupalLogin setStringValue: origNickname];
+	[drupalLogin setDelegate:self];
 	
-	origPassword = (NSString*)ESScreensaver_GetStringSetting("settings.content.password_md5", "");
+	m_origPassword = (NSString*)ESScreensaver_GetStringSetting("settings.content.password_md5", "");
 	
-	[origPassword retain];
+	//[m_origPassword retain];
 
-	[drupalPassword setStringValue: origPassword];
+	[drupalPassword setStringValue: m_origPassword];
 	
-	[proxyLogin setStringValue: (NSString*)ESScreensaver_GetStringSetting("settings.content.proxy_username", "")];
+	[drupalPassword setDelegate:self];
+	
+	[proxyLogin setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.proxy_username", "") autorelease]];
 
-	[proxyPassword setStringValue: (NSString*)ESScreensaver_GetStringSetting("settings.content.proxy_password", "")];
+	[proxyPassword setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.proxy_password", "") autorelease]];
 	
 	bool unlimited_cache = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache", false);
 	
@@ -141,9 +385,36 @@
 
 	[debugLog setState: ESScreensaver_GetBoolSetting("settings.app.log", false)];
 
-	[contentFldr setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.sheepdir", "") stringByAbbreviatingWithTildeInPath]];
+	[contentFldr setStringValue: [[(NSString*)ESScreensaver_GetStringSetting("settings.content.sheepdir", "") autorelease] stringByAbbreviatingWithTildeInPath]];
+	
+	
+	SInt32 pmm = ESScreensaver_GetIntSetting("settings.player.PlaybackMixingMode", 0);
+	
+	[playbackMixingMode selectCellWithTag:pmm];
+
+	[goldPlayerFPS setIntValue: ESScreensaver_GetIntSetting("settings.player.player_fps_gold", 30)];
+	
+	bool unlimited_cache_gold = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache_gold", false);
+	
+	SInt32 cache_size_gold = ESScreensaver_GetIntSetting("settings.content.cache_size_gold", 2000);
+
+	if (cache_size_gold == 0)
+	{
+		unlimited_cache_gold = true;
+		
+		cache_size_gold = 2000;
+	}
+
+	[goldCacheType selectCellWithTag: (unlimited_cache_gold ? 0 : 1) ];
+	
+	[goldCacheSize setIntValue: cache_size_gold];
+	
 
 	[version setStringValue:(NSString*)ESScreensaver_GetVersion()];
+		
+	[self fixFlockSize];
+	
+	[self startTest:nil];
 
 }
 
@@ -180,6 +451,8 @@
 	ESScreensaver_SetBoolSetting("settings.player.silent_mode", [silentMode state]);
 	
 	ESScreensaver_SetBoolSetting("settings.app.attributionpng", [showAttribution state]);
+	
+	ESScreensaver_SetBoolSetting("settings.content.negvotedeletes", [negVoteKills state]);
 
 	SUUpdater *upd = [self updater];
 
@@ -196,7 +469,7 @@
 	
 	NSString *newPassword = [drupalPassword stringValue];
 	
-	if (![newNickname isEqual:origNickname] || ![newPassword isEqual:origPassword])
+	if (![newNickname isEqual:m_origNickname] || ![newPassword isEqual:m_origPassword])
 	{
 		ESScreensaver_SetStringSetting("settings.generator.nickname", [newNickname UTF8String]);
 
@@ -204,7 +477,7 @@
 		
 		ESScreensaver_SetStringSetting("settings.content.password_md5", [md5Password UTF8String]);
 	}
-
+	
 	ESScreensaver_SetStringSetting("settings.content.proxy_username", [[proxyLogin stringValue] UTF8String]);
 
 	ESScreensaver_SetStringSetting("settings.content.proxy_password", [[proxyPassword stringValue] UTF8String]);
@@ -226,14 +499,30 @@
 	ESScreensaver_SetBoolSetting("settings.generator.save_frames", [saveFrames state]);
 
 	ESScreensaver_SetBoolSetting("settings.app.log", [debugLog state]);
+	
+	
+	ESScreensaver_SetIntSetting("settings.player.PlaybackMixingMode", [[playbackMixingMode selectedCell] tag]);
+	
+	int player_fps_gold = [goldPlayerFPS intValue];
+	
+	if (player_fps_gold <= 0)
+		player_fps_gold = 1;
+	
+	ESScreensaver_SetIntSetting("settings.player.player_fps_gold", player_fps_gold);
+	
+	bool unlimited_cache_gold = ([[goldCacheType selectedCell] tag] == 0);
+	
+	ESScreensaver_SetBoolSetting("settings.content.unlimited_cache_gold", unlimited_cache_gold);
+
+	SInt32 cache_size_gold = [goldCacheSize intValue];
+	
+	ESScreensaver_SetIntSetting("settings.content.cache_size_gold", cache_size_gold);
 }
 
 
-- (IBAction)goToHelpPage:(id)sender
+- (IBAction)goToCreateAccountPage:(id)sender
 {
-	NSString *urlStr = [NSString stringWithFormat:@"http://electricsheep.org/client/%s", CLIENT_VERSION];
-	
-	NSURL *helpURL = [NSURL URLWithString:urlStr];
+	NSURL *helpURL = [NSURL URLWithString: @"http://community.electricsheep.org/user/register"];
 	
 	[[NSWorkspace sharedWorkspace] openURL:helpURL];
 }
@@ -260,6 +549,8 @@
             [field setObjectValue:[[openPanel directory] stringByAbbreviatingWithTildeInPath]];
         }
     }
+	
+	[self fixFlockSize];
 }
 
 - (ESConfiguration*)initWithWindowNibName:(NSString*)nibName updater:(SUUpdater*)updater

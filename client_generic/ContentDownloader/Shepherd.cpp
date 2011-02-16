@@ -473,7 +473,7 @@ const char *Shepherd::serverName( bool allowServerQuery )
 
 				//	Create the url for getting the cp file to create the frame
 				char 	url[ MAXBUF*5 ];
-				snprintf( url, MAXBUF*5, "http://%s/query.php?q=redir&u=%s&p=%s&v=%s&u=%s",
+				snprintf( url, MAXBUF*5, "http://%s/query.php?q=redir&u=%s&p=%s&v=%s&i=%s",
 					fRedirectServerName,
 					nickEncoded.c_str(),
 					passEncoded.c_str(),

@@ -152,7 +152,6 @@ class	CElectricSheep
 
 			virtual ~CElectricSheep()
 			{
-				SAFE_DELETE( m_pVoter );
 			}
 
 			//
@@ -360,7 +359,9 @@ class	CElectricSheep
 					//	This stuff was never started in config mode.
 					if (m_MultipleInstancesMode == false)
 					{
-						g_NetworkManager->Shutdown();
+						SAFE_DELETE( m_pVoter );
+
+						g_NetworkManager->Shutdown();						
 					}
 					g_Player().Shutdown();
 					g_Settings()->Shutdown();

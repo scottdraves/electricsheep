@@ -435,6 +435,14 @@ void	CContentDecoder::CalculateNextSheep()
 */
 void	CContentDecoder::ReadPackets()
 {
+	AVFrame		*pFrame = NULL;
+	
+	AVPacket    packet;
+
+	av_init_packet(&packet);
+	
+	CVideoFrame *pVideoFrame = NULL;
+	
 	try {
 	
 		g_Log->Info( "Packet thread started..." );
@@ -442,8 +450,7 @@ void	CContentDecoder::ReadPackets()
 		if( !NextSheepForPlaying() )
 			return;
 
-		AVPacket    packet;
-		AVFrame		*pFrame = avcodec_alloc_frame();
+		pFrame = avcodec_alloc_frame();
 
 		while( true )
 		{			
@@ -518,7 +525,7 @@ void	CContentDecoder::ReadPackets()
 						}
 
 						//printf( "creating pVideoFrame" );
-						CVideoFrame *pVideoFrame = new CVideoFrame( m_pVideoCodecContext, m_WantedPixelFormat, std::string(m_pFormatContext->filename) );
+						pVideoFrame = new CVideoFrame( m_pVideoCodecContext, m_WantedPixelFormat, std::string(m_pFormatContext->filename) );
 						AVFrame	*pDest = pVideoFrame->Frame();
 
 						//printf( "calling sws_scale()" );
@@ -555,6 +562,7 @@ void	CContentDecoder::ReadPackets()
 						pVideoFrame->SetMetaData_IsEdge( m_IsEdge );
 						pVideoFrame->SetMetaData_atime( m_CurrentFileatime );
 						m_FrameQueue.push( pVideoFrame );
+						pVideoFrame = NULL;
 
 						//printf( "yielding..." );
 						m_pDecoderThread->yield();
@@ -574,19 +582,25 @@ void	CContentDecoder::ReadPackets()
 			}
 		}
 
-		printf( "decoder thread ending..." );
-
-		if( pFrame )
-		{
-			av_free( pFrame );
-			pFrame = NULL;
-		}
-
-		g_Log->Info( "Ending decoder thread..." );
 	}
 	catch(thread_interrupted const&)
 	{
 	}
+	
+	if (pVideoFrame)
+		delete pVideoFrame;
+	
+	av_free_packet( &packet );
+	
+	printf( "decoder thread ending..." );
+
+	if( pFrame )
+	{
+		av_free( pFrame );
+		pFrame = NULL;
+	}
+
+	g_Log->Info( "Ending decoder thread..." );
 }
 
 void CContentDecoder::LockFrame()

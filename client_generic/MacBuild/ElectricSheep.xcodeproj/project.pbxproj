@@ -109,7 +109,6 @@
 		2160FCAB0F30F48200B2C27A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.dylib */; };
 		2160FCAC0F30F48200B2C27A /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.dylib */; };
 		2160FCAD0F30F48200B2C27A /* liblua5.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AF30E8E715E00CE185C /* liblua5.1.a */; };
-		2160FCAE0F30F48200B2C27A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1CB50E8E928500CE185C /* Carbon.framework */; };
 		2160FCAF0F30F48200B2C27A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135D2670EC70571005E246D /* AppKit.framework */; };
 		2160FE7C0F30F8A000B2C27A /* electricsheep-frown.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2160FE190F30F82800B2C27A /* electricsheep-frown.png */; };
 		2160FE7D0F30F8A000B2C27A /* electricsheep-smile.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2160FE1A0F30F82800B2C27A /* electricsheep-smile.png */; };
@@ -197,7 +196,6 @@
 		21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD10E8E6C0500CE185C /* libavformat.a */; };
 		21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.dylib */; };
 		21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AF30E8E715E00CE185C /* liblua5.1.a */; };
-		21887A260EC6CDF9001ABD2E /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1CB50E8E928500CE185C /* Carbon.framework */; };
 		2199D0A80F574AC8007CEB9C /* SheepGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */; };
 		2199D0A90F574AC8007CEB9C /* SheepGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */; };
 		2199D0DC0F575949007CEB9C /* SheepUploader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0DB0F575949007CEB9C /* SheepUploader.cpp */; };
@@ -231,7 +229,6 @@
 		21EE63C21013A879000CE53E /* ESScreensaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2135DA520EC7479A005E246D /* ESScreensaverView.m */; };
 		21EE63C31013A87F000CE53E /* ESScreensaver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2135DA540EC74853005E246D /* ESScreensaver.cpp */; };
 		21EE63CF1013A93A000CE53E /* ESConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AAA0EE0F70453200AC23A8 /* ESConfiguration.m */; };
-		21EE63D11013A975000CE53E /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135DB240EC75133005E246D /* ScreenSaver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -553,7 +550,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				213D540311F79C9800CF500D /* IOKit.framework in Frameworks */,
-				21EE63D11013A975000CE53E /* ScreenSaver.framework in Frameworks */,
 				2160FC9D0F30F48200B2C27A /* CoreFoundation.framework in Frameworks */,
 				2160FC9E0F30F48200B2C27A /* GLUT.framework in Frameworks */,
 				2160FC9F0F30F48200B2C27A /* OpenGL.framework in Frameworks */,
@@ -569,7 +565,6 @@
 				2160FCAC0F30F48200B2C27A /* libbz2.dylib in Frameworks */,
 				2160FCAD0F30F48200B2C27A /* liblua5.1.a in Frameworks */,
 				21DC0CA91263B98200D60C6A /* libcurl.dylib in Frameworks */,
-				2160FCAE0F30F48200B2C27A /* Carbon.framework in Frameworks */,
 				2160FCAF0F30F48200B2C27A /* AppKit.framework in Frameworks */,
 				212316970F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a in Frameworks */,
 				21CE8E3E0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
@@ -597,7 +592,6 @@
 				21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */,
 				21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */,
 				21DC0CAC1263B99000D60C6A /* libcurl.dylib in Frameworks */,
-				21887A260EC6CDF9001ABD2E /* Carbon.framework in Frameworks */,
 				2135D2690EC70571005E246D /* AppKit.framework in Frameworks */,
 				2181FAF00ECF42820078FDDA /* libswscale.a in Frameworks */,
 				212316960F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a in Frameworks */,
@@ -1345,12 +1339,12 @@
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 					"\"$(SRCROOT)/../lua5.1/src\"",
 				);
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.6;
+				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = "Electric Sheep";
 				SDKROOT = macosx10.4;
-				"SDKROOT[arch=x86_64]" = macosx10.6;
+				"SDKROOT[arch=x86_64]" = macosx10.5;
 				VALID_ARCHS = "i386 ppc x86_64";
 			};
 			name = Debug;
@@ -1379,7 +1373,7 @@
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 					"\"$(SRCROOT)/../lua5.1/src\"",
 				);
-				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.6;
+				"MACOSX_DEPLOYMENT_TARGET[arch=x86_64]" = 10.5;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1389,7 +1383,7 @@
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_NAME = "Electric Sheep";
 				SDKROOT = macosx10.4;
-				"SDKROOT[arch=x86_64]" = macosx10.6;
+				"SDKROOT[arch=x86_64]" = macosx10.5;
 				STRIP_INSTALLED_PRODUCT = YES;
 				VALID_ARCHS = "i386 ppc x86_64";
 				ZERO_LINK = NO;

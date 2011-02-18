@@ -232,18 +232,31 @@
 	[loginTestStatusText setStringValue:@"Testing Login..."];
 	
 	m_httpData = [[NSMutableData dataWithCapacity:10] retain];
+			
+	NSString *newPassword = [drupalPassword stringValue];
+	NSString *newNickname = [drupalLogin stringValue];
 	
-	CFStringRef username = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)[drupalLogin stringValue], NULL, NULL, kCFStringEncodingUTF8);
-	CFStringRef pass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)[drupalPassword stringValue], NULL, NULL, kCFStringEncodingUTF8);
-	CFStringRef ver = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, CFSTR(CLIENT_VERSION), NULL, NULL, kCFStringEncodingUTF8);
+	NSString *md5_pass;
+
+	if (![newPassword isEqual:m_origPassword])
+	{
+		md5_pass = [self computeMD5:[NSString stringWithFormat:@"%@sh33p%@", newPassword, newNickname]];
+	}
+	else {
+		md5_pass = newPassword;
+	}
+
+	CFStringRef urlnickname = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)newNickname, NULL, NULL, kCFStringEncodingUTF8);	
+	CFStringRef urlpass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)md5_pass, NULL, NULL, kCFStringEncodingUTF8);
+	CFStringRef urlver = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, CFSTR(CLIENT_VERSION), NULL, NULL, kCFStringEncodingUTF8);
 	
-	NSString *urlstr = [NSString stringWithFormat:@"http://%s/query.php?q=redir&u=%@&p=%@&v=%@", REDIRECT_SERVER, username, pass, ver ];
-	
+	NSString *urlstr = [NSString stringWithFormat:@"http://%s/query.php?q=redir&u=%@&p=%@&v=%@", REDIRECT_SERVER, urlnickname, urlpass, urlver ];
+		
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlstr]];
 	
-	CFRelease(username);
-	CFRelease(pass);
-	CFRelease(ver);
+	CFRelease(urlnickname);
+	CFRelease(urlpass);
+	CFRelease(urlver);
 	
 	/*CFHTTPMessageRef dummyRequest =
 		CFHTTPMessageCreateRequest(

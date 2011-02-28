@@ -23,7 +23,7 @@ If you don't want to wait, you can download and install some sheep manually. The
 
 1. To download a packs of 100s, follow the directions in the [http://community.electricsheep.org/node/247 forum].
 
-2. To download one at a time, go to the [http://v2d7c.sheepserver.net/cgi/status.cgi server] , pick a sheep, click on the icon to go to its own page. Then click again on the full-size image to save it to your hard disk in the same location as you put the packs (see the link above).
+2. To download one at a time, go to the [http://v2d7c.sheepserver.net/cgi/status.cgi server] , pick a sheep, click on the icon to go to its own page. Then click again (control-click on mac, or right-click on windows) on the full-size image to save it to your hard disk in the same location as you put the packs (see the link above).
 <p><br>
 ----
 <p><br>

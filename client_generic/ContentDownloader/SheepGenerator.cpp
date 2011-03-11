@@ -502,7 +502,7 @@ bool	SheepGenerator::generateSheep()
 				//	Parse the xml file to get env-vars.
 				TiXmlDocument *pDoc = new TiXmlDocument;
 
-				uint32	sleeptime = 0;
+				uint32	sleeptime = TIMEOUT;
 				if( pDoc )
 				{
 					if( pDoc->LoadFile( cpf ) )

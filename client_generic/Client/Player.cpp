@@ -114,7 +114,7 @@ void	CPlayer::SetHWND( HWND _hWnd )
 bool CPlayer::AddDisplay( CGLContextObj _glContext )
 #else
 #ifdef WIN32
-bool CPlayer::AddDisplay( uint32 screen, bool _blank )
+bool CPlayer::AddDisplay( uint32 screen, IDirect3D9 *_pIDirect3D9, bool _blank)
 #else
 bool CPlayer::AddDisplay( uint32 screen )
 #endif
@@ -153,7 +153,6 @@ bool CPlayer::AddDisplay( uint32 screen )
 
 
 #ifdef	WIN32
-#ifdef _MSC_VER
 	bool bDirectDraw = g_Settings()->Get( "settings.player.directdraw", false );
 	CDisplayDD *pDisplayDD = NULL;
 	CDisplayDX *pDisplayDX = NULL;
@@ -165,7 +164,7 @@ bool CPlayer::AddDisplay( uint32 screen )
 	else
 	{
 		g_Log->Info( "Attempting to open %s...", CDisplayDX::Description() );
-		pDisplayDX = new CDisplayDX(_blank);
+		pDisplayDX = new CDisplayDX( _blank, _pIDirect3D9 );
 		pDisplayDX->SetScreen( screen );
 	}
 	
@@ -193,34 +192,6 @@ bool CPlayer::AddDisplay( uint32 screen )
 		spRenderer = new CRendererDD();
 	else
 		spRenderer = new CRendererDX();
-#else
-	CDisplayDX *pDisplayDX = NULL;
-
-	g_Log->Info( "Attempting to open %s...", CDisplayDX::Description() );
-	pDisplayDX = new CDisplayDX();
-	pDisplayDX->SetScreen( screen );
-	
-	
-	if( pDisplayDX == NULL)
-	{
-		g_Log->Error( "Unable to open display" );
-		return false;
-	}
-
-	spDisplay = pDisplayDX;
-
-	if( m_hWnd )
-	{
-		if( !spDisplay->Initialize( m_hWnd, true ) )
-			return false;
-	}
-	else
-		if ( !spDisplay->Initialize( w, h, m_bFullscreen ) )
-			return false;
-
-	spRenderer = new CRendererDX();
-
-#endif // !_MSC_VER
 #else // !WIN32
 
 	g_Log->Info( "Attempting to open %s...", CDisplayGL::Description() );

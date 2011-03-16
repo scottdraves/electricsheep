@@ -66,7 +66,7 @@ class CDisplayDX : public CDisplayOutput
 	bool	InitDX9();
 
 	public:
-			CDisplayDX(bool _blank);
+			CDisplayDX(bool _blank, IDirect3D9 *_pIDirect3D9);
 			virtual ~CDisplayDX();
 
 			virtual DWORD	GetNumMonitors() { return m_dwNumMonitors; }
@@ -77,6 +77,7 @@ class CDisplayDX : public CDisplayOutput
 			static char *Description()	{	return "Windows DirectX display";	};
 			virtual HWND	Initialize( const uint32 _width, const uint32 _height, const bool _bFullscreen );
 
+			UINT	GetAdapterOrdinal();
 			HWND	WindowHandle( void )	{	return m_WindowHandle;	};
 			IDirect3DDevice9	*Device()	{	return m_pDevice;		};
 			D3DPRESENT_PARAMETERS PresentParameters() { return m_PresentationParams; };

@@ -6,6 +6,8 @@
 #endif
 
 #include <windows.h>
+#include <d3d9.h>
+#include <d3dx9.h>
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <shellapi.h>
@@ -50,7 +52,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 
 	//	Mode deduced from cmdline parsing.
 	eScrMode m_ScrMode;
-
+	IDirect3D9 * m_pD3D9;
 
 	//	Previous mouse pos, for movement calcs.
 	bool			m_bMouseUnknown;
@@ -116,7 +118,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 	}
 
 	public:
-			CElectricSheep_Win32() : CElectricSheep(), g_SingleInstanceObj( "Global\\{"CLIENT_VERSION_PRETTY"}" ), m_bAllowFKey(false)
+			CElectricSheep_Win32() : CElectricSheep(), g_SingleInstanceObj( "Global\\{"CLIENT_VERSION_PRETTY"}" ), m_bAllowFKey(false), m_pD3D9(NULL)
 			{
 				printf( "CElectricSheep_Win32()\n" );
 
@@ -134,7 +136,11 @@ class	CElectricSheep_Win32 : public CElectricSheep
 					BOOL bUnused;
 					SystemParametersInfo( SPI_SCREENSAVERRUNNING, FALSE, &bUnused, WM_SETTINGCHANGE );
 				}
-				SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, TRUE, NULL, WM_SETTINGCHANGE );
+				SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, TRUE, NULL, WM_SETTINGCHANGE );\
+				if (m_pD3D9 != NULL)
+				{
+					m_pD3D9->Release();
+				}
 			}
 
 			//
@@ -397,21 +403,44 @@ class	CElectricSheep_Win32 : public CElectricSheep
 				if( m_ScrMode == eWindowed || m_ScrMode == eWindowed_AllowMultipleInstances)
 					g_Player().Fullscreen( false );
 
-				if ( g_Player().AddDisplay(g_Settings()->Get( "settings.player.screen", 0 ), 
+				size_t monnum = g_Settings()->Get( "settings.player.screen", 0 );
+				
+				m_pD3D9 = Direct3DCreate9( D3D_SDK_VERSION );
+				
+				if ( g_Player().AddDisplay(g_Settings()->Get( "settings.player.screen", 0 ), m_pD3D9,
 					g_Settings()->Get( "settings.player.MultiDisplayMode", 0 ) == CPlayer::kMDSingleScreen && m_ScrMode != eFullScreenStandalone  && m_ScrMode != eWindowed
 					) == false)
 				{
-					g_Log->Error( "AddDisplay failed for screen %d", g_Settings()->Get( "settings.player.screen", 0 ));
-					return false;
+					bool foundfirstmon = false;
+					g_Log->Error( "AddDisplay failed for screen %d", monnum );
+					g_Log->Info( "Trying to autodetect usable monitors..." );
+					monnum = 0;
+					while (monnum < 9)
+					{
+						g_Log->Info( "Trying monitor %d", monnum );
+						if (g_Player().AddDisplay( monnum, m_pD3D9 ) == true)
+						{
+							foundfirstmon = true;
+							g_Log->Info( "Monitor %d ok", monnum );
+							break;
+						}
+						else
+						{
+							g_Log->Error( "Monitor %d failed", monnum );
+							++monnum;
+						}
+					}
+					if (foundfirstmon == false)
+						return false;
 				} else
 					g_Log->Info( "AddDisplay succeeded for screen %d", g_Settings()->Get( "settings.player.screen", 0 ));
 				if ( m_ScrMode != eWindowed && m_ScrMode != eWindowed_AllowMultipleInstances && g_Settings()->Get( "settings.player.MultiDisplayMode", 0 ) != CPlayer::kMDSingleScreen)
-					for (DWORD dw = ( g_Settings()->Get( "settings.player.screen", 0 ) + 1 ); dw < g_Player().Display()->GetNumMonitors(); ++dw)
+					for ( DWORD dw = ( monnum + 1 ); dw < g_Player().Display()->GetNumMonitors(); ++dw )
 					{
-						if (g_Player().AddDisplay(dw) == true)
-							g_Log->Info( "AddDisplay succeeded for screen %d", dw);
+						if ( g_Player().AddDisplay( dw, m_pD3D9 ) == true )
+							g_Log->Info( "AddDisplay succeeded for screen %d", dw );
 						else
-							g_Log->Error( "AddDisplay failed for screen %d", dw);
+							g_Log->Error( "AddDisplay failed for screen %d", dw );
 					}
 				//
 				if( CElectricSheep::Startup() == false )

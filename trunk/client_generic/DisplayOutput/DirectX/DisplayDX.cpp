@@ -22,12 +22,13 @@ namespace	DisplayOutput
 
 bool		m_bWaitForInputIdle = false;
 bool		g_bPreview = false;
+static HWND		gl_hFocusWindow = NULL;
 
 /*
 	CDisplayDX().
 
 */
-CDisplayDX::CDisplayDX(bool _blank) : CDisplayOutput()
+CDisplayDX::CDisplayDX(bool _blank, IDirect3D9 *_pIDirect3D9) : CDisplayOutput()
 {
 	memset(&m_PresentationParams, 0, sizeof(m_PresentationParams));
 	m_WindowHandle = NULL;
@@ -36,7 +37,7 @@ CDisplayDX::CDisplayDX(bool _blank) : CDisplayOutput()
 	m_bWaitForInputIdle = false;
 	m_dwNumMonitors = 0;
 	m_Shader20 = false;
-	m_pDirect3DInstance = NULL;
+	m_pDirect3DInstance = _pIDirect3D9;
 	m_BlankUnused = _blank;
 }
 
@@ -47,11 +48,6 @@ CDisplayDX::CDisplayDX(bool _blank) : CDisplayOutput()
 CDisplayDX::~CDisplayDX()
 {
 	g_Log->Info( "~CDisplayDX()" );
-	if (m_pDirect3DInstance != NULL && m_pDirect3DInstance->Release() == 0)
-	{
-		m_pDirect3DInstance = NULL;
-		g_Log->Info( "~CDisplayDX() removing DirectX object" );
-	}
 }
 
 /*
@@ -292,23 +288,41 @@ LRESULT CALLBACK CDisplayDX::wndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM
     return 0;
 }
 
+UINT	CDisplayDX::GetAdapterOrdinal()
+{
+	if (m_pDirect3DInstance == NULL)
+	{
+		g_Log->Error( "Using default adapter for screen %d", m_DesiredScreenID );
+		return D3DADAPTER_DEFAULT;
+	}
+	MONITORINFO monitorInfo;
+	for( DWORD iMonitor = 0; iMonitor < m_dwNumMonitors; iMonitor++ )
+	{
+		if (iMonitor == m_DesiredScreenID)
+		{
+			MonitorInfo *pMonitorInfo = &m_Monitors[iMonitor];
+			monitorInfo.cbSize = sizeof(MONITORINFO);
+			if ( GetMonitorInfo( pMonitorInfo->hMonitor, &monitorInfo ) != 0 )
+				for ( size_t iAdapter = 0; iAdapter < m_pDirect3DInstance->GetAdapterCount(); ++iAdapter )
+				{
+					if ( m_pDirect3DInstance->GetAdapterMonitor(iAdapter) == pMonitorInfo->hMonitor )
+					{
+						g_Log->Info( "Using adapter %d for screen %d", iAdapter, m_DesiredScreenID );
+						return iAdapter;
+					}
+				}
+		}
+	}
+	g_Log->Info( "Using default adapter for screen %d", m_DesiredScreenID );
+	return D3DADAPTER_DEFAULT;
+}
+
 /*
 */
 bool	CDisplayDX::InitDX9()
 {
-	//	Start dx9...
-	static IDirect3D9 *m_pDirect3D = NULL;
-	
-	if (m_pDirect3D == NULL)
+	if( m_pDirect3DInstance == NULL )
 	{
-		g_Log->Info( "Creating first IDirect3D9 object");
-		m_pDirect3D = Direct3DCreate9( D3D_SDK_VERSION );
-		m_pDirect3DInstance = m_pDirect3D;
-	}
-
-	if( m_pDirect3D == NULL )
-	{
-		g_Log->Error( "Creating IDirect3D9 object failure");
 		g_Log->Error( "Couldn't initialize Direct3D\nMake sure you have DirectX 9.0c or later installed." );
 		return false;
 	} else
@@ -335,15 +349,12 @@ bool	CDisplayDX::InitDX9()
 	m_PresentationParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
 
 	m_PresentationParams.EnableAutoDepthStencil = false;
-	//m_PresentationParams.AutoDepthStencilFormat = (depthBits > 16)? ((stencilBits > 0)? D3DFMT_D24S8 : D3DFMT_D24X8) : D3DFMT_D16;
 
 	m_PresentationParams.MultiSampleType = D3DMULTISAMPLE_NONE;
-	//m_PresentationParams.MultiSampleType = D3DMULTISAMPLE_4_SAMPLES;
-	//m_PresentationParams.MultiSampleQuality = D3DMULTISAMPLE_4_SAMPLES;
 
     D3DCAPS9 caps;
     DWORD dwVertexProcessing = 0;
-    m_pDirect3D->GetDeviceCaps(0, D3DDEVTYPE_HAL, &caps);
+    m_pDirect3DInstance->GetDeviceCaps(0, D3DDEVTYPE_HAL, &caps);
 	if ( caps.VertexShaderVersion >= D3DVS_VERSION(2,0) )
 		m_Shader20 = true;
 	if (caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
@@ -353,34 +364,23 @@ bool	CDisplayDX::InitDX9()
             dwVertexProcessing = D3DCREATE_MIXED_VERTEXPROCESSING;
 			g_Log->Info( "DX: Mixed vertex processing" );
 			m_Shader20 = false;
-            //info->dwFixedVPUsage = 0;   // hardware
-           // info->dwShaderVPUsage = D3DUSAGE_SOFTWAREPROCESSING;
         }
         else
         {
-			g_Log->Info( "DX: Hardware vertex processing" );
             dwVertexProcessing = D3DCREATE_HARDWARE_VERTEXPROCESSING;
-			//if (caps.DevCaps & D3DDEVCAPS_PUREDEVICE)
-			//{
-			//	g_Log->Info( "DX: D3DCREATE_PUREDEVICE" );
-			//	dwVertexProcessing |= D3DCREATE_PUREDEVICE;
-			//}
+			g_Log->Info( "DX: Hardware vertex processing" );
 			m_Shader20 = true;
-           //  info->dwFixedVPUsage = 0;   // hardware
-           // info->dwShaderVPUsage = 0;  // hardware
 
         } 
     }
     else
     {
-		g_Log->Info( "DX: Software vertex processing" );
         dwVertexProcessing = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+		g_Log->Info( "DX: Software vertex processing" );
 		m_Shader20 = false;
-       // info->dwFixedVPUsage = D3DUSAGE_SOFTWAREPROCESSING;
-        //info->dwShaderVPUsage = D3DUSAGE_SOFTWAREPROCESSING;
     }
 
-	HRESULT devresult = m_pDirect3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_WindowHandle, D3DCREATE_FPU_PRESERVE | dwVertexProcessing, &m_PresentationParams, &m_pDevice);
+	HRESULT devresult = m_pDirect3DInstance->CreateDevice( m_bFullScreen ? GetAdapterOrdinal() : D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, gl_hFocusWindow == NULL ? m_WindowHandle : gl_hFocusWindow, D3DCREATE_FPU_PRESERVE | dwVertexProcessing, &m_PresentationParams, &m_pDevice);
 /*	UINT adapterid = 0;
 	for (adapterid = 0; adapterid < m_pDirect3D->GetAdapterCount(); ++adapterid)
 	{
@@ -413,6 +413,8 @@ bool	CDisplayDX::InitDX9()
 		};
 		return false;
 	}
+	if (gl_hFocusWindow == NULL)
+		gl_hFocusWindow = m_WindowHandle;
 	return true;
 }
 
@@ -423,6 +425,7 @@ bool	CDisplayDX::InitDX9()
 */
 HWND CDisplayDX::createwindow( uint32 _w, uint32 _h, const bool _bFullscreen )
 {
+	m_bFullScreen = _bFullscreen;
 	HMODULE    hInstance = GetModuleHandle(NULL);
 	
 	EnumMonitors();
@@ -602,7 +605,6 @@ bool	CDisplayDX::Initialize( HWND _hWnd, bool _bPreview )
 		{
 			g_Log->Error( "CDisplayDX::Initialize unable to create window from _hWnd" );
 			return false;
-			//ThrowStr( "Unable to create window..." );
 		}
 
 		g_Log->Info( "Screensaver (%dx%d)", m_Width, m_Height );
@@ -636,7 +638,7 @@ HWND CDisplayDX::Initialize( const uint32 _width, const uint32 _height, const bo
 	if( m_WindowHandle == 0 )
 	{
 		g_Log->Error( "CDisplayDX::Initialize createwindow returned 0" );
-		return 0;//ThrowStr( "Unable to create window..." );
+		return 0;
 	}
 
 	//	Show or Hide cursor.

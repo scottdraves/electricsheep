@@ -85,7 +85,7 @@ copy ..\runtime\pthreadGC2.dll ..\runtimemsvc /y
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libgcc.lib;libmingwex.lib;libmoldname.lib;libavcodec.lib;libavcore.lib;libavfilter.lib;libswscale.lib;libavdevice.lib;libavformat.lib;libavutil.lib;user32.lib;shlwapi.lib;wxzlibd.lib;wxpngd.lib;libcurld.lib;tinyxmld.lib;lua5.1d.lib;d3d9.lib;ws2_32.lib;wldap32.lib;ddraw.lib;dxguid.lib;psapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgcc.lib;libmingwex.lib;libmoldname.lib;libavcodec.lib;libavutil.lib;libavfilter.lib;libswscale.lib;libavdevice.lib;libavformat.lib;user32.lib;shlwapi.lib;wxzlibd.lib;wxpngd.lib;libcurld.lib;tinyxmld.lib;lua5.1d.lib;d3d9.lib;ws2_32.lib;wldap32.lib;ddraw.lib;dxguid.lib;psapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)d.exe</OutputFile>
       <AdditionalLibraryDirectories>..\curl\lib\debug-zlib;..\tinyXml\Debug;..\lua5.1\lib\static;..\ffmpeg\ffmpeg-static\lib;C:\wxWidgets-2.9.1\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -142,7 +142,7 @@ copy ..\runtime\pthreadGC2.dll ..\runtimemsvc
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libgcc.lib;libmingwex.lib;libmoldname.lib;libavcodec.lib;libavcore.lib;libavformat.lib;libswscale.lib;libavdevice.lib;libavutil.lib;wxzlib.lib;wxpng.lib;kernel32.lib;user32.lib;shlwapi.lib;libcurl.lib;tinyxml.lib;lua5.1.lib;d3d9.lib;ws2_32.lib;wldap32.lib;ddraw.lib;dxguid.lib;psapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgcc.lib;libmingwex.lib;libmoldname.lib;libavcodec.lib;libavformat.lib;libswscale.lib;libavdevice.lib;libavutil.lib;wxzlib.lib;wxpng.lib;kernel32.lib;user32.lib;shlwapi.lib;libcurl.lib;tinyxml.lib;lua5.1.lib;d3d9.lib;ws2_32.lib;wldap32.lib;ddraw.lib;dxguid.lib;psapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>NotSet</ShowProgress>
       <OutputFile>$(OutDir)$(ProjectName).scr</OutputFile>
       <AdditionalLibraryDirectories>..\curl\lib\release-zlib;..\tinyXml\Release;..\lua5.1\lib\static;..\ffmpeg\ffmpeg-static\lib;C:\wxWidgets-2.9.1\lib\vc_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

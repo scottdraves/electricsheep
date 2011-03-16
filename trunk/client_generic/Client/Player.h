@@ -1,6 +1,10 @@
 #ifndef	_PLAYER_H_
 #define	_PLAYER_H_
 
+#ifdef WIN32
+#include	<d3d9.h>
+#include	<d3dx9.h>
+#endif
 #include	"DisplayOutput.h"
 #include	"Renderer.h"
 #include	"Singleton.h"
@@ -125,7 +129,7 @@ private:
 			bool	AddDisplay( CGLContextObj _glContext );
 #else
 #ifdef WIN32
-			bool	AddDisplay( uint32 screen, bool _blank = false );
+			bool	AddDisplay( uint32 screen, IDirect3D9 *_pIDirect3D9 = NULL, bool _blank = false );
 #else
 			bool	AddDisplay( uint32 screen );
 #endif

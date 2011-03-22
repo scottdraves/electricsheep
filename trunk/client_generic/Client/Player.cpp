@@ -39,7 +39,7 @@
 #ifdef	WIN32
 #include	"DisplayDX.h"
 #include	"RendererDX.h"
-#if defined(WIN32) && defined(_MSC_VER)
+#if defined(WIN32) && defined(_MSC_VER) && !defined(_WIN64)
 #include	"../msvc/DisplayDD.h"
 #include	"../msvc/RendererDD.h"
 #endif
@@ -153,15 +153,19 @@ bool CPlayer::AddDisplay( uint32 screen )
 
 
 #ifdef	WIN32
+#ifndef _WIN64
 	bool bDirectDraw = g_Settings()->Get( "settings.player.directdraw", false );
 	CDisplayDD *pDisplayDD = NULL;
+#endif
 	CDisplayDX *pDisplayDX = NULL;
+#ifndef _WIN64
 	if (bDirectDraw)
 	{
 		g_Log->Info( "Attempting to open %s...", CDisplayDD::Description() );
 		pDisplayDD = new CDisplayDD();
 	}
 	else
+#endif
 	{
 		g_Log->Info( "Attempting to open %s...", CDisplayDX::Description() );
 		pDisplayDX = new CDisplayDX( _blank, _pIDirect3D9 );
@@ -169,17 +173,21 @@ bool CPlayer::AddDisplay( uint32 screen )
 	}
 	
 	
-	if( pDisplayDX == NULL && pDisplayDD == NULL)
+	if( pDisplayDX == NULL 
+#ifndef _WIN64
+		&& pDisplayDD == NULL
+#endif
+		)
 	{
 		g_Log->Error( "Unable to open display" );
 		return false;
 	}
-
+#ifndef _WIN64
 	if (bDirectDraw)
 		spDisplay = pDisplayDD;
 	else
+#endif
 		spDisplay = pDisplayDX;
-
 	if( m_hWnd )
 	{
 		if( !spDisplay->Initialize( m_hWnd, true ) )
@@ -188,9 +196,11 @@ bool CPlayer::AddDisplay( uint32 screen )
 	else
 		if ( !spDisplay->Initialize( w, h, m_bFullscreen ) )
 			return false;
+#ifndef _WIN64
 	if (bDirectDraw)
 		spRenderer = new CRendererDD();
 	else
+#endif
 		spRenderer = new CRendererDX();
 #else // !WIN32
 

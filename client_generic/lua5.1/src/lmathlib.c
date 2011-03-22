@@ -256,11 +256,11 @@ LUALIB_API int luaopen_math (lua_State *L) {
   luaL_register(L, LUA_MATHLIBNAME, mathlib);
   lua_pushnumber(L, PI);
   lua_setfield(L, -2, "pi");
-  #ifndef WIN32
+#ifndef WIN32
   lua_pushnumber(L, HUGE_VAL);
-  else
+#else
   lua_pushnumber(L, inf);
-  #endif
+#endif
   lua_setfield(L, -2, "huge");
 #if defined(LUA_COMPAT_MOD)
   lua_getfield(L, -1, "fmod");

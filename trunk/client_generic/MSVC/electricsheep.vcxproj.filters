@@ -189,18 +189,6 @@
     <ClCompile Include="..\DisplayOutput\Renderer\TextureFlat.cpp">
       <Filter>DisplayOutput\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="BackBufDD.cpp">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClCompile>
-    <ClCompile Include="DisplayDD.cpp">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClCompile>
-    <ClCompile Include="RendererDD.cpp">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureFlatDD.cpp">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClCompile>
     <ClCompile Include="..\DisplayOutput\DirectX\DisplayDX10.cpp">
       <Filter>DisplayOutput\DirectX10</Filter>
     </ClCompile>
@@ -233,6 +221,18 @@
     </ClCompile>
     <ClCompile Include="..\TupleStorage\storage.cpp">
       <Filter>TupleStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureFlatDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClCompile>
+    <ClCompile Include="BackBufDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClCompile>
+    <ClCompile Include="RendererDD.cpp">
+      <Filter>DisplayOutput\DirectX7</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,27 +470,6 @@
     <ClInclude Include="..\DisplayOutput\Renderer\TextureFlat.h">
       <Filter>DisplayOutput\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="BackBufDD.h">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClInclude>
-    <ClInclude Include="DirDrawErrs.h">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClInclude>
-    <ClInclude Include="DisplayDD.h">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClInclude>
-    <ClInclude Include="FontDD.h">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClInclude>
-    <ClInclude Include="RendererDD.h">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureFlatDD.h">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClInclude>
-    <ClInclude Include="WObject.h">
-      <Filter>DisplayOutput\DirectX7</Filter>
-    </ClInclude>
     <ClInclude Include="..\Networking\Networking.h">
       <Filter>Networking</Filter>
     </ClInclude>
@@ -508,6 +487,27 @@
     </ClInclude>
     <ClInclude Include="cpu_usage_win32.h">
       <Filter>Client\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureFlatDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="WObject.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="BackBufDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="DirDrawErrs.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="FontDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererDD.h">
+      <Filter>DisplayOutput\DirectX7</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

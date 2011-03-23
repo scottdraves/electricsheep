@@ -132,10 +132,7 @@ bool CPlayer::AddDisplay( uint32 screen )
 	{
 	case 0: // only gold, if any
 		{
-			std::string content = g_Settings()->Root() + "content/";
-			std::string watchFolder = g_Settings()->Get( "settings.content.sheepdir", content ) + "/mpeg/";
-			std::vector<std::string> files;
-			if ( Base::GetFileList( files,  watchFolder, "avi", true, false ) == false ) // no gold sheep
+			if (m_HasGoldSheep == false)
 			{
 				w = 800;
 				h = 592;
@@ -324,6 +321,9 @@ const bool	CPlayer::Startup()
 		if (m_InitPlayCounts)
 			g_PlayCounter().SetDirectory( content );
 	}
+
+	std::vector<std::string> files;
+	m_HasGoldSheep = Base::GetFileList( files,  watchFolder, "avi", true, false );
 
     //  Tidy up the paths.
     path    scriptPath = scriptRoot;

@@ -103,7 +103,7 @@ bool	CShaderDX::Build( const char *_pVertexShader, const char *_pFragmentShader 
 
 		const char *profile = g_DLLFun->D3DXGetVertexShaderProfile_fun( m_pDevice );
 
-		if( g_DLLFun->D3DXCompileShader_fun( shaderString.c_str(), shaderString.length(), NULL, NULL, "main", profile, D3DXSHADER_SKIPVALIDATION, &pShaderBuf, &pErrorsBuf, &m_pVertexConstants ) == D3D_OK )
+		if( g_DLLFun->D3DXCompileShader_fun( shaderString.c_str(), (UINT)shaderString.length(), NULL, NULL, "main", profile, D3DXSHADER_SKIPVALIDATION, &pShaderBuf, &pErrorsBuf, &m_pVertexConstants ) == D3D_OK )
 		{
 			if (FAILED(m_pDevice->CreateVertexShader( (DWORD *)pShaderBuf->GetBufferPointer(), &m_pVertexShader )))
 			{
@@ -132,7 +132,7 @@ bool	CShaderDX::Build( const char *_pVertexShader, const char *_pFragmentShader 
 
 		const char *profile = g_DLLFun->D3DXGetPixelShaderProfile_fun( m_pDevice );
 
-		if( g_DLLFun->D3DXCompileShader_fun( shaderString.c_str(), shaderString.length(), NULL, NULL, "main", profile, D3DXSHADER_SKIPVALIDATION, &pShaderBuf, &pErrorsBuf, &m_pFragmentConstants ) == D3D_OK )
+		if( g_DLLFun->D3DXCompileShader_fun( shaderString.c_str(), (UINT)shaderString.length(), NULL, NULL, "main", profile, D3DXSHADER_SKIPVALIDATION, &pShaderBuf, &pErrorsBuf, &m_pFragmentConstants ) == D3D_OK )
 		{
 			if (FAILED(m_pDevice->CreatePixelShader( (DWORD *)pShaderBuf->GetBufferPointer(), &m_pFragmentShader )))
 			{

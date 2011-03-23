@@ -41,7 +41,7 @@ struct DDSHeader {
 bool	CImage::LoadDDS( const std::string &_fileName, const bool _wantMipMaps )
 {
 	DDSHeader	header;
-	int dummy;
+	size_t dummy;
 
 	FILE *pFileData = fopen( _fileName.c_str(), "rb" );
 	if( !pFileData )

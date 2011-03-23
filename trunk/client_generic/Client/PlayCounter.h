@@ -176,7 +176,7 @@ public:
 			{
 				fflush( iter->second.PlayCountFile );
 				fseek( iter->second.PlayCountFile, 0, SEEK_SET );
-				int nwrite = fwrite( iter->second.PlayCounts, sizeof( uint16 ), max_sheep, iter->second.PlayCountFile );
+				size_t nwrite = fwrite( iter->second.PlayCounts, sizeof( uint16 ), max_sheep, iter->second.PlayCountFile );
 				if (nwrite != max_sheep)
 					g_Log->Error( "Writing playcounts failed" );
 				fclose( iter->second.PlayCountFile );

@@ -185,7 +185,7 @@ void Shepherd::setRootPath(const char *path)
 {
 	// strip off trailing white space
 	//
-	int len = strlen(path);
+	size_t len = strlen(path);
 	char *runner = const_cast<char *>(path) + len - 1;
 	while(*runner == ' ')
 	{
@@ -268,7 +268,7 @@ Shepherd::setFreeServerName(const char *server)
 //		Sets the server name for the sheep server.
 //
 {
-	int len = strlen(server);
+	size_t len = strlen(server);
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	// initialize the server name string
@@ -288,7 +288,7 @@ Shepherd::setRedirectServerName(const char *server)
 //		Sets the server name for the sheep server.
 //
 {
-	int len = strlen(server);
+	size_t len = strlen(server);
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	// initialize the server name string
@@ -310,7 +310,7 @@ Shepherd::setProxy(const char *proxy)
 //	transactions.
 //
 {
-	int len = strlen(proxy);
+	size_t len = strlen(proxy);
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	// initialize the proxy string
@@ -330,7 +330,7 @@ Shepherd::setProxyUserName(const char *userName)
 //		Sets the proxy username.
 //
 {
-	int len = strlen(userName);
+	size_t len = strlen(userName);
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	// initialize the proxy string
@@ -350,7 +350,7 @@ Shepherd::setProxyPassword(const char *password)
 //		Sets the proxy password.
 //
 {
-	int len = strlen(password);
+	size_t len = strlen(password);
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	// initialize the proxy string
@@ -370,7 +370,7 @@ Shepherd::filenameIsMpg(const char *name)
 //		Returns if the file is a valid mpeg name.
 //
 {
-	int n = strlen(name);
+	size_t n = strlen(name);
 	return !((n <= 4 || 0 != strcmp(&name[n-4], ".avi")) );
 }
 
@@ -381,7 +381,7 @@ Shepherd::filenameIsXxx(const char *name)
 //		Returns if the file is a deleted mpeg file.
 //
 {
-	int n = strlen(name);
+	size_t n = strlen(name);
 	return !(n <= 4 || 0 != strcmp(&name[n-4], ".xxx"));
 }
 
@@ -392,11 +392,11 @@ Shepherd::filenameIsTmp(const char *name)
 //		Returns if the file is a deleted mpeg file.
 //
 {
-	int n = strlen(name);
+	size_t n = strlen(name);
 	return !(n <= 4 || 0 != strcmp(&name[n-4], ".tmp"));
 }
 
-void Shepherd::addMessageText(const char *s, int len, time_t timeout)
+void Shepherd::addMessageText(const char *s, size_t len, time_t timeout)
 {
 
 	QueueMessage( std::string( s ), (fp8)timeout );
@@ -592,7 +592,7 @@ const char	*Shepherd::proxyPassword()
 */
 void	Shepherd::setPassword( const char *password )
 {
-	int len = strlen(password);
+	size_t len = strlen(password);
 
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
@@ -790,7 +790,7 @@ bool Shepherd::getSheep( char *path, SheepArray *sheep )
 //	Sets the unique id for this Shepherd.
 void	Shepherd::setUniqueID( const char *uniqueID )
 {
-	int len;
+	size_t len;
 	if( strlen( uniqueID ) > 16 )
 		len = strlen( uniqueID );
 	else

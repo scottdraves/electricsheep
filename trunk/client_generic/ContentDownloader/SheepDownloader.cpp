@@ -662,7 +662,7 @@ void	SheepDownloader::deleteSheep( Sheep *sheep )
 	sheep->setDeleted( true );
 
 	//	Create the filename with an xxx extension.
-	int len = strlen( sheep->fileName() );
+	size_t len = strlen( sheep->fileName() );
 	char *deletedFile = new char[ len + 1 ];
 	strcpy( deletedFile, sheep->fileName() );
 

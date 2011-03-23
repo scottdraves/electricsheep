@@ -83,6 +83,8 @@ private:
 	//	Used to keep track of elapsed time since last frame.
 	fp8	m_CapClock;
 
+	bool m_HasGoldSheep;
+
 #ifdef	WIN32
 	HWND	m_hWnd;
 

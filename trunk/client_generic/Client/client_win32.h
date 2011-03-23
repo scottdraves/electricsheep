@@ -403,7 +403,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 				if( m_ScrMode == eWindowed || m_ScrMode == eWindowed_AllowMultipleInstances)
 					g_Player().Fullscreen( false );
 
-				size_t monnum = g_Settings()->Get( "settings.player.screen", 0 );
+				uint32 monnum = g_Settings()->Get( "settings.player.screen", 0 );
 				
 				m_pD3D9 = Direct3DCreate9( D3D_SDK_VERSION );
 				

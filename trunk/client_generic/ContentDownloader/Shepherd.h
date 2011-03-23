@@ -240,7 +240,7 @@ class Shepherd
 			static std::string computeMD5( const std::string& str );
 
 			//	Overlay text management for the renderer.
-			static void addMessageText( const char *s, int len, time_t timeout );
+			static void addMessageText( const char *s, size_t len, time_t timeout );
 
 
 			//	Called from generators.

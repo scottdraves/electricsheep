@@ -40,7 +40,7 @@ int32 CFileDownloader::customWrite( void *_pBuffer, size_t _size, size_t _nmemb,
 	}
 
 	pOut->m_Data.append( (char *)_pBuffer, _size * _nmemb );
-	return _size * _nmemb;
+	return (int32)(_size * _nmemb);
 }
 
 

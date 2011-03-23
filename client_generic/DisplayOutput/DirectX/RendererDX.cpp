@@ -378,7 +378,7 @@ Base::Math::CVector2	CRendererDX::GetTextExtent( spCBaseFont _spFont, const std:
     ASSERT( pDXFont );
 
     //	Make a copy of `text' and extend it by `.'.
-	uint32 textLength = _text.length();
+	size_t textLength = _text.length();
 	ASSERT( textLength < 2048 );
 
 	static char	pTmp[ 2048 ];

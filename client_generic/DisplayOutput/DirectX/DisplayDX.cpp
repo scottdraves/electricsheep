@@ -303,7 +303,7 @@ UINT	CDisplayDX::GetAdapterOrdinal()
 			MonitorInfo *pMonitorInfo = &m_Monitors[iMonitor];
 			monitorInfo.cbSize = sizeof(MONITORINFO);
 			if ( GetMonitorInfo( pMonitorInfo->hMonitor, &monitorInfo ) != 0 )
-				for ( size_t iAdapter = 0; iAdapter < m_pDirect3DInstance->GetAdapterCount(); ++iAdapter )
+				for ( UINT iAdapter = 0; iAdapter < m_pDirect3DInstance->GetAdapterCount(); ++iAdapter )
 				{
 					if ( m_pDirect3DInstance->GetAdapterMonitor(iAdapter) == pMonitorInfo->hMonitor )
 					{

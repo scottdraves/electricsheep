@@ -529,7 +529,7 @@ std::string CManager::Encode( const std::string &_src )
 
 	const int8	dec2hex[ 16 + 1 ] = "0123456789ABCDEF";
 	const uint8	*pSrc = (const uint8 *)_src.c_str();
-	const int32 srcLen= _src.length();
+	const size_t srcLen= _src.length();
 	uint8 *const pStart = new uint8[ srcLen * 3 ];
 	uint8 *pEnd = pStart;
 	const uint8 * const srcEnd = pSrc + srcLen;

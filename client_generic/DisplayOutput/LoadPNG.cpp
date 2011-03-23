@@ -35,7 +35,7 @@ bool	CImage::LoadPNG( const std::string &_fileName, const bool _wantMipMaps )
 	png_byte **ppbRowPointers;
 
 	// avoid a compiler warning
-	int dummy;
+	size_t dummy;
 
 	// open the PNG input file
 	if( (file = fopen( _fileName.c_str(), "rb")) == NULL )

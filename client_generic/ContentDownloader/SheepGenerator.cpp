@@ -161,7 +161,7 @@ void	SheepGenerator::setURL( const char *url )
  	boost::mutex::scoped_lock lockthis( s_GeneratorMutex );
 
 	SAFE_DELETE_ARRAY( fURL );
-	int len = strlen( url );
+	size_t len = strlen( url );
 	fURL = new char[ len + 1 ];
 	strncpy( fURL, url, len + 1 );
 }

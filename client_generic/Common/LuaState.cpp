@@ -435,7 +435,7 @@ int32 Call( lua_State *_pState, const char *_pFunc, const char *_pSig, ... )
 			switch( *_pSig++ )
 			{
 				case 'd':	//	Double result.
-						if( lua_isnumber( _pState, nres ) )
+						if( !lua_isnumber( _pState, nres ) )
 							g_Log->Error( "Wrong result type, expected double" );
 						else
 							*va_arg( pArg, fp8 *) = lua_tonumber( _pState, nres );

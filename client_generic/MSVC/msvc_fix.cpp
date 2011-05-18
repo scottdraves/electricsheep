@@ -2,8 +2,9 @@
 #include <windows.h>
 #include <stdio.h> 
 #include <stdarg.h>
+#ifdef _WIN64
 #include <winsock2.h>
-
+#endif
 extern "C"
 {
 

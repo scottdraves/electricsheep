@@ -13,14 +13,15 @@
 #include "../../Common/md5.h"
 #include "../../Common/clientversion.h"
 #include "../../Common/ProcessForker.h"
+#include "../../tinyXml/tinyxml.h"
 
 #include	<curl/curl.h>
 #include	<curl/types.h>
 #include	<curl/easy.h>
 
 #ifdef WIN32
-#define CLIENT_HELP_LINKW  			L"http://electricsheep.org/client/WIN_2.7b30"
-#define CLIENT_HELP_LINK  			"http://electricsheep.org/client/WIN_2.7b30"
+#define CLIENT_HELP_LINKW  			L"http://electricsheep.org/client/WIN_2.7b31"
+#define CLIENT_HELP_LINK  			"http://electricsheep.org/client/WIN_2.7b31"
 #endif
 
 #ifdef LINUX_GNU
@@ -46,6 +47,40 @@ std::string computeMD5( const std::string& str )
 	}
 
 	return md5Str;
+}
+
+static std::string generateID()
+{
+    uint8	*salt;
+    uint32	u;
+	char id[17];
+	id[16] = 0;
+
+#ifdef WIN32
+    SYSTEMTIME syst;
+    GetSystemTime(&syst);
+    salt = ((unsigned char *)&syst) + sizeof(SYSTEMTIME) - 8;
+#else
+	timeval cur_time;
+	gettimeofday(&cur_time, NULL);
+	
+	salt = (unsigned char*)&cur_time;
+#endif
+
+	for( u=0; u<16; u++ )
+	{
+		unsigned r = rand();
+		r = r ^ (salt[u>>1] >> ((u&1)<<2));
+		r &= 15;
+		if( r < 10 )
+			r += '0';
+		else
+			r += 'A' - 10;
+
+		id[u] = r;
+	}
+
+	return 	std::string( id );
 }
 
 std::string Encode( const std::string &_src )
@@ -81,32 +116,34 @@ void electricsheepguiMyDialog2::SaveSettings()
 	g_Settings()->Set("settings.app.attributionpng", m_checkAttributionPNG->GetValue());
 
 	long temp = 0;
+	double tempd = 0.;
 
 	m_spinCache->GetValue().ToLong(&temp);
 	g_Settings()->Set("settings.content.cache_size", (int32)temp);
-	
+
 	m_spinGoldCache->GetValue().ToLong(&temp);
 	g_Settings()->Set("settings.content.cache_size_gold", (int32)temp);
 
-	m_spinDecodeFps->GetValue().ToLong(&temp);
-	g_Settings()->Set("settings.player.player_fps", (int32)temp);
-
-	m_spinDecodeFpsGold->GetValue().ToLong(&temp);
-	g_Settings()->Set("settings.player.player_fps_gold", (int32)temp);
+	wxString tempstr = m_spinDecodeFps->GetValue();
+	//tempstr.Replace(wxT(","), wxT("."));
+	tempstr.ToDouble(&tempd);
+	g_Settings()->Set("settings.player.player_fps", tempd);
 
 	g_Settings()->Set("settings.player.screen", m_spinMonitor->GetValue());
 	g_Settings()->Set("settings.player.LoopIterations", m_spinRepeatLoops->GetValue());
 
-	m_spinDisplayFps->GetValue().ToLong(&temp);
-	g_Settings()->Set("settings.player.display_fps", (int32)temp);
+	tempstr = m_spinDisplayFps->GetValue();
+	//tempstr.Replace(wxT(","), wxT("."));
+	tempstr.ToDouble(&tempd);
+	g_Settings()->Set("settings.player.display_fps", tempd);
 
-	g_Settings()->Set("settings.player.PlaybackMixingMode", m_radioPlaybackMixingMode->GetSelection());
+	g_Settings()->Set("settings.player.PlaybackMixingMode", m_choicePlaybackMixingMode->GetSelection());
 	g_Settings()->Set("settings.player.SeamlessPlayback", m_SeamlessPlayback->GetValue());
 	g_Settings()->Set("settings.player.quiet_mode", m_QuietMode->GetValue());
 	g_Settings()->Set("settings.player.directdraw", m_DirectDraw->GetValue());
 
 	g_Settings()->Set("settings.content.unlimited_cache", m_checkUnlimitedCache->IsChecked());
-	
+
 	g_Settings()->Set("settings.content.unlimited_cache_gold", m_checkGoldUnlimitedCache->IsChecked());
 
 	g_Settings()->Set("settings.content.download_mode", m_checkHttp->GetValue());
@@ -200,15 +237,15 @@ size_t GetFlockSizeMBs(wxString mpegpath, int sheeptype)
 
 void electricsheepguiMyDialog2::LoadSettings()
 {
+	m_UniqueId = g_Settings()->Get( "settings.content.unique_id", generateID() );
 	m_DebugLog->SetValue(g_Settings()->Get("settings.app.log", false));
 	m_checkAttributionPNG->SetValue(g_Settings()->Get("settings.app.attributionpng", true));
 	m_spinCache->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.content.cache_size", 2000)));
 	m_spinGoldCache->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.content.cache_size_gold", 2000)));
-	m_spinDecodeFps->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.player.player_fps", 20)));
-	m_spinDecodeFpsGold->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.player.player_fps_gold", 30)));
+	m_spinDecodeFps->SetValue(wxString::Format(wxT("%.2lf"), g_Settings()->Get("settings.player.player_fps", 20.)));
 	m_spinMonitor->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.player.screen", 0)));
 	m_spinRepeatLoops->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.player.LoopIterations", 2)));
-	m_spinDisplayFps->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.player.display_fps", 60)));
+	m_spinDisplayFps->SetValue(wxString::Format(wxT("%.2lf"), g_Settings()->Get("settings.player.display_fps", 60.)));
 
 	if (g_Settings()->Get( "settings.content.unlimited_cache", false) == true)
 	{
@@ -239,7 +276,7 @@ void electricsheepguiMyDialog2::LoadSettings()
 	m_checkHttp->SetValue( g_Settings()->Get( "settings.content.download_mode", true )  );
 	m_checkRenderFrames->SetValue( g_Settings()->Get( "settings.generator.enabled", true )  );
 	m_checkMulticore->SetValue( g_Settings()->Get( "settings.generator.all_cores", false  )  );
-	m_radioPlaybackMixingMode->SetSelection( g_Settings()->Get( "settings.player.PlaybackMixingMode", 0 ) );
+	m_choicePlaybackMixingMode->SetSelection( g_Settings()->Get( "settings.player.PlaybackMixingMode", 0 ) );
 	m_SeamlessPlayback->SetValue( g_Settings()->Get( "settings.player.SeamlessPlayback", false ) );
 	m_QuietMode->SetValue( g_Settings()->Get( "settings.player.quiet_mode", true) );
 	m_DirectDraw->SetValue( g_Settings()->Get( "settings.player.directdraw", false) );
@@ -274,39 +311,48 @@ void electricsheepguiMyDialog2::LoadSettings()
 	else
 		g_Settings()->Set( "settings.content.use_proxy", false);
 
-#ifndef LINUX_GNU
-	m_dirContent->SetPath( g_Settings()->Get( "settings.content.sheepdir", std::string(szPath) + "Content" ) );
-#else
+
 	m_dirContent->SetPath( g_Settings()->Get( "settings.content.sheepdir", std::string(szPath) + "content" ) );
-#endif
+
 	wxString newlabel = wxT("New sheep are created everyday.  When the screensaver runs,\nit tries to download them, and saves them on your hard disk,\ndeleting old ones to make room.  Login to get more sheep.\nIt is currently using ");
 	wxString newlabelgold = wxT("It is currently using ");
-#ifndef LINUX_GNU
-	newlabel += wxString::Format(wxT("%d"), (int)GetFlockSizeMBs(m_dirContent->GetPath()+"\\mpeg", 0)) + wxT("MB.");
-	newlabelgold += wxString::Format(wxT("%d"), (int)GetFlockSizeMBs(m_dirContent->GetPath()+"\\mpeg", 1)) + wxT("MB.");
+
+#ifdef WIN32
+	int freeflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"\\mpeg", 0);
+	int goldflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"\\mpeg", 1);
 #else
-	newlabel += wxString::Format(wxT("%d"), (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 0)) + wxT("MB.");
-	newlabelgold += wxString::Format(wxT("%d"), (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 1)) + wxT("MB.");
+	int freeflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 0));
+	int freeflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 1));
 #endif
+	int totalflocksizembs = freeflocksizembs + goldflocksizembs;
+
+	newlabel += wxString::Format(wxT("%d %s %d%s"), freeflocksizembs, wxT("MB (of"), totalflocksizembs, wxT("MB total)."));
+	newlabelgold += wxString::Format(wxT("%d %s %d%s"), goldflocksizembs, wxT("MB (of"), totalflocksizembs, wxT("MB total)."));
+
 	m_staticTextFlockSize->SetLabel(newlabel);
-	m_staticTextGoldFlockSize1->SetLabel(newlabelgold);
+	m_staticTextGoldFlockSize->SetLabel(newlabelgold);
+	m_staticTextGoldFlockSize->Fit();
+	m_GoldFlockStaticSizer->Layout();
 }
 
 int32 customWrite( void *_pBuffer, size_t _size, size_t _nmemb, void *_pUserData )
 {
+	((electricsheepguiMyDialog2*)_pUserData)->m_Response.append( (char *)_pBuffer, _size * _nmemb );
 	return _size*_nmemb; // dummy
 }
 
-
-void electricsheepguiMyDialog2::LoginTest()
+void electricsheepguiMyDialog2::Login()
 {
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 	CURL *pCurl = curl_easy_init();
 
-	curl_easy_setopt(pCurl, CURLOPT_USERPWD, std::string(Encode( std::string(m_textDrupalName->GetValue()) ) + std::string(":") + Encode( std::string(m_textDrupalPassword->GetValue()) ) ).c_str());
+	std::string nickencoded = Encode( g_Settings()->Get("settings.generator.nickname", std::string("")) );
+	std::string passencoded = Encode( g_Settings()->Get("settings.content.password_md5", std::string("")) );
+
+	curl_easy_setopt(pCurl, CURLOPT_USERPWD, std::string( nickencoded + std::string(":") + passencoded ).c_str());
 
 	curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, &customWrite);
-	curl_easy_setopt(pCurl, CURLOPT_WRITEDATA, NULL);
+	curl_easy_setopt(pCurl, CURLOPT_WRITEDATA, this);
 	curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS, true);
 
 	curl_slist *slist=NULL;
@@ -314,45 +360,104 @@ void electricsheepguiMyDialog2::LoginTest()
 	slist = curl_slist_append(slist, "Accept-Language: en-us");
 
 	curl_easy_setopt(pCurl, CURLOPT_HTTPHEADER, slist);
-	curl_easy_setopt(pCurl, CURLOPT_URL, (std::string("http://") + CLIENT_SERVER ).c_str());
+
+	char 	url[ 1024*5 ];
+	snprintf( url, 1024*5, "http://%s/query.php?q=redir&u=%s&p=%s&v=%s&i=%s",
+		REDIRECT_SERVER,
+		nickencoded.c_str(),
+		passencoded.c_str(),
+					CLIENT_VERSION,
+					m_UniqueId
+					);
+
+	curl_easy_setopt(pCurl, CURLOPT_URL, url);
 	curl_easy_setopt(pCurl, CURLOPT_CONNECTTIMEOUT, 15);
-	
+
 	wxMutexGuiEnter();
-	m_staticText6->SetLabel("...talking");
+	m_staticText6->SetLabel("...talking...");
 	wxMutexGuiLeave();
+	
 
 	long code = 0;
+	m_Response.clear();
 	if (code = curl_easy_perform(pCurl) == CURLE_OK)
 	{
 		if (curl_easy_getinfo(pCurl, CURLINFO_RESPONSE_CODE, &code) == CURLE_OK)
 		{
 			if (code == 200)
 			{
-				wxMutexGuiEnter();
-				m_staticText6->SetLabel("...logged in!...");
-				wxMutexGuiLeave();
-				m_CreateAccountButton->Enable(false);
-				g_Settings()->Set("settings.content.registered", true);
+				//TinyXML has problems with string not terminated by \n
+				m_Response += "\n";
 
-				curl_slist_free_all(slist);
+				TiXmlDocument doc;
+				if ( doc.Parse(m_Response.c_str(), NULL, TIXML_ENCODING_UTF8 ) )
+				{
+					TiXmlHandle hDoc(&doc);
+					TiXmlElement* listElement;
+					const char *host = NULL;
+					const char *role = NULL;
 
-				curl_easy_cleanup( pCurl );
+					listElement=hDoc.FirstChild( "query" ).FirstChild( "redir" ).Element();
 
-				curl_global_cleanup();
-				return;
+					if ( listElement != NULL )
+					{
+						host = listElement->Attribute("host");
+						role = listElement->Attribute("role");
+					}
+
+					if ( host != NULL && *host != 0 && role != NULL && *role != 0 )
+					{
+						m_Role = role;
+
+						wxMutexGuiEnter();
+						if (m_Role == "error" || m_Role == "none")
+						{
+							m_staticText25->SetLabel("Become a member for access to our private server with more sheep,\nhigher resolution sheep, and other interactive features.\n");
+						} else
+						if (m_Role == "registered")
+						{
+							m_staticText25->SetLabel("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
+						} else
+						if (m_Role == "member")
+						{
+							m_staticText25->SetLabel("Thank you for your membership, you may upgrade to Gold for higher\nresolution and other benefits.");
+						} else
+						if (m_Role == "gold")
+						{
+							m_staticText25->SetLabel("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
+						}
+						
+						if (m_Role == "registered" || m_Role == "member" || m_Role == "gold")
+						{
+							m_staticText6->SetLabel("...logged in!...");
+							
+							g_Settings()->Set("settings.content.registered", true);
+							Layout();
+							wxMutexGuiLeave();
+
+							curl_slist_free_all(slist);
+							curl_easy_cleanup( pCurl );
+							curl_global_cleanup();
+			
+							return;
+						}
+
+						Layout();
+						wxMutexGuiLeave();
+
+					}
+				}
 			}
 		}
 	}
 	g_Settings()->Set("settings.content.registered", false);
 	wxMutexGuiEnter();
 	m_staticText6->SetLabel("...Failed!...");
-	m_CreateAccountButton->Enable(true);
+	Layout();
 	wxMutexGuiLeave();
-
+	
 	curl_slist_free_all(slist);
-
 	curl_easy_cleanup( pCurl );
-
 	curl_global_cleanup();
 	return;
 }
@@ -373,7 +478,7 @@ electricsheepguiMyDialog2::electricsheepguiMyDialog2( wxWindow* parent )
 MyDialog2( parent )
 {
 	sMainDialog = this;
-	m_TestLogin = true;
+	m_TestLogin = false;
 	m_LoginThread = NULL;
 #ifndef LINUX_GNU
 if( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_COMMON_APPDATA, NULL, 0, szPath ) ) )
@@ -396,7 +501,6 @@ m_staticVersion->SetLabel(CLIENT_VERSION_PRETTYW);
 
 m_spinCache->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
 m_spinDecodeFps->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
-m_spinDecodeFpsGold->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
 m_spinDisplayFps->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
 
 
@@ -439,20 +543,6 @@ m_AboutText->WriteText(wxT(" from all over the world."));
 
 m_AboutText->EndSuppressUndo();
 
-// Fill rich text control on Gold tab (promo text)
-m_PromoText->BeginSuppressUndo();
-m_PromoText->Clear();
-m_PromoText->WriteText(wxT("Upgrade your account to gold membership to get higher quality sheep.  Learn more "));
-
-m_PromoText->BeginStyle(urlStyle);
-m_PromoText->BeginURL(wxT("http://electricsheep.org/gold"));
-m_PromoText->WriteText(wxT("online"));
-m_PromoText->EndURL();
-m_PromoText->EndStyle();
-m_PromoText->WriteText(wxT("."));
-
-m_PromoText->EndSuppressUndo();
-
 LoadSettings();
 }
 
@@ -466,35 +556,8 @@ void* LoginThread::Entry()
 	wxMilliSleep(1000);
 	if (sMainDialog->m_TestLogin)
 		return 0;
-	sMainDialog->LoginTest();
+	sMainDialog->Login();
 	return 0;
-}
-
-void electricsheepguiMyDialog2::OnIdle( wxIdleEvent& event )
-{
-	if (m_TestLogin)
-	{
-		if (m_LoginThread == NULL)
-		{
-			m_LoginThread = new LoginThread();
-			m_LoginThread->Create();
-			m_LoginThread->Run();
-		}
-		else
-		{
-			if (!m_LoginThread->IsRunning())
-			{
-				m_TestLogin = false;
-				m_LoginThread->Delete();
-				delete m_LoginThread;
-				m_LoginThread = new LoginThread();
-
-				m_LoginThread->Create();
-				m_LoginThread->Run();
-			}
-		}
-	}
-	event.Skip();
 }
 
 void electricsheepguiMyDialog2::OnRunClick( wxCommandEvent& event )
@@ -532,6 +595,7 @@ g_Settings()->Set("settings.content.password_md5",
 				  g_Settings()->Get("settings.generator.nickname", std::string(""))
 				  )
 				  );
+DeleteListXml();
 m_TestLogin = true;
 }
 
@@ -549,12 +613,22 @@ g_Settings()->Set("settings.content.password_md5",
 				  g_Settings()->Get("settings.generator.nickname", std::string(""))
 				  )
 				  );
+DeleteListXml();
 m_TestLogin = true;
+}
+
+void electricsheepguiMyDialog2::OnTestAccountButtonClick( wxCommandEvent& event )
+{
+	m_TestLogin = true;
 }
 
 void electricsheepguiMyDialog2::OnCreateClick( wxCommandEvent& event )
 {
-::wxLaunchDefaultBrowser(wxT("http://community.electricsheep.org/user/register"));
+	std::string nickencoded = Encode( g_Settings()->Get("settings.generator.nickname", std::string("")) );
+	std::string passencoded = Encode( g_Settings()->Get("settings.content.password_md5", std::string("")) );
+	std::stringstream browserlink;
+	browserlink << "http://electricsheep.org/account/" << m_Role << "?u="<< nickencoded << "&p=" << passencoded;
+	::wxLaunchDefaultBrowser(wxString(browserlink.str()));
 }
 
 void electricsheepguiMyDialog2::OnUnlimitedCacheCheck( wxCommandEvent& event )
@@ -565,6 +639,17 @@ void electricsheepguiMyDialog2::OnUnlimitedCacheCheck( wxCommandEvent& event )
 	{
 		g_Settings()->Set("settings.content.unlimited_cache", true);
 		m_spinCache->Enable(false);
+	}
+}
+
+void electricsheepguiMyDialog2::OnGoldUnlimitedCacheCheck( wxCommandEvent& event )
+{
+	m_spinGoldCache->Enable(true);
+	g_Settings()->Set("settings.content.unlimited_cache_gold", false);
+	if (m_checkGoldUnlimitedCache->IsChecked())
+	{
+		g_Settings()->Set("settings.content.unlimited_cache_gold", true);
+		m_spinGoldCache->Enable(false);
 	}
 }
 
@@ -613,22 +698,6 @@ void electricsheepguiMyDialog2::OnProxyPasswordEnter( wxCommandEvent& event )
 	g_Settings()->Set( "settings.content.proxy_password", std::string(m_textProxyPassword->GetValue()));
 }
 
-void electricsheepguiMyDialog2::OnPromoTextURL( wxTextUrlEvent& event )
-{
-	wxLaunchDefaultBrowser(event.GetString());
-}
-
-void electricsheepguiMyDialog2::OnGoldUnlimitedCacheCheck( wxCommandEvent& event )
-{
-	m_spinGoldCache->Enable(true);
-	g_Settings()->Set("settings.content.unlimited_cache_gold", false);
-	if (m_checkGoldUnlimitedCache->IsChecked())
-	{
-		g_Settings()->Set("settings.content.unlimited_cache_gold", true);
-		m_spinGoldCache->Enable(false);
-	}
-}
-
 void electricsheepguiMyDialog2::OnAboutUrl( wxTextUrlEvent& event )
 {
 	wxLaunchDefaultBrowser(event.GetString());
@@ -643,4 +712,102 @@ void electricsheepguiMyDialog2::OnClickOk( wxCommandEvent& event )
 void electricsheepguiMyDialog2::OnCancelClick( wxCommandEvent& event )
 {
 	this->Destroy();
+}
+
+void electricsheepguiMyDialog2::LoginTest( wxIdleEvent& event )
+{
+	if (m_TestLogin)
+	{
+		if (m_LoginThread == NULL)
+		{
+			m_LoginThread = new LoginThread();
+			m_LoginThread->Create();
+			m_LoginThread->Run();
+		}
+		else
+		{
+			if (!m_LoginThread->IsRunning())
+			{
+				m_TestLogin = false;
+				m_LoginThread->Delete();
+				delete m_LoginThread;
+				m_LoginThread = new LoginThread();
+
+				m_LoginThread->Create();
+				m_LoginThread->Run();
+			}
+		}
+	}
+}
+
+void electricsheepguiMyDialog2::DeleteListXml()
+{
+	std::string path = g_Settings()->Get( "settings.content.sheepdir", g_Settings()->Root() + "content" );
+	remove( (path + std::string("\\xml\\list.xml")).c_str() );
+}
+
+void electricsheepguiMyDialog2::OnDecodeFpsTextUpdated( wxCommandEvent& event )
+{
+	/*if (m_spinDecodeFps != NULL)
+	{
+		long val = 0;
+		m_spinDecodeFps->GetValue().ToLong(&val);
+		if (m_spinDecodeFps->GetValue().size() > 0)
+		{
+			if (val <= 0.1 || val > 99)
+			{
+				m_spinDecodeFps->ChangeValue(wxT("23"));
+			}
+		}
+	}*/
+	event.Skip();
+}
+
+void electricsheepguiMyDialog2::OnDecodeFpsKillFocus( wxFocusEvent& event )
+{
+	if (m_spinDecodeFps->GetValue() == wxEmptyString)
+		m_spinDecodeFps->ChangeValue(wxT("20"));
+	double val = 0;
+	m_spinDecodeFps->GetValue().ToDouble(&val);
+	if (m_spinDecodeFps->GetValue().size() > 0)
+	{
+		if (val < 0.1 || val > 100)
+		{
+			m_spinDecodeFps->ChangeValue(wxT("20"));
+		}
+	}
+	event.Skip();
+}
+
+void electricsheepguiMyDialog2::OnPlayerFpsTextUpdated( wxCommandEvent& event )
+{
+	/*if (m_spinDisplayFps != NULL)
+	{
+		long val = 0;
+		m_spinDisplayFps->GetValue().ToLong(&val);
+		if (m_spinDisplayFps->GetValue().size() > 0)
+		{
+			if (val <= 0.1 || val > 99)
+			{
+				m_spinDisplayFps->ChangeValue(wxT("60"));
+			}
+		}
+	}*/
+	event.Skip();
+}
+
+void electricsheepguiMyDialog2::OnPlayerFpsKillFocus( wxFocusEvent& event )
+{
+	if (m_spinDisplayFps->GetValue() == wxEmptyString)
+		m_spinDisplayFps->ChangeValue(wxT("60"));
+	double val = 0;
+	m_spinDisplayFps->GetValue().ToDouble(&val);
+	if (m_spinDisplayFps->GetValue().size() > 0)
+	{
+		if (val < 1 || val > 120)
+		{
+			m_spinDisplayFps->ChangeValue(wxT("60"));
+		}
+	}
+	event.Skip();
 }

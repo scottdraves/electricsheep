@@ -22,9 +22,10 @@
 #include <wx/button.h>
 #include <wx/textctrl.h>
 #include <wx/statbox.h>
-#include <wx/checkbox.h>
 #include <wx/panel.h>
+#include <wx/checkbox.h>
 #include <wx/filepicker.h>
+#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/radiobox.h>
 #include <wx/richtext/richtextctrl.h>
@@ -39,7 +40,6 @@
 class MyDialog2 : public wxDialog 
 {
 	private:
-	
 	protected:
 		wxStaticBitmap* m_bitmap12;
 		wxStaticText* m_staticText4;
@@ -53,13 +53,21 @@ class MyDialog2 : public wxDialog
 		wxTextCtrl* m_textDrupalName;
 		wxStaticText* m_staticText41;
 		wxTextCtrl* m_textDrupalPassword;
+		wxStaticText* m_staticText25;
 		wxStaticText* m_staticText6;
+		wxButton* m_TestAccountButton;
 		wxButton* m_CreateAccountButton;
+		wxPanel* m_Flock;
 		wxStaticText* m_staticTextFlockSize;
 		wxStaticText* m_staticText7;
 		wxTextCtrl* m_spinCache;
 		wxStaticText* m_staticText10;
 		wxCheckBox* m_checkUnlimitedCache;
+		wxStaticText* m_staticTextGoldFlockSize;
+		wxStaticText* m_staticText20;
+		wxTextCtrl* m_spinGoldCache;
+		wxStaticText* m_staticText21;
+		wxCheckBox* m_checkGoldUnlimitedCache;
 		wxPanel* m_Advanced;
 		wxCheckBox* m_checkHttp;
 		wxCheckBox* m_checkRenderFrames;
@@ -71,6 +79,7 @@ class MyDialog2 : public wxDialog
 		wxCheckBox* m_checkAttributionPNG;
 		wxDirPickerCtrl* m_dirContent;
 		wxButton* m_buttonOpenContent;
+		wxChoice* m_choicePlaybackMixingMode;
 		wxPanel* m_Playback;
 		wxStaticText* m_staticText8;
 		wxTextCtrl* m_spinDecodeFps;
@@ -97,21 +106,11 @@ class MyDialog2 : public wxDialog
 		wxTextCtrl* m_textProxyUser;
 		wxStaticText* m_staticText412;
 		wxTextCtrl* m_textProxyPassword;
-		wxPanel* m_Gold;
-		wxRichTextCtrl* m_PromoText;
-		wxRadioBox* m_radioPlaybackMixingMode;
-		wxStaticText* m_staticTextGoldFlockSize1;
-		wxStaticText* m_staticText20;
-		wxTextCtrl* m_spinGoldCache;
-		wxStaticText* m_staticText21;
-		wxCheckBox* m_checkGoldUnlimitedCache;
-		wxStaticText* m_staticText81;
-		wxTextCtrl* m_spinDecodeFpsGold;
-		wxStaticText* m_staticText112;
 		wxPanel* m_About;
 		wxRichTextCtrl* m_AboutText;
 		wxButton* m_Ok;
 		wxButton* m_Cancel;
+		wxStaticBoxSizer* m_GoldFlockStaticSizer;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnDialogClose( wxCloseEvent& event ) { event.Skip(); }
@@ -120,18 +119,24 @@ class MyDialog2 : public wxDialog
 		virtual void OnHelpClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrupalNameTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrupalPasswordTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTestAccountButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCreateClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUnlimitedCacheCheck( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGoldUnlimitedCacheCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnContentDirChanged( wxFileDirPickerEvent& event ) { event.Skip(); }
 		virtual void OnOpenClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnProxyTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnProxyUserNameEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnProxyPasswordEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPromoTextURL( wxTextUrlEvent& event ) { event.Skip(); }
-		virtual void OnGoldUnlimitedCacheCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAboutUrl( wxTextUrlEvent& event ) { event.Skip(); }
 		virtual void OnClickOk( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		
+		virtual void OnDecodeFpsTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDecodeFpsKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void OnPlayerFpsTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPlayerFpsKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		
 		virtual void OnDialogCharHook( wxKeyEvent& e )
 		{ 
 			e.Skip(); 
@@ -141,6 +146,7 @@ class MyDialog2 : public wxDialog
 				this->Destroy();
 			}
 		}
+		virtual void LoginTest( wxIdleEvent& event ) { event.Skip(); }
 		
 	
 	public:

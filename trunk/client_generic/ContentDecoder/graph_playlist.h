@@ -101,9 +101,6 @@ typedef std::multimap< std::string, spCNode > gnode_t;
 #warning TODO (Keffo#1#): Move this stuff to Lua, no need to bother with this in C/C++!
 class	CGraphPlaylist : public CPlaylist
 {
-	//	The default content to show when nothing is available...
-	std::string	m_Default;
-
 	//	Path to folder to monitor & update interval in seconds.
 	path			m_Path;
 	fp8				m_Interval;
@@ -137,7 +134,7 @@ class	CGraphPlaylist : public CPlaylist
 	}
 
 	public:
-			CGraphPlaylist( const std::string &_watchFolder, const std::string &_default ) : CPlaylist()
+			CGraphPlaylist( const std::string &_watchFolder ) : CPlaylist()
 			{
 				m_Interval = 2;
 				m_Clock = 0;
@@ -146,7 +143,6 @@ class	CGraphPlaylist : public CPlaylist
 
 				//	Update now so other parts of the code doesn't freak when this returns zero length;
 				m_Path = _watchFolder.c_str();
-				m_Default = _default;
 
 				g_Log->Info( "Starting graphing playlist in %s...", m_Path.native_directory_string().c_str() );
 				UpdateDirectory( m_Path );
@@ -164,7 +160,7 @@ class	CGraphPlaylist : public CPlaylist
 
 			virtual uint32	Size()	{	return m_Graph.size();	}
 
-			virtual bool	Next( std::string &_result )
+			virtual bool	Next()
 			{
 				try
 				{
@@ -176,13 +172,11 @@ class	CGraphPlaylist : public CPlaylist
 					}
 
 					//	Placeholder!
-					_result = m_Default;
 					return true;
 				}
 				catch( ... )
 				{
 					g_Log->Error( "eh?" );
-					_result = m_Default;
 				}
 
 				return true;

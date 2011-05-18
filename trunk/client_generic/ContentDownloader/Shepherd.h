@@ -100,7 +100,6 @@ class Shepherd
 	static char *fMpegPath;
 	static char *fXmlPath;
 	static char *fJpegPath;
-	static char *fFreeServerName;
 	static char *fRedirectServerName;
 	static char *fServerName;
 	static char *fProxy;
@@ -117,6 +116,7 @@ class Shepherd
 	static bool fShutdown;
 	static int fChangeRes;
 	static int fChangingRes;
+	static char *s_Role;
 	static boost::detail::atomic_count	*renderingFrames;
 	static boost::detail::atomic_count	*totalRenderedFrames;
 	static bool m_RenderingAllowed;
@@ -225,12 +225,12 @@ class Shepherd
 			static const char *xmlPath();
 			static const char *jpegPath();
 
+			static void setRole( const char *role );
+			static const char *role();
+
 			//	Gets/sets the host name of the server to use.
 			static void setRedirectServerName( const char *server );
-			static void setFreeServerName( const char *server );
 			static const char *serverName( bool allowServerQuery = true );
-			static const char *serverName2();
-
 
 			//	Gets/sets the registration password.
 			static void setPassword( const char *password );

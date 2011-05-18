@@ -102,6 +102,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 			//	Decode a frame every 1/_fpsCap seconds, store the previous frame, and lerp between them.
 			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
 			{
+				fp4 currentalpha = m_LastAlpha;
 				if (m_bWaitNextFrame)
 				{
 #if !defined(WIN32) && !defined(_MSC_VER)
@@ -113,6 +114,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 					{
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
+						currentalpha = m_LastAlpha;
 					}
 					
 					Reset();
@@ -123,6 +125,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 					{
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
+						currentalpha = m_LastAlpha;
 						Reset();	
 						
 						m_bWaitNextFrame = false;
@@ -146,8 +149,16 @@ class	CLinearFrameDisplay : public CFrameDisplay
 						{
 							m_MetaData = _metadata;
 							m_LastAlpha = m_MetaData.m_Fade;
+							currentalpha = m_LastAlpha;
 						}
 					}
+					else
+					{
+						currentalpha = (fp4)Base::Math::Clamped(m_LastAlpha + 
+							Base::Math::Clamped(m_InterframeDelta/m_FadeCount, 0., 1./m_FadeCount)
+							, 0., 1.);
+					}
+
 				}
 
 				if ( m_spFrames[ m_State ] != NULL )
@@ -170,7 +181,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 						m_spRenderer->SetTexture( m_spFrames[ 0 ], m_State ^ 1 );
 						m_spRenderer->SetTexture( m_spFrames[ 1 ], m_State );
 						m_spShader->Set( "delta", (fp4)m_InterframeDelta );
-						m_spShader->Set( "newalpha", (fp4)m_LastAlpha );
+						m_spShader->Set( "newalpha", (fp4)currentalpha );
 						m_spRenderer->Apply();
 						texRect = m_spFrames[ 0 ]->GetRect();
 					}

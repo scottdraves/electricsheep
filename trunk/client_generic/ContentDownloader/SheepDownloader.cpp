@@ -620,6 +620,7 @@ void	SheepDownloader::deleteCached( const int &size, const int getGenerationType
 				if (rand() % 2 == 0)
 				{
 					best = oldest;
+					oldest_time = oldest_sheep_time;
 					g_Log->Info("Deleting oldest sheep");
 				} else
 					g_Log->Info("Deleting most played sheep");
@@ -632,6 +633,7 @@ void	SheepDownloader::deleteCached( const int &size, const int getGenerationType
 				std::stringstream temp;
 				std::string temptime = ctime( &oldest_time );
 				temptime.erase(temptime.size() - 1);
+				
 				temp << "Deleted: " << filename << ", played:" << playcount << " time" <<  ((playcount == 1) ? "," : "s,") << temptime;
 				Shepherd::AddOverflowMessage( temp.str() );
 				g_Log->Info("%s", temp.str().c_str());
@@ -718,6 +720,9 @@ void	SheepDownloader::findSheepToDownload()
 	int best_rating;
 	time_t best_ctime;
     int best_anim;
+	int best_rating_old;
+	int best_anim_old;
+	time_t best_ctime_old;
 
 	try {
 #ifndef	DEBUG
@@ -779,9 +784,9 @@ void	SheepDownloader::findSheepToDownload()
 			}
 			else
 			{
-				best_rating = 0;
-				best_ctime = 0;
-				best_anim = -1;
+				best_anim_old = -1;
+				best_ctime_old = 0;
+				best_rating_old = INT_MAX;
 
 				//	Reset the generation number.
 				setCurrentGeneration( -1 );
@@ -801,65 +806,86 @@ void	SheepDownloader::findSheepToDownload()
 						fGotList = true;
 					}
 
-					updateCachedSheep();
-
-					unsigned int i;
-					unsigned int j;
-
-					//	Iterate the server flock to find the next sheep to download.
-					for( i=0; i<fServerFlock.size(); i++ )
+					do
 					{
-						//	Iterate the client flock to see if it allready exists in the cache.
-						for( j=0; j<fClientFlock.size(); j++ )
-						{
-							if( (fServerFlock[i]->id() == fClientFlock[j]->id()) && (fServerFlock[i]->generation() == fClientFlock[j]->generation()) )
-								break;
-						}
+						best_rating = INT_MIN;
+						best_ctime = 0;
+						best_anim = -1;
+						int sheepcount = 0;
 
-						//	If it is not found and the cache is ok to store than check if the file should be downloaded based on rating and server file write time.
-						if( (j == fClientFlock.size()) && !cacheOverflow((double)fServerFlock[i]->fileSize(), fServerFlock[i]->getGenerationType()) )
-						{
-							//	Check if it is the best file to download.
-							if( best_ctime == 0 ||
-								(fServerFlock[i]->rating() > best_rating) ||
-								(fServerFlock[i]->rating() == best_rating &&
-								fServerFlock[i]->fileWriteTime() < best_ctime))
-								{
-									best_rating = fServerFlock[i]->rating();
-									best_ctime = fServerFlock[i]->fileWriteTime();
-									best_anim = i;
-								}
-						}
-					}
+						updateCachedSheep();
 
-					//	Found a valid sheep so download it.
-					if( best_anim != -1 )
-					{
-						//	Make enough room in the cache for it.
-						deleteCached( fServerFlock[ best_anim ]->fileSize(), fServerFlock[ best_anim ]->getGenerationType() );
-
-						Shepherd::setDownloadState(std::string("Downloading sheep...\n") + fServerFlock[ best_anim ]->URL());
+						unsigned int i;
+						unsigned int j;
 						
-						if( downloadSheep( fServerFlock[ best_anim ] ) )
+						size_t downloadedcount = 0;
+						for( i=0; i<fServerFlock.size(); i++ )
 						{
-							failureSleepDuration = 0;
-							badSheepSleepDuration = TIMEOUT;
+							//	Iterate the client flock to see if it allready exists in the cache.
+							for( j=0; j<fClientFlock.size(); j++ )
+							{
+								if( (fServerFlock[i]->id() == fClientFlock[j]->id()) && (fServerFlock[i]->generation() == fClientFlock[j]->generation()) )
+								{
+									downloadedcount++;
+									break;
+								}
+							}
 						}
-						else
+						//	Iterate the server flock to find the next sheep to download.
+						for( i=0; i<fServerFlock.size(); i++ )
 						{
-							//	Gradually increase duration betwee 10 seconds and TIMEOUT, if the sheep fail to download consecutively
-							failureSleepDuration = badSheepSleepDuration;
-							
-							badSheepSleepDuration = Base::Math::Clamped( badSheepSleepDuration * 2, TIMEOUT, MAX_TIMEOUT );
-							
-							std::stringstream tmp;
-				
-							tmp << "Downloading failed, will retry in {" << std::fixed << std::setprecision(0) << failureSleepDuration << "}...\n" << fServerFlock[ best_anim ]->URL();
+							//	Iterate the client flock to see if it allready exists in the cache.
+							for( j=0; j<fClientFlock.size(); j++ )
+							{
+								if( (fServerFlock[i]->id() == fClientFlock[j]->id()) && (fServerFlock[i]->generation() == fClientFlock[j]->generation()) )
+									break;
+							}
 
-							Shepherd::setDownloadState(tmp.str());
+							//	If it is not found and the cache is ok to store than check if the file should be downloaded based on rating and server file write time.
+							if( (j == fClientFlock.size()) && !cacheOverflow((double)fServerFlock[i]->fileSize(), fServerFlock[i]->getGenerationType()) )
+							{
+								//	Check if it is the best file to download.
+								if( (best_ctime == 0 && best_ctime_old == 0) ||
+									(fServerFlock[i]->rating() > best_rating && fServerFlock[i]->rating() <= best_rating_old) ||
+									(fServerFlock[i]->rating() == best_rating && fServerFlock[i]->fileWriteTime() < best_ctime ) )
+									{
+										if ( fServerFlock[i]->rating() != best_rating_old ||
+											(fServerFlock[i]->rating() == best_rating_old  && fServerFlock[i]->fileWriteTime() > best_ctime_old) )
+										{
+											best_rating = fServerFlock[i]->rating();
+											best_ctime = fServerFlock[i]->fileWriteTime();
+											best_anim = i;
+										}
+									}
+							}
 						}
-					}
-					else
+
+						//	Found a valid sheep so download it.
+						if( best_anim != -1 )
+						{
+							best_ctime_old = best_ctime;
+							best_rating_old = best_rating;
+							//	Make enough room in the cache for it.
+							deleteCached( fServerFlock[ best_anim ]->fileSize(), fServerFlock[ best_anim ]->getGenerationType() );
+
+							std::stringstream downloadingsheepstr;
+							downloadingsheepstr << "Downloading sheep " << downloadedcount+1 << "/" << fServerFlock.size() << "...\n";
+							Shepherd::setDownloadState(downloadingsheepstr.str() + fServerFlock[ best_anim ]->URL());
+						
+							g_Log->Info( "Best sheep to download rating=%d, fServerFlock index=%d, write time=%s", best_rating, best_anim, ctime(&best_ctime) );
+							if( downloadSheep( fServerFlock[ best_anim ] ) )
+							{
+								failureSleepDuration = 0;
+								badSheepSleepDuration = TIMEOUT;
+							} else
+							{
+								best_anim_old = best_anim;
+							}
+						}
+						this_thread::interruption_point();
+					} while (best_anim != -1);
+
+					if (best_anim_old == -1)
 					{
 						failureSleepDuration = badSheepSleepDuration;
 							
@@ -870,7 +896,18 @@ void	SheepDownloader::findSheepToDownload()
 						tmp << "All available sheep downloaded, will retry in {" << std::fixed << std::setprecision(0) << failureSleepDuration << "}...";
 
 						Shepherd::setDownloadState(tmp.str());
+					}
+					else
+					{
+							//	Gradually increase duration betwee 10 seconds and TIMEOUT, if the sheep fail to download consecutively
+							failureSleepDuration = badSheepSleepDuration;
 						
+							badSheepSleepDuration = Base::Math::Clamped( badSheepSleepDuration * 2, TIMEOUT, MAX_TIMEOUT );
+						
+							std::stringstream tmp;
+			
+							tmp << "Downloading failed, will retry in {" << std::fixed << std::setprecision(0) << failureSleepDuration << "}...\n" << fServerFlock[ best_anim_old ]->URL();
+							Shepherd::setDownloadState(tmp.str());
 					}
 				}
 				else
@@ -917,20 +954,11 @@ bool	SheepDownloader::getSheepList()
 
     snprintf( filename, MAX_PATH, "%slist.gzip", xmlPath );
 
-
-	//	Encode the nickname & user-url since they're part of the request.
-#ifdef WIN32
-	std::string	nickEncoded = Network::CManager::Encode( SheepGenerator::nickName() );
-	std::string	urlEncoded = Network::CManager::Encode( SheepGenerator::URL() );
-#endif
-
 	//	Create the url for getting the cp file to create the frame
 	char 	url[ MAXBUF*5 ];
     snprintf( url, MAXBUF*5, "%scgi/list?v=%s&u=%s",	ContentDownloader::Shepherd::serverName(),
 																CLIENT_VERSION,
 																Shepherd::uniqueID() );
-																//nickEncoded.c_str(),
-																//urlEncoded.c_str() );
 
 	Network::spCFileDownloader spDownload = new Network::CFileDownloader( "Sheep list" );
 	if( !spDownload->Perform( url ) )

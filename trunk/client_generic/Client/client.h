@@ -14,6 +14,7 @@
 #include "clientversion.h"
 
 #include "ContentDownloader.h"
+#include "SheepGenerator.h"
 #include "Shepherd.h"
 #include "Voting.h"
 #include "Timer.h"
@@ -61,14 +62,12 @@ class	CElectricSheep
 		fp8						m_PNGDelayTimer;
 
 		//	The base framerate(from config).
-		int32			m_PlayerFps;
-		// frame rate for gold sheep
-		int32			m_PlayerFpsGold;
+		fp8			m_PlayerFps;
 
 		//	Potentially adjusted framerate(from <- and -> keys)
-		int32			m_CurrentFps;
+		fp8			m_CurrentFps;
 
-		int32			m_OriginalFps;
+		fp8			m_OriginalFps;
 
 		//	Voting object.
 		CVote			*m_pVoter;
@@ -194,16 +193,12 @@ class	CElectricSheep
 				m_lastPlayedSeconds = 0;
 
                 //	Set framerate.
-                m_PlayerFps = g_Settings()->Get( "settings.player.player_fps", 20 );
-				if ( m_PlayerFps < 1 )
-					m_PlayerFps = 1;
+                m_PlayerFps = g_Settings()->Get( "settings.player.player_fps", 20. );
+				if ( m_PlayerFps < 0.1 )
+					m_PlayerFps = 1.;
 				m_OriginalFps = m_PlayerFps;
                 m_CurrentFps = m_PlayerFps;
 				
-				m_PlayerFpsGold = g_Settings()->Get( "settings.player.player_fps_gold", 30 );
-                if ( m_PlayerFpsGold < 1 )
-					m_PlayerFpsGold = 1;
-
 				g_Player().Framerate( m_CurrentFps );
 
 
@@ -238,7 +233,7 @@ class	CElectricSheep
 				//	Add some display stats.
                 m_HudManager->Add( "displaystats", new Hud::CStatsConsole( Base::Math::CRect( 1, 1 ), hudFontName, hudFontSize ) );
                 Hud::spCStatsConsole spStats = (Hud::spCStatsConsole)m_HudManager->Get( "displaystats" );
-                spStats->Add( new Hud::CIntCounter( "decodefps", "Decoding video at ", " fps" ) );
+                spStats->Add( new Hud::CStringStat( "decodefps", "Decoding video at ", "? fps" ) );
 				
 
                 int32 displayMode = g_Settings()->Get( "settings.player.DisplayMode", 0 );
@@ -258,14 +253,10 @@ class	CElectricSheep
 				spStats->Add( new Hud::CStringStat( "currentid", "Currently playing sheep: ", "n/a" ) );
                 spStats->Add( new Hud::CStringStat( "uptime", "\nClient uptime: ", "...." ) );
 
-				bool hasBattery = (GetACLineStatus() != -1);
-
-				if (hasBattery)
-					spStats->Add( new Hud::CStringStat( "zbattery", "\nPower Source: ", "Unknown" ) );
-
                 //	Add some server stats.
                 m_HudManager->Add( "serverstats", new Hud::CStatsConsole( Base::Math::CRect( 1, 1 ), hudFontName, hudFontSize ) );
                 spStats = (Hud::spCStatsConsole)m_HudManager->Get( "serverstats" );
+				spStats->Add( new Hud::CStringStat( "loginstatus", "", "Not logged in" ) );
 				spStats->Add( new Hud::CStringStat( "all", "Local flock: ", "unknown..." ) );
                 spStats->Add( new Hud::CStringStat( "server", "Server is ", "not known yet" ) );
                 spStats->Add( new Hud::CStringStat( "transfers", "", "" ) );
@@ -286,7 +277,9 @@ class	CElectricSheep
 				spStats->Add( new Hud::CTimeCountDownStat( "countdown", "", "Rendering disabled" ) );
                 spStats->Add( new Hud::CIntCounter( "rendering", "Currently rendering ", " frames" ) );
                 spStats->Add( new Hud::CIntCounter( "totalframes", "", " frames rendered" ) );
-								
+				
+				bool hasBattery = (GetACLineStatus() != -1);								
+				
 				if (hasBattery)
 					spStats->Add( new Hud::CStringStat( "zbattery", "\nPower source: ", "Unknown" ) );
 			
@@ -441,11 +434,6 @@ class	CElectricSheep
 				
 				g_Player().BeginFrameUpdate();
 
-				if ( g_Player().GetCurrentPlayingGeneration() > 10000)
-					m_CurrentFps = m_PlayerFpsGold;
-				else
-					m_CurrentFps = m_PlayerFps;
-
 				while ( g_Player().BeginDisplayFrame( displayUnit ) )
 				{
 				
@@ -584,13 +572,11 @@ class	CElectricSheep
 
 						//	Update some stats.
 						Hud::spCStatsConsole spStats = (Hud::spCStatsConsole)m_HudManager->Get( "displaystats" );
-						((Hud::CIntCounter *)spStats->Get( "decodefps" ))->SetSample( m_CurrentFps );
+						std::stringstream decodefpsstr;
+						decodefpsstr.precision(2);
+						decodefpsstr << std::fixed << m_CurrentFps << " fps";
+						((Hud::CStringStat *)spStats->Get( "decodefps" ))->SetSample( decodefpsstr.str() );
 						((Hud::CIntCounter *)spStats->Get( "displayfps" ))->AddSample( 1 );
-
-						Hud::CStringStat *batteryStat = ((Hud::CStringStat *)spStats->Get( "zbattery" ));
-						
-						if (batteryStat != NULL)
-							batteryStat->SetSample( batteryStatus );
 
 						uint32 playingID = g_Player().GetCurrentPlayingSheepID();
 						uint32 playingGen = g_Player().GetCurrentPlayingSheepGeneration();
@@ -659,6 +645,7 @@ class	CElectricSheep
 						}
 						else
 							((Hud::CStringStat *)spStats->Get( "server" ))->Visible( false );
+						
 
 						Hud::CStringStat	*pTmp = (Hud::CStringStat *)spStats->Get( "transfers" );
 						if( pTmp )
@@ -673,6 +660,26 @@ class	CElectricSheep
 							}
 						}
 						
+						pTmp = (Hud::CStringStat *)spStats->Get( "loginstatus" );
+						if( pTmp )
+						{
+							const char *role = ContentDownloader::Shepherd::role();
+							std::string loginstatus;
+							if (role != NULL)
+								loginstatus = role;
+							if( loginstatus == "" || loginstatus == "none" )
+							{
+								pTmp->SetSample( "Not logged in" );
+							}
+							else
+							{
+								std::stringstream loginstatusstr;
+								loginstatusstr << "Logged in as " << ContentDownloader::SheepGenerator::nickName() << ":" << loginstatus;
+								pTmp->SetSample( loginstatusstr.str() );
+							}
+							pTmp->Visible( true );
+						}
+
 						pTmp = (Hud::CStringStat *)spStats->Get( "survivors" );
 						if( pTmp )
 						{
@@ -733,12 +740,12 @@ class	CElectricSheep
 						spStats = (Hud::spCStatsConsole)m_HudManager->Get( "renderstats" );
 						((Hud::CIntCounter *)spStats->Get( "rendering" ))->SetSample( ContentDownloader::Shepherd::FramesRendering() );
 						((Hud::CIntCounter *)spStats->Get( "totalframes" ))->SetSample( ContentDownloader::Shepherd::TotalFramesRendered() );
-
-						Hud::CStringStat *batteryStat2 = ((Hud::CStringStat *)spStats->Get( "zbattery" ));
 						
-						if (batteryStat2 != NULL)
-							batteryStat2->SetSample( batteryStatus );
-
+						Hud::CStringStat *batteryStat = ((Hud::CStringStat *)spStats->Get( "zbattery" ));
+						
+						if (batteryStat != NULL)
+							batteryStat->SetSample( batteryStatus );
+						
 						if (m_CpuUsageTotal != -1 && m_CpuUsageES != -1)
 						{
 							std::stringstream temp;

@@ -105,14 +105,14 @@ class	CStartupScreen : public CHudEntry
 				{
 					m_MoveMessageCounter += 0.0005f;
 					if (m_MoveMessageCounter >= 1.f)
-						m_MoveMessageCounter -= 1.f + edge*2 + fp4(size.m_Y) + 0.2f;
+						m_MoveMessageCounter -= 1.f + edge*2 + fp4(size.m_Y);
 				}
 
 				//	Draw quad.
 				_spRenderer->Reset( DisplayOutput::eTexture | DisplayOutput::eShader | DisplayOutput::eBlend );
 
-				Base::Math::CRect r( 0.5f - (extent.Width()*0.5f), extent.m_Y0 + m_MoveMessageCounter + 0.2f,
-									 0.5f + (extent.Width()*0.5f), extent.m_Y1 + m_MoveMessageCounter + 0.2f);
+				Base::Math::CRect r( 0.5f - (extent.Width()*0.5f), extent.m_Y0 + m_MoveMessageCounter,
+									 0.5f + (extent.Width()*0.5f), extent.m_Y1 + m_MoveMessageCounter);
 
 				_spRenderer->SetBlend( "alphablend" );
 				_spRenderer->Apply();

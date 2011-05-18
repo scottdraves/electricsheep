@@ -66,10 +66,10 @@ private:
 	Base::CTimer	m_Timer;
 
 	//	Goal decoding framerate.
-	uint32			m_PlayerFps;
+	fp8			m_PlayerFps;
 
 	//	Goal display framerate;
-	uint32			m_DisplayFps;
+	fp8			m_DisplayFps;
 
 	//	Fullscreen or not.
 	bool			m_bFullscreen;
@@ -138,7 +138,7 @@ private:
 #endif
 
 			inline void		PlayCountsInitOff()					{	m_InitPlayCounts = false; };
-			inline void		Framerate( const uint32 _fps )		{	m_PlayerFps = _fps;	};
+			inline void		Framerate( const fp8 _fps )			{	m_PlayerFps = _fps;	};
 			inline void		Fullscreen( const bool _bState )	{	m_bFullscreen = _bState; };
 			inline bool		Stopped()							{	return !m_bStarted;	};
 			

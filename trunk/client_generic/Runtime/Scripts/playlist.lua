@@ -664,7 +664,7 @@ function Next( _curID, _startByRandom )
 		return next.filepath ..  next.file
 	end
 
-	dump( "Playing default..." )
+	dump( "No sheep chosen to play..." )
 	context.CurrentSheep = nil
 	return ""
 end

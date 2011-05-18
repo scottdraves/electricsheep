@@ -70,8 +70,6 @@ static std::string generateID()
 //
 void	CContentDownloader::ServerFallback()
 {
-	g_Settings()->Set( "settings.content.server", std::string(CLIENT_SERVER) );
-	Shepherd::setFreeServerName( CLIENT_SERVER );
 	Shepherd::setRegistered( false );
 	g_NetworkManager->Logout();
 }
@@ -83,7 +81,6 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 	g_Log->Info( "Attempting to start contentdownloader...", _bPreview );
 	Shepherd::initializeShepherd();
 
-	Shepherd::setFreeServerName( g_Settings()->Get( "settings.content.server", std::string(CLIENT_SERVER) ).c_str() );
 	Shepherd::setRedirectServerName( g_Settings()->Get( "settings.content.redirectserver", std::string(REDIRECT_SERVER) ).c_str() );
 	Shepherd::setRootPath( g_Settings()->Get( "settings.content.sheepdir", g_Settings()->Root() + "content" ).c_str() );
 	Shepherd::setCacheSize( g_Settings()->Get( "settings.content.cache_size", 2000 ), 0 );

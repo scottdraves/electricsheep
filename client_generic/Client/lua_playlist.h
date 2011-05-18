@@ -49,9 +49,6 @@ static randctx ISAAC_ctx;
 
 class	CLuaPlaylist : public CPlaylist
 {
-	//	The default content to show when nothing is available...
-	std::string	m_Default;
-
 	boost::mutex	m_Lock;
 	
 	boost::mutex	m_CurrentPlayingLock;
@@ -297,7 +294,7 @@ class	CLuaPlaylist : public CPlaylist
 	}
 
 	public:
-			CLuaPlaylist( const std::string &_scriptRoot, const std::string &_watchFolder, const std::string &_default ) : CPlaylist()
+			CLuaPlaylist( const std::string &_scriptRoot, const std::string &_watchFolder ) : CPlaylist()
 			{
 				m_NormalInterval = fp8(g_Settings()->Get( "settings.player.NormalInterval", 100 ));
 				m_EmptyInterval = 10.0f;
@@ -357,9 +354,7 @@ class	CLuaPlaylist : public CPlaylist
 				}
 
 				m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Init", "sibddbb", m_Path.native_directory_string().c_str(), loopIterations, seamlessPlayback, playEvenly, m_MedianLevel, m_AutoMedian, m_RandomMedian) );
-				m_Default = _default;
-
-				//
+				
 				UpdateDirectory( m_Path );
 			}
 
@@ -415,12 +410,12 @@ class	CLuaPlaylist : public CPlaylist
 						_result = std::string( (const char *)ret );
 					else
 					{
-						_result = m_Default;
+						m_pState->Pop( stackdelta );
+						return false;
 					}
 				else
 				{
 					g_Log->Warning( "Playlist behaved weird" );
-					_result = m_Default;
 				}
 
 				//	Clean up return string from stack.

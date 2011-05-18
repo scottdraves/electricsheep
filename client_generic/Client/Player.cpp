@@ -125,6 +125,16 @@ bool CPlayer::AddDisplay( uint32 screen )
 	ContentDecoder::spCContentDecoder	spDecoder;
 	spCFrameDisplay						spFrameDisplay;
 
+	static bool detectgold = true;
+	if (detectgold)
+	{
+		detectgold = false;
+		std::string content = g_Settings()->Root() + "content/";
+		std::string watchFolder = g_Settings()->Get( "settings.content.sheepdir", content ) + "/mpeg/";
+
+		std::vector<std::string> files;
+		m_HasGoldSheep = Base::GetFileList( files,  watchFolder, "avi", true, false );
+	}
 	// modify aspect ratio and/or window size hint
 	uint32	w = 1280;
 	uint32 h = 720;
@@ -304,7 +314,7 @@ bool CPlayer::AddDisplay( uint32 screen )
 */
 const bool	CPlayer::Startup()
 {
-	m_DisplayFps = g_Settings()->Get( "settings.player.display_fps", 60 );
+	m_DisplayFps = g_Settings()->Get( "settings.player.display_fps", 60. );
 	
 	//	Grab some paths for the decoder.
     std::string content = g_Settings()->Root() + "content/";
@@ -314,7 +324,6 @@ const bool	CPlayer::Startup()
 	std::string	scriptRoot = g_Settings()->Get( "settings.app.InstallDir", std::string(SHAREDIR) ) + "Scripts";
 #endif
 	std::string watchFolder = g_Settings()->Get( "settings.content.sheepdir", content ) + "/mpeg/";
-	std::string defaultfile = g_Settings()->Get( "settings.app.InstallDir", std::string("./") ) + "electricsheep-wait--removed!.avi";
 
  	if( TupleStorage::IStorageInterface::CreateFullDirectory( content.c_str() ) )
 	{
@@ -322,19 +331,14 @@ const bool	CPlayer::Startup()
 			g_PlayCounter().SetDirectory( content );
 	}
 
-	std::vector<std::string> files;
-	m_HasGoldSheep = Base::GetFileList( files,  watchFolder, "avi", true, false );
-
     //  Tidy up the paths.
     path    scriptPath = scriptRoot;
     path    watchPath = watchFolder;
-    path    defaultPath = defaultfile;
 
 	//	Create playlist.
 	g_Log->Info( "Creating playlist..." );
   	m_spPlaylist = new ContentDecoder::CLuaPlaylist(	scriptPath.native_directory_string(),
-														watchPath.native_directory_string(),
-														defaultPath.native_directory_string() );
+														watchPath.native_directory_string() );
 
 	//	Create decoder last.
 	g_Log->Info( "Starting decoder..." );

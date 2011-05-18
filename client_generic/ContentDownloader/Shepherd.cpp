@@ -63,7 +63,6 @@ char *Shepherd::fRootPath = NULL;
 char *Shepherd::fMpegPath = NULL;
 char *Shepherd::fXmlPath = NULL;
 char *Shepherd::fJpegPath = NULL;
-char *Shepherd::fFreeServerName = NULL;
 char *Shepherd::fRedirectServerName = NULL;
 char *Shepherd::fServerName = NULL;
 char *Shepherd::fProxy = NULL;
@@ -76,6 +75,7 @@ int Shepherd::fCacheSizeGold = 100;
 int Shepherd::fRegistered = 0;
 char *Shepherd::fPassword = NULL;
 char *Shepherd::fUniqueID = NULL;
+char *Shepherd::s_Role = NULL;
 boost::detail::atomic_count *Shepherd::renderingFrames = NULL;
 boost::detail::atomic_count *Shepherd::totalRenderedFrames = NULL;
 bool Shepherd::m_RenderingAllowed = true;
@@ -150,7 +150,6 @@ void	Shepherd::notifyShepherdOfHisUntimleyDeath()
 	SAFE_DELETE_ARRAY( fMpegPath );
 	SAFE_DELETE_ARRAY( fXmlPath );
 	SAFE_DELETE_ARRAY( fJpegPath );
-	SAFE_DELETE_ARRAY( fFreeServerName );
 	SAFE_DELETE_ARRAY( fRedirectServerName );
 	SAFE_DELETE_ARRAY( fServerName );
 	SAFE_DELETE_ARRAY( fPassword );
@@ -158,6 +157,7 @@ void	Shepherd::notifyShepherdOfHisUntimleyDeath()
 	SAFE_DELETE_ARRAY( fProxyUser );
 	SAFE_DELETE_ARRAY( fProxyPass );
 	SAFE_DELETE_ARRAY( fUniqueID );
+	SAFE_DELETE_ARRAY( s_Role );
 
 	SAFE_DELETE( totalRenderedFrames );
 	SAFE_DELETE( renderingFrames );
@@ -261,24 +261,26 @@ void Shepherd::setRootPath(const char *path)
 #endif
 }
 
-void
-Shepherd::setFreeServerName(const char *server)
-//
-// Description:
-//		Sets the server name for the sheep server.
-//
+void Shepherd::setRole( const char *role )
 {
-	size_t len = strlen(server);
+	size_t len = strlen(role);
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
-	// initialize the server name string
+	// initialize the proxy string
 	//
-	if(fFreeServerName != NULL)
+	if(role != NULL)
 	{
-		fStringsToDelete.push_back( fFreeServerName );
+		fStringsToDelete.push_back( s_Role );
 	}
-	fFreeServerName = new char[len + 1];
-	strcpy(fFreeServerName, server);
+	s_Role = new char[len + 1];
+	strcpy(s_Role, role);
+}
+
+const char *Shepherd::role()
+{
+	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
+
+	return s_Role;
 }
 
 void
@@ -468,7 +470,6 @@ const char *Shepherd::serverName( bool allowServerQuery )
 			if (fRedirectServerName != NULL )
 			{
 				std::string	nickEncoded = Network::CManager::Encode( SheepGenerator::nickName() );
-				//std::string	passEncoded = Network::CManager::Encode( Shepherd::computeMD5( Shepherd::password() ) );
 				std::string	passEncoded = Network::CManager::Encode( Shepherd::password() );
 
 				//	Create the url for getting the cp file to create the frame
@@ -496,11 +497,15 @@ const char *Shepherd::serverName( bool allowServerQuery )
 						TiXmlHandle hDoc(&doc);
 						TiXmlElement* listElement;
 						const char *host = NULL;
+						const char *role = NULL;
 
 						listElement=hDoc.FirstChild( "query" ).FirstChild( "redir" ).Element();
 
 						if ( listElement != NULL )
+						{
 							host = listElement->Attribute("host");
+							role = listElement->Attribute("role");
+						}
 
 						if ( host != NULL && *host != 0 )
 						{
@@ -517,6 +522,10 @@ const char *Shepherd::serverName( bool allowServerQuery )
 							}
 
 						}
+						if ( role != NULL && *role != 0 )
+						{
+							setRole(role);
+						}
 					}
 					else
 					{
@@ -524,27 +533,6 @@ const char *Shepherd::serverName( bool allowServerQuery )
 					}
 
 					time(&s_LastRequestTime);
-				}
-			}
-
-			{
-				boost::mutex::scoped_lock lockthis( s_GetServerNameMutex );
-
-				if ( ( fServerName == NULL || *fServerName == 0 ) && fFreeServerName != NULL )
-				{
-					std::string tmpServerName = "http://";
-					tmpServerName += fFreeServerName;
-					tmpServerName += "/";
-
-					if ( fServerName != NULL )
-						fStringsToDelete.push_back( fServerName );
-
-					fServerName = new char [ strlen( tmpServerName.c_str() ) + 1 ];
-
-					strcpy( fServerName, tmpServerName.c_str() );
-
-					const char *err = "server request failed, using free one";
-					addMessageText( err, strlen(err), 180 );	//	3 minutes.
 				}
 			}
 		}
@@ -556,13 +544,6 @@ const char *Shepherd::serverName( bool allowServerQuery )
 
 		return fServerName;
 	}
-}
-
-const char *Shepherd::serverName2()
-{
-	static const char *serverName2 = "sheep.mcgrathandassociates.com/sheep";
-
-	return serverName2;
 }
 
 const char *Shepherd::proxy()

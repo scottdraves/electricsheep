@@ -345,8 +345,6 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 			} else
 			{
 				m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, First, m_prevLast, fname );
-				//m_NextSheepQueue.peek(name, true);
-				//m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, m_nextFirst, Last, fname );
 			}
 			
 			m_NoSheeps = false;

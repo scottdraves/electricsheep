@@ -20,6 +20,8 @@ class	CFrameDisplay
 	fp4		m_LastAlpha;
 
 	protected:
+		fp8		m_FadeCount;
+
 		ContentDecoder::sMetaData m_MetaData;
 		//	Temporary storage for decoded videoframe.
 		ContentDecoder::spCVideoFrame	m_spFrameData;
@@ -127,6 +129,7 @@ class	CFrameDisplay
 				m_spRenderer = _spRenderer;
 				m_spImageRef = new DisplayOutput::CImage();
 				m_bValid = true;
+				m_FadeCount = (fp8)g_Settings()->Get("settings.player.fadecount", 30);
 			}
 
 			virtual ~CFrameDisplay()
@@ -145,6 +148,7 @@ class	CFrameDisplay
 			//	Decode a frame, and render it.
 			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
 			{
+				fp4 currentalpha = m_LastAlpha;
    				if( UpdateInterframeDelta( _decodeFps ) )
    				{
 #if !defined(WIN32) && !defined(_MSC_VER)
@@ -156,15 +160,23 @@ class	CFrameDisplay
 					{
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
+						currentalpha = m_LastAlpha;
 					}
 #else
 					if (GrabFrame( _spDecoder, m_spVideoTexture, _metadata))
 					{
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
+						currentalpha = m_LastAlpha;
 					}
 #endif
    				}
+				else
+				{
+					currentalpha = (fp4)Base::Math::Clamped(m_LastAlpha + 
+						Base::Math::Clamped(m_InterframeDelta/m_FadeCount, 0., 1./m_FadeCount)
+						, 0., 1.);
+				}
 				
 				if ( m_spVideoTexture.IsNull() )
 					return false;
@@ -176,7 +188,7 @@ class	CFrameDisplay
 
                 //UpdateInterframeDelta( _decodeFps );
 
-				m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, m_LastAlpha ),  m_spVideoTexture->GetRect() );
+				m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha ),  m_spVideoTexture->GetRect() );
 
 				return true;
 			}

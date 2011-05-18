@@ -409,7 +409,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 				
 				if ( g_Player().AddDisplay(g_Settings()->Get( "settings.player.screen", 0 ), m_pD3D9,
 					g_Settings()->Get( "settings.player.MultiDisplayMode", 0 ) == CPlayer::kMDSingleScreen && m_ScrMode != eFullScreenStandalone  && m_ScrMode != eWindowed
-					) == false)
+					) == true)
 				{
 					bool foundfirstmon = false;
 					g_Log->Error( "AddDisplay failed for screen %d", monnum );
@@ -613,7 +613,6 @@ class	CElectricSheep_Win32 : public CElectricSheep
 		}
 		return -1;
 	}
-
 };
 
 

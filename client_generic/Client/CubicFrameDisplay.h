@@ -136,6 +136,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 			//	Decode a frame every 1/_fpsCap seconds, store the previous 4 frames, and lerp between them.
 			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
 			{
+				fp4 currentalpha = m_LastAlpha;
 				if (m_bWaitNextFrame)
 				{
 #if !defined(WIN32) && !defined(_MSC_VER)
@@ -146,6 +147,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 					{
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
+						currentalpha = m_LastAlpha;
 					}
 					
 					Reset();
@@ -157,6 +159,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 					{
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
+						currentalpha = m_LastAlpha;
 						Reset();
 						m_NumFrames++;													
 						m_bWaitNextFrame = false;
@@ -187,10 +190,17 @@ class	CCubicFrameDisplay : public CFrameDisplay
 						else
 						{
 							m_MetaData = _metadata;
-							m_LastAlpha = m_MetaData.m_Fade;							
+							m_LastAlpha = m_MetaData.m_Fade;
+							currentalpha = m_LastAlpha;
 						}
 
 						m_NumFrames++;
+					}
+					else
+					{
+						currentalpha = (fp4)Base::Math::Clamped(m_LastAlpha + 
+							Base::Math::Clamped(m_InterframeDelta/m_FadeCount, 0., 1./m_FadeCount)
+							, 0., 1.);
 					}
 				}
 
@@ -219,11 +229,11 @@ class	CCubicFrameDisplay : public CFrameDisplay
 						//	Set the filter weights...
 						m_spShader->Set( "weights", MitchellNetravali( fp4(m_InterframeDelta) + 1.f, B, C ), MitchellNetravali( fp4(m_InterframeDelta), B, C ),
 													MitchellNetravali( 1.f - fp4(m_InterframeDelta), B, C ), MitchellNetravali( 2.f - fp4(m_InterframeDelta), B, C ) );
-						m_spShader->Set( "newalpha", m_LastAlpha);
+						m_spShader->Set( "newalpha", currentalpha);
 					}
 					m_spRenderer->SetBlend( "alphablend" );
 					m_spRenderer->Apply();
-					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 0, 0, 0, m_LastAlpha), m_spFrames[ m_Frames[3] ]->GetRect() );
+					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 0, 0, 0, currentalpha), m_spFrames[ m_Frames[3] ]->GetRect() );
 				}
 
 				return true;

@@ -77,7 +77,7 @@ bool	CStorageLua::Set( const std::string &_entry, const fp8  _val )
 {
 	assert( m_pState != NULL );
 	std::stringstream s;
-	s << "g_Settings." << _entry << " = " << _val;
+	s << "g_Settings." << _entry << " =  [[" << _val << "]]";
 	m_pState->Execute( s.str().c_str() );
 	Dirty( true );
 	return( true );
@@ -136,9 +136,14 @@ bool	CStorageLua::Get( const std::string &_entry, fp8 &_val )
 	assert( m_pState != NULL );
 	std::string s = "g_Settings." + _entry;
 	int32 bSuccess = 0;
-	fp8 ret = 0.0;
-	m_pState->Pop( Base::Script::Call( m_pState->GetState(), "g_GetSetting", "sd>id", s.c_str(), 0.0, &bSuccess, &ret ) );
-	_val = ret;
+	char	*ret = NULL;
+	m_pState->Pop( Base::Script::Call( m_pState->GetState(), "g_GetSetting", "ss>is", s.c_str(), "?", &bSuccess, &ret ) );
+	if (bSuccess && ret != NULL)
+	{
+		std::stringstream tmp( ret );
+		tmp >> _val;
+	}
+
 	return( bSuccess !=0 );
 }
 
@@ -194,6 +199,22 @@ bool	CStorageLua::Commit()
 		std::string cfgfile = std::string("/") + CLIENT_SETTINGS + ".cfg";
 
 		g_Log->Info( "CLuaStorage::Commit()\n" );
+
+		std::stringstream s; // write client version as string
+		s << "g_Settings." << "settings.app.os_version" << " =  [[" << CLIENT_VERSION << "]]";
+		m_pState->Execute( s.str().c_str() );
+		
+		time_t	curTime;
+		time( &curTime );
+
+		std::stringstream temp;
+		std::string temptime = ctime( &curTime );
+		temptime.erase(temptime.size() - 1);
+		
+		std::stringstream s2; // write client version as string
+		s2 << "g_Settings." << "settings.app.date_time" << " =  [[" << temptime << "]]";
+		m_pState->Execute( s2.str().c_str() );
+
 		path tmpPath = m_sRoot;
 		tmpPath /= cfgfile;
 		std::string tmp = "table.save( g_Settings, [[" + tmpPath.file_string() + "]] )";

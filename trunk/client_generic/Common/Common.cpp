@@ -29,7 +29,7 @@ bool GetFileList( std::vector<std::string> &_list, const std::string _dir, const
 		std::string dirname(itr->path().filename());
 		if (is_directory(itr->status()))
 		{
-			gotSheep = GetFileList( _list, (itr->path().string() + std::string("/")), _extension, _usegoldsheep, _usefreesheep );
+			gotSheep |= GetFileList( _list, (itr->path().string() + std::string("/")), _extension, _usegoldsheep, _usefreesheep );
 		}
 		else
 		{

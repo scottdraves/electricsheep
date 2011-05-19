@@ -679,9 +679,10 @@ bool Shepherd::getSheep( char *path, SheepArray *sheep )
 
 		if (is_directory(itr->status()))
 		{
-			gotSheep = getSheep( (char*)(itr->path().string() + std::string("/")).c_str(), sheep );
+			bool gotSheepSubfolder = getSheep( (char*)(itr->path().string() + std::string("/")).c_str(), sheep );
+			gotSheep |= gotSheepSubfolder;
 
-			if (!gotSheep)
+			if (!gotSheepSubfolder)
 				remove_all(itr->path());
 		}
 		else

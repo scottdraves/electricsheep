@@ -463,15 +463,15 @@
 {
 	double player_fps = [playerFPS doubleValue];
 	
-	if (player_fps <= .1)
-		player_fps = .1;
+	if (player_fps < .1)
+		player_fps = 20.0;
 	
 	ESScreensaver_SetDoubleSetting("settings.player.player_fps", player_fps);
 	
 	double display_fps = [displayFPS doubleValue];
 	
-	if (display_fps <= .1)
-		display_fps = .1;
+	if (display_fps < .1)
+		display_fps = 60.0;
 	
 	ESScreensaver_SetDoubleSetting("settings.player.display_fps", display_fps);
 
@@ -645,5 +645,15 @@
 {
 	[self startTest:nil];
 }
+
+- (IBAction)goToHelpPage:(id)sender
+{
+	NSString *urlStr = [NSString stringWithFormat:@"http://electricsheep.org/client/%s", CLIENT_VERSION];
+	
+	NSURL *helpURL = [NSURL URLWithString:urlStr];
+	
+	[[NSWorkspace sharedWorkspace] openURL:helpURL];
+}
+
 
 @end

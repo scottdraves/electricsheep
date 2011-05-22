@@ -82,6 +82,7 @@
 - (IBAction)cancel:(id)sender;
 - (IBAction)goToCreateAccountPage:(id)sender;
 - (IBAction)goToLearnMorePage:(id)sender;
+- (IBAction)goToHelpPage:(id)sender;
 - (IBAction)chooseContentFolder:(id)sender;
 - (IBAction)doManualUpdate:(id)sender;
 - (IBAction)doSignIn:(id)sender;

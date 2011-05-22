@@ -166,6 +166,12 @@ bool ESScreensaver_GetBoolSetting( const char *url, const bool defval )
 	return g_Settings()->Get(std::string(url), (bool)defval );
 }
 
+double ESScreensaver_GetDoubleSetting( const char *url, const double defval )
+{	
+	return g_Settings()->Get(std::string(url), (fp8)defval );
+}
+
+
 void ESScreensaver_SetStringSetting( const char *url, const char *val )
 {
 	g_Settings()->Set(std::string(url), std::string(val));
@@ -180,6 +186,12 @@ void ESScreensaver_SetBoolSetting( const char *url, const bool val )
 {
 	g_Settings()->Set(std::string(url), val);
 }
+
+void ESScreensaver_SetDoubleSetting( const char *url, const double val )
+{
+	g_Settings()->Set(std::string(url), val);
+}
+
 	
 void ESScreensaver_DeinitClientStorage( void )
 {

@@ -28,6 +28,8 @@ BOOL mIsFullScreen;
 
 BOOL mInSheet;
 
+NSMutableArray *mBlackingWindows;
+
 }
 
 - (void)awakeFromNib;
@@ -52,5 +54,10 @@ BOOL mInSheet;
 
 - (void)toggleFullScreen:(id)sender;
 
+- (void) blackScreensExcept:(NSScreen*)fullscreen;
+
+- (void) unblackScreens;
+
+- (void) fadeWindow:(NSWindow *)window withEffect:(NSString *)effect;
 
 @end

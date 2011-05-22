@@ -261,7 +261,7 @@ class	CElectricSheep
                 spStats->Add( new Hud::CStringStat( "server", "Server is ", "not known yet" ) );
                 spStats->Add( new Hud::CStringStat( "transfers", "", "" ) );
 				spStats->Add( new Hud::CStringStat( "deleted", "", "" ) );
-				spStats->Add( new Hud::CStringStat( "survivors", "", "" ) );
+				spStats->Add( new Hud::CStringStat( "bsurvivors", "", "" ) );
 				if (m_MultipleInstancesMode == true)
 					spStats->Add( new Hud::CTimeCountDownStat( "svstat", "", "Downloading disabled, read-only mode" ) );
 				else
@@ -663,24 +663,30 @@ class	CElectricSheep
 						pTmp = (Hud::CStringStat *)spStats->Get( "loginstatus" );
 						if( pTmp )
 						{
+							bool visible = true;
+							
 							const char *role = ContentDownloader::Shepherd::role();
 							std::string loginstatus;
 							if (role != NULL)
 								loginstatus = role;
-							if( loginstatus == "" || loginstatus == "none" )
+							else
+								visible = false;
+								
+							if( loginstatus.empty() || loginstatus == "none" )
 							{
 								pTmp->SetSample( "Not logged in" );
 							}
 							else
 							{
 								std::stringstream loginstatusstr;
-								loginstatusstr << "Logged in as " << ContentDownloader::SheepGenerator::nickName() << ":" << loginstatus;
+								loginstatusstr << "Logged in as " << ContentDownloader::SheepGenerator::nickName() << " (" << loginstatus << ")";
 								pTmp->SetSample( loginstatusstr.str() );
 							}
-							pTmp->Visible( true );
+							
+							pTmp->Visible( visible );
 						}
 
-						pTmp = (Hud::CStringStat *)spStats->Get( "survivors" );
+						pTmp = (Hud::CStringStat *)spStats->Get( "bsurvivors" );
 						if( pTmp )
 						{
 							std::stringstream survivors;

@@ -21,10 +21,13 @@ extern "C" {
 	CFStringRef ESScreensaver_GetStringSetting( const char *url, const char *defval );
 	SInt32 ESScreensaver_GetIntSetting( const char *url, const SInt32 defval );
 	bool ESScreensaver_GetBoolSetting( const char *url, const bool defval );
+	double ESScreensaver_GetDoubleSetting( const char *url, const double defval );
 	
 	void ESScreensaver_SetStringSetting( const char *url, const char *val );
 	void ESScreensaver_SetIntSetting( const char *url, const SInt32 val );
 	void ESScreensaver_SetBoolSetting( const char *url, const bool val );
+	void ESScreensaver_SetDoubleSetting( const char *url, const double val );
+	
 	
 	void ESScreensaver_SaveSettings( void );
 	

@@ -88,18 +88,6 @@
     [aboutText setAttributedStringValue: string];
 	
 	[string release];
-	
-	[goldText setAllowsEditingTextAttributes: YES];
-    [goldText setSelectable: YES];
-	
-
-    string = [[NSMutableAttributedString alloc] initWithHTML:[[goldText stringValue] dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:NULL];
-
-    // set the attributed string to the NSTextField
-    [goldText setAttributedStringValue: string];
-	
-	[string release];
-
 }
 
 - (void)fixFlockSize
@@ -108,10 +96,16 @@
 	 
 	if (mpegpath != NULL && *mpegpath)
 	{
-		NSMutableString *str = [NSMutableString stringWithString:[flockSizeText stringValue]];
 
 		size_t flockSize = ESScreensaver_GetFlockSizeMBs(mpegpath, 0);
 		
+		size_t goldFlockSize = ESScreensaver_GetFlockSizeMBs(mpegpath, 1);
+		
+		size_t totalSize = flockSize + goldFlockSize;
+
+		
+		NSMutableString *str = [NSMutableString stringWithString:[flockSizeText stringValue]];
+
 		[str replaceOccurrencesOfString:@"^1" withString:[NSString stringWithFormat:@"%ld", flockSize] options:0 range:NSMakeRange(0, [str length])];
 		
 		[flockSizeText setStringValue:str];
@@ -119,11 +113,16 @@
 		
 		str = [NSMutableString stringWithString:[goldFlockSizeText stringValue]];
 
-		size_t goldFlockSize = ESScreensaver_GetFlockSizeMBs(mpegpath, 1);
-		
 		[str replaceOccurrencesOfString:@"^1" withString:[NSString stringWithFormat:@"%ld", goldFlockSize] options:0 range:NSMakeRange(0, [str length])];
 		
-		[goldFlockSizeText setStringValue:str];  
+		[goldFlockSizeText setStringValue:str]; 
+		
+		
+		str = [NSMutableString stringWithString:[totalFlockSizeText stringValue]];
+
+		[str replaceOccurrencesOfString:@"^1" withString:[NSString stringWithFormat:@"%ld", totalSize] options:0 range:NSMakeRange(0, [str length])];
+		
+		[totalFlockSizeText setStringValue:str];  
 	}
 }
 
@@ -140,6 +139,8 @@
 	[loginTestStatusText setStringValue:@"The server is unreachable."];
 	
 	m_checkingLogin = NO;
+	
+	[signInButton setEnabled:YES];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -163,8 +164,18 @@
 			
 		NSString *rolestr = (NSString*)ESScreensaver_GetRoleFromXML(xml);
 		   
-		[loginStatusImage setImage:greenImage];
-		[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Logged in (role: %@).", rolestr ? rolestr : @"N/A"]];
+		if (![rolestr isEqual:@"error"] && ![rolestr isEqual:@"none"])
+		{
+			[loginStatusImage setImage:greenImage];
+			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Logged in (role: %@).", rolestr ? rolestr : @"N/A"]];
+		}
+		else
+		{
+			[loginStatusImage setImage:redImage];
+			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Login Failed."]];
+		}
+
+		[self updateMembershipText:rolestr];
 	}
 	else
 	{
@@ -175,6 +186,28 @@
 	[m_httpData release];
 	
 	m_checkingLogin = NO;
+	
+	[signInButton setEnabled:YES];
+}
+
+- (void)updateMembershipText:(NSString*)role
+{
+	if ([role isEqual:@"error"] || [role isEqual:@"none"])
+	{
+		[membershipText setStringValue:@"Become a member for access to our private server with more sheep,\nhigher resolution sheep, and other interactive features.\n"];
+	} else
+	if ([role isEqual:@"registered"])
+	{
+		[membershipText setStringValue:@"Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features."];
+	} else
+	if ([role isEqual:@"member"])
+	{
+		[membershipText setStringValue:@"Thank you for your membership, you may upgrade to Gold for higher\nresolution and other benefits."];
+	} else
+	if ([role isEqual:@"gold"])
+	{
+		[membershipText setStringValue:@"Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features."];
+	}						
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -219,7 +252,13 @@
 - (void)startTest:(NSTimer *)timer
 {
 	if (m_checkingLogin)
-		[m_checkTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+	{
+		if (timer)
+			[m_checkTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+		return;
+	}
+	
+	[signInButton setEnabled:NO];
 		
 	m_checkingLogin = YES;
 
@@ -233,18 +272,9 @@
 	
 	m_httpData = [[NSMutableData dataWithCapacity:10] retain];
 			
-	NSString *newPassword = [drupalPassword stringValue];
 	NSString *newNickname = [drupalLogin stringValue];
 	
-	NSString *md5_pass;
-
-	if (![newPassword isEqual:m_origPassword])
-	{
-		md5_pass = [self computeMD5:[NSString stringWithFormat:@"%@sh33p%@", newPassword, newNickname]];
-	}
-	else {
-		md5_pass = newPassword;
-	}
+	NSString *md5_pass = [self md5Password];
 
 	CFStringRef urlnickname = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)newNickname, NULL, NULL, kCFStringEncodingUTF8);	
 	CFStringRef urlpass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)md5_pass, NULL, NULL, kCFStringEncodingUTF8);
@@ -306,9 +336,9 @@
 {
 	[self htmlifyEditFields];
 	
-	[playerFPS setIntValue: ESScreensaver_GetIntSetting("settings.player.player_fps", 23)];
+	[playerFPS setDoubleValue: ESScreensaver_GetDoubleSetting("settings.player.player_fps", 23.0)];
 	
-	[displayFPS setIntValue: ESScreensaver_GetIntSetting("settings.player.display_fps", 60)];
+	[displayFPS setDoubleValue: ESScreensaver_GetDoubleSetting("settings.player.display_fps", 60.0)];
 	
 	[loopIterations setIntValue: ESScreensaver_GetIntSetting("settings.player.LoopIterations", 2)];
 	
@@ -403,9 +433,7 @@
 	
 	SInt32 pmm = ESScreensaver_GetIntSetting("settings.player.PlaybackMixingMode", 0);
 	
-	[playbackMixingMode selectCellWithTag:pmm];
-
-	[goldPlayerFPS setIntValue: ESScreensaver_GetIntSetting("settings.player.player_fps_gold", 30)];
+	[playbackMixingMode selectItemAtIndex:pmm];
 	
 	bool unlimited_cache_gold = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache_gold", false);
 	
@@ -433,19 +461,19 @@
 
 - (void)saveSettings
 {
-	int player_fps = [playerFPS intValue];
+	double player_fps = [playerFPS doubleValue];
 	
-	if (player_fps <= 0)
-		player_fps = 1;
+	if (player_fps <= .1)
+		player_fps = .1;
 	
-	ESScreensaver_SetIntSetting("settings.player.player_fps", player_fps);
+	ESScreensaver_SetDoubleSetting("settings.player.player_fps", player_fps);
 	
-	int display_fps = [displayFPS intValue];
+	double display_fps = [displayFPS doubleValue];
 	
-	if (display_fps <= 0)
-		display_fps = 1;
+	if (display_fps <= .1)
+		display_fps = .1;
 	
-	ESScreensaver_SetIntSetting("settings.player.display_fps", display_fps);
+	ESScreensaver_SetDoubleSetting("settings.player.display_fps", display_fps);
 
 	ESScreensaver_SetIntSetting("settings.player.LoopIterations", [loopIterations intValue]);
 
@@ -514,15 +542,8 @@
 	ESScreensaver_SetBoolSetting("settings.app.log", [debugLog state]);
 	
 	
-	ESScreensaver_SetIntSetting("settings.player.PlaybackMixingMode", [[playbackMixingMode selectedCell] tag]);
-	
-	int player_fps_gold = [goldPlayerFPS intValue];
-	
-	if (player_fps_gold <= 0)
-		player_fps_gold = 1;
-	
-	ESScreensaver_SetIntSetting("settings.player.player_fps_gold", player_fps_gold);
-	
+	ESScreensaver_SetIntSetting("settings.player.PlaybackMixingMode", [playbackMixingMode indexOfSelectedItem]);
+		
 	bool unlimited_cache_gold = ([[goldCacheType selectedCell] tag] == 0);
 	
 	ESScreensaver_SetBoolSetting("settings.content.unlimited_cache_gold", unlimited_cache_gold);
@@ -539,6 +560,38 @@
 	
 	[[NSWorkspace sharedWorkspace] openURL:helpURL];
 }
+
+- (NSString*)md5Password
+{
+	NSString *newNickname = [drupalLogin stringValue];
+	NSString *newPassword = [drupalPassword stringValue];
+
+	if (![newPassword isEqual:m_origPassword])
+	{
+		return [self computeMD5:[NSString stringWithFormat:@"%@sh33p%@", newPassword, newNickname]];
+	}
+	else {
+		return newPassword;
+	}
+}
+
+- (IBAction)goToLearnMorePage:(id)sender
+{
+	NSString *newNickname = [drupalLogin stringValue];
+	
+	NSString *md5_pass = [self md5Password];
+
+	CFStringRef urlnickname = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)newNickname, NULL, NULL, kCFStringEncodingUTF8);	
+	CFStringRef urlpass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)md5_pass, NULL, NULL, kCFStringEncodingUTF8);
+	CFStringRef urlver = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, CFSTR(CLIENT_VERSION), NULL, NULL, kCFStringEncodingUTF8);
+	
+	NSString *urlstr = [NSString stringWithFormat:@"http://electricsheep.org/account/?u=%@&p=%@", urlnickname, urlpass, urlver ];
+
+	NSURL *helpURL = [NSURL URLWithString: urlstr];
+	
+	[[NSWorkspace sharedWorkspace] openURL:helpURL];
+}
+
 
 - (IBAction)chooseContentFolder:(id)sender
 {
@@ -586,6 +639,11 @@
 				
 	if (upd != NULL)
 		[upd checkForUpdates:sender];
+}
+
+- (IBAction)doSignIn:(id)sender
+{
+	[self startTest:nil];
 }
 
 @end

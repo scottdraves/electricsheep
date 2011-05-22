@@ -220,6 +220,7 @@
 		21DC0CA91263B98200D60C6A /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */; };
 		21DC0CAC1263B99000D60C6A /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */; };
 		21DE7CD91019020600E77D68 /* Instructions.rtf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21DE7CA6101901E900E77D68 /* Instructions.rtf */; };
+		21E1A7C01388032C00D938E6 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1CB50E8E928500CE185C /* Carbon.framework */; };
 		21E6A55410B5F97E00DAF0FF /* electricsheep-attr.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */; };
 		21E6A56110B5F9A000DAF0FF /* electricsheep-attr.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */; };
 		21EE633510139BCC000CE53E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EE633410139BCC000CE53E /* main.m */; };
@@ -549,6 +550,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21E1A7C01388032C00D938E6 /* Carbon.framework in Frameworks */,
 				213D540311F79C9800CF500D /* IOKit.framework in Frameworks */,
 				2160FC9D0F30F48200B2C27A /* CoreFoundation.framework in Frameworks */,
 				2160FC9E0F30F48200B2C27A /* GLUT.framework in Frameworks */,
@@ -1359,6 +1361,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;

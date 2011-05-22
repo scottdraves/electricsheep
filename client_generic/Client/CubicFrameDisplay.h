@@ -206,34 +206,42 @@ class	CCubicFrameDisplay : public CFrameDisplay
 
 				if (m_NumFrames > 0 && !m_spFrames[ m_Frames[3] ].IsNull())
 				{
-					//	Not enough frames decoded yet, display the latest one only.
-					if( m_NumFrames < 4 )
+					//	Enable the shader.
+					m_spRenderer->SetShader( m_spShader );
+
+					if (m_NumFrames < 4)
 					{
-						m_spRenderer->SetTexture( m_spFrames[ m_Frames[3] ], 0 );
+						uint32 i;
+						
+						for (i = 0; i < 4-m_NumFrames; i++)
+						{
+							m_spRenderer->SetTexture( m_spFrames[ m_Frames[ 4-m_NumFrames ] ], i );
+						}
+						
+						for (i = 4-m_NumFrames; i < 4; i++)
+						{
+							m_spRenderer->SetTexture( m_spFrames[ m_Frames[i] ], i );
+						}
 					}
 					else
-					{
-						//	Enable the shader.
-						m_spRenderer->SetShader( m_spShader );
-
 						//	Set the 4 textures.
 						for( uint32 i=0; i<4; i++ )
 							m_spRenderer->SetTexture( m_spFrames[ m_Frames[i] ], i );
 
-						//	B = 1,   C = 0   - cubic B-spline
-						//	B = 1/3, C = 1/3 - nice
-						//	B = 0,   C = 1/2 - Catmull-Rom spline.
-						const fp4 B = 1.0f;
-						const fp4 C = 0.0f;
+					//	B = 1,   C = 0   - cubic B-spline
+					//	B = 1/3, C = 1/3 - nice
+					//	B = 0,   C = 1/2 - Catmull-Rom spline.
+					const fp4 B = 1.0f;
+					const fp4 C = 0.0f;
 
-						//	Set the filter weights...
-						m_spShader->Set( "weights", MitchellNetravali( fp4(m_InterframeDelta) + 1.f, B, C ), MitchellNetravali( fp4(m_InterframeDelta), B, C ),
-													MitchellNetravali( 1.f - fp4(m_InterframeDelta), B, C ), MitchellNetravali( 2.f - fp4(m_InterframeDelta), B, C ) );
-						m_spShader->Set( "newalpha", currentalpha);
-					}
+					//	Set the filter weights...
+					m_spShader->Set( "weights", MitchellNetravali( fp4(m_InterframeDelta) + 1.f, B, C ), MitchellNetravali( fp4(m_InterframeDelta), B, C ),
+												MitchellNetravali( 1.f - fp4(m_InterframeDelta), B, C ), MitchellNetravali( 2.f - fp4(m_InterframeDelta), B, C ) );
+					m_spShader->Set( "newalpha", currentalpha);
+
 					m_spRenderer->SetBlend( "alphablend" );
 					m_spRenderer->Apply();
-					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 0, 0, 0, currentalpha), m_spFrames[ m_Frames[3] ]->GetRect() );
+					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1, 1, 1, currentalpha), m_spFrames[ m_Frames[3] ]->GetRect() );
 				}
 
 				return true;

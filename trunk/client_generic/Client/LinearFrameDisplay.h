@@ -187,7 +187,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 					}
 					
 					
-					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 0, 0, 0, m_LastAlpha ), texRect );
+					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1, 1, 1, currentalpha ), texRect );
 				}
 
 				return true;

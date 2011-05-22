@@ -405,7 +405,7 @@ void SheepDownloader::parseSheepList()
 	char pbuf[MAXBUF];
 
 	//	Open the file.
-	sprintf(pbuf, "%slist.xml", Shepherd::xmlPath());
+	sprintf(pbuf, "%slist_%s.xml", Shepherd::xmlPath(), Shepherd::role());
 
 	TiXmlDocument doc(pbuf);
 	if (doc.LoadFile())
@@ -811,7 +811,6 @@ void	SheepDownloader::findSheepToDownload()
 						best_rating = INT_MIN;
 						best_ctime = 0;
 						best_anim = -1;
-						int sheepcount = 0;
 
 						updateCachedSheep();
 
@@ -941,7 +940,7 @@ bool	SheepDownloader::getSheepList()
 	const char *xmlPath = Shepherd::xmlPath();
 
 	char filename[ MAX_PATH ];
-    snprintf( filename, MAX_PATH, "%slist.xml", xmlPath );
+    snprintf( filename, MAX_PATH, "%slist_%s.xml", xmlPath, Shepherd::role() );
 
 	struct stat stat_buf;
 	if( -1 != stat( filename, &stat_buf) )
@@ -984,7 +983,7 @@ bool	SheepDownloader::getSheepList()
 	time( &fLastListTime );
 
 	//	Open the file to write the uncompressed xml data.
-	snprintf( filename, MAX_PATH, "%slist.xml", xmlPath );
+	snprintf( filename, MAX_PATH, "%slist_%s.xml", xmlPath, Shepherd::role() );
 	FILE *outXML = fopen( filename, "wb" );
 	if( outXML == NULL )
 		return false;

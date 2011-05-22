@@ -37,25 +37,28 @@
 	IBOutlet NSButton* debugLog;
 	IBOutlet NSButton* silentMode;
 	
-	IBOutlet NSMatrix* playbackMixingMode;
+	IBOutlet NSPopUpButton* playbackMixingMode;
 	IBOutlet NSMatrix* goldCacheType;
 	IBOutlet NSFormCell* goldCacheSize;
-    IBOutlet NSTextField* goldPlayerFPS;
 
 	
 	IBOutlet NSTextField* aboutText;
 	
-	IBOutlet NSTextField* goldText;
-	
+	IBOutlet NSTextField* membershipText;
+		
 	IBOutlet NSTextField* version;	
 	
 	IBOutlet NSTextField* flockSizeText;
 	
 	IBOutlet NSTextField* goldFlockSizeText;
 	
+	IBOutlet NSTextField* totalFlockSizeText;
+	
 	IBOutlet NSTextField* loginTestStatusText;
 	
 	IBOutlet NSImageView* loginStatusImage;
+	
+	IBOutlet NSButton* signInButton;
 	
 	NSString *m_origNickname;
 	NSString *m_origPassword;
@@ -71,19 +74,24 @@
 	NSTimer *m_checkTimer;
 		
 	BOOL m_checkingLogin;
+	
 }
 
 
 - (IBAction)ok:(id)sender;
 - (IBAction)cancel:(id)sender;
 - (IBAction)goToCreateAccountPage:(id)sender;
+- (IBAction)goToLearnMorePage:(id)sender;
 - (IBAction)chooseContentFolder:(id)sender;
 - (IBAction)doManualUpdate:(id)sender;
+- (IBAction)doSignIn:(id)sender;
 
 - (ESConfiguration*)initWithWindowNibName:(NSString*)nibName updater:(SUUpdater*)updater;
 
 - (void)htmlifyEditFields;
 - (void)fixFlockSize;
+- (NSString*)md5Password;
+- (void)updateMembershipText:(NSString*)role;
 
 - (void)awakeFromNib;
 - (void)loadSettings;

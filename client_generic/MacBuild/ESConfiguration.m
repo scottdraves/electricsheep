@@ -506,18 +506,9 @@
 
 	ESScreensaver_SetStringSetting("settings.content.sheepdir", [[[contentFldr stringValue] stringByStandardizingPath] UTF8String]);
 	
-	NSString *newNickname = [drupalLogin stringValue];
+	ESScreensaver_SetStringSetting("settings.generator.nickname", [[drupalLogin stringValue] UTF8String]);
 	
-	NSString *newPassword = [drupalPassword stringValue];
-	
-	if (![newNickname isEqual:m_origNickname] || ![newPassword isEqual:m_origPassword])
-	{
-		ESScreensaver_SetStringSetting("settings.generator.nickname", [newNickname UTF8String]);
-
-		NSString *md5Password = [self computeMD5:[NSString stringWithFormat:@"%@sh33p%@", newPassword, newNickname]];
-		
-		ESScreensaver_SetStringSetting("settings.content.password_md5", [md5Password UTF8String]);
-	}
+	ESScreensaver_SetStringSetting("settings.content.password_md5", [[self md5Password] UTF8String]);
 	
 	ESScreensaver_SetStringSetting("settings.content.proxy_username", [[proxyLogin stringValue] UTF8String]);
 

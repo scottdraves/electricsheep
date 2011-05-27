@@ -629,13 +629,10 @@ class	CElectricSheep
 						//	Serverstats.
 						spStats = (Hud::spCStatsConsole)m_HudManager->Get( "serverstats" );
 						
-						if( ContentDownloader::Shepherd::getClientFlockCount(0) > 0)
-						{
-							std::stringstream tmpstr;
-							tmpstr << ContentDownloader::Shepherd::getClientFlockCount(0) + ContentDownloader::Shepherd::getClientFlockCount(1) << " sheep, "
-								<< ContentDownloader::Shepherd::getClientFlockMBs(0) + ContentDownloader::Shepherd::getClientFlockMBs(1) << "MB";
-							((Hud::CStringStat *)spStats->Get( "all" ))->SetSample(tmpstr.str());
-						}
+						std::stringstream tmpstr;
+						tmpstr << ContentDownloader::Shepherd::getClientFlockCount(0) + ContentDownloader::Shepherd::getClientFlockCount(1) << " sheep, "
+							<< ContentDownloader::Shepherd::getClientFlockMBs(0) + ContentDownloader::Shepherd::getClientFlockMBs(1) << "MB";
+						((Hud::CStringStat *)spStats->Get( "all" ))->SetSample(tmpstr.str());
 
 						const char *servername = ContentDownloader::Shepherd::serverName( false );
 						if ( servername != NULL && servername[0] )

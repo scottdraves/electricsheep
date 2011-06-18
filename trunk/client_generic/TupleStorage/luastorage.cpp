@@ -232,7 +232,7 @@ int CStorageLua::SettingsLogger( lua_State *_pState )
 {
     assert( _pState !=NULL );
     const char *pString = luaL_checkstring( _pState, 1 );
-    g_Log->Info( pString );
+    g_Log->Info( "%s", pString );
     return(0);
 }
 

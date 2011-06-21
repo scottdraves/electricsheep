@@ -608,7 +608,7 @@ class	CElectricSheep
 								FormatTimeDiff(m_lastPlayedSeconds, false).c_str()
 								);
 						else
-							strcpy(playCntStr, "Played for the first time");
+							strcpy(playCntStr, "Playing for the first time");
 						
 						snprintf( strCurID, 256, "#%d.%05d (%s)\n%s\n",
 							g_Player().GetCurrentPlayingGeneration(),

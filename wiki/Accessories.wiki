@@ -12,6 +12,9 @@ http://www.codeproject.com/audio/SheepWMP.asp
 run electric sheep in a window while you work on windows:
 http://www.geocities.com/c00l_ac/SheepWatcher.html
 
+Run it on your desktop on Windows:
+http://sourceforge.net/projects/vital-desktop/
+
 and on Mac OS X:
 http://www.dozingcatsoftware.com/
 

@@ -16,7 +16,8 @@ Run it on your desktop on Windows:
 http://sourceforge.net/projects/vital-desktop/
 
 and on Mac OS X:
-http://www.dozingcatsoftware.com/
+http://www.dozingcatsoftware.com/ or
+http://www.macupdate.com/app/mac/24497/wallsaver
 
 use shoop to connect your sheep together into continuous sequences of your own design:
 http://sourceforge.net/project/showfiles.php?group_id=235226

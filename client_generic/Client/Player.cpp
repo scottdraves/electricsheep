@@ -138,7 +138,8 @@ bool CPlayer::AddDisplay( uint32 screen )
 	// modify aspect ratio and/or window size hint
 	uint32	w = 1280;
 	uint32 h = 720;
-	switch ( g_Settings()->Get( "settings.player.PlaybackMixingMode", 0 ) )
+	m_UsedSheepType = g_Settings()->Get( "settings.player.PlaybackMixingMode", 0 );
+	switch ( m_UsedSheepType )
 	{
 	case 0: // only gold, if any
 		{
@@ -146,6 +147,7 @@ bool CPlayer::AddDisplay( uint32 screen )
 			{
 				w = 800;
 				h = 592;
+				m_UsedSheepType = 2;
 			}
 		}
 		break;
@@ -338,7 +340,8 @@ const bool	CPlayer::Startup()
 	//	Create playlist.
 	g_Log->Info( "Creating playlist..." );
   	m_spPlaylist = new ContentDecoder::CLuaPlaylist(	scriptPath.native_directory_string(),
-														watchPath.native_directory_string() );
+														watchPath.native_directory_string(),
+														m_UsedSheepType );
 
 	//	Create decoder last.
 	g_Log->Info( "Starting decoder..." );

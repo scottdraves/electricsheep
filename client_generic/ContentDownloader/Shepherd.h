@@ -91,10 +91,10 @@ class Shepherd
 	static bool getSheep( char *path, SheepArray *sheep );
 
 	static uint64 s_ClientFlockBytes;
-	static size_t s_ClientFlockCount;
+	static uint64 s_ClientFlockCount;
 
 	static uint64 s_ClientFlockGoldBytes;
-	static size_t s_ClientFlockGoldCount;
+	static uint64 s_ClientFlockGoldCount;
 
 	static char *fRootPath;
 	static char *fMpegPath;
@@ -365,7 +365,7 @@ class Shepherd
 					return s_ClientFlockGoldBytes/1024/1024;
 				return 0;
 			}
-			static size_t getClientFlockCount(const int generationtype)
+			static uint64 getClientFlockCount(const int generationtype)
 			{
 				if ( generationtype == 0 )
 					return s_ClientFlockCount;

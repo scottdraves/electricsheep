@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\Common\pool.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\msvc_fix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Common\XTimer.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\msvc_fix.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

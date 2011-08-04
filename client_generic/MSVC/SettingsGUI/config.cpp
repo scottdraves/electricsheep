@@ -49,12 +49,12 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	m_RunButton = new wxButton( this, wxID_ANY, wxT("Run"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RunButton->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
-	m_RunButton->SetToolTip( wxT("Start the client in standalone mode") );
+	m_RunButton->SetToolTip( wxT("Run in a window") );
 	
 	bSizer3->Add( m_RunButton, 0, wxALL, 1 );
 	
 	m_HelpButton = new wxButton( this, wxID_ANY, wxT("Help"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_HelpButton->SetToolTip( wxT("Launch the online help") );
+	m_HelpButton->SetToolTip( wxT("Launch online help") );
 	
 	bSizer3->Add( m_HelpButton, 0, wxALL, 1 );
 	
@@ -82,7 +82,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText3->Wrap( -1 );
 	bSizer6->Add( m_staticText3, 0, wxALL, 5 );
 	
-	m_textDrupalName = new wxTextCtrl( m_Basic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE );
+	m_textDrupalName = new wxTextCtrl( m_Basic, wxID_DRUPAL_NAME, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE );
 	m_textDrupalName->SetMaxLength( 256 ); 
 	m_textDrupalName->SetToolTip( wxT("your username from\nthe web site") );
 	
@@ -97,14 +97,14 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText41->Wrap( -1 );
 	bSizer7->Add( m_staticText41, 0, wxALL, 5 );
 	
-	m_textDrupalPassword = new wxTextCtrl( m_Basic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
+	m_textDrupalPassword = new wxTextCtrl( m_Basic, wxID_DRUPAL_PASSWORD, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
 	m_textDrupalPassword->SetMaxLength( 256 ); 
 	m_textDrupalPassword->SetToolTip( wxT("the password from\nyour account") );
 	
 	bSizer7->Add( m_textDrupalPassword, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
 	sbSizer1->Add( bSizer7, 0, wxALIGN_RIGHT, 5 );
-
+	
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -129,11 +129,11 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer8->Add( bSizer481, 1, wxEXPAND, 5 );
 	
 	sbSizer1->Add( bSizer8, 1, wxEXPAND, 5 );
-
+	
 	bSizer5->Add( sbSizer1, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer5;
-	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_Basic, wxID_ANY, wxT("Membership") ), wxVERTICAL );
+	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_Basic, wxID_ANY, wxT("Register") ), wxVERTICAL );
 	
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxVERTICAL );
@@ -183,7 +183,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText7->Wrap( -1 );
 	bSizer9->Add( m_staticText7, 0, wxALL, 5 );
 	
-	m_spinCache = new wxTextCtrl( m_Flock, wxID_ANY, wxT("2000"), wxDefaultPosition, wxSize( 64,-1 ), wxTE_CENTRE );
+	m_spinCache = new wxTextCtrl( m_Flock, wxID_FREE_FLOCK_MAX_SPACE, wxT("2000"), wxDefaultPosition, wxSize( 64,-1 ), wxTE_CENTRE );
 	m_spinCache->SetMaxLength( 5 ); 
 	m_spinCache->SetToolTip( wxT("After the maximum is reached,\nold sheep are deleted to make\nroom for new ones") );
 	
@@ -212,7 +212,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	wxBoxSizer* bSizer44;
 	bSizer44 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextGoldFlockSize = new wxStaticText( m_Flock, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGoldFlockSize = new wxStaticText( m_Flock, wxID_ANY, wxT("It is currently using 0 MBs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGoldFlockSize->Wrap( -1 );
 	bSizer44->Add( m_staticTextGoldFlockSize, 0, 0, 5 );
 	
@@ -225,7 +225,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText20->Wrap( -1 );
 	bSizer43->Add( m_staticText20, 0, wxALL, 5 );
 	
-	m_spinGoldCache = new wxTextCtrl( m_Flock, wxID_ANY, wxT("2000"), wxDefaultPosition, wxSize( 64,-1 ), wxTE_CENTRE );
+	m_spinGoldCache = new wxTextCtrl( m_Flock, wxID_GOLD_FLOCK_MAX_SPACE, wxT("2000"), wxDefaultPosition, wxSize( 64,-1 ), wxTE_CENTRE );
 	m_spinGoldCache->SetMaxLength( 5 ); 
 	m_spinGoldCache->SetToolTip( wxT("After the maximum is reached,\nold sheep are deleted to make\nroom for new ones") );
 	
@@ -253,6 +253,200 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_Flock->Layout();
 	bSizer52->Fit( m_Flock );
 	m_notebook2->AddPage( m_Flock, wxT("Flock"), false );
+	m_Playback = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer40;
+	bSizer40 = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer10;
+	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText8 = new wxStaticText( m_Playback, wxID_ANY, wxT("Sheep Playback Speed:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8->Wrap( -1 );
+	bSizer10->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_spinDecodeFps = new wxTextCtrl( m_Playback, wxID_SHEEP_PLAYBACK_SPEED, wxT("15"), wxDefaultPosition, wxSize( 42,-1 ), wxTE_CENTRE );
+	m_spinDecodeFps->SetMaxLength( 5 ); 
+	m_spinDecodeFps->SetToolTip( wxT("Frames per second (FPS)") );
+	
+	bSizer10->Add( m_spinDecodeFps, 0, wxALIGN_RIGHT|wxALL|wxSHAPED, 3 );
+	
+	m_staticText11 = new wxStaticText( m_Playback, wxID_ANY, wxT("FPS"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	bSizer10->Add( m_staticText11, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
+	bSizer40->Add( bSizer10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText9 = new wxStaticText( m_Playback, wxID_ANY, wxT("Repeat loops"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	bSizer11->Add( m_staticText9, 0, wxALL, 5 );
+	
+	m_spinRepeatLoops = new wxSpinCtrl( m_Playback, wxID_REPEAT_LOOPS, wxT("2"), wxDefaultPosition, wxSize( 50,-1 ), wxSP_ARROW_KEYS, 0, 100, 2 );
+	m_spinRepeatLoops->SetToolTip( wxT("Play the sheep that are\nloops this many times") );
+	
+	bSizer11->Add( m_spinRepeatLoops, 0, wxALL|wxSHAPED, 3 );
+	
+	m_staticText12 = new wxStaticText( m_Playback, wxID_ANY, wxT("times"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	bSizer11->Add( m_staticText12, 0, wxALL, 5 );
+	
+	bSizer40->Add( bSizer11, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	
+	wxBoxSizer* bSizer23;
+	bSizer23 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_SeamlessPlayback = new wxCheckBox( m_Playback, wxID_ANY, wxT("Seamless playback"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_SeamlessPlayback->SetToolTip( wxT("avoid sheep that lead\nto hard cuts") );
+	
+	bSizer23->Add( m_SeamlessPlayback, 0, wxALL, 5 );
+	
+	bSizer40->Add( bSizer23, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	
+	m_Playback->SetSizer( bSizer40 );
+	m_Playback->Layout();
+	bSizer40->Fit( m_Playback );
+	m_notebook2->AddPage( m_Playback, wxT("Playback"), false );
+	m_Display = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer77;
+	bSizer77 = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer25;
+	bSizer25 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxString m_radioMultiDisplayModeChoices[] = { wxT("Cloned"), wxT("Independent"), wxT("Single") };
+	int m_radioMultiDisplayModeNChoices = sizeof( m_radioMultiDisplayModeChoices ) / sizeof( wxString );
+	m_radioMultiDisplayMode = new wxRadioBox( m_Display, wxID_ANY, wxT("Multi Monitor Mode"), wxDefaultPosition, wxDefaultSize, m_radioMultiDisplayModeNChoices, m_radioMultiDisplayModeChoices, 1, wxRA_SPECIFY_ROWS );
+	m_radioMultiDisplayMode->SetSelection( 0 );
+	m_radioMultiDisplayMode->SetToolTip( wxT("How to handle\nmultiple screens") );
+	
+	bSizer25->Add( m_radioMultiDisplayMode, 0, wxALL|wxEXPAND, 5 );
+	
+	bSizer77->Add( bSizer25, 0, wxALIGN_RIGHT, 5 );
+	
+	wxBoxSizer* bSizer14;
+	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText13 = new wxStaticText( m_Display, wxID_ANY, wxT("Display Monitor"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13->Wrap( -1 );
+	bSizer14->Add( m_staticText13, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_spinMonitor = new wxSpinCtrl( m_Display, wxID_DISPLAY_MONITOR, wxT("0"), wxDefaultPosition, wxSize( 50,-1 ), wxSP_ARROW_KEYS, 0, 3, 0 );
+	m_spinMonitor->SetToolTip( wxT("If you have multiple monitors and\nare in single mode, then display on\nthis monitor") );
+	
+	bSizer14->Add( m_spinMonitor, 0, wxALL, 5 );
+	
+	m_staticText111 = new wxStaticText( m_Display, wxID_ANY, wxT("Display speed"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText111->Wrap( -1 );
+	bSizer14->Add( m_staticText111, 3, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_spinDisplayFps = new wxTextCtrl( m_Display, wxID_DISPLAY_SPEED, wxT("60"), wxDefaultPosition, wxSize( 42,-1 ), wxTE_CENTRE );
+	m_spinDisplayFps->SetMaxLength( 5 ); 
+	m_spinDisplayFps->SetToolTip( wxT("When Interpolation is Linear or\nCubic then the video is upsampled\nto this rate") );
+	
+	bSizer14->Add( m_spinDisplayFps, 0, wxALL, 5 );
+	
+	m_staticText19 = new wxStaticText( m_Display, wxID_ANY, wxT("FPS"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19->Wrap( -1 );
+	bSizer14->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	bSizer77->Add( bSizer14, 0, wxALIGN_RIGHT, 5 );
+	
+	wxBoxSizer* bSizer16;
+	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxString m_radioDisplayModeChoices[] = { wxT("Off"), wxT("Linear"), wxT("Cubic") };
+	int m_radioDisplayModeNChoices = sizeof( m_radioDisplayModeChoices ) / sizeof( wxString );
+	m_radioDisplayMode = new wxRadioBox( m_Display, wxID_ANY, wxT("Interpolation"), wxDefaultPosition, wxDefaultSize, m_radioDisplayModeNChoices, m_radioDisplayModeChoices, 1, wxRA_SPECIFY_ROWS );
+	m_radioDisplayMode->SetSelection( 1 );
+	m_radioDisplayMode->SetToolTip( wxT("Linear and Cubic interpolation\nallow display speed (above) to\nbe higher than decode speed\n(under the Playback tab)") );
+	
+	bSizer16->Add( m_radioDisplayMode, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
+	
+	bSizer77->Add( bSizer16, 0, wxALIGN_RIGHT, 5 );
+	
+	wxBoxSizer* bSizer331;
+	bSizer331 = new wxBoxSizer( wxVERTICAL );
+	
+	m_VerticalSync = new wxCheckBox( m_Display, wxID_ANY, wxT("V-Sync"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_VerticalSync->SetToolTip( wxT("Off to improve multiple monitor\ndisplay performance, On to\nprevent image tearing") );
+	
+	bSizer331->Add( m_VerticalSync, 0, wxALL, 5 );
+	
+	bSizer77->Add( bSizer331, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
+	wxBoxSizer* bSizer341;
+	bSizer341 = new wxBoxSizer( wxVERTICAL );
+	
+	m_ReverseDisplays = new wxCheckBox( m_Display, wxID_ANY, wxT("Reverse monitor order"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_ReverseDisplays->SetToolTip( wxT("Experimental switch to\nincrease multimon\nperformance") );
+	
+	bSizer341->Add( m_ReverseDisplays, 0, wxALL, 5 );
+	
+	bSizer77->Add( bSizer341, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
+	wxBoxSizer* bSizer27;
+	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_DirectDraw = new wxCheckBox( m_Display, wxID_ANY, wxT("DirectDraw mode"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
+	m_DirectDraw->SetToolTip( wxT("only for compatibility with very old graphics chips") );
+	
+	bSizer27->Add( m_DirectDraw, 0, wxALL, 5 );
+	
+	bSizer77->Add( bSizer27, 1, wxALIGN_RIGHT|wxALL, 5 );
+	
+	m_Display->SetSizer( bSizer77 );
+	m_Display->Layout();
+	bSizer77->Fit( m_Display );
+	m_notebook2->AddPage( m_Display, wxT("Display"), false );
+	m_Proxy = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer36;
+	bSizer36 = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer61;
+	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText31 = new wxStaticText( m_Proxy, wxID_ANY, wxT("Hostname:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText31->Wrap( -1 );
+	bSizer61->Add( m_staticText31, 0, wxALL, 5 );
+	
+	m_textProxyHost = new wxTextCtrl( m_Proxy, wxID_PROXY_HOST_NAME, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE );
+	m_textProxyHost->SetMaxLength( 256 ); 
+	bSizer61->Add( m_textProxyHost, 0, wxALL|wxFIXED_MINSIZE, 5 );
+	
+	bSizer36->Add( bSizer61, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
+	wxBoxSizer* bSizer71;
+	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText411 = new wxStaticText( m_Proxy, wxID_ANY, wxT("User:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText411->Wrap( -1 );
+	bSizer71->Add( m_staticText411, 0, wxALL, 5 );
+	
+	m_textProxyUser = new wxTextCtrl( m_Proxy, wxID_PROXY_USER_NAME, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
+	m_textProxyUser->SetMaxLength( 256 ); 
+	bSizer71->Add( m_textProxyUser, 0, wxALL|wxFIXED_MINSIZE, 5 );
+	
+	bSizer36->Add( bSizer71, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
+	wxBoxSizer* bSizer72;
+	bSizer72 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText412 = new wxStaticText( m_Proxy, wxID_ANY, wxT("Password:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText412->Wrap( -1 );
+	bSizer72->Add( m_staticText412, 0, wxALL, 5 );
+	
+	m_textProxyPassword = new wxTextCtrl( m_Proxy, wxID_PROXY_PASSWORD, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
+	m_textProxyPassword->SetMaxLength( 256 ); 
+	bSizer72->Add( m_textProxyPassword, 0, wxALL|wxFIXED_MINSIZE, 5 );
+	
+	bSizer36->Add( bSizer72, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
+	m_Proxy->SetSizer( bSizer36 );
+	m_Proxy->Layout();
+	bSizer36->Fit( m_Proxy );
+	m_notebook2->AddPage( m_Proxy, wxT("Proxy"), false );
 	m_Advanced = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_Advanced->SetToolTip( wxT("Advanced client settings") );
 	
@@ -366,7 +560,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_Advanced, wxID_ANY, wxT("Content directory") ), wxHORIZONTAL );
 	
-	m_dirContent = new wxDirPickerCtrl( m_Advanced, wxID_ANY, wxT(",90,90,-1,70,0"), wxT("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE|wxDIRP_DIR_MUST_EXIST );
+	m_dirContent = new wxDirPickerCtrl( m_Advanced, wxID_CONTENT_DIRECTORY, wxT(",90,90,-1,70,0"), wxT("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE|wxDIRP_DIR_MUST_EXIST );
 	sbSizer3->Add( m_dirContent, 0, wxALL, 5 );
 	
 	m_buttonOpenContent = new wxButton( m_Advanced, wxID_ANY, wxT("Open this folder"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -376,16 +570,16 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	bSizer13->Add( sbSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer53;
-	bSizer53 = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbSizer6;
+	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( m_Advanced, wxID_ANY, wxT("Flock choice") ), wxVERTICAL );
 	
 	wxString m_choicePlaybackMixingModeChoices[] = { wxT("if there are any gold sheep then play only gold sheep"), wxT("free sheep only"), wxT("play all sheep") };
 	int m_choicePlaybackMixingModeNChoices = sizeof( m_choicePlaybackMixingModeChoices ) / sizeof( wxString );
 	m_choicePlaybackMixingMode = new wxChoice( m_Advanced, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePlaybackMixingModeNChoices, m_choicePlaybackMixingModeChoices, 0 );
 	m_choicePlaybackMixingMode->SetSelection( 0 );
-	bSizer53->Add( m_choicePlaybackMixingMode, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	sbSizer6->Add( m_choicePlaybackMixingMode, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
-	bSizer13->Add( bSizer53, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bSizer13->Add( sbSizer6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
 	
 	bSizer12->Add( bSizer13, 0, wxALL|wxEXPAND, 5 );
 	
@@ -393,200 +587,6 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_Advanced->Layout();
 	bSizer12->Fit( m_Advanced );
 	m_notebook2->AddPage( m_Advanced, wxT("Advanced"), false );
-	m_Playback = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer40;
-	bSizer40 = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText8 = new wxStaticText( m_Playback, wxID_ANY, wxT("Speed:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	bSizer10->Add( m_staticText8, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	m_spinDecodeFps = new wxTextCtrl( m_Playback, wxID_ANY, wxT("15"), wxDefaultPosition, wxSize( 42,-1 ), wxTE_CENTRE );
-	m_spinDecodeFps->SetMaxLength( 5 ); 
-	m_spinDecodeFps->SetToolTip( wxT("Frames per second (FPS)") );
-	
-	bSizer10->Add( m_spinDecodeFps, 0, wxALIGN_RIGHT|wxALL|wxSHAPED, 3 );
-	
-	m_staticText11 = new wxStaticText( m_Playback, wxID_ANY, wxT("FPS"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	bSizer10->Add( m_staticText11, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	bSizer40->Add( bSizer10, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText9 = new wxStaticText( m_Playback, wxID_ANY, wxT("Repeat loops"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	bSizer11->Add( m_staticText9, 0, wxALL, 5 );
-	
-	m_spinRepeatLoops = new wxSpinCtrl( m_Playback, wxID_ANY, wxT("2"), wxDefaultPosition, wxSize( 50,-1 ), wxSP_ARROW_KEYS, 0, 100, 2 );
-	m_spinRepeatLoops->SetToolTip( wxT("Play the sheep that are\nloops this many times") );
-	
-	bSizer11->Add( m_spinRepeatLoops, 0, wxALL|wxSHAPED, 3 );
-	
-	m_staticText12 = new wxStaticText( m_Playback, wxID_ANY, wxT("times"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	bSizer11->Add( m_staticText12, 0, wxALL, 5 );
-	
-	bSizer40->Add( bSizer11, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	wxBoxSizer* bSizer23;
-	bSizer23 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_SeamlessPlayback = new wxCheckBox( m_Playback, wxID_ANY, wxT("Seamless playback"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
-	m_SeamlessPlayback->SetToolTip( wxT("avoid sheep that lead\nto hard cuts") );
-	
-	bSizer23->Add( m_SeamlessPlayback, 0, wxALL, 5 );
-	
-	bSizer40->Add( bSizer23, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	m_Playback->SetSizer( bSizer40 );
-	m_Playback->Layout();
-	bSizer40->Fit( m_Playback );
-	m_notebook2->AddPage( m_Playback, wxT("Playback"), false );
-	m_Display = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer77;
-	bSizer77 = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* bSizer25;
-	bSizer25 = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxString m_radioMultiDisplayModeChoices[] = { wxT("Cloned"), wxT("Independent"), wxT("Single") };
-	int m_radioMultiDisplayModeNChoices = sizeof( m_radioMultiDisplayModeChoices ) / sizeof( wxString );
-	m_radioMultiDisplayMode = new wxRadioBox( m_Display, wxID_ANY, wxT("Multi Monitor Mode"), wxDefaultPosition, wxDefaultSize, m_radioMultiDisplayModeNChoices, m_radioMultiDisplayModeChoices, 1, wxRA_SPECIFY_ROWS );
-	m_radioMultiDisplayMode->SetSelection( 0 );
-	m_radioMultiDisplayMode->SetToolTip( wxT("How to handle\nmultiple screens") );
-	
-	bSizer25->Add( m_radioMultiDisplayMode, 0, wxALL|wxEXPAND, 5 );
-	
-	bSizer77->Add( bSizer25, 0, wxALIGN_RIGHT, 5 );
-	
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText13 = new wxStaticText( m_Display, wxID_ANY, wxT("Display Monitor"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText13->Wrap( -1 );
-	bSizer14->Add( m_staticText13, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_spinMonitor = new wxSpinCtrl( m_Display, wxID_ANY, wxT("0"), wxDefaultPosition, wxSize( 50,-1 ), wxSP_ARROW_KEYS, 0, 3, 0 );
-	m_spinMonitor->SetToolTip( wxT("If you have multiple monitors and\nare in single mode, then display on\nthis monitor") );
-	
-	bSizer14->Add( m_spinMonitor, 0, wxALL, 5 );
-	
-	m_staticText111 = new wxStaticText( m_Display, wxID_ANY, wxT("Display speed"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText111->Wrap( -1 );
-	bSizer14->Add( m_staticText111, 3, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_spinDisplayFps = new wxTextCtrl( m_Display, wxID_ANY, wxT("60"), wxDefaultPosition, wxSize( 42,-1 ), wxTE_CENTRE );
-	m_spinDisplayFps->SetMaxLength( 5 ); 
-	m_spinDisplayFps->SetToolTip( wxT("When Interpolation is Linear or\nCubic then the video is upsampled\nto this rate") );
-	
-	bSizer14->Add( m_spinDisplayFps, 0, wxALL, 5 );
-	
-	m_staticText19 = new wxStaticText( m_Display, wxID_ANY, wxT("FPS"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText19->Wrap( -1 );
-	bSizer14->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	bSizer77->Add( bSizer14, 0, wxALIGN_RIGHT, 5 );
-	
-	wxBoxSizer* bSizer16;
-	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxString m_radioDisplayModeChoices[] = { wxT("Off"), wxT("Linear"), wxT("Cubic") };
-	int m_radioDisplayModeNChoices = sizeof( m_radioDisplayModeChoices ) / sizeof( wxString );
-	m_radioDisplayMode = new wxRadioBox( m_Display, wxID_ANY, wxT("Interpolation"), wxDefaultPosition, wxDefaultSize, m_radioDisplayModeNChoices, m_radioDisplayModeChoices, 1, wxRA_SPECIFY_ROWS );
-	m_radioDisplayMode->SetSelection( 1 );
-	m_radioDisplayMode->SetToolTip( wxT("Linear and Cubic interpolation\nallow display speed (above) to\nbe higher than decode speed\n(under the Playback tab)") );
-	
-	bSizer16->Add( m_radioDisplayMode, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
-	
-	bSizer77->Add( bSizer16, 0, wxALIGN_RIGHT, 5 );
-	
-	wxBoxSizer* bSizer331;
-	bSizer331 = new wxBoxSizer( wxVERTICAL );
-	
-	m_VerticalSync = new wxCheckBox( m_Display, wxID_ANY, wxT("V-Sync"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
-	m_VerticalSync->SetToolTip( wxT("Off to improve multiple monitor\ndisplay performance, On to\nprevent image tearing") );
-	
-	bSizer331->Add( m_VerticalSync, 0, wxALL, 5 );
-	
-	bSizer77->Add( bSizer331, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	wxBoxSizer* bSizer341;
-	bSizer341 = new wxBoxSizer( wxVERTICAL );
-	
-	m_ReverseDisplays = new wxCheckBox( m_Display, wxID_ANY, wxT("Reverse monitor order"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
-	m_ReverseDisplays->SetToolTip( wxT("Experimental switch to\nincrease multimon\nperformance") );
-	
-	bSizer341->Add( m_ReverseDisplays, 0, wxALL, 5 );
-	
-	bSizer77->Add( bSizer341, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	wxBoxSizer* bSizer27;
-	bSizer27 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_DirectDraw = new wxCheckBox( m_Display, wxID_ANY, wxT("DirectDraw mode"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
-	m_DirectDraw->SetToolTip( wxT("only for compatibility with\nvery old graphics chips, do\nNOT enable this except to\nfix instant-crashing") );
-	
-	bSizer27->Add( m_DirectDraw, 0, wxALL, 5 );
-	
-	bSizer77->Add( bSizer27, 1, wxALIGN_RIGHT|wxALL, 5 );
-	
-	m_Display->SetSizer( bSizer77 );
-	m_Display->Layout();
-	bSizer77->Fit( m_Display );
-	m_notebook2->AddPage( m_Display, wxT("Display"), false );
-	m_Proxy = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer36;
-	bSizer36 = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* bSizer61;
-	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText31 = new wxStaticText( m_Proxy, wxID_ANY, wxT("Hostname:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText31->Wrap( -1 );
-	bSizer61->Add( m_staticText31, 0, wxALL, 5 );
-	
-	m_textProxyHost = new wxTextCtrl( m_Proxy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE );
-	m_textProxyHost->SetMaxLength( 256 ); 
-	bSizer61->Add( m_textProxyHost, 0, wxALL|wxFIXED_MINSIZE, 5 );
-	
-	bSizer36->Add( bSizer61, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	wxBoxSizer* bSizer71;
-	bSizer71 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText411 = new wxStaticText( m_Proxy, wxID_ANY, wxT("User:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText411->Wrap( -1 );
-	bSizer71->Add( m_staticText411, 0, wxALL, 5 );
-	
-	m_textProxyUser = new wxTextCtrl( m_Proxy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
-	m_textProxyUser->SetMaxLength( 256 ); 
-	bSizer71->Add( m_textProxyUser, 0, wxALL|wxFIXED_MINSIZE, 5 );
-	
-	bSizer36->Add( bSizer71, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	wxBoxSizer* bSizer72;
-	bSizer72 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText412 = new wxStaticText( m_Proxy, wxID_ANY, wxT("Password:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText412->Wrap( -1 );
-	bSizer72->Add( m_staticText412, 0, wxALL, 5 );
-	
-	m_textProxyPassword = new wxTextCtrl( m_Proxy, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
-	m_textProxyPassword->SetMaxLength( 256 ); 
-	bSizer72->Add( m_textProxyPassword, 0, wxALL|wxFIXED_MINSIZE, 5 );
-	
-	bSizer36->Add( bSizer72, 0, wxALIGN_RIGHT|wxALL, 5 );
-	
-	m_Proxy->SetSizer( bSizer36 );
-	m_Proxy->Layout();
-	bSizer36->Fit( m_Proxy );
-	m_notebook2->AddPage( m_Proxy, wxT("Proxy"), false );
 	m_About = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer48;
 	bSizer48 = new wxBoxSizer( wxVERTICAL );
@@ -625,27 +625,51 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MyDialog2::OnDialogClose ) );
 	this->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( MyDialog2::OnDialogCharHook ), NULL, this );
-	this->Connect( wxEVT_IDLE, wxIdleEventHandler( MyDialog2::LoginTest ), NULL, this );
+	this->Connect( wxEVT_IDLE, wxIdleEventHandler( MyDialog2::OnIdle ) );
 	m_RunButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnRunClick ), NULL, this );
 	m_HelpButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnHelpClick ), NULL, this );
+	m_textDrupalName->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textDrupalName->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textDrupalName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDrupalNameTextEnter ), NULL, this );
+	m_textDrupalPassword->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textDrupalPassword->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textDrupalPassword->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDrupalPasswordTextEnter ), NULL, this );
 	m_TestAccountButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnTestAccountButtonClick ), NULL, this );
 	m_CreateAccountButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnCreateClick ), NULL, this );
+	m_spinCache->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinCache->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_checkUnlimitedCache->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MyDialog2::OnUnlimitedCacheCheck ), NULL, this );
+	m_spinGoldCache->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinGoldCache->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_checkGoldUnlimitedCache->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MyDialog2::OnGoldUnlimitedCacheCheck ), NULL, this );
-	m_dirContent->Connect( wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEventHandler( MyDialog2::OnContentDirChanged ), NULL, this );
-	m_buttonOpenContent->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnOpenClick ), NULL, this );
+	m_spinDecodeFps->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnDecodeFpsKillFocus ), NULL, this );
+	m_spinDecodeFps->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinDecodeFps->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinDecodeFps->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDecodeFpsTextUpdated ), NULL, this );
+	m_spinRepeatLoops->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinRepeatLoops->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinMonitor->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinMonitor->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinDisplayFps->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnPlayerFpsKillFocus ), NULL, this );
+	m_spinDisplayFps->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinDisplayFps->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinDisplayFps->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnPlayerFpsTextUpdated ), NULL, this );
+	m_textProxyHost->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textProxyHost->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textProxyHost->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialog2::OnProxyTextEnter ), NULL, this );
+	m_textProxyUser->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textProxyUser->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textProxyUser->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialog2::OnProxyUserNameEnter ), NULL, this );
+	m_textProxyPassword->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textProxyPassword->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textProxyPassword->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialog2::OnProxyPasswordEnter ), NULL, this );
+	m_dirContent->Connect( wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEventHandler( MyDialog2::OnContentDirChanged ), NULL, this );
+	m_dirContent->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_dirContent->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_buttonOpenContent->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnOpenClick ), NULL, this );
 	m_AboutText->Connect( wxEVT_COMMAND_TEXT_URL, wxTextUrlEventHandler( MyDialog2::OnAboutUrl ), NULL, this );
 	m_Ok->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnClickOk ), NULL, this );
 	m_Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnCancelClick ), NULL, this );
-	m_spinDecodeFps->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDecodeFpsTextUpdated ), NULL, this );
-	m_spinDecodeFps->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnDecodeFpsKillFocus ), NULL, this );
-	m_spinDisplayFps->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnPlayerFpsTextUpdated ), NULL, this );
-	m_spinDisplayFps->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnPlayerFpsKillFocus ), NULL, this );
 }
 
 MyDialog2::~MyDialog2()
@@ -653,25 +677,50 @@ MyDialog2::~MyDialog2()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MyDialog2::OnDialogClose ) );
 	this->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( MyDialog2::OnDialogCharHook ), NULL, this );
-	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( MyDialog2::LoginTest ), NULL, this );
+	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( MyDialog2::OnIdle ) );
 	m_RunButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnRunClick ), NULL, this );
 	m_HelpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnHelpClick ), NULL, this );
+	m_textDrupalName->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textDrupalName->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textDrupalName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDrupalNameTextEnter ), NULL, this );
+	m_textDrupalPassword->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textDrupalPassword->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textDrupalPassword->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDrupalPasswordTextEnter ), NULL, this );
 	m_TestAccountButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnTestAccountButtonClick ), NULL, this );
 	m_CreateAccountButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnCreateClick ), NULL, this );
+	m_spinCache->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinCache->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_checkUnlimitedCache->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MyDialog2::OnUnlimitedCacheCheck ), NULL, this );
+	m_spinGoldCache->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinGoldCache->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_checkGoldUnlimitedCache->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MyDialog2::OnGoldUnlimitedCacheCheck ), NULL, this );
-	m_dirContent->Disconnect( wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEventHandler( MyDialog2::OnContentDirChanged ), NULL, this );
-	m_buttonOpenContent->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnOpenClick ), NULL, this );
+	m_spinDecodeFps->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnDecodeFpsKillFocus ), NULL, this );
+	m_spinDecodeFps->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinDecodeFps->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinDecodeFps->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDecodeFpsTextUpdated ), NULL, this );
+	m_spinRepeatLoops->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinRepeatLoops->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinMonitor->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinMonitor->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinDisplayFps->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnPlayerFpsKillFocus ), NULL, this );
+	m_spinDisplayFps->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_spinDisplayFps->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_spinDisplayFps->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnPlayerFpsTextUpdated ), NULL, this );
+	m_textProxyHost->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textProxyHost->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textProxyHost->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialog2::OnProxyTextEnter ), NULL, this );
+	m_textProxyUser->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textProxyUser->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textProxyUser->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialog2::OnProxyUserNameEnter ), NULL, this );
+	m_textProxyPassword->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_textProxyPassword->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
 	m_textProxyPassword->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialog2::OnProxyPasswordEnter ), NULL, this );
+	m_dirContent->Disconnect( wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEventHandler( MyDialog2::OnContentDirChanged ), NULL, this );
+	m_dirContent->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( MyDialog2::OnTextLeftUp ), NULL, this );
+	m_dirContent->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MyDialog2::OnTextSetFocus ), NULL, this );
+	m_buttonOpenContent->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnOpenClick ), NULL, this );
 	m_AboutText->Disconnect( wxEVT_COMMAND_TEXT_URL, wxTextUrlEventHandler( MyDialog2::OnAboutUrl ), NULL, this );
 	m_Ok->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnClickOk ), NULL, this );
 	m_Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialog2::OnCancelClick ), NULL, this );
-	m_spinDecodeFps->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnDecodeFpsTextUpdated ), NULL, this );
-	m_spinDecodeFps->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnDecodeFpsKillFocus ), NULL, this );
-	m_spinDisplayFps->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MyDialog2::OnPlayerFpsTextUpdated ), NULL, this );
-	m_spinDisplayFps->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MyDialog2::OnPlayerFpsKillFocus ), NULL, this );
+	
 }

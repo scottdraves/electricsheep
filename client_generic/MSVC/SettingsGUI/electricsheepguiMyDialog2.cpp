@@ -286,7 +286,8 @@ void electricsheepguiMyDialog2::LoadSettings()
 	m_ReverseDisplays->SetValue( g_Settings()->Get( "settings.player.reversedisplays", false ) );
 
 	m_textDrupalName->ChangeValue( g_Settings()->Get( "settings.generator.nickname", std::string("") ) );
-	m_textDrupalPassword->ChangeValue( g_Settings()->Get( "settings.content.password_md5", std::string("") ) );
+	if (m_textDrupalName->GetValue() != wxEmptyString)
+		m_textDrupalPassword->ChangeValue( g_Settings()->Get( "settings.content.password_md5", std::string("") ) );
 
 	/*if (g_Settings()->Get( "settings.content.registered", false ) == true )
 	{
@@ -348,6 +349,17 @@ void electricsheepguiMyDialog2::Login()
 
 	std::string nickencoded = Encode( g_Settings()->Get("settings.generator.nickname", std::string("")) );
 	std::string passencoded = Encode( g_Settings()->Get("settings.content.password_md5", std::string("")) );
+	
+	if (nickencoded == std::string("") || passencoded == std::string(""))
+	{
+		wxMutexGuiEnter();
+		m_staticText6->SetLabel("...Failed!...");
+		Layout();
+		wxMutexGuiLeave();
+		curl_easy_cleanup( pCurl );
+		curl_global_cleanup();
+		return;
+	}
 
 	curl_easy_setopt(pCurl, CURLOPT_USERPWD, std::string( nickencoded + std::string(":") + passencoded ).c_str());
 
@@ -376,7 +388,7 @@ void electricsheepguiMyDialog2::Login()
 	wxMutexGuiEnter();
 	m_staticText6->SetLabel("...talking...");
 	wxMutexGuiLeave();
-	
+
 
 	long code = 0;
 	m_Response.clear();
@@ -426,11 +438,11 @@ void electricsheepguiMyDialog2::Login()
 						{
 							m_staticText25->SetLabel("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
 						}
-						
+
 						if (m_Role == "registered" || m_Role == "member" || m_Role == "gold")
 						{
 							m_staticText6->SetLabel("...logged in!...");
-							
+
 							g_Settings()->Set("settings.content.registered", true);
 							Layout();
 							wxMutexGuiLeave();
@@ -438,7 +450,7 @@ void electricsheepguiMyDialog2::Login()
 							curl_slist_free_all(slist);
 							curl_easy_cleanup( pCurl );
 							curl_global_cleanup();
-			
+
 							return;
 						}
 
@@ -455,7 +467,7 @@ void electricsheepguiMyDialog2::Login()
 	m_staticText6->SetLabel("...Failed!...");
 	Layout();
 	wxMutexGuiLeave();
-	
+
 	curl_slist_free_all(slist);
 	curl_easy_cleanup( pCurl );
 	curl_global_cleanup();
@@ -473,12 +485,45 @@ electricsheepguiMyDialog2::~electricsheepguiMyDialog2()
 	g_Settings()->Shutdown();
 }
 
+void electricsheepguiMyDialog2::OnIdle( wxIdleEvent& event )
+{
+	if (m_TestLogin)
+	{
+		if (m_LoginThread == NULL)
+		{
+			m_LoginThread = new LoginThread();
+			m_LoginThread->Create();
+			m_LoginThread->Run();
+		}
+		else
+		{
+			if (!m_LoginThread->IsRunning())
+			{
+				m_TestLogin = false;
+				m_LoginThread->Delete();
+				delete m_LoginThread;
+				m_LoginThread = new LoginThread();
+
+				m_LoginThread->Create();
+				m_LoginThread->Run();
+			}
+		}
+	}
+}
+
+void electricsheepguiMyDialog2::DeleteListXml()
+{
+	std::string path = g_Settings()->Get( "settings.content.sheepdir", g_Settings()->Root() + "content" );
+	remove( (path + std::string("\\xml\\list.xml")).c_str() );
+}
+
 electricsheepguiMyDialog2::electricsheepguiMyDialog2( wxWindow* parent )
 :
 MyDialog2( parent )
 {
 	sMainDialog = this;
-	m_TestLogin = false;
+	m_TestLogin = true;
+	m_NewFocus = true;
 	m_LoginThread = NULL;
 #ifndef LINUX_GNU
 if( SUCCEEDED( SHGetFolderPathA( NULL, CSIDL_COMMON_APPDATA, NULL, 0, szPath ) ) )
@@ -496,7 +541,7 @@ TupleStorage::IStorageInterface::CreateFullDirectory( std::string(szPath) + "Log
 m_staticVersion->SetLabel(CLIENT_VERSION_PRETTY);
 #endif
 #ifdef WIN32
-m_staticVersion->SetLabel(CLIENT_VERSION_PRETTYW);
+m_staticVersion->SetLabel(CLIENT_VERSION_PRETTYW2);
 #endif
 
 m_spinCache->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
@@ -550,7 +595,6 @@ void electricsheepguiMyDialog2::OnDialogClose( wxCloseEvent& event )
 {
 	this->Destroy();
 }
-
 void* LoginThread::Entry()
 {
 	wxMilliSleep(1000);
@@ -578,6 +622,116 @@ void electricsheepguiMyDialog2::OnHelpClick( wxCommandEvent& event )
 	wxLaunchDefaultBrowser(CLIENT_HELP_LINK);
 }
 
+void electricsheepguiMyDialog2::OnTextLeftUp( wxMouseEvent& event )
+{
+	event.Skip();
+	switch (event.GetId())
+	{
+		case wxID_DRUPAL_NAME:
+			if (m_NewFocus == true)
+			{
+				m_textDrupalName->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+			break;
+
+		case wxID_DRUPAL_PASSWORD:
+			if (m_NewFocus == true)
+			{
+				m_textDrupalPassword->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+			break;
+
+		case wxID_FREE_FLOCK_MAX_SPACE:
+			if (m_NewFocus == true)
+			{
+				m_spinCache->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_GOLD_FLOCK_MAX_SPACE:
+			if (m_NewFocus == true)
+			{
+				m_spinGoldCache->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_SHEEP_PLAYBACK_SPEED:
+			if (m_NewFocus == true)
+			{
+				m_spinDecodeFps->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_REPEAT_LOOPS:
+			if (m_NewFocus == true)
+			{
+				m_spinRepeatLoops->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_DISPLAY_MONITOR:
+			if (m_NewFocus == true)
+			{
+				m_spinMonitor->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_DISPLAY_SPEED:
+			if (m_NewFocus == true)
+			{
+				m_spinDisplayFps->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_PROXY_HOST_NAME:
+			if (m_NewFocus == true)
+			{
+				m_textProxyHost->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_PROXY_USER_NAME:
+			if (m_NewFocus == true)
+			{
+				m_textProxyUser->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_PROXY_PASSWORD:
+			if (m_NewFocus == true)
+			{
+				m_textProxyPassword->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+		case wxID_CONTENT_DIRECTORY:
+			if (m_NewFocus == true)
+			{
+				//m_dirContent->SetSelection(-1,-1);
+				m_NewFocus = false;
+			}
+		break;
+
+	}
+}
+
+void electricsheepguiMyDialog2::OnTextSetFocus( wxFocusEvent& event )
+{
+	m_NewFocus = true;
+	event.Skip();
+}
+
 void electricsheepguiMyDialog2::OnDrupalNameTextEnter( wxCommandEvent& event )
 {
 //m_staticText6->SetLabel("...password changed, press 'Login' to verify...");
@@ -585,18 +739,10 @@ m_CreateAccountButton->Enable( true );
 
 g_Settings()->Set("settings.content.registered", false);
 
-g_Settings()->Set("settings.content.password", std::string(m_textDrupalPassword->GetValue()));
 g_Settings()->Set("settings.generator.nickname", std::string(m_textDrupalName->GetValue()));
 
-g_Settings()->Set("settings.content.password_md5",
-				  computeMD5(
-				  g_Settings()->Get("settings.content.password", std::string("")) +
-				  "sh33p" +
-				  g_Settings()->Get("settings.generator.nickname", std::string(""))
-				  )
-				  );
-DeleteListXml();
-m_TestLogin = true;
+//DeleteListXml();
+m_textDrupalPassword->ChangeValue(wxEmptyString);
 }
 
 void electricsheepguiMyDialog2::OnDrupalPasswordTextEnter( wxCommandEvent& event )
@@ -613,12 +759,13 @@ g_Settings()->Set("settings.content.password_md5",
 				  g_Settings()->Get("settings.generator.nickname", std::string(""))
 				  )
 				  );
-DeleteListXml();
+//DeleteListXml();
 m_TestLogin = true;
 }
 
 void electricsheepguiMyDialog2::OnTestAccountButtonClick( wxCommandEvent& event )
 {
+	m_staticText6->SetLabel("...talking...");
 	m_TestLogin = true;
 }
 
@@ -679,6 +826,72 @@ void electricsheepguiMyDialog2::OnOpenClick( wxCommandEvent& event )
 #endif
 }
 
+void electricsheepguiMyDialog2::OnDecodeFpsKillFocus( wxFocusEvent& event )
+{
+	if (m_spinDecodeFps->GetValue() == wxEmptyString)
+		m_spinDecodeFps->ChangeValue(wxT("20"));
+	double val = 0;
+	m_spinDecodeFps->GetValue().ToDouble(&val);
+	if (m_spinDecodeFps->GetValue().size() > 0)
+	{
+		if (val < 0.1 || val > 100)
+		{
+			m_spinDecodeFps->ChangeValue(wxT("20"));
+		}
+	}
+	event.Skip();
+}
+
+void electricsheepguiMyDialog2::OnDecodeFpsTextUpdated( wxCommandEvent& event )
+{
+	/*if (m_spinDecodeFps != NULL)
+	{
+		long val = 0;
+		m_spinDecodeFps->GetValue().ToLong(&val);
+		if (m_spinDecodeFps->GetValue().size() > 0)
+		{
+			if (val <= 0.1 || val > 99)
+			{
+				m_spinDecodeFps->ChangeValue(wxT("23"));
+			}
+		}
+	}*/
+	event.Skip();
+}
+
+void electricsheepguiMyDialog2::OnPlayerFpsKillFocus( wxFocusEvent& event )
+{
+	if (m_spinDisplayFps->GetValue() == wxEmptyString)
+		m_spinDisplayFps->ChangeValue(wxT("60"));
+	double val = 0;
+	m_spinDisplayFps->GetValue().ToDouble(&val);
+	if (m_spinDisplayFps->GetValue().size() > 0)
+	{
+		if (val < 1 || val > 120)
+		{
+			m_spinDisplayFps->ChangeValue(wxT("60"));
+		}
+	}
+	event.Skip();
+}
+
+void electricsheepguiMyDialog2::OnPlayerFpsTextUpdated( wxCommandEvent& event )
+{
+	/*if (m_spinDisplayFps != NULL)
+	{
+		long val = 0;
+		m_spinDisplayFps->GetValue().ToLong(&val);
+		if (m_spinDisplayFps->GetValue().size() > 0)
+		{
+			if (val <= 0.1 || val > 99)
+			{
+				m_spinDisplayFps->ChangeValue(wxT("60"));
+			}
+		}
+	}*/
+	event.Skip();
+}
+
 void electricsheepguiMyDialog2::OnProxyTextEnter( wxCommandEvent& event )
 {
 	g_Settings()->Set( "settings.content.proxy", std::string(m_textProxyHost->GetValue()));
@@ -712,102 +925,4 @@ void electricsheepguiMyDialog2::OnClickOk( wxCommandEvent& event )
 void electricsheepguiMyDialog2::OnCancelClick( wxCommandEvent& event )
 {
 	this->Destroy();
-}
-
-void electricsheepguiMyDialog2::LoginTest( wxIdleEvent& event )
-{
-	if (m_TestLogin)
-	{
-		if (m_LoginThread == NULL)
-		{
-			m_LoginThread = new LoginThread();
-			m_LoginThread->Create();
-			m_LoginThread->Run();
-		}
-		else
-		{
-			if (!m_LoginThread->IsRunning())
-			{
-				m_TestLogin = false;
-				m_LoginThread->Delete();
-				delete m_LoginThread;
-				m_LoginThread = new LoginThread();
-
-				m_LoginThread->Create();
-				m_LoginThread->Run();
-			}
-		}
-	}
-}
-
-void electricsheepguiMyDialog2::DeleteListXml()
-{
-	std::string path = g_Settings()->Get( "settings.content.sheepdir", g_Settings()->Root() + "content" );
-	remove( (path + std::string("\\xml\\list.xml")).c_str() );
-}
-
-void electricsheepguiMyDialog2::OnDecodeFpsTextUpdated( wxCommandEvent& event )
-{
-	/*if (m_spinDecodeFps != NULL)
-	{
-		long val = 0;
-		m_spinDecodeFps->GetValue().ToLong(&val);
-		if (m_spinDecodeFps->GetValue().size() > 0)
-		{
-			if (val <= 0.1 || val > 99)
-			{
-				m_spinDecodeFps->ChangeValue(wxT("23"));
-			}
-		}
-	}*/
-	event.Skip();
-}
-
-void electricsheepguiMyDialog2::OnDecodeFpsKillFocus( wxFocusEvent& event )
-{
-	if (m_spinDecodeFps->GetValue() == wxEmptyString)
-		m_spinDecodeFps->ChangeValue(wxT("20"));
-	double val = 0;
-	m_spinDecodeFps->GetValue().ToDouble(&val);
-	if (m_spinDecodeFps->GetValue().size() > 0)
-	{
-		if (val < 0.1 || val > 100)
-		{
-			m_spinDecodeFps->ChangeValue(wxT("20"));
-		}
-	}
-	event.Skip();
-}
-
-void electricsheepguiMyDialog2::OnPlayerFpsTextUpdated( wxCommandEvent& event )
-{
-	/*if (m_spinDisplayFps != NULL)
-	{
-		long val = 0;
-		m_spinDisplayFps->GetValue().ToLong(&val);
-		if (m_spinDisplayFps->GetValue().size() > 0)
-		{
-			if (val <= 0.1 || val > 99)
-			{
-				m_spinDisplayFps->ChangeValue(wxT("60"));
-			}
-		}
-	}*/
-	event.Skip();
-}
-
-void electricsheepguiMyDialog2::OnPlayerFpsKillFocus( wxFocusEvent& event )
-{
-	if (m_spinDisplayFps->GetValue() == wxEmptyString)
-		m_spinDisplayFps->ChangeValue(wxT("60"));
-	double val = 0;
-	m_spinDisplayFps->GetValue().ToDouble(&val);
-	if (m_spinDisplayFps->GetValue().size() > 0)
-	{
-		if (val < 1 || val > 120)
-		{
-			m_spinDisplayFps->ChangeValue(wxT("60"));
-		}
-	}
-	event.Skip();
 }

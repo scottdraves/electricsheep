@@ -199,6 +199,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\msvc_fix.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="electricsheepguiMyDialog2.cpp" />
     <ClCompile Include="main.cpp" />
@@ -215,6 +216,7 @@
     <ClCompile Include="..\..\Common\pool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\msvc_fix.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="electricsheepguiMyDialog2.h" />
     <ClInclude Include="main.h" />

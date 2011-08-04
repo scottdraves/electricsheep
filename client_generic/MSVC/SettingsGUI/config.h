@@ -24,14 +24,26 @@
 #include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/checkbox.h>
-#include <wx/filepicker.h>
-#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/radiobox.h>
+#include <wx/filepicker.h>
+#include <wx/choice.h>
 #include <wx/richtext/richtextctrl.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
+#define wxID_DRUPAL_NAME			10010
+#define wxID_DRUPAL_PASSWORD		10011
+#define wxID_FREE_FLOCK_MAX_SPACE	10012
+#define wxID_GOLD_FLOCK_MAX_SPACE	10013
+#define wxID_SHEEP_PLAYBACK_SPEED	10014
+#define wxID_REPEAT_LOOPS			10015
+#define wxID_DISPLAY_MONITOR		10016
+#define wxID_DISPLAY_SPEED			10017
+#define wxID_PROXY_HOST_NAME		10018
+#define wxID_PROXY_USER_NAME		10019
+#define wxID_PROXY_PASSWORD			10020
+#define wxID_CONTENT_DIRECTORY		10021
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,6 +52,7 @@
 class MyDialog2 : public wxDialog 
 {
 	private:
+	
 	protected:
 		wxStaticBitmap* m_bitmap12;
 		wxStaticText* m_staticText4;
@@ -53,9 +66,9 @@ class MyDialog2 : public wxDialog
 		wxTextCtrl* m_textDrupalName;
 		wxStaticText* m_staticText41;
 		wxTextCtrl* m_textDrupalPassword;
-		wxStaticText* m_staticText25;
 		wxStaticText* m_staticText6;
 		wxButton* m_TestAccountButton;
+		wxStaticText* m_staticText25;
 		wxButton* m_CreateAccountButton;
 		wxPanel* m_Flock;
 		wxStaticText* m_staticTextFlockSize;
@@ -68,18 +81,6 @@ class MyDialog2 : public wxDialog
 		wxTextCtrl* m_spinGoldCache;
 		wxStaticText* m_staticText21;
 		wxCheckBox* m_checkGoldUnlimitedCache;
-		wxPanel* m_Advanced;
-		wxCheckBox* m_checkHttp;
-		wxCheckBox* m_checkRenderFrames;
-		wxCheckBox* m_checkMulticore;
-		wxCheckBox* m_checkKeepFrames;
-		wxCheckBox* m_checkNegVoteDeletes;
-		wxCheckBox* m_QuietMode;
-		wxCheckBox* m_DebugLog;
-		wxCheckBox* m_checkAttributionPNG;
-		wxDirPickerCtrl* m_dirContent;
-		wxButton* m_buttonOpenContent;
-		wxChoice* m_choicePlaybackMixingMode;
 		wxPanel* m_Playback;
 		wxStaticText* m_staticText8;
 		wxTextCtrl* m_spinDecodeFps;
@@ -106,6 +107,18 @@ class MyDialog2 : public wxDialog
 		wxTextCtrl* m_textProxyUser;
 		wxStaticText* m_staticText412;
 		wxTextCtrl* m_textProxyPassword;
+		wxPanel* m_Advanced;
+		wxCheckBox* m_checkHttp;
+		wxCheckBox* m_checkRenderFrames;
+		wxCheckBox* m_checkMulticore;
+		wxCheckBox* m_checkKeepFrames;
+		wxCheckBox* m_checkNegVoteDeletes;
+		wxCheckBox* m_QuietMode;
+		wxCheckBox* m_DebugLog;
+		wxCheckBox* m_checkAttributionPNG;
+		wxDirPickerCtrl* m_dirContent;
+		wxButton* m_buttonOpenContent;
+		wxChoice* m_choicePlaybackMixingMode;
 		wxPanel* m_About;
 		wxRichTextCtrl* m_AboutText;
 		wxButton* m_Ok;
@@ -117,25 +130,26 @@ class MyDialog2 : public wxDialog
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void OnRunClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTextLeftUp( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnTextSetFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnDrupalNameTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrupalPasswordTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTestAccountButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCreateClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUnlimitedCacheCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGoldUnlimitedCacheCheck( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnContentDirChanged( wxFileDirPickerEvent& event ) { event.Skip(); }
-		virtual void OnOpenClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDecodeFpsKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void OnDecodeFpsTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPlayerFpsKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void OnPlayerFpsTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnProxyTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnProxyUserNameEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnProxyPasswordEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnContentDirChanged( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnOpenClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAboutUrl( wxTextUrlEvent& event ) { event.Skip(); }
 		virtual void OnClickOk( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		
-		virtual void OnDecodeFpsTextUpdated( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDecodeFpsKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void OnPlayerFpsTextUpdated( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPlayerFpsKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		
 		virtual void OnDialogCharHook( wxKeyEvent& e )
 		{ 
@@ -146,12 +160,10 @@ class MyDialog2 : public wxDialog
 				this->Destroy();
 			}
 		}
-		virtual void LoginTest( wxIdleEvent& event ) { event.Skip(); }
-		
 	
 	public:
 		
-		MyDialog2( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Electric Sheep Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,500 ), long style = wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER );
+		MyDialog2( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Electric Sheep Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,512 ), long style = wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER );
 		~MyDialog2();
 	
 };

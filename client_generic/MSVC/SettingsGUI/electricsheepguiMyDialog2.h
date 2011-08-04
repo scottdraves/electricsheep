@@ -34,29 +34,30 @@ class electricsheepguiMyDialog2 : public MyDialog2
 	protected:
 		// Handlers for MyDialog2 events.
 		void OnDialogClose( wxCloseEvent& event );
+		void OnIdle( wxIdleEvent& event );
 		void OnRunClick( wxCommandEvent& event );
 		void OnHelpClick( wxCommandEvent& event );
+		void OnTextLeftUp( wxMouseEvent& event );
+		void OnTextSetFocus( wxFocusEvent& event );
 		void OnDrupalNameTextEnter( wxCommandEvent& event );
 		void OnDrupalPasswordTextEnter( wxCommandEvent& event );
 		void OnTestAccountButtonClick( wxCommandEvent& event );
 		void OnCreateClick( wxCommandEvent& event );
 		void OnUnlimitedCacheCheck( wxCommandEvent& event );
 		void OnGoldUnlimitedCacheCheck( wxCommandEvent& event );
-		void OnContentDirChanged( wxFileDirPickerEvent& event );
-		void OnOpenClick( wxCommandEvent& event );
+		void OnDecodeFpsKillFocus( wxFocusEvent& event );
+		void OnDecodeFpsTextUpdated( wxCommandEvent& event );
+		void OnPlayerFpsKillFocus( wxFocusEvent& event );
+		void OnPlayerFpsTextUpdated( wxCommandEvent& event );
 		void OnProxyTextEnter( wxCommandEvent& event );
 		void OnProxyUserNameEnter( wxCommandEvent& event );
 		void OnProxyPasswordEnter( wxCommandEvent& event );
+		void OnContentDirChanged( wxFileDirPickerEvent& event );
+		void OnOpenClick( wxCommandEvent& event );
 		void OnAboutUrl( wxTextUrlEvent& event );
 		void OnClickOk( wxCommandEvent& event );
 		void OnCancelClick( wxCommandEvent& event );
-		virtual void LoginTest( wxIdleEvent& event );
 		void DeleteListXml();
-		
-		void OnDecodeFpsTextUpdated( wxCommandEvent& event );
-		void OnDecodeFpsKillFocus( wxFocusEvent& event );
-		void OnPlayerFpsTextUpdated( wxCommandEvent& event );
-		void OnPlayerFpsKillFocus( wxFocusEvent& event );
 
 	public:
 		/** Constructor */
@@ -74,6 +75,7 @@ private:
 	void LoadSettings();
 	std::string m_UniqueId;
 	LoginThread *m_LoginThread;
+	bool m_NewFocus;
 };
 
 #endif // __electricsheepguiMyDialog2__

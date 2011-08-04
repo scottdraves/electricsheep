@@ -57,8 +57,8 @@ using namespace std;
 //
 uint64 Shepherd::s_ClientFlockBytes = 0;
 uint64 Shepherd::s_ClientFlockGoldBytes = 0;
-size_t Shepherd::s_ClientFlockCount = 0;
-size_t Shepherd::s_ClientFlockGoldCount = 0;
+uint64 Shepherd::s_ClientFlockCount = 0;
+uint64 Shepherd::s_ClientFlockGoldCount = 0;
 char *Shepherd::fRootPath = NULL;
 char *Shepherd::fMpegPath = NULL;
 char *Shepherd::fXmlPath = NULL;

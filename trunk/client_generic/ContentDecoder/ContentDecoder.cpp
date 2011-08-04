@@ -338,7 +338,8 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 			}
 			
 			_bSkipLoop = false;
-			if ( !Open( name ) )
+			boost::filesystem::path sys_name( name );
+			if ( !Open( sys_name.native_file_string() ) )
 			{
 				sheepfound = false;
 				continue;
@@ -375,7 +376,7 @@ void	CContentDecoder::CalculateNextSheep()
 			
 			if ( m_spPlaylist == NULL )
 			{
-				thread::sleep( get_system_time() + posix_time::seconds(1) );
+				thread::sleep( get_system_time() + posix_time::milliseconds(100) );
 				continue;
 			}
 			
@@ -576,7 +577,7 @@ void	CContentDecoder::ReadPackets()
 				NextSheepForPlaying( bNextForced );
 				
 				if ( bNextForced )
-					ClearQueue( 4 );
+					ClearQueue();
 			}
 		}
 

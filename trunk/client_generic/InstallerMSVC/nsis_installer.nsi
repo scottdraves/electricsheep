@@ -4,7 +4,7 @@
 !define PRODUCT_NAME "Electric Sheep"
 !define PRODUCT_SCR_STRING "es.scr"
 !define PRODUCT_EXE_STRING "es.exe"
-!define PRODUCT_VERSION "2.7b31"
+!define PRODUCT_VERSION "2.7b33"
 !define PRODUCT_PUBLISHER "Electricsheep"
 !define PRODUCT_WEB_SITE "http://www.electricsheep.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Flam3.exe"
@@ -191,6 +191,7 @@ Section -Post
   WriteRegStr HKLM SOFTWARE\ElectricSheep "InstallDir" "$INSTDIR"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$WINDIR\es.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
@@ -271,7 +272,7 @@ Function OptionCurrentScreensaver
 	System::Call 'KERNEL32.DLL::GetShortPathNameA(t, t, i) i(R0., .R0, R1) .R2'
 
 	StrCmp $R2 "0" +2
-  WriteRegStr HKCU "Control Panel\Desktop" "SCRNSAVE.EXE" "$R0"
+	WriteRegStr HKCU "Control Panel\Desktop" "SCRNSAVE.EXE" "$R0"
 	Return
 
 	lbl_vista:

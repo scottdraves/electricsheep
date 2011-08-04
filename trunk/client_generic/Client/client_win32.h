@@ -131,16 +131,16 @@ class	CElectricSheep_Win32 : public CElectricSheep
 
 			virtual ~CElectricSheep_Win32()
 			{
-				if( m_ScrMode == eSaver || m_ScrMode == eFullScreenStandalone)
-				{
-					BOOL bUnused;
-					SystemParametersInfo( SPI_SCREENSAVERRUNNING, FALSE, &bUnused, WM_SETTINGCHANGE );
-				}
-				SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, TRUE, NULL, WM_SETTINGCHANGE );\
 				if (m_pD3D9 != NULL)
 				{
-					m_pD3D9->Release();
+					//m_pD3D9->Release();
 				}
+				if( m_ScrMode == eSaver || m_ScrMode == eFullScreenStandalone)
+				{
+					//BOOL bUnused;
+					//SystemParametersInfo( SPI_SCREENSAVERRUNNING, FALSE, &bUnused, WM_SETTINGCHANGE );
+				}
+				//SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, TRUE, NULL, WM_SETTINGCHANGE );
 			}
 
 			//
@@ -193,7 +193,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 					}
 					else if( *c=='s' || *c=='S' )
 					{
-						SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, FALSE, NULL, WM_SETTINGCHANGE );
+						//SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, FALSE, NULL, WM_SETTINGCHANGE );
 						m_ScrMode = eSaver;
 					}
 					else if( *c=='c' || *c=='C' )
@@ -227,7 +227,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 					// fullscreen with working F keys
 					else if (*c=='r' || *c=='R' )
 					{
-						SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, FALSE, NULL, WM_SETTINGCHANGE );
+						//SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, FALSE, NULL, WM_SETTINGCHANGE );
 						m_ScrMode = eFullScreenStandalone;
 						m_bAllowFKey = true;
 					}
@@ -395,8 +395,8 @@ class	CElectricSheep_Win32 : public CElectricSheep
 				//#warning NOTE (Keffo#1#): This is just annoying until all bugs are gone!
 				if( m_ScrMode == eSaver || m_ScrMode == eFullScreenStandalone)
 				{
-					BOOL bUnused;
-					SystemParametersInfo( SPI_SCREENSAVERRUNNING, TRUE, &bUnused, WM_SETTINGCHANGE );
+					//BOOL bUnused;
+					//SystemParametersInfo( SPI_SCREENSAVERRUNNING, TRUE, &bUnused, WM_SETTINGCHANGE );
 				}
 
 				//	User wants windowed?

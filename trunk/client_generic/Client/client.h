@@ -630,8 +630,35 @@ class	CElectricSheep
 						spStats = (Hud::spCStatsConsole)m_HudManager->Get( "serverstats" );
 						
 						std::stringstream tmpstr;
-						tmpstr << ContentDownloader::Shepherd::getClientFlockCount(0) + ContentDownloader::Shepherd::getClientFlockCount(1) << " sheep, "
-							<< ContentDownloader::Shepherd::getClientFlockMBs(0) + ContentDownloader::Shepherd::getClientFlockMBs(1) << "MB";
+						uint64 flockcount = 0;
+						uint64 flockmbs = 0;
+						uint64 flockcountfree = ContentDownloader::Shepherd::getClientFlockCount(0);
+						uint64 flockcountgold = ContentDownloader::Shepherd::getClientFlockCount(1);
+						uint64 flockmbsfree = ContentDownloader::Shepherd::getClientFlockMBs(0);
+						uint64 flockmbsgold = ContentDownloader::Shepherd::getClientFlockMBs(1);
+						switch ( g_Player().UsedSheepType() )
+						{
+						case 0: // only gold, if any
+							{
+								flockcount = flockcountgold;
+								flockmbs = flockmbsgold;
+								if (g_Player().HasGoldSheep() == false)
+								{
+									flockcount += flockcountfree;
+									flockmbs += flockmbsfree;
+								}
+							}
+							break;
+						case 1: // free sheep only
+								flockcount = flockcountfree;
+								flockmbs = flockmbsfree;
+							break;
+						case 2: // all sheep
+								flockcount = flockcountfree + flockcountgold;
+								flockmbs = flockmbsfree + flockmbsgold;
+							break;
+						};
+						tmpstr << flockcount << ((g_Player().UsedSheepType() == 0 && g_Player().HasGoldSheep() == true) ? " gold sheep, " : " sheep, ") << flockmbs << "MB";
 						((Hud::CStringStat *)spStats->Get( "all" ))->SetSample(tmpstr.str());
 
 						const char *servername = ContentDownloader::Shepherd::serverName( false );

@@ -84,6 +84,7 @@ private:
 	fp8	m_CapClock;
 
 	bool m_HasGoldSheep;
+	int m_UsedSheepType;
 
 #ifdef	WIN32
 	HWND	m_hWnd;
@@ -239,6 +240,8 @@ private:
 			}
 			
 			inline void		SetMultiDisplayMode( MultiDisplayMode mode )	{ m_MultiDisplayMode = mode; }
+			inline bool		HasGoldSheep() { return m_HasGoldSheep; }
+			inline int		UsedSheepType() { return m_UsedSheepType; }
 };
 
 /*

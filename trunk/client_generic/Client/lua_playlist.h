@@ -69,6 +69,7 @@ class	CLuaPlaylist : public CPlaylist
 	uint64			m_FlockMBs;
 	uint64			m_FlockGoldMBs;
 
+	int &m_UsedSheepType;
 
 	//	The lua state that will do all the work.
 	Base::Script::CLuaState	*m_pState;
@@ -294,7 +295,7 @@ class	CLuaPlaylist : public CPlaylist
 	}
 
 	public:
-			CLuaPlaylist( const std::string &_scriptRoot, const std::string &_watchFolder ) : CPlaylist()
+			CLuaPlaylist( const std::string &_scriptRoot, const std::string &_watchFolder, int &_usedsheeptype ) : CPlaylist(), m_UsedSheepType(_usedsheeptype)
 			{
 				m_NormalInterval = fp8(g_Settings()->Get( "settings.player.NormalInterval", 100 ));
 				m_EmptyInterval = 10.0f;

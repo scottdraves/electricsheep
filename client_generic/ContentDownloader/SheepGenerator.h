@@ -50,6 +50,8 @@ class SheepGenerator
 	Base::spCProcessForker	m_spFlam;
 	
 	static boost::mutex	s_GeneratorMutex;
+	static boost::mutex	s_NickNameMutex;
+	
 
 	char            *fTempFile;
 	bool			fHasMessage;

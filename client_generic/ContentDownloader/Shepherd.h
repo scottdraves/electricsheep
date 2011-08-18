@@ -138,6 +138,8 @@ class Shepherd
 	
 	static boost::mutex	s_GetServerNameMutex;
 	
+	static boost::mutex s_RoleMutex;
+	
 
 	static time_t s_LastRequestTime;
 

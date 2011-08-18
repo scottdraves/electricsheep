@@ -66,6 +66,8 @@ char *SheepGenerator::fURL = NULL;
 //	Initialize any global data.
 boost::mutex SheepGenerator::s_GeneratorMutex;
 
+boost::mutex SheepGenerator::s_NickNameMutex;
+
 //
 static void encode( char *dst, const char *src )
 {
@@ -138,7 +140,7 @@ void	SheepGenerator::Abort()
 */
 void	SheepGenerator::setNickName( const char *nick )
 {
- 	boost::mutex::scoped_lock lockthis( s_GeneratorMutex );
+ 	boost::mutex::scoped_lock lockthis( s_NickNameMutex );
 
 	SAFE_DELETE_ARRAY( fNickName );
 	fNickName = new char[ strlen(nick) + 1 ];
@@ -149,7 +151,7 @@ void	SheepGenerator::setNickName( const char *nick )
 */
 const char	*SheepGenerator::nickName()
 {
- 	boost::mutex::scoped_lock lockthis( s_GeneratorMutex );
+ 	boost::mutex::scoped_lock lockthis( s_NickNameMutex );
 
 	return fNickName;
 }

@@ -81,9 +81,10 @@ CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom,
 	
 	m_NoSheeps = true;
 
-	m_FadeIn = 0;
+	m_FadeIn = m_FadeCount;
 	m_FadeOut = 0;
 	m_prevLast = 0;
+	m_totalFrameCount = 0;
 }
 
 /*
@@ -138,6 +139,7 @@ int	CContentDecoder::DumpError( int _err )
 bool	CContentDecoder::Open( const std::string &_filename )
 {
 	m_iCurrentFileFrameCount = 0;
+	m_totalFrameCount = 0;
 	struct stat fs;
 	if ( !::stat( _filename.c_str(), &fs ) )
 	{
@@ -207,6 +209,8 @@ bool	CContentDecoder::Open( const std::string &_filename )
         g_Log->Error( "avcodec_open failed for %s", _filename.c_str() );
         return false;
     }
+	
+	m_totalFrameCount = ((((double)m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(m_pVideoStream->r_frame_rate));
 
 	g_Log->Info( "Open done()" );
 
@@ -345,7 +349,9 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 				continue;
 			} else
 			{
-				m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, First, m_prevLast, fname );
+				//m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, First, m_prevLast, fname );
+				//m_NextSheepQueue.peek(name, true);
+				//m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, m_nextFirst, Last, fname );
 			}
 			
 			m_NoSheeps = false;
@@ -531,30 +537,34 @@ void	CContentDecoder::ReadPackets()
 						sws_scale( m_pScaler, pFrame->data, pFrame->linesize, 0, m_pVideoCodecContext->height, pDest->data, pDest->linesize );
 
 						++m_iCurrentFileFrameCount;
-						//g_Log->Info("framcount %u", m_iCurrentFileFrameCount);
-						//if (m_iCurrentFileFrameCount == 160 - m_FadeCount)
-						//{
-						//	if (m_prevLast != m_nextFirst)
-						//	{
-						//		//g_Log->Info("FADING prevLast %u nextFirst %u", m_prevLast, m_nextFirst);
-						//		m_FadeOut = m_FadeCount + 1;
-						//	}
-						//}
-						pVideoFrame->SetMetaData_Fade(1.f);
-						if (m_FadeOut > 0)
+						
+						/*if (m_totalFrameCount > 0)
 						{
-							--m_FadeOut;
-							if (m_FadeOut == 0)
-								m_FadeIn = 0;
-							pVideoFrame->SetMetaData_Fade(fp4(m_FadeOut) / fp4(m_FadeCount));
-							//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
-						}
-						if (m_FadeIn < m_FadeCount)
-						{
-							++m_FadeIn;
-							pVideoFrame->SetMetaData_Fade(fp4(m_FadeIn) / fp4(m_FadeCount));
-							//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
-						}
+							//g_Log->Info("framcount %lu, %lf", (long)(((double)m_pFormatContext->duration/(double)AV_TIME_BASE)),av_q2d(m_pVideoStream->r_frame_rate));
+							if (m_iCurrentFileFrameCount == m_totalFrameCount - m_FadeCount)
+							{
+								if (m_prevLast != m_nextFirst)
+								{
+									//g_Log->Info("FADING prevLast %u nextFirst %u", m_prevLast, m_nextFirst);
+									m_FadeOut = m_FadeCount + 1;
+								}
+							}
+							pVideoFrame->SetMetaData_Fade(1.f);
+							if (m_FadeOut > 0)
+							{
+								--m_FadeOut;
+								if (m_FadeOut == 0)
+									m_FadeIn = 0;
+								pVideoFrame->SetMetaData_Fade(fp4(m_FadeOut) / fp4(m_FadeCount));
+								//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
+							}
+							if (m_FadeIn < m_FadeCount)
+							{
+								++m_FadeIn;
+								pVideoFrame->SetMetaData_Fade(fp4(m_FadeIn) / fp4(m_FadeCount));
+								//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
+							}
+						}*/
 
 						pVideoFrame->SetMetaData_SheepID( m_CurSheepID );
 						pVideoFrame->SetMetaData_SheepGeneration( m_CurGeneration );

@@ -19,9 +19,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.7b31</string>
+	<string>2.7b33</string>
 	<key>CFBundleGetInfoString</key>
-	<string>2.7b31</string>
+	<string>2.7b33</string>
 	<key>NSPrincipalClass</key>
 	<string>ESScreensaverView</string>
 	<key>SUPublicDSAKeyFile</key>

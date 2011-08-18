@@ -67,6 +67,8 @@ class CContentDecoder
 	uint32				m_FadeIn;
 	uint32				m_FadeOut;
 	uint32				m_FadeCount;
+	
+	uint32				m_totalFrameCount;
 
 	//	Thread & threadfunction.
 	boost::thread	*m_pDecoderThread;

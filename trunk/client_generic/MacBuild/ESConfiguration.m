@@ -317,6 +317,14 @@
 
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
+	NSTextField *ed = [aNotification object];
+
+	if (ed == drupalLogin && [m_origPassword isEqual: [drupalPassword stringValue]])
+	{
+		[drupalPassword setStringValue: @""];
+		return;
+	}
+	
 	if (m_checkTimer != nil)
 	{
 		if ([m_checkTimer isValid])

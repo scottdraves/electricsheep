@@ -95,6 +95,8 @@ boost::mutex	Shepherd::s_GetServerNameMutex;
 
 boost::mutex	Shepherd::s_ComputeServerNameMutex;
 
+boost::mutex	Shepherd::s_RoleMutex;
+
 bool Shepherd::fShutdown = false;
 int Shepherd::fChangeRes = 0;
 int Shepherd::fChangingRes = 0;
@@ -264,7 +266,7 @@ void Shepherd::setRootPath(const char *path)
 void Shepherd::setRole( const char *role )
 {
 	size_t len = strlen(role);
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
+	boost::mutex::scoped_lock lockthis( s_RoleMutex );
 
 	// initialize the proxy string
 	//
@@ -278,7 +280,7 @@ void Shepherd::setRole( const char *role )
 
 const char *Shepherd::role()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
+	boost::mutex::scoped_lock lockthis( s_RoleMutex );
 
 	return s_Role;
 }

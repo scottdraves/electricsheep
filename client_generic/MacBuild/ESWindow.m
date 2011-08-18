@@ -72,7 +72,7 @@
 	}
 }
 
-- (void)toggleFullScreen:(id)sender
+- (void)switchFullScreen:(id)sender
 {
 	NSScreen *targetScreen = [self screen];
 
@@ -368,7 +368,7 @@
 					ESWindow *wnd = [self originalWindow];
 					if ( wnd != nil && [wnd isFullScreen] )
 					{
-						[wnd toggleFullScreen:self];
+						[wnd switchFullScreen:self];
 					}
 				}
 				handled = YES;

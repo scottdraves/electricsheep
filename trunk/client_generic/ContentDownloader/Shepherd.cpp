@@ -95,13 +95,15 @@ boost::mutex	Shepherd::s_GetServerNameMutex;
 
 boost::mutex	Shepherd::s_ComputeServerNameMutex;
 
+boost::mutex	Shepherd::s_RoleMutex;
+
 bool Shepherd::fShutdown = false;
 int Shepherd::fChangeRes = 0;
 int Shepherd::fChangingRes = 0;
 
 time_t Shepherd::s_LastRequestTime = 0;
 
-std::vector<char *> Shepherd::fStringsToDelete;
+Base::CBlockingQueue<char *> Shepherd::fStringsToDelete;
 
 std::string Shepherd::s_DownloadState;
 std::string Shepherd::s_RenderState;
@@ -164,14 +166,15 @@ void	Shepherd::notifyShepherdOfHisUntimleyDeath()
 
 	std::vector<char *>::const_iterator it;
 
-	for (it = fStringsToDelete.begin(); it != fStringsToDelete.end(); it++)
+	
+	char *str;
+	
+	while(fStringsToDelete.pop(str))
 	{
-		char *str = *it;
-
 		SAFE_DELETE_ARRAY( str );
 	}
-
-	fStringsToDelete.clear();
+	
+	fStringsToDelete.clear(0);
 }
 
 void Shepherd::setRootPath(const char *path)
@@ -196,7 +199,7 @@ void Shepherd::setRootPath(const char *path)
 
 	//	delete the old path
 	if ( fRootPath != NULL )
-		fStringsToDelete.push_back( fRootPath );
+		fStringsToDelete.push( fRootPath );
 
 	// allocate the memory to hold the string.
 	if(*runner != PATH_SEPARATOR_C)
@@ -225,7 +228,7 @@ void Shepherd::setRootPath(const char *path)
 
 	// initialize the mpeg path
 	if ( fMpegPath != NULL )
-		fStringsToDelete.push_back( fMpegPath );
+		fStringsToDelete.push( fMpegPath );
 
 	fMpegPath = new char[(len + 12)];
 	snprintf(fMpegPath, len + 12, "%smpeg%c", fRootPath,PATH_SEPARATOR_C);
@@ -237,7 +240,7 @@ void Shepherd::setRootPath(const char *path)
 
 	// initialize the xml path
 	if ( fXmlPath != NULL )
-		fStringsToDelete.push_back( fXmlPath );
+		fStringsToDelete.push( fXmlPath );
 
 	fXmlPath = new char[(len + 12)];
 	snprintf(fXmlPath, len + 12,"%sxml%c", fRootPath,PATH_SEPARATOR_C);
@@ -250,7 +253,7 @@ void Shepherd::setRootPath(const char *path)
 
 	// initialize the jpeg path
 	if ( fJpegPath != NULL )
-		fStringsToDelete.push_back( fJpegPath );
+		fStringsToDelete.push( fJpegPath );
 
 	fJpegPath = new char[(len + 12)];
 	snprintf(fJpegPath, len + 12,"%sjpeg%c", fRootPath,PATH_SEPARATOR_C);
@@ -264,13 +267,13 @@ void Shepherd::setRootPath(const char *path)
 void Shepherd::setRole( const char *role )
 {
 	size_t len = strlen(role);
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
+	boost::mutex::scoped_lock lockthis( s_RoleMutex );
 
 	// initialize the proxy string
 	//
 	if(role != NULL)
 	{
-		fStringsToDelete.push_back( s_Role );
+		fStringsToDelete.push( s_Role );
 	}
 	s_Role = new char[len + 1];
 	strcpy(s_Role, role);
@@ -278,7 +281,7 @@ void Shepherd::setRole( const char *role )
 
 const char *Shepherd::role()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
+	boost::mutex::scoped_lock lockthis( s_RoleMutex );
 
 	return s_Role;
 }
@@ -297,7 +300,7 @@ Shepherd::setRedirectServerName(const char *server)
 	//
 	if(fRedirectServerName != NULL)
 	{
-		fStringsToDelete.push_back( fRedirectServerName );
+		fStringsToDelete.push( fRedirectServerName );
 	}
 	fRedirectServerName = new char[len + 1];
 	strcpy(fRedirectServerName, server);
@@ -319,7 +322,7 @@ Shepherd::setProxy(const char *proxy)
 	//
 	if(fProxy != NULL)
 	{
-		fStringsToDelete.push_back( fProxy );
+		fStringsToDelete.push( fProxy );
 	}
 	fProxy = new char[len + 1];
 	strcpy(fProxy, proxy);
@@ -339,7 +342,7 @@ Shepherd::setProxyUserName(const char *userName)
 	//
 	if(fProxyUser != NULL)
 	{
-		fStringsToDelete.push_back( fProxyUser );
+		fStringsToDelete.push( fProxyUser );
 	}
 	fProxyUser = new char[len + 1];
 	strcpy(fProxyUser, userName);
@@ -359,7 +362,7 @@ Shepherd::setProxyPassword(const char *password)
 	//
 	if(fProxyPass != NULL)
 	{
-		fStringsToDelete.push_back( fProxyPass );
+		fStringsToDelete.push( fProxyPass );
 	}
 	fProxyPass = new char[len + 1];
 	strcpy(fProxyPass, password);
@@ -514,7 +517,7 @@ const char *Shepherd::serverName( bool allowServerQuery )
 							if ( fServerName == NULL || (strcmp( fServerName, host ) != 0) )
 							{
 								if ( fServerName != NULL )
-									fStringsToDelete.push_back( fServerName );
+									fStringsToDelete.push( fServerName );
 
 								fServerName = new char[ strlen(host) + 1 ];
 
@@ -578,7 +581,7 @@ void	Shepherd::setPassword( const char *password )
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	if ( fPassword != NULL )
-		fStringsToDelete.push_back( fPassword );
+		fStringsToDelete.push( fPassword );
 
 	fPassword = new char[ len + 1 ];
 	strcpy( fPassword, password );
@@ -618,12 +621,14 @@ uint64 Shepherd::GetFlockSizeMBsRecount(const int generationtype)
 */
 bool	Shepherd::getClientFlock(SheepArray *sheep)
 {
-	std::string fmpegpath;
-	{
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 	
-	fmpegpath = fMpegPath;
-	}
+	s_ClientFlockBytes = 0;
+	s_ClientFlockCount = 0;
+	
+	s_ClientFlockGoldBytes = 0;
+	s_ClientFlockGoldCount = 0;
+
 	SheepArray::iterator iter;
 	for (iter = sheep->begin(); iter != sheep->end(); ++iter )
 		delete *iter;
@@ -631,16 +636,7 @@ bool	Shepherd::getClientFlock(SheepArray *sheep)
 	sheep->clear();
 
 	//	Get the sheep in fMpegPath.
-	getSheep( fmpegpath.c_str(), sheep );
-
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	s_ClientFlockBytes = 0;
-	s_ClientFlockCount = 0;
-	
-	s_ClientFlockGoldBytes = 0;
-	s_ClientFlockGoldCount = 0;
-
+	getSheep( fMpegPath, sheep );
 	for (iter = sheep->begin(); iter != sheep->end(); ++iter )
 	{
 		if ((*iter)->getGenerationType() == 0)
@@ -789,7 +785,7 @@ void	Shepherd::setUniqueID( const char *uniqueID )
 
 	if( fUniqueID != NULL )
 	{
-		fStringsToDelete.push_back( fUniqueID );
+		fStringsToDelete.push( fUniqueID );
 	}
 
 	fUniqueID = new char[ len + 1 ];

@@ -31,6 +31,7 @@
 #include	"Timer.h"
 #include	"Sheep.h"
 #include	"Log.h"
+#include	"BlockingQueue.h"
 
 #ifdef WIN32
 #define PATH_SEPARATOR_C '\\'
@@ -138,10 +139,12 @@ class Shepherd
 	
 	static boost::mutex	s_GetServerNameMutex;
 	
+	static boost::mutex s_RoleMutex;
+	
 
 	static time_t s_LastRequestTime;
 
-	static std::vector<char *> fStringsToDelete;
+	static Base::CBlockingQueue<char *> fStringsToDelete;
 	
 	static std::string s_DownloadState;
 

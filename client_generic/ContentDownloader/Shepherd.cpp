@@ -623,11 +623,11 @@ bool	Shepherd::getClientFlock(SheepArray *sheep)
 {
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 	
-	s_ClientFlockBytes = 0;
-	s_ClientFlockCount = 0;
+	uint64 clientFlockBytes = 0;
+	uint64 clientFlockCount = 0;
 	
-	s_ClientFlockGoldBytes = 0;
-	s_ClientFlockGoldCount = 0;
+	uint64 clientFlockGoldBytes = 0;
+	uint64 clientFlockGoldCount = 0;
 
 	SheepArray::iterator iter;
 	for (iter = sheep->begin(); iter != sheep->end(); ++iter )
@@ -641,15 +641,22 @@ bool	Shepherd::getClientFlock(SheepArray *sheep)
 	{
 		if ((*iter)->getGenerationType() == 0)
 		{
-			s_ClientFlockBytes += (*iter)->fileSize();
-			++s_ClientFlockCount;
+			clientFlockBytes += (*iter)->fileSize();
+			++clientFlockCount;
 		}
 		else if ((*iter)->getGenerationType() == 1)
 		{
-			s_ClientFlockGoldBytes += (*iter)->fileSize();
-			++s_ClientFlockGoldCount;
+			clientFlockGoldBytes += (*iter)->fileSize();
+			++clientFlockGoldCount;
 		}
 	}
+	
+	
+	s_ClientFlockBytes = clientFlockBytes;
+	s_ClientFlockCount = clientFlockCount;
+	
+	s_ClientFlockGoldBytes = clientFlockGoldBytes;
+	s_ClientFlockGoldCount = clientFlockGoldCount;
 
 	return true;
 }

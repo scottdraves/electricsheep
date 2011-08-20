@@ -95,8 +95,6 @@ boost::mutex	Shepherd::s_GetServerNameMutex;
 
 boost::mutex	Shepherd::s_ComputeServerNameMutex;
 
-boost::mutex	Shepherd::s_RoleMutex;
-
 bool Shepherd::fShutdown = false;
 int Shepherd::fChangeRes = 0;
 int Shepherd::fChangingRes = 0;
@@ -266,7 +264,7 @@ void Shepherd::setRootPath(const char *path)
 void Shepherd::setRole( const char *role )
 {
 	size_t len = strlen(role);
-	boost::mutex::scoped_lock lockthis( s_RoleMutex );
+	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	// initialize the proxy string
 	//
@@ -280,7 +278,7 @@ void Shepherd::setRole( const char *role )
 
 const char *Shepherd::role()
 {
-	boost::mutex::scoped_lock lockthis( s_RoleMutex );
+	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	return s_Role;
 }
@@ -620,14 +618,12 @@ uint64 Shepherd::GetFlockSizeMBsRecount(const int generationtype)
 */
 bool	Shepherd::getClientFlock(SheepArray *sheep)
 {
+	std::string fmpegpath;
+	{
 	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 	
-	s_ClientFlockBytes = 0;
-	s_ClientFlockCount = 0;
-	
-	s_ClientFlockGoldBytes = 0;
-	s_ClientFlockGoldCount = 0;
-
+	fmpegpath = fMpegPath;
+	}
 	SheepArray::iterator iter;
 	for (iter = sheep->begin(); iter != sheep->end(); ++iter )
 		delete *iter;
@@ -635,7 +631,16 @@ bool	Shepherd::getClientFlock(SheepArray *sheep)
 	sheep->clear();
 
 	//	Get the sheep in fMpegPath.
-	getSheep( fMpegPath, sheep );
+	getSheep( fmpegpath.c_str(), sheep );
+
+	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
+
+	s_ClientFlockBytes = 0;
+	s_ClientFlockCount = 0;
+	
+	s_ClientFlockGoldBytes = 0;
+	s_ClientFlockGoldCount = 0;
+
 	for (iter = sheep->begin(); iter != sheep->end(); ++iter )
 	{
 		if ((*iter)->getGenerationType() == 0)
@@ -659,7 +664,7 @@ using namespace boost::filesystem;
 	getSheep().
 	Recursively loops through all files in the path looking for sheep.
 */
-bool Shepherd::getSheep( char *path, SheepArray *sheep )
+bool Shepherd::getSheep( const char *path, SheepArray *sheep )
 {
 	bool gotSheep = false;
 	char fbuf[ MAXBUF ];

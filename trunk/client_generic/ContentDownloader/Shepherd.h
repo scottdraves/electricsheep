@@ -88,7 +88,7 @@ class Shepherd
 	}	SHEPHERD_MESSAGE;
 
 	//	Gets all sheep in path.
-	static bool getSheep( char *path, SheepArray *sheep );
+	static bool getSheep( const char *path, SheepArray *sheep );
 
 	static uint64 s_ClientFlockBytes;
 	static uint64 s_ClientFlockCount;
@@ -137,8 +137,6 @@ class Shepherd
 	static boost::mutex	s_ComputeServerNameMutex;
 	
 	static boost::mutex	s_GetServerNameMutex;
-	
-	static boost::mutex s_RoleMutex;
 	
 
 	static time_t s_LastRequestTime;

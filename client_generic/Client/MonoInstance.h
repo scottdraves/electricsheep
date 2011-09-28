@@ -56,7 +56,7 @@ class CMonoInstance
 								{
 
 									std::string extension = szFileName;
-									OutputDebugStringA(szFileName);
+									//OutputDebugStringA(szFileName);
 									//if (extension.find("es.scr") != extension.npos && extension.find("es.exe") != extension.npos)
 									{
 										if (WaitForSingleObject(hProcess, 5000) != WAIT_OBJECT_0)

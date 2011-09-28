@@ -56,9 +56,14 @@ class CMonoInstance
 								{
 
 									std::string extension = szFileName;
-									if (extension.find("es.scr") != extension.npos && extension.find("es.exe") != extension.npos)
+									OutputDebugStringA(szFileName);
+									//if (extension.find("es.scr") != extension.npos && extension.find("es.exe") != extension.npos)
 									{
-										WaitForSingleObject(hProcess, 10000);
+										if (WaitForSingleObject(hProcess, 5000) != WAIT_OBJECT_0)
+										{
+											CloseHandle (hProcess);
+											return false;
+										}
 									} 
 									CloseHandle (hProcess);
 									return true;
@@ -79,25 +84,35 @@ class CMonoInstance
 				m_hMutex = CreateMutexA( NULL, FALSE, strMutexName ); 	//	Do early.
 				if (m_hMutex != NULL)
 				{
+					//OutputDebugStringA("CMonoInstance creating mutex 1st time");
 					m_dwLastError = GetLastError();	 //	Save for use later...
 					if (ERROR_ALREADY_EXISTS == m_dwLastError) // give some time for snapshot
 					{
 						CloseHandle( m_hMutex );
+						m_hMutex = NULL;
+						//OutputDebugStringA("WaitForParentPID() ERROR_ALREADY_EXISTS");
 						if (WaitForParentPID() == false)
 						{
 							Sleep(1000);
 							WaitForParentPID();
+							//OutputDebugStringA("WaitForParentPID() 2");
 						}
+						//OutputDebugStringA("CMonoInstance creating mutex 2nd time");
 						m_hMutex = CreateMutexA( NULL, FALSE, strMutexName );
 						m_dwLastError = GetLastError();
 					}
+				} else
+				{
+					//OutputDebugStringA("assuming m_dwLastError = ERROR_ALREADY_EXISTS");
+					m_dwLastError = ERROR_ALREADY_EXISTS;
 				}
 			}
 
 			~CMonoInstance()
 			{
-				if( m_hMutex ) 	//	Do not forget to close handles.
+				if( m_hMutex != NULL ) 	//	Do not forget to close handles.
 				{
+					//OutputDebugStringA("~CMonoInstance()");
 					CloseHandle( m_hMutex );	//	Do as late as possible.
 					m_hMutex = NULL;			//	Good habit to be in.
 				}

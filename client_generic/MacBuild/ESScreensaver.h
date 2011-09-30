@@ -32,6 +32,7 @@ extern "C" {
 	void ESScreensaver_SaveSettings( void );
 	
 	void ESScreensaver_InitClientStorage( void );
+	CFStringRef ESScreensaver_GetRoot( void );
 	void ESScreensaver_DeinitClientStorage( void );
 	
 	void ESScreensaver_SetUpdateAvailable( const char *verinfo );

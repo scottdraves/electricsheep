@@ -82,7 +82,16 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 	Shepherd::initializeShepherd();
 
 	Shepherd::setRedirectServerName( g_Settings()->Get( "settings.content.redirectserver", std::string(REDIRECT_SERVER) ).c_str() );
-	Shepherd::setRootPath( g_Settings()->Get( "settings.content.sheepdir", g_Settings()->Root() + "content" ).c_str() );
+	
+	std::string root = g_Settings()->Get( "settings.content.sheepdir", g_Settings()->Root() + "content" );
+	
+	if (root.empty())
+	{
+		root = g_Settings()->Root() + "content";
+		g_Settings()->Set( "settings.content.sheepdir", root );
+	}
+	
+	Shepherd::setRootPath( root.c_str() );
 	Shepherd::setCacheSize( g_Settings()->Get( "settings.content.cache_size", 2000 ), 0 );
 	Shepherd::setCacheSize( g_Settings()->Get( "settings.content.cache_size_gold", 2000 ), 1 );
 	if (g_Settings()->Get( "settings.content.unlimited_cache", false) == true)

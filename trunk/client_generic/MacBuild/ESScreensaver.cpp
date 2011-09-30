@@ -149,6 +149,20 @@ void ESScreensaver_InitClientStorage( void )
 	gClient.SetUpConfig();
 }
 
+CFStringRef ESScreensaver_GetRoot( void )
+{	
+	std::string root = g_Settings()->Get("settings.content.sheepdir", g_Settings()->Root() + "content");
+	
+	if (root.empty())
+	{
+		root = g_Settings()->Root() + "content";
+		g_Settings()->Set("settings.content.sheepdir", root);
+	}
+	
+	return CFStringCreateWithCString( NULL, root.c_str(), kCFStringEncodingUTF8 );
+}
+
+
 CFStringRef ESScreensaver_GetStringSetting( const char *url, const char *defval )
 {	
 	std::string val = g_Settings()->Get( std::string(url), std::string(defval) );

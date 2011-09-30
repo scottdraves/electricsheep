@@ -36,7 +36,7 @@
 	
 	SInt32 pmm = ESScreensaver_GetIntSetting("settings.player.PlaybackMixingMode", 0);
 	
-	const char *mpegpath = [[(NSString*)ESScreensaver_GetStringSetting("settings.content.sheepdir", "") autorelease] UTF8String];
+	const char *mpegpath = [[NSString stringWithFormat:@"%@/mpeg",[(NSString*)ESScreensaver_GetRoot() autorelease]] UTF8String];
 	
 	if (pmm == 1 || mpegpath == NULL || *mpegpath == 0 || ESScreensaver_GetFlockSizeMBs(mpegpath, 1) == 0) //playing only free sheep???
 	{

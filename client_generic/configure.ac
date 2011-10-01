@@ -77,7 +77,7 @@ if test x$WX_CONFIG != xno; then
    WX_MAJOR=${WX_VERSION%%.*};
    WX_MINOR=${WX_VERSION#*.};
    WX_MINOR=${WX_MINOR%%.*};
-   WX_MICRO=${WX_MICRO##*.};
+   WX_MICRO=${WX_VERSION##*.};
 
    if test $WX_MAJOR -gt 2; then
       WX_VER_291=yes

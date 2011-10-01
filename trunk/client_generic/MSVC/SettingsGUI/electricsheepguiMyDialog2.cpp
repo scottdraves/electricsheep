@@ -322,8 +322,8 @@ void electricsheepguiMyDialog2::LoadSettings()
 	int freeflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"\\mpeg", 0);
 	int goldflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"\\mpeg", 1);
 #else
-	int freeflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 0));
-	int freeflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 1));
+	int freeflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 0);
+	int goldflocksizembs = (int)GetFlockSizeMBs(m_dirContent->GetPath()+"/mpeg", 1);
 #endif
 	int totalflocksizembs = freeflocksizembs + goldflocksizembs;
 

@@ -31,6 +31,7 @@ static HWND		gl_hFocusWindow = NULL;
 CDisplayDX::CDisplayDX(bool _blank, IDirect3D9 *_pIDirect3D9) : CDisplayOutput()
 {
 	memset(&m_PresentationParams, 0, sizeof(m_PresentationParams));
+	m_pDevice = NULL;
 	m_WindowHandle = NULL;
 	m_bScreensaver = false;
 	m_DesiredScreenID = 0;

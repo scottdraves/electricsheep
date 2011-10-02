@@ -378,9 +378,8 @@ void electricsheepguiMyDialog2::Login()
 		REDIRECT_SERVER,
 		nickencoded.c_str(),
 		passencoded.c_str(),
-					CLIENT_VERSION,
-					m_UniqueId
-					);
+		CLIENT_VERSION,
+		m_UniqueId.c_str());
 
 	curl_easy_setopt(pCurl, CURLOPT_URL, url);
 	curl_easy_setopt(pCurl, CURLOPT_CONNECTTIMEOUT, 15);

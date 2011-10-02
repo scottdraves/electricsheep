@@ -17,8 +17,8 @@
 		#define	CLIENT_VERSION_PRETTY		"Mac OS X 2.7 (Beta 33)"
 		#define CLIENT_SETTINGS				"ElectricSheep"
 	#else
-		#define CLIENT_VERSION				"LNX_2.7b28"
-		#define	CLIENT_VERSION_PRETTY		"Linux(Generic) 2.7 (Beta 28)"
+		#define CLIENT_VERSION				"LNX_2.7b33"
+		#define	CLIENT_VERSION_PRETTY		"version 2.7b33"
 		#define CLIENT_SETTINGS				"ElectricSheep"
 	#endif
 #endif

@@ -133,7 +133,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 			{
 				if (m_pD3D9 != NULL)
 				{
-					//m_pD3D9->Release();
+					m_pD3D9->Release();
 				}
 				if( m_ScrMode == eSaver || m_ScrMode == eFullScreenStandalone)
 				{

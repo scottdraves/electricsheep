@@ -105,7 +105,7 @@ echo "using static source version $reqwx"
 dnl Need to reset this, else it will override the value below !
 WX_CONFIG=""
 
-AC_CHECK_PROG(WX_CONFIG, wx-config, yes, no, [wxWidgets-2.9.1])
+AC_CHECK_PROG(WX_CONFIG, wx-config, yes, no)
 
 if test $WX_CONFIG = no; then
 echo
@@ -113,8 +113,8 @@ echo YOU CAN FIX THIS !
 AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher, and then run this configure script again.])
 fi
 
-WX_CXXFLAGS=`wxWidgets-2.9.1/wx-config --cxxflags`
-WX_LIBS="-static `wxWidgets-2.9.1/wx-config --libs`"
+WX_CXXFLAGS=`wx-config --cxxflags`
+WX_LIBS="-static `wx-config --libs`"
 
 echo "WX_CXXFLAGS is $WX_CXXFLAGS"
 echo "WX_LIBS is $WX_LIBS"

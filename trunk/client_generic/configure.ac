@@ -110,7 +110,7 @@ AC_CHECK_PROG(WX_CONFIG, wx-config, yes, no, [wxWidgets-2.9.1])
 if test $WX_CONFIG = no; then
 echo
 echo YOU CAN FIX THIS !
-AC_MSG_ERROR([Please run './configure && make' in wxWidgets-2.9.1 before compiling electricsheep.])
+AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher, and then run this configure script again.])
 fi
 
 WX_CXXFLAGS=`wxWidgets-2.9.1/wx-config --cxxflags`

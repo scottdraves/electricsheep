@@ -112,14 +112,13 @@ echo
 echo YOU CAN FIX THIS !
 AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher, and then run this configure script again.])
 fi
+fi
 
-WX_CXXFLAGS=`wx-config --cxxflags`
+WX_CXXFLAGS="`wx-config --cxxflags` -DBOOST_FILESYSTEM_VERSION=2"
 WX_LIBS="-static `wx-config --libs`"
 
 echo "WX_CXXFLAGS is $WX_CXXFLAGS"
 echo "WX_LIBS is $WX_LIBS"
-
-fi
 
 WX_LDADD="$WX_LIBS"
 

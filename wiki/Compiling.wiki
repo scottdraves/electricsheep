@@ -85,6 +85,7 @@ Using installer from C:\esmsvc\InstallerMSVC will build installer package, after
   * Or Open client_generic/MacBuild/ElectricSheep.xcodeproj into Xcode 4 (this will not build for macos 10.4)
  * Target "ElectricSheepTestingApp" builds standalone application and "Screen Saver" one builds (wait for it...) screen saver module.
  * execute this command: "cp -r MacBuild/build/Debug/proximus.bundle ~/Library/Screen\ Savers/"
+  * with Xcode 4, open the organizer to find the location of your derived data, and copy the proximus.bundle into place.
  * Choose Build from Build Menu
  * For Debug Active Build configuration the Screen Saver target will be built directly in ~/Library/Screen Savers folder so you can debug it directly
  * For Release Configuration it will be build directly in the build folder at the same level as a project

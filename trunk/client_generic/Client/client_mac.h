@@ -26,7 +26,7 @@
 #include <IOKit/ps/IOPowerSources.h>
 #include <IOKit/ps/IOPSKeys.h>
 
-#include "ESScreensaver.h"
+#include "../MacBuild/ESScreensaver.h"
 
 /*
 	CElectricSheep_Mac().

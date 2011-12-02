@@ -465,6 +465,9 @@ class	CElectricSheep
 						{
 							if ( m_SplashPNGDelayTimer.Time() >  m_PNGDelayTimer)
 							{
+							  // XXX update m_spSplashPNG here, so every time it is shown, it is randomized among our shuffle group.
+							  // call CSplashImage again.
+
 								m_HudManager->Add( "splash_png", m_spSplashPNG,
 									fp4( g_Settings()->Get( "settings.app.pngfadein", 10 ) +
 									g_Settings()->Get( "settings.app.pnghold", 10 ) +

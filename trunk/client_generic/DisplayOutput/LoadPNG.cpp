@@ -130,14 +130,10 @@ bool	CImage::LoadPNG( const std::string &_fileName, const bool _wantMipMaps )
 	// read the additional chunks in the PNG file (not really needed)
 	png_read_end( png_ptr, NULL );
 
-#if 1 || ((defined(MAC)||defined(LINUX_GNU)) && defined(__BIG_ENDIAN__))
-	if (nChannels < 3) {
-		g_Log->Warning( "bad number of channels %d ...", nChannels );
-	} else {
-	  for( uint32 i=0; i<m_Height; i++ )
-	    {
-	      flipChannelsRB( ppbRowPointers[i], m_Width, nChannels );
-	    }
+#if (defined(MAC)||defined(LINUX_GNU)) && defined(__BIG_ENDIAN__)
+	for( uint32 i=0; i<m_Height; i++ )
+	{		
+		flipChannels( ppbRowPointers[i], m_Width, nChannels );
 	}
 #endif
 

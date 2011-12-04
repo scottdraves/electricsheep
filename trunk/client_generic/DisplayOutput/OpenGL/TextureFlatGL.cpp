@@ -143,11 +143,7 @@ bool	CTextureFlatGL::Upload( spCImage _spImage )
 		GL_LUMINANCE,
 		GL_LUMINANCE_ALPHA,
 		GL_RGB,
-#ifdef MAC
-		GL_BGRA
-#else
 		GL_RGBA
-#endif
 	};
 
 	GLenum srcFormat = srcFormats[ format.GetChannels() ];

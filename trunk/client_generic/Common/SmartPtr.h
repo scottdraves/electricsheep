@@ -414,17 +414,15 @@ template<class T, class REP, class ACCESS = T *> class SmartPtr : public SmartPt
 	void	IncrRefCount();
 	void	DecrRefCount();
 
-	public:
-			SmartPtr();
-			~SmartPtr();
-
-
+	protected:
 
 		//	Helper methods.
 		void	CopyFrom( const SmartPtrBase &ptr );
 		void	CopyFrom( const T *ptr );
 
-
+	public:
+			SmartPtr();
+			~SmartPtr();
 
 			//
 			SmartPtr( const SmartPtr &ptr );
@@ -641,14 +639,14 @@ template<class T, class REP = CRefCountRep<T>, class ACCESS = T*> class	CRefCoun
 			//	Assignment Operators
 			CRefCountPtr& operator = ( const CRefCountPtr& ptr )
 			{
-				this->CopyFrom( ptr );
+				SmartPtr<T, REP, ACCESS>::CopyFrom( ptr );
 				return( *this );
 			}
 
 			//
 			CRefCountPtr &operator = ( const T *ptr )
 			{
-				this->CopyFrom( ptr );
+				SmartPtr<T, REP, ACCESS>::CopyFrom( ptr );
 				return( *this );
 			}
 

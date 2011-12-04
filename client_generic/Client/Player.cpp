@@ -357,14 +357,8 @@ ContentDecoder::CContentDecoder *CPlayer::CreateContentDecoder( bool _bStartByRa
 	if ( m_spPlaylist.IsNull() )
 		return NULL;
 	
-#ifndef LINUX_GNU
+#ifdef WIN32
 	PixelFormat pf = PIX_FMT_RGB32;
-	
-	//On PowerPC machines we need to use different pixel format!
-#if defined(MAC) && defined(__BIG_ENDIAN__)
-	pf = PIX_FMT_BGR32_1;
-#endif
-
 #else
 
 	PixelFormat pf = PIX_FMT_BGR32;

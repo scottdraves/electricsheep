@@ -236,18 +236,6 @@ inline void flipChannels( uint8 *_pData, uint32 _nPixels, const uint32 _nChannel
 	} while (--_nPixels);
 }
 
-inline void flipChannelsRB( uint8 *_pData, uint32 _nPixels, const uint32 _nChannels )
-{
-	uint8	tmp;
-
-	do {
-		tmp = _pData[0];
-		_pData[0] = _pData[2];
-		_pData[2] = tmp;
-		_pData += _nChannels;
-	} while (--_nPixels);
-}
-
 #if (defined(MAC) || defined(LINUX_GNU)) 
 #ifdef __LITTLE_ENDIAN__
 	#define MCHAR4(a, b, c, d) (a | (b << 8) | (c << 16) | (d << 24))

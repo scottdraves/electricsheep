@@ -86,6 +86,8 @@ class	CElectricSheep
 		// Splash PNG
 		Hud::spCSplashImage m_spSplashPNG;
 		Base::CTimer m_SplashPNGDelayTimer;
+		int m_nSplashes;
+		std::string m_SplashFilename;
 
 		Hud::spCCrossFade m_spCrossFade;
 
@@ -285,31 +287,44 @@ class	CElectricSheep
 			
 				spStats->Add( new Hud::CStringStat( "zzacpu", "CPU usage: ", "Unknown" ) );
 
-#ifndef LINUX_GNU      
-				//	Vote splash.
-                m_spSplashPos = new Hud::CSplash( 0.2f, g_Settings()->Get( "settings.app.InstallDir", std::string(".\\") ) + "electricsheep-smile.png" );
-                m_spSplashNeg = new Hud::CSplash( 0.2f, g_Settings()->Get( "settings.app.InstallDir", std::string(".\\") ) + "electricsheep-frown.png" );
-                
-				// PNG splash
-				std::string fname = g_Settings()->Get( "settings.player.attrpngfilename", g_Settings()->Get( "settings.app.InstallDir", std::string(".\\") ) + "electricsheep-attr.png"  );
-
-
+#ifndef LINUX_GNU
+				std::string defaultDir = std::string(".\\");
 #else
+				std::string defaultDir = std::string("");
+#endif
 				//	Vote splash.
-                m_spSplashPos = new Hud::CSplash( 0.2f, g_Settings()->Get( "settings.app.InstallDir", std::string("") ) + "electricsheep-smile.png" );
-                m_spSplashNeg = new Hud::CSplash( 0.2f, g_Settings()->Get( "settings.app.InstallDir", std::string("") ) + "electricsheep-frown.png" );
+				m_spSplashPos = new Hud::CSplash( 0.2f, g_Settings()->Get( "settings.app.InstallDir", defaultDir ) + "electricsheep-smile.png" );
+				m_spSplashNeg = new Hud::CSplash( 0.2f, g_Settings()->Get( "settings.app.InstallDir", defaultDir ) + "electricsheep-frown.png" );
                 
 				// PNG splash
-				std::string fname = g_Settings()->Get( "settings.player.attrpngfilename", g_Settings()->Get( "settings.app.InstallDir", std::string("") ) + "electricsheep-attr.png"  );
+				m_SplashFilename = g_Settings()->Get( "settings.player.attrpngfilename", g_Settings()->Get( "settings.app.InstallDir", defaultDir ) + "electricsheep-attr.png"  );
 
-#endif
-				
-				if ( fname.empty() == false && g_Settings()->Get( "settings.app.attributionpng", true ) == true )
-					m_spSplashPNG = new Hud::CSplashImage( 0.2f, fname, 
-					fp4( g_Settings()->Get( "settings.app.pngfadein", 10 ) ),
-					fp4( g_Settings()->Get( "settings.app.pnghold", 10 ) ),
-					fp4( g_Settings()->Get( "settings.app.pngfadeout", 10 ) )
-					);
+				char *percent;
+				char fNameFormatted[PATH_MAX];
+				if (m_SplashFilename.empty() == false && (percent = strchr(m_SplashFilename.c_str(), '%'))) {
+				  if (percent[1] == 'd') {
+				    FILE *test;
+				    while (1) {
+				      sprintf(fNameFormatted, m_SplashFilename.c_str(), m_nSplashes);
+				      if (test = fopen(fNameFormatted, "r")) {
+					fclose(test);
+					m_nSplashes++;
+				      } else {
+					break;
+				      }
+				    }
+				  }
+				}
+
+
+				// if multiple splashes are found then they are loaded when the timer goes off, not here
+				if ( m_SplashFilename.empty() == false && g_Settings()->Get( "settings.app.attributionpng", true ) == true )
+				  m_spSplashPNG = new Hud::CSplashImage( 0.2f, m_SplashFilename.c_str(),
+									 fp4( g_Settings()->Get( "settings.app.pngfadein", 10 ) ),
+									 fp4( g_Settings()->Get( "settings.app.pnghold", 10 ) ),
+									 fp4( g_Settings()->Get( "settings.app.pngfadeout", 10 ) )
+									 );
+
 				
 				m_spCrossFade = new Hud::CCrossFade( g_Player().Display()->Width(), g_Player().Display()->Height(), true );
 				
@@ -341,6 +356,8 @@ class	CElectricSheep
 				m_spSplashPos = NULL;
 				m_spSplashNeg = NULL;
 				m_spSplashPNG = NULL;
+				m_nSplashes = 0;
+				m_SplashFilename = std::string();
 				m_spCrossFade = NULL;
 				m_StartupScreen = NULL;
 				m_HudManager = NULL;
@@ -465,8 +482,22 @@ class	CElectricSheep
 						{
 							if ( m_SplashPNGDelayTimer.Time() >  m_PNGDelayTimer)
 							{
-							  // XXX update m_spSplashPNG here, so every time it is shown, it is randomized among our shuffle group.
-							  // call CSplashImage again.
+
+
+							  // update m_spSplashPNG here, so every time it is shown, it is randomized among our shuffle group.
+
+							  if (m_nSplashes > 0) {
+							    char fNameFormatted[PATH_MAX];
+							    sprintf(fNameFormatted, m_SplashFilename.c_str(), random() % m_nSplashes);
+							    if ( m_SplashFilename.empty() == false && g_Settings()->Get( "settings.app.attributionpng", true ) == true )
+							    m_spSplashPNG = new Hud::CSplashImage( 0.2f, fNameFormatted,
+												   fp4( g_Settings()->Get( "settings.app.pngfadein", 10 ) ),
+												   fp4( g_Settings()->Get( "settings.app.pnghold", 10 ) ),
+												   fp4( g_Settings()->Get( "settings.app.pngfadeout", 10 ) )
+												   );
+							  }
+
+
 
 								m_HudManager->Add( "splash_png", m_spSplashPNG,
 									fp4( g_Settings()->Get( "settings.app.pngfadein", 10 ) +

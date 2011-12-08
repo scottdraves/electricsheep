@@ -331,7 +331,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 
 				std::string tmp = "Working dir: " + m_WorkingDir;
 				g_Log->Info( tmp.c_str() );
-				g_Log->Info( "Commandline: %s", GetCommandLine() );
+				g_Log->Info( "Commandline: %s", GetCommandLineA() );
 
 				_chdir( m_WorkingDir.c_str() );
 

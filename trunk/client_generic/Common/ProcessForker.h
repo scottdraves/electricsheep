@@ -246,7 +246,11 @@ class	CProcessForker
 
 				while( !bExitWhile )
 				{
-					DWORD rc = MsgWaitForMultipleObjects( 1, &m_hProcess, FALSE, INFINITE, QS_ALLINPUT );
+					DWORD rc = 0;
+					if (m_hProcess == INVALID_HANDLE_VALUE)
+						rc = WAIT_FAILED;
+					else
+						rc = MsgWaitForMultipleObjects( 1, &m_hProcess, FALSE, INFINITE, QS_ALLINPUT );
 					switch( rc )
 					{
 						case WAIT_FAILED:

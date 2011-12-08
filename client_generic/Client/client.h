@@ -299,21 +299,28 @@ class	CElectricSheep
 				// PNG splash
 				m_SplashFilename = g_Settings()->Get( "settings.player.attrpngfilename", g_Settings()->Get( "settings.app.InstallDir", defaultDir ) + "electricsheep-attr.png"  );
 
-				char *percent;
-				char fNameFormatted[PATH_MAX];
-				if (m_SplashFilename.empty() == false && (percent = strchr(m_SplashFilename.c_str(), '%'))) {
-				  if (percent[1] == 'd') {
-				    FILE *test;
-				    while (1) {
-				      sprintf(fNameFormatted, m_SplashFilename.c_str(), m_nSplashes);
-				      if (test = fopen(fNameFormatted, "r")) {
-					fclose(test);
-					m_nSplashes++;
-				      } else {
-					break;
-				      }
-				    }
-				  }
+				const char *percent;
+
+				if (m_SplashFilename.empty() == false && (percent = strchr(m_SplashFilename.c_str(), '%')))
+				{
+					if (percent[1] == 'd')
+					{
+						FILE *test;
+						while (1)
+						{
+							char fNameFormatted[FILENAME_MAX];
+							snprintf(fNameFormatted, FILENAME_MAX, m_SplashFilename.c_str(), m_nSplashes);
+							if (test = fopen(fNameFormatted, "r"))
+							{
+								fclose(test);
+								m_nSplashes++;
+							}
+							else 
+							{
+								break;
+							}
+						}
+					}
 				}
 
 
@@ -486,16 +493,17 @@ class	CElectricSheep
 
 							  // update m_spSplashPNG here, so every time it is shown, it is randomized among our shuffle group.
 
-							  if (m_nSplashes > 0) {
-							    char fNameFormatted[PATH_MAX];
-							    sprintf(fNameFormatted, m_SplashFilename.c_str(), random() % m_nSplashes);
-							    if ( m_SplashFilename.empty() == false && g_Settings()->Get( "settings.app.attributionpng", true ) == true )
-							    m_spSplashPNG = new Hud::CSplashImage( 0.2f, fNameFormatted,
-												   fp4( g_Settings()->Get( "settings.app.pngfadein", 10 ) ),
-												   fp4( g_Settings()->Get( "settings.app.pnghold", 10 ) ),
-												   fp4( g_Settings()->Get( "settings.app.pngfadeout", 10 ) )
-												   );
-							  }
+								if (m_nSplashes > 0)
+								{
+									char fNameFormatted[FILENAME_MAX];
+									snprintf( fNameFormatted, FILENAME_MAX, m_SplashFilename.c_str(), rand() % m_nSplashes );
+									if ( m_SplashFilename.empty() == false && g_Settings()->Get( "settings.app.attributionpng", true ) == true )
+										m_spSplashPNG = new Hud::CSplashImage( 0.2f, fNameFormatted,
+														fp4( g_Settings()->Get( "settings.app.pngfadein", 10 ) ),
+														fp4( g_Settings()->Get( "settings.app.pnghold", 10 ) ),
+														fp4( g_Settings()->Get( "settings.app.pngfadeout", 10 ) )
+														);
+								}
 
 
 

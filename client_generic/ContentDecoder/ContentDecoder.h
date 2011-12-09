@@ -116,6 +116,8 @@ class CContentDecoder
 	bool			m_bStartByRandom;
 
 	bool			m_NoSheeps;
+	
+	bool			m_Initialized;
 
 	bool	Open( const std::string &_filename );
 	bool	NextSheepForPlaying( bool _bSkipLoop = false );
@@ -127,6 +129,7 @@ class CContentDecoder
 			CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, const uint32 _queueLenght, PixelFormat _wantedPixelFormat = PIX_FMT_RGB24 );
 			virtual ~CContentDecoder();
 
+			bool	Initialized() { return m_Initialized; }
 			void	Close();
 			bool	Start();
 			void	Stop();

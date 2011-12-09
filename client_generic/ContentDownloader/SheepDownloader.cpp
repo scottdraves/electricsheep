@@ -35,6 +35,7 @@
 #include <time.h>
 #include <math.h>
 
+#include "io.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifndef WIN32
@@ -140,13 +141,12 @@ int	SheepDownloader::numberOfDownloadedSheep()
 */
 void SheepDownloader::clearFlocks()
 {
+	boost::mutex::scoped_lock lockthis( s_DownloaderMutex );
 	//	Clear the server flock.
 	for( uint32 i=0; i < fServerFlock.size(); i++ )
 		SAFE_DELETE( fServerFlock[i] );
 
 	fServerFlock.clear();
-
-	boost::mutex::scoped_lock lockthis( s_DownloaderMutex );
 
 	fGotList = false;
 
@@ -711,6 +711,26 @@ void	SheepDownloader::deleteSheepId( int sheepId )
 	}
 }
 
+bool SheepDownloader::isFolderAccessible( const char *folder )
+{
+	if (folder == NULL)
+		return false;
+	if (access(folder, 6) != 0)
+		return false;
+
+	struct stat status;
+	std::string tempstr(folder);
+	if (tempstr.size() > 1 && (tempstr.at(tempstr.size()-1) == '\\' || tempstr.at(tempstr.size()-1) == '/'))
+		tempstr.erase(tempstr.size()-1);
+	if ( stat( tempstr.c_str(), &status ) == -1)
+		return false;
+
+	if ( !(status.st_mode & S_IFDIR) )
+		return false; // it's a file
+
+	return true;
+}
+
 /*
 	findSheepToDownload().
 	This method loads all of the sheep that are cached on disk and deletes any files in the cache that no longer exist on the server
@@ -726,7 +746,6 @@ void	SheepDownloader::findSheepToDownload()
 
 	try {
 #ifndef	DEBUG
-		Shepherd::getClientFlock( &fClientFlock );
 
 		//if there are at least three sheep to display in content folder, sleep, otherwise start to download immediately
 		if ( fClientFlock.size() > 3 )
@@ -754,7 +773,7 @@ void	SheepDownloader::findSheepToDownload()
 		{
 
 			this_thread::interruption_point();
-
+			bool incorrect_folder = false;
 #ifdef WIN32
 			ULARGE_INTEGER winlpFreeBytesAvailable, winlpTotalNumberOfBytes, winlpRealBytesAvailable;
 
@@ -762,29 +781,45 @@ void	SheepDownloader::findSheepToDownload()
 			{
 				lpFreeBytesAvailable = winlpFreeBytesAvailable.QuadPart;
 				lpTotalNumberOfBytes = winlpTotalNumberOfBytes.QuadPart;
-			}
+			} else
+				incorrect_folder = true;
 #else
 			struct statfs buf;
 			if( statfs( Shepherd::xmlPath(), &buf) >= 0 )
 			{
 				lpFreeBytesAvailable = (boost::uintmax_t)buf.f_bavail * (boost::uintmax_t)buf.f_bsize;
 				lpTotalNumberOfBytes = (boost::uintmax_t)buf.f_blocks * (boost::uintmax_t)buf.f_bsize;
-			}
+			} else
+				incorrect_folder = true;
 #endif
 
-			if( lpFreeBytesAvailable < ((boost::uintmax_t)MIN_MEGABYTES * 1024 * 1024) )
+			incorrect_folder = !isFolderAccessible( Shepherd::xmlPath() ) || !isFolderAccessible( Shepherd::mpegPath() );
+			if( lpFreeBytesAvailable < ((boost::uintmax_t)MIN_MEGABYTES * 1024 * 1024) || incorrect_folder)
 			{
-			        const char *err = "Low disk space.  Downloading disabled.\n";
-				Shepherd::addMessageText( err, strlen(err), 180 ); //3 minutes
+				if (incorrect_folder)
+				{
+					const char *err = "Folder is not working.  Downloading disabled.\n";
+					Shepherd::addMessageText( err, strlen(err), 180 ); //3 minutes
 
-				thread::sleep( get_system_time() + posix_time::seconds(TIMEOUT) );
+					thread::sleep( get_system_time() + posix_time::seconds(TIMEOUT) );
+				}
+				else
+				{
+					const char *err = "Low disk space.  Downloading disabled.\n";
+					Shepherd::addMessageText( err, strlen(err), 180 ); //3 minutes
 
-				deleteCached( 0, 0 );
-				deleteCached( 0, 1 );
+					thread::sleep( get_system_time() + posix_time::seconds(TIMEOUT) );
+				
+					boost::mutex::scoped_lock lockthis( s_DownloaderMutex );
+
+					deleteCached( 0, 0 );
+					deleteCached( 0, 1 );
+				}
 			}
 			else
 			{
 				best_anim_old = -1;
+				std::string best_anim_old_url;
 				best_ctime_old = 0;
 				best_rating_old = INT_MAX;
 
@@ -813,6 +848,8 @@ void	SheepDownloader::findSheepToDownload()
 						best_anim = -1;
 
 						updateCachedSheep();
+
+						boost::mutex::scoped_lock lockthis( s_DownloaderMutex );
 
 						unsigned int i;
 						unsigned int j;
@@ -879,6 +916,7 @@ void	SheepDownloader::findSheepToDownload()
 							} else
 							{
 								best_anim_old = best_anim;
+								best_anim_old_url = fServerFlock[ best_anim_old ]->URL();
 							}
 						}
 						this_thread::interruption_point();
@@ -905,7 +943,7 @@ void	SheepDownloader::findSheepToDownload()
 						
 							std::stringstream tmp;
 			
-							tmp << "Downloading failed, will retry in {" << std::fixed << std::setprecision(0) << failureSleepDuration << "}...\n" << fServerFlock[ best_anim_old ]->URL();
+							tmp << "Downloading failed, will retry in {" << std::fixed << std::setprecision(0) << failureSleepDuration << "}...\n" << best_anim_old_url;
 							Shepherd::setDownloadState(tmp.str());
 					}
 				}

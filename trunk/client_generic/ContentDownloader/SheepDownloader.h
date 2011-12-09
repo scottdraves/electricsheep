@@ -80,6 +80,8 @@ class SheepDownloader
 		//	Delete enough sheep to clear enough room for the given amount of bytes.
 		void deleteCached( const int &bytes, const int getGenerationType );
 
+		bool isFolderAccessible( const char *folder );
+
 		//	This methods parses the sheep list and intializes the array of server sheep.
 		void parseSheepList();
 

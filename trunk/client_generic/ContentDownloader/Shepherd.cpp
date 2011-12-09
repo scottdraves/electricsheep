@@ -621,8 +621,6 @@ uint64 Shepherd::GetFlockSizeMBsRecount(const int generationtype)
 */
 bool	Shepherd::getClientFlock(SheepArray *sheep)
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-	
 	uint64 clientFlockBytes = 0;
 	uint64 clientFlockCount = 0;
 	
@@ -636,7 +634,7 @@ bool	Shepherd::getClientFlock(SheepArray *sheep)
 	sheep->clear();
 
 	//	Get the sheep in fMpegPath.
-	getSheep( fMpegPath, sheep );
+	getSheep( mpegPath(), sheep );
 	for (iter = sheep->begin(); iter != sheep->end(); ++iter )
 	{
 		if ((*iter)->getGenerationType() == 0)

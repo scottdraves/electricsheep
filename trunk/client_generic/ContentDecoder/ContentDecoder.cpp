@@ -79,6 +79,7 @@ CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom,
 	m_lockedFrame = NULL;
 	m_bFrameLocked = false;
 	
+	m_Initialized = false;
 	m_NoSheeps = true;
 
 	m_FadeIn = m_FadeCount;
@@ -424,7 +425,8 @@ void	CContentDecoder::CalculateNextSheep()
 			}
 			else
 				bRebuild = true;
-				
+			
+			m_Initialized = true;
 			thread::sleep( get_system_time() + posix_time::milliseconds(100) );
 			//this_thread::yield();
 		}
@@ -673,7 +675,8 @@ bool	CContentDecoder::Start()
 	sp.sched_priority = 8; //Foreground NORMAL_PRIORITY_CLASS - THREAD_PRIORITY_BELOW_NORMAL
 	esnRetVal = pthread_setschedparam( (pthread_t)m_pNextSheepThread->native_handle(), SCHED_RR, &sp );
 #endif
-
+	while ( Initialized() == false )
+		thread::sleep( get_system_time() + posix_time::milliseconds(100) );
 	m_pDecoderThread = new thread( bind( &CContentDecoder::ReadPackets, this ) );
 	
 	int retry = 0;

@@ -715,13 +715,18 @@ bool SheepDownloader::isFolderAccessible( const char *folder )
 {
 	if (folder == NULL)
 		return false;
+#ifdef WIN32
+	if (_access(folder, 6) != 0)
+		return false;
+#else
 	if (access(folder, 6) != 0)
 		return false;
+#endif
 
 	struct stat status;
 	std::string tempstr(folder);
 	if (tempstr.size() > 1 && (tempstr.at(tempstr.size()-1) == '\\' || tempstr.at(tempstr.size()-1) == '/'))
-		tempstr.erase(tempstr.size()-1);
+		tempstr.erase( tempstr.size() - 1 );
 	if ( stat( tempstr.c_str(), &status ) == -1)
 		return false;
 

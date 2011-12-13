@@ -6,7 +6,6 @@
 #include	<boost/bind.hpp>
 
 #include	<curl/curl.h>
-#include	<curl/types.h>
 #include	<curl/easy.h>
 
 #include	"ContentDownloader.h"

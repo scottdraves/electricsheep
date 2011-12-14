@@ -35,7 +35,11 @@ static const GLint internalFormats[] =
 	GL_INTENSITY8,
 	GL_LUMINANCE8_ALPHA8,
 	GL_RGB8,
+#ifdef MAC
+	GL_RGBA,
+#else
 	GL_RGBA8,
+#endif
 
 	GL_INTENSITY16,
 	GL_LUMINANCE16_ALPHA16,
@@ -71,7 +75,7 @@ static const GLenum srcTypes[] =
 	GL_UNSIGNED_BYTE,
 	GL_UNSIGNED_BYTE,
 	GL_UNSIGNED_BYTE,
-#if MAC
+#ifdef MAC
 	GL_UNSIGNED_INT_8_8_8_8_REV,
 #else
 	GL_UNSIGNED_BYTE,

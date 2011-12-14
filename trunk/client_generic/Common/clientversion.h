@@ -13,8 +13,8 @@
 	#define	CLIENT_VERSION_PRETTYW2		L"version 2.7 (Beta 34)"
 #else
 	#ifdef MAC
-		#define CLIENT_VERSION				"OSX_2.7b33"
-		#define	CLIENT_VERSION_PRETTY		"Mac OS X 2.7 (Beta 33)"
+		#define CLIENT_VERSION				"OSX_2.7b34"
+		#define	CLIENT_VERSION_PRETTY		"Mac OS X 2.7 (Beta 34)"
 		#define CLIENT_SETTINGS				"ElectricSheep"
 	#else
 		#define CLIENT_VERSION				"LNX_2.7b33"

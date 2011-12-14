@@ -15,6 +15,7 @@
 	IBOutlet NSPopUpButton* multiDisplayMode;
 	IBOutlet NSButton* seamlessPlayback;
 	IBOutlet NSButton* synchronizeVBL;
+	IBOutlet NSButton* blackoutMonitors;
 	IBOutlet NSSlider* playEvenly;
 	IBOutlet NSButton* showAttribution;
 	IBOutlet NSButton* autoUpdates;
@@ -62,6 +63,8 @@
 	
 	NSString *m_origNickname;
 	NSString *m_origPassword;
+	
+	NSString *m_roleString;
 	
 	NSMutableData *m_httpData;
 	

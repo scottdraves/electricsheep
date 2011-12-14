@@ -167,7 +167,11 @@ bool	CContentDecoder::Open( const std::string &_filename )
 	m_VideoStreamID = -1;
     for( uint32 i=0; i<m_pFormatContext->nb_streams; i++ )
     {
+#ifdef MAC
+		if( m_pFormatContext->streams[i]->codec->codec_type == CODEC_TYPE_VIDEO )
+#else
         if( m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
+#endif
         {
             m_pVideoStream = m_pFormatContext->streams[i];
             m_VideoStreamID = i;

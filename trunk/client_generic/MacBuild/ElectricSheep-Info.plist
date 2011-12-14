@@ -17,9 +17,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.7b33</string>
+	<string>2.7b34</string>
 	<key>CFBundleGetInfoString</key>
-	<string>2.7b33</string>
+	<string>2.7b34</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

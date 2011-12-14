@@ -140,6 +140,7 @@ void electricsheepguiMyDialog2::SaveSettings()
 	g_Settings()->Set("settings.player.SeamlessPlayback", m_SeamlessPlayback->GetValue());
 	g_Settings()->Set("settings.player.quiet_mode", m_QuietMode->GetValue());
 	g_Settings()->Set("settings.player.directdraw", m_DirectDraw->GetValue());
+	g_Settings()->Set( "settings.player.force_windowed_directx", m_ForceWindowedDX );
 
 	g_Settings()->Set("settings.content.unlimited_cache", m_checkUnlimitedCache->IsChecked());
 
@@ -245,7 +246,8 @@ void electricsheepguiMyDialog2::LoadSettings()
 	m_spinMonitor->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.player.screen", 0)));
 	m_spinRepeatLoops->SetValue(wxString::Format(wxT("%d"), g_Settings()->Get("settings.player.LoopIterations", 2)));
 	m_spinDisplayFps->SetValue(wxString::Format(wxT("%.2lf"), g_Settings()->Get("settings.player.display_fps", 60.)));
-
+	m_ForceWindowedDX = g_Settings()->Get( "settings.player.force_windowed_directx", true );
+	
 	if (g_Settings()->Get( "settings.content.unlimited_cache", false) == true)
 	{
 		m_checkUnlimitedCache->SetValue(true);
@@ -311,9 +313,14 @@ void electricsheepguiMyDialog2::LoadSettings()
 	else
 		g_Settings()->Set( "settings.content.use_proxy", false);
 
-
+#ifdef WIN32
+	wxString tmpstr = g_Settings()->Get( "settings.content.sheepdir", std::string(szPath) + "content" );
+	while (tmpstr.size() > 1 && (tmpstr.at(tmpstr.size()-1) == '/' || tmpstr.at(tmpstr.size()-1) == '\\'))
+		tmpstr.erase(tmpstr.size()-1);
+	m_dirContent->SetPath( tmpstr );
+#else
 	m_dirContent->SetPath( g_Settings()->Get( "settings.content.sheepdir", std::string(szPath) + "content" ) );
-
+#endif
 	wxString newlabel = wxT("New sheep are created everyday.  When the screensaver runs,\nit tries to download them, and saves them on your hard disk,\ndeleting old ones to make room.  Login to get more sheep.\nIt is currently using ");
 	wxString newlabelgold = wxT("It is currently using ");
 
@@ -817,7 +824,10 @@ void electricsheepguiMyDialog2::OnContentDirChanged( wxFileDirPickerEvent& event
 void electricsheepguiMyDialog2::OnOpenClick( wxCommandEvent& event )
 {
 #ifndef LINUX_GNU
-	wxExecute(L"explorer " + m_dirContent->GetPath());
+	wxString tmpstr = m_dirContent->GetPath();
+	while (tmpstr.size() > 1 && (tmpstr.at(tmpstr.size()-1) == '/' || tmpstr.at(tmpstr.size()-1) == '\\'))
+		tmpstr.erase(tmpstr.size()-1);
+	wxExecute(L"explorer " + tmpstr);
 #else
 	int iReturn = wxExecute(L"nautilus " + m_dirContent->GetPath());
 	if ( iReturn == -1 ) wxExecute(L"dolphin " + m_dirContent->GetPath());

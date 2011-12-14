@@ -169,15 +169,38 @@ bool	CRendererDX::TestResetDevice()
 		{
 			m_Fonts[i]->OnLostDevice();
 		}
-		m_pDevice->Reset(&m_PresentationParams);
-		m_pSprite->OnResetDevice();
-		for (size_t i = 0; i < m_Fonts.size(); ++i)
+		HRESULT hr = m_pDevice->Reset(&m_PresentationParams);
+		if (hr == D3D_OK)
 		{
-			m_Fonts[i]->OnResetDevice();
+			m_pSprite->OnResetDevice();
+			for (size_t i = 0; i < m_Fonts.size(); ++i)
+			{
+				m_Fonts[i]->OnResetDevice();
+			}
+			Defaults();
+			Reset( DisplayOutput::eEverything );
+			Apply();
+		} else
+		{
+			switch (hr)
+			{
+			case D3DERR_DEVICELOST:
+				g_Log->Error("Device reset: D3DERR_DEVICELOST");
+				break;
+			case D3DERR_DEVICEREMOVED:
+				g_Log->Error("Device reset: D3DERR_DEVICEREMOVED");
+				break;
+			case D3DERR_DRIVERINTERNALERROR:
+				g_Log->Error("Device reset: D3DERR_DRIVERINTERNALERROR");
+				break;
+			case D3DERR_OUTOFVIDEOMEMORY:
+				g_Log->Error("Device reset: D3DERR_OUTOFVIDEOMEMORY");
+				break;
+			default:
+				g_Log->Error("Device reset: %u", hr);
+				break;
+			}
 		}
-		Defaults();
-		Reset( DisplayOutput::eEverything );
-		Apply();
 	}
 	return false;
 }

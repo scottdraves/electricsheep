@@ -124,7 +124,6 @@ int	CContentDecoder::DumpError( int _err )
 		switch( _err )
 		{
 			case AVERROR_INVALIDDATA:	g_Log->Error( "Error while parsing header" );	break;
-			case AVERROR_NOFMT:			g_Log->Error( "Unknown format" );	break;
 			case AVERROR(EIO):			g_Log->Error( "I/O error occured. Usually that means that input file is truncated and/or corrupted." );	break;
 			case AVERROR(ENOMEM):		g_Log->Error( "Memory allocation error occured" );	break;
 			case AVERROR(ENOENT):		/*g_Log->Error( "No such file or directory" );  legal, will be warned in Open()*/	break;
@@ -168,7 +167,7 @@ bool	CContentDecoder::Open( const std::string &_filename )
 	m_VideoStreamID = -1;
     for( uint32 i=0; i<m_pFormatContext->nb_streams; i++ )
     {
-        if( m_pFormatContext->streams[i]->codec->codec_type == CODEC_TYPE_VIDEO )
+        if( m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
         {
             m_pVideoStream = m_pFormatContext->streams[i];
             m_VideoStreamID = i;
@@ -211,7 +210,7 @@ bool	CContentDecoder::Open( const std::string &_filename )
         return false;
     }
 	
-	m_totalFrameCount = ((((double)m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(m_pVideoStream->r_frame_rate));
+	m_totalFrameCount = uint32((((double)m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(m_pVideoStream->r_frame_rate));
 
 	g_Log->Info( "Open done()" );
 

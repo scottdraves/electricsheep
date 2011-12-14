@@ -75,38 +75,43 @@ void	CDisplayDX::EnumMonitors()
 		{
 			//	To get monitor info for a display device, call EnumDisplayDevices a second time,
 			//	passing dispdev.DeviceName (from the first call) as the first parameter.
-			EnumDisplayDevices( dispdev.DeviceName, 0, (DISPLAY_DEVICE *)&dispdev2, 0 );
-
-			pMonitorInfoNew = &m_Monitors[ m_dwNumMonitors ];
-			ZeroMemory( pMonitorInfoNew, sizeof(MonitorInfo) );
-			lstrcpy( pMonitorInfoNew->strDeviceName, dispdev.DeviceString );
-			lstrcpy( pMonitorInfoNew->strMonitorName, dispdev2.DeviceString );
-			pMonitorInfoNew->iAdapter = NO_ADAPTER;
-
-			if( dispdev.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP )
+			if (EnumDisplayDevices( dispdev.DeviceName, 0, (DISPLAY_DEVICE *)&dispdev2, 0 ) != 0)
 			{
-				EnumDisplaySettings( dispdev.DeviceName, ENUM_CURRENT_SETTINGS, &devmode );
-				//if( dispdev.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE )
-				//{
-					//	For some reason devmode.dmPosition is not always (0, 0) for the primary display, so force it.
-					//pMonitorInfoNew->rcScreen.left = 0;
-					//pMonitorInfoNew->rcScreen.top = 0;
-				//}
-				//else
-				//{
-					pMonitorInfoNew->rcScreen.left = devmode.dmPosition.x;
-					pMonitorInfoNew->rcScreen.top = devmode.dmPosition.y;
-				//}
+				pMonitorInfoNew = &m_Monitors[ m_dwNumMonitors ];
+				ZeroMemory( pMonitorInfoNew, sizeof(MonitorInfo) );
+				lstrcpy( pMonitorInfoNew->strDeviceName, dispdev.DeviceString );
+				lstrcpy( pMonitorInfoNew->strMonitorName, dispdev2.DeviceString );
+				pMonitorInfoNew->iAdapter = NO_ADAPTER;
 
-				pMonitorInfoNew->rcScreen.right = pMonitorInfoNew->rcScreen.left + devmode.dmPelsWidth;
-				pMonitorInfoNew->rcScreen.bottom = pMonitorInfoNew->rcScreen.top + devmode.dmPelsHeight;
+				if( dispdev.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP )
+				{
+					if (EnumDisplaySettings( dispdev.DeviceName, ENUM_CURRENT_SETTINGS, &devmode ) != 0)
+					{
+						if( dispdev.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE )
+							g_Log->Info( "DISPLAY_DEVICE_PRIMARY_DEVICE" );
+						//{
+							//	For some reason devmode.dmPosition is not always (0, 0) for the primary display, so force it.
+							//pMonitorInfoNew->rcScreen.left = 0;
+							//pMonitorInfoNew->rcScreen.top = 0;
+						//}
+						//else
+						//{
+							pMonitorInfoNew->rcScreen.left = devmode.dmPosition.x;
+							pMonitorInfoNew->rcScreen.top = devmode.dmPosition.y;
+						//}
 
-				pMonitorInfoNew->hMonitor = MonitorFromRect( &pMonitorInfoNew->rcScreen, MONITOR_DEFAULTTONULL );
+						pMonitorInfoNew->rcScreen.right = pMonitorInfoNew->rcScreen.left + devmode.dmPelsWidth;
+						pMonitorInfoNew->rcScreen.bottom = pMonitorInfoNew->rcScreen.top + devmode.dmPelsHeight;
+
+						pMonitorInfoNew->hMonitor = MonitorFromRect( &pMonitorInfoNew->rcScreen, MONITOR_DEFAULTTONULL );
+						g_Log->Info( "EnumMonitors %d x=%u y=%u w=%u h=%u", m_dwNumMonitors, devmode.dmPosition.x, devmode.dmPosition.y, devmode.dmPelsWidth, devmode.dmPelsHeight);
+					}
+				}
+
+				m_dwNumMonitors ++;
+				if( m_dwNumMonitors == MAX_DISPLAYS )
+					break;
 			}
-
-			m_dwNumMonitors ++;
-			if( m_dwNumMonitors == MAX_DISPLAYS )
-				break;
 		}
 		iDevice++;
 	}
@@ -131,7 +136,10 @@ void CDisplayDX::BlankUnusedMonitors(WNDCLASS &wnd, HWND hWnd, HINSTANCE hInstan
 
 			rc = pMonitorInfo->rcScreen;
 			if( iMonitor != m_DesiredScreenID )
+			{
+				g_Log->Info( "Monitor iMonitor != m_DesiredScreenID %d!=%d x1=%d y1=%d x2=%d y2=%d ", iMonitor, m_DesiredScreenID, rc.left, rc.top, rc.right - rc.left,rc.bottom - rc.top);
 				pMonitorInfo->hWnd = CreateWindowEx( WS_EX_TOPMOST, L"ElectricsheepWndClass", L"ES", dwStyle, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, hWnd, NULL, hInstance, NULL );
+			}
 
 		}
 
@@ -291,7 +299,7 @@ LRESULT CALLBACK CDisplayDX::wndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM
 
 UINT	CDisplayDX::GetAdapterOrdinal()
 {
-	if (m_pDirect3DInstance == NULL)
+	if (m_pDirect3DInstance == NULL || (g_Settings()->Get( "settings.player.force_default_adapter", false ) == true))
 	{
 		g_Log->Error( "Using default adapter for screen %d", m_DesiredScreenID );
 		return D3DADAPTER_DEFAULT;
@@ -333,12 +341,24 @@ bool	CDisplayDX::InitDX9()
 	memset( &m_PresentationParams, 0, sizeof(m_PresentationParams) );
 
 	m_PresentationParams.BackBufferFormat = D3DFMT_X8R8G8B8;
-
-	m_PresentationParams.Windowed = !m_bFullScreen;
-
-	m_PresentationParams.BackBufferWidth  = m_Width;
-	m_PresentationParams.BackBufferHeight = m_Height;
+	if (g_Settings()->Get( "settings.player.MultiDisplayMode", 0 ) != 2 && g_Settings()->Get( "settings.player.force_windowed_directx", true ) == true)
+		m_PresentationParams.Windowed = TRUE;
+	else
+		m_PresentationParams.Windowed = !m_bFullScreen;
+	
+	D3DDISPLAYMODE dm = {0};
+	if ( m_bFullScreen && m_pDirect3DInstance->GetAdapterDisplayMode( GetAdapterOrdinal(), &dm ) == D3D_OK )
+	{
+		m_PresentationParams.BackBufferWidth  = dm.Width;
+		m_PresentationParams.BackBufferHeight = dm.Height;
+	} else
+	{
+		m_PresentationParams.BackBufferWidth  = m_Width;
+		m_PresentationParams.BackBufferHeight = m_Height;
+	}
+	g_Log->Info( "Using backbuffer w=%d h=%d", m_PresentationParams.BackBufferWidth, m_PresentationParams.BackBufferHeight);
 	m_PresentationParams.BackBufferCount  = 1;
+	m_PresentationParams.hDeviceWindow = m_WindowHandle;
 
 	m_PresentationParams.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
 
@@ -381,7 +401,7 @@ bool	CDisplayDX::InitDX9()
 		m_Shader20 = false;
     }
 
-	HRESULT devresult = m_pDirect3DInstance->CreateDevice( m_bFullScreen ? GetAdapterOrdinal() : D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, gl_hFocusWindow == NULL ? m_WindowHandle : gl_hFocusWindow, D3DCREATE_FPU_PRESERVE | dwVertexProcessing, &m_PresentationParams, &m_pDevice);
+	HRESULT devresult = m_pDirect3DInstance->CreateDevice( m_bFullScreen ? GetAdapterOrdinal() : D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, (gl_hFocusWindow == NULL) ? m_WindowHandle : gl_hFocusWindow, D3DCREATE_FPU_PRESERVE | dwVertexProcessing, &m_PresentationParams, &m_pDevice);
 /*	UINT adapterid = 0;
 	for (adapterid = 0; adapterid < m_pDirect3D->GetAdapterCount(); ++adapterid)
 	{
@@ -414,8 +434,11 @@ bool	CDisplayDX::InitDX9()
 		};
 		return false;
 	}
-	if (gl_hFocusWindow == NULL)
+	if (gl_hFocusWindow == NULL && m_bFullScreen == true)
+	{
+		g_Log->Info( "gl_hFocusWindow = m_WindowHandle" );
 		gl_hFocusWindow = m_WindowHandle;
+	}
 	return true;
 }
 
@@ -434,7 +457,7 @@ HWND CDisplayDX::createwindow( uint32 _w, uint32 _h, const bool _bFullscreen )
 	WNDCLASS   wndclass = {0};
 	RECT       windowRect;
 	SetRect( &windowRect, 0, 0, _w, _h );
-
+	g_Log->Info( "CDisplayDX::createwindow x=%u y=%u w=%u h=%u", 0, 0, _w, _h);
 	wndclass.style         = CS_HREDRAW | CS_VREDRAW;
 	wndclass.lpfnWndProc   = (WNDPROC)CDisplayDX::wndProc;
 	wndclass.cbClsExtra    = 0;
@@ -484,8 +507,11 @@ HWND CDisplayDX::createwindow( uint32 _w, uint32 _h, const bool _bFullscreen )
 	AdjustWindowRectEx( &windowRect, style, false, exStyle );
 	int ww = windowRect.right - windowRect.left;
 	int hh = windowRect.bottom - windowRect.top;
-	HWND hWnd = CreateWindowEx( exStyle, L"ElectricsheepWndClass", L"Electricsheep", style, 0, 0, ww, hh, NULL, NULL, hInstance, NULL );
+	int xx = 0;
+	int yy = 0;
+	g_Log->Info( "CDisplayDX::createwindow AdjustWindowRectEx x=%u y=%u w=%u h=%u", 0, 0, ww, hh);
 	MONITORINFO monitorInfo;
+	
 	for( DWORD iMonitor = 0; iMonitor < m_dwNumMonitors; iMonitor++ )
 	{
 		if (iMonitor == m_DesiredScreenID && _bFullscreen)
@@ -494,9 +520,16 @@ HWND CDisplayDX::createwindow( uint32 _w, uint32 _h, const bool _bFullscreen )
 			monitorInfo.cbSize = sizeof(MONITORINFO);
 			GetMonitorInfo( pMonitorInfo->hMonitor, &monitorInfo );
 			pMonitorInfo->rcScreen = monitorInfo.rcMonitor;
-			SetWindowPos( hWnd, HWND_TOPMOST, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top, monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, SWP_NOACTIVATE );
+			//SetWindowPos( hWnd, HWND_TOPMOST, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top, monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, SWP_NOACTIVATE );
+			xx = monitorInfo.rcMonitor.left;
+			yy = monitorInfo.rcMonitor.top;
+			ww = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
+			hh = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
+			g_Log->Info( "CDisplayDX::createwindow SetWindowPos x=%u y=%u w=%u h=%u",  monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top, monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top);
 		}
 	}
+
+	HWND hWnd = CreateWindowEx( exStyle, L"ElectricsheepWndClass", L"Electricsheep", style, xx, yy, ww, hh, NULL, NULL, hInstance, NULL );
 	BlankUnusedMonitors(wndclass, hWnd, hInstance);
 	return hWnd;
 }
@@ -543,7 +576,7 @@ bool	CDisplayDX::Initialize( HWND _hWnd, bool _bPreview )
 		DWORD dwStyle = WS_VISIBLE | WS_CHILD;
 		AdjustWindowRect( &rc, dwStyle, FALSE );
 		m_WindowHandle = CreateWindow( L"ElectricsheepWndClass", L"Preview", dwStyle, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, _hWnd, NULL, hInstance, NULL );
-
+		g_Log->Info( "CDisplayDX::Initialize x=%u y=%u w=%u h=%u",  rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top);
 		if( m_WindowHandle == NULL )
 		{
 			g_Log->Error( "CDisplayDX::Initialize unable to create window for preview" );
@@ -597,7 +630,7 @@ bool	CDisplayDX::Initialize( HWND _hWnd, bool _bPreview )
 		GetWindowRect( _hWnd, &rc );
 		m_Width = rc.right - rc.left;
 		m_Height = rc.bottom - rc.top;
-
+		g_Log->Info( "CDisplayDX::Initialize right=%u left=%u bottom=%u top=%u",  rc.right, rc.left, rc.bottom, rc.top);
 		//DWORD exstyle = 0;//WS_EX_TOPMOST;
 		//DWORD style = WS_CHILD | WS_VISIBLE;
 
@@ -652,8 +685,11 @@ HWND CDisplayDX::Initialize( const uint32 _width, const uint32 _height, const bo
     m_Height = rect.bottom - rect.top;
 
     ShowWindow( m_WindowHandle, SW_SHOW );
-    SetForegroundWindow( m_WindowHandle );
-    SetFocus( m_WindowHandle );
+	if (gl_hFocusWindow == NULL)
+	{
+		SetForegroundWindow( m_WindowHandle );
+		SetFocus( m_WindowHandle );
+	}
 
 	if( !InitDX9() )
 		return false;

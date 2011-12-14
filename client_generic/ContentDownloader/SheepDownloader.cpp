@@ -803,7 +803,7 @@ void	SheepDownloader::findSheepToDownload()
 			{
 				if (incorrect_folder)
 				{
-					const char *err = "Folder is not working.  Downloading disabled.\n";
+					const char *err = "Content folder is not working.  Downloading disabled.\n";
 					Shepherd::addMessageText( err, strlen(err), 180 ); //3 minutes
 
 					thread::sleep( get_system_time() + posix_time::seconds(TIMEOUT) );

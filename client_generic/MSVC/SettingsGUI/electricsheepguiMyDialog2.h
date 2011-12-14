@@ -74,6 +74,7 @@ private:
 	void SaveSettings();
 	void LoadSettings();
 	std::string m_UniqueId;
+	bool m_ForceWindowedDX;
 	LoginThread *m_LoginThread;
 	bool m_NewFocus;
 };

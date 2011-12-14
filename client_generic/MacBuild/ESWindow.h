@@ -28,6 +28,8 @@ BOOL mIsFullScreen;
 
 BOOL mInSheet;
 
+BOOL mBlackouMonitors;
+
 NSMutableArray *mBlackingWindows;
 
 }

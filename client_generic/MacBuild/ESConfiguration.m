@@ -45,6 +45,8 @@
 	
 	m_checkTimer = nil;
 	
+	m_roleString = @"member";
+	
 	ESScreensaver_InitClientStorage();
 
 	[self loadSettings];
@@ -168,11 +170,13 @@
 		{
 			[loginStatusImage setImage:greenImage];
 			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Logged in (role: %@).", rolestr ? rolestr : @"N/A"]];
+			m_roleString = [rolestr retain];
 		}
 		else
 		{
 			[loginStatusImage setImage:redImage];
 			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Login Failed."]];
+			m_roleString = @"member";
 		}
 
 		[self updateMembershipText:rolestr];
@@ -373,6 +377,12 @@
 	[seamlessPlayback setState: ESScreensaver_GetBoolSetting("settings.player.SeamlessPlayback", false)];
 	
 	[synchronizeVBL setState: ESScreensaver_GetBoolSetting("settings.player.vbl_sync", false)];
+	
+	[blackoutMonitors setState: ESScreensaver_GetBoolSetting("settings.player.blackout_monitors", true)];
+	
+#ifdef SCREEN_SAVER
+	[blackoutMonitors setHidden:true];
+#endif
 
 	[playEvenly setIntValue: ESScreensaver_GetIntSetting("settings.player.PlayEvenly", 100)];
 	
@@ -490,6 +500,8 @@
 	ESScreensaver_SetBoolSetting("settings.player.SeamlessPlayback", [seamlessPlayback state]);
 	
 	ESScreensaver_SetBoolSetting("settings.player.vbl_sync", [synchronizeVBL state]);
+	
+	ESScreensaver_SetBoolSetting("settings.player.blackout_monitors", [blackoutMonitors state]);
 
 	ESScreensaver_SetIntSetting("settings.player.PlayEvenly", [playEvenly intValue]);
 
@@ -582,9 +594,9 @@
 
 	CFStringRef urlnickname = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)newNickname, NULL, NULL, kCFStringEncodingUTF8);	
 	CFStringRef urlpass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)md5_pass, NULL, NULL, kCFStringEncodingUTF8);
-	CFStringRef urlver = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, CFSTR(CLIENT_VERSION), NULL, NULL, kCFStringEncodingUTF8);
+	CFStringRef urlrole = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)m_roleString, NULL, NULL, kCFStringEncodingUTF8);
 	
-	NSString *urlstr = [NSString stringWithFormat:@"http://electricsheep.org/account/?u=%@&p=%@", urlnickname, urlpass, urlver ];
+	NSString *urlstr = [NSString stringWithFormat:@"http://electricsheep.org/account/%@?u=%@&p=%@", urlrole, urlnickname, urlpass ];
 
 	NSURL *helpURL = [NSURL URLWithString: urlstr];
 	

@@ -35,7 +35,6 @@
 #include <time.h>
 #include <math.h>
 
-#include "io.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifndef WIN32
@@ -55,6 +54,7 @@
 #include "ContentDownloader.h"
 #include "SheepDownloader.h"
 #ifdef WIN32
+#include "io.h"
 #include "SheepGenerator.h"
 #endif
 #include "Shepherd.h"

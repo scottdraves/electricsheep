@@ -47,6 +47,8 @@
 		frame.size.width = 1280;
 		frame.size.height = 720; 
 	}
+	
+	mBlackouMonitors = ESScreensaver_GetBoolSetting("settings.player.blackout_monitors", true);
 
 	ESScreensaver_DeinitClientStorage();
 	
@@ -127,7 +129,13 @@
 			[NSCursor hide];
 		}
 		
-		[self blackScreensExcept:targetScreen];
+		mBlackouMonitors = ESScreensaver_GetBoolSetting("settings.player.blackout_monitors", true);
+		
+		if (mBlackouMonitors)
+			[self blackScreensExcept:targetScreen];
+		else
+			mBlackingWindows = nil;
+
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 										 selector:@selector(fullscreenWindowMoved:)
@@ -194,8 +202,11 @@
  */
 - (void) blackScreensExcept:(NSScreen*)fullscreen
 {
-	if (mBlackingWindows != NULL)
+	if (mBlackingWindows != nil)
+	{
 		[mBlackingWindows release];
+		mBlackingWindows = nil;
+	}
 		
 	mBlackingWindows = [[NSMutableArray alloc] initWithCapacity:[[NSScreen screens] count]];
 	
@@ -235,7 +246,7 @@
  */
 - (void) unblackScreens
 {
-	if (!mBlackingWindows)
+	if (mBlackingWindows == nil)
 		return;
 	
 	unsigned int i;

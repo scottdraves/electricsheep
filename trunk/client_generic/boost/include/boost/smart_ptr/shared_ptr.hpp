@@ -41,6 +41,7 @@
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
 #include <typeinfo>             // for std::bad_cast
+#include <cstddef>              // for std::size_t
 
 #if !defined(BOOST_NO_IOSTREAM)
 #if !defined(BOOST_NO_IOSFWD)
@@ -50,17 +51,13 @@
 #endif
 #endif
 
-#ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
-# pragma warning(push)
-# pragma warning(disable:4284) // odd return type for operator->
-#endif
-
 namespace boost
 {
 
 template<class T> class shared_ptr;
 template<class T> class weak_ptr;
 template<class T> class enable_shared_from_this;
+template<class T> class enable_shared_from_this2;
 
 namespace detail
 {
@@ -102,6 +99,14 @@ template<> struct shared_ptr_traits<void const volatile>
 // enable_shared_from_this support
 
 template< class X, class Y, class T > inline void sp_enable_shared_from_this( boost::shared_ptr<X> const * ppx, Y const * py, boost::enable_shared_from_this< T > const * pe )
+{
+    if( pe != 0 )
+    {
+        pe->_internal_accept_owner( ppx, const_cast< Y* >( py ) );
+    }
+}
+
+template< class X, class Y, class T > inline void sp_enable_shared_from_this( boost::shared_ptr<X> * ppx, Y const * py, boost::enable_shared_from_this2< T > const * pe )
 {
     if( pe != 0 )
     {
@@ -198,7 +203,17 @@ public:
         boost::detail::sp_enable_shared_from_this( this, p, p );
     }
 
-//  generated copy constructor, destructor are fine
+//  generated copy constructor, destructor are fine...
+
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+// ... except in C++0x, move disables the implicit copy
+
+    shared_ptr( shared_ptr const & r ): px( r.px ), pn( r.pn ) // never throws
+    {
+    }
+
+#endif
 
     template<class Y>
     explicit shared_ptr(weak_ptr<Y> const & r): pn(r.pn) // may throw
@@ -219,7 +234,7 @@ public:
     template<class Y>
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
-    shared_ptr( shared_ptr<Y> const & r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+    shared_ptr( shared_ptr<Y> const & r, typename boost::detail::sp_enable_if_convertible<Y,T>::type = boost::detail::sp_empty() )
 
 #else
 
@@ -344,7 +359,7 @@ public:
     template<class Y>
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
 
-    shared_ptr( shared_ptr<Y> && r, typename detail::sp_enable_if_convertible<Y,T>::type = detail::sp_empty() )
+    shared_ptr( shared_ptr<Y> && r, typename boost::detail::sp_enable_if_convertible<Y,T>::type = boost::detail::sp_empty() )
 
 #else
 
@@ -439,7 +454,7 @@ public:
         return pn < rhs.pn;
     }
 
-    void * _internal_get_deleter( detail::sp_typeinfo const & ti ) const
+    void * _internal_get_deleter( boost::detail::sp_typeinfo const & ti ) const
     {
         return pn.get_deleter( ti );
     }
@@ -679,13 +694,18 @@ template<class T> inline bool atomic_compare_exchange_explicit( shared_ptr<T> * 
     return atomic_compare_exchange( p, v, w ); // std::move( w )
 }
 
-#endif
+#endif // !defined(BOOST_SP_NO_ATOMIC_ACCESS)
+
+// hash_value
+
+template< class T > struct hash;
+
+template< class T > std::size_t hash_value( boost::shared_ptr<T> const & p )
+{
+    return boost::hash< T* >()( p.get() );
+}
 
 } // namespace boost
-
-#ifdef BOOST_MSVC
-# pragma warning(pop)
-#endif
 
 #endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 

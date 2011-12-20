@@ -10,8 +10,8 @@
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/thread/mutex.hpp>
-#include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
+#include <boost/thread/detail/thread_interruption.hpp>
 
 #include <boost/config/abi_prefix.hpp>
 
@@ -225,7 +225,7 @@ namespace boost
         template<typename TimeDuration>
         bool timed_lock_upgrade(TimeDuration const & relative_time)
         {
-            return timed_lock(get_system_time()+relative_time);
+            return timed_lock_upgrade(get_system_time()+relative_time);
         }
 
         bool try_lock_upgrade()

@@ -38,8 +38,8 @@
 		2123132F0F503C4500702B2C /* Sheep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2123131B0F503C4500702B2C /* Sheep.cpp */; };
 		212313300F503C4500702B2C /* SheepDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2123131D0F503C4500702B2C /* SheepDownloader.cpp */; };
 		212313330F503C4500702B2C /* Shepherd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 212313230F503C4500702B2C /* Shepherd.cpp */; };
-		212316960F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212316950F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a */; };
-		212316970F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212316950F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a */; };
+		212316960F50636700702B2C /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212316950F50636700702B2C /* libboost_filesystem.a */; };
+		212316970F50636700702B2C /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212316950F50636700702B2C /* libboost_filesystem.a */; };
 		212CAF841141CA3F009DA85A /* TrebuchetMS-20.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 212CAF831141CA3F009DA85A /* TrebuchetMS-20.glf */; };
 		212CAF851141CA3F009DA85A /* TrebuchetMS-20.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 212CAF831141CA3F009DA85A /* TrebuchetMS-20.glf */; };
 		2135D2220EC70153005E246D /* ESOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2135D2200EC70153005E246D /* ESOpenGLView.m */; };
@@ -102,8 +102,8 @@
 		2160FCA10F30F48200B2C27A /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AB00E8E690900CE185C /* libavcodec.a */; };
 		2160FCA20F30F48200B2C27A /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AB40E8E693200CE185C /* libavdevice.a */; };
 		2160FCA30F30F48200B2C27A /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AB50E8E693200CE185C /* libavutil.a */; };
-		2160FCA50F30F48200B2C27A /* libboost_system-xgcc40-mt-1_39.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABB0E8E69F700CE185C /* libboost_system-xgcc40-mt-1_39.a */; };
-		2160FCA60F30F48200B2C27A /* libboost_thread-xgcc40-mt-1_39.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABD0E8E69F700CE185C /* libboost_thread-xgcc40-mt-1_39.a */; };
+		2160FCA50F30F48200B2C27A /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABB0E8E69F700CE185C /* libboost_system.a */; };
+		2160FCA60F30F48200B2C27A /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABD0E8E69F700CE185C /* libboost_thread.a */; };
 		2160FCA90F30F48200B2C27A /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD10E8E6C0500CE185C /* libavformat.a */; };
 		2160FCAA0F30F48200B2C27A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2181FAEF0ECF42820078FDDA /* libswscale.a */; };
 		2160FCAB0F30F48200B2C27A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.dylib */; };
@@ -191,8 +191,8 @@
 		21887A170EC6CDF9001ABD2E /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AB00E8E690900CE185C /* libavcodec.a */; };
 		21887A180EC6CDF9001ABD2E /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AB40E8E693200CE185C /* libavdevice.a */; };
 		21887A190EC6CDF9001ABD2E /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AB50E8E693200CE185C /* libavutil.a */; };
-		21887A1B0EC6CDF9001ABD2E /* libboost_system-xgcc40-mt-1_39.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABB0E8E69F700CE185C /* libboost_system-xgcc40-mt-1_39.a */; };
-		21887A1D0EC6CDF9001ABD2E /* libboost_thread-xgcc40-mt-1_39.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABD0E8E69F700CE185C /* libboost_thread-xgcc40-mt-1_39.a */; };
+		21887A1B0EC6CDF9001ABD2E /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABB0E8E69F700CE185C /* libboost_system.a */; };
+		21887A1D0EC6CDF9001ABD2E /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABD0E8E69F700CE185C /* libboost_thread.a */; };
 		21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD10E8E6C0500CE185C /* libavformat.a */; };
 		21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.dylib */; };
 		21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AF30E8E715E00CE185C /* liblua5.1.a */; };
@@ -436,7 +436,7 @@
 		2123131E0F503C4500702B2C /* SheepDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SheepDownloader.h; sourceTree = "<group>"; };
 		212313230F503C4500702B2C /* Shepherd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shepherd.cpp; sourceTree = "<group>"; };
 		212313240F503C4500702B2C /* Shepherd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shepherd.h; sourceTree = "<group>"; };
-		212316950F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_filesystem-xgcc40-mt-1_39.a"; path = "../boost/osx/lib/libboost_filesystem-xgcc40-mt-1_39.a"; sourceTree = SOURCE_ROOT; };
+		212316950F50636700702B2C /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = ../boost/osx/lib/libboost_filesystem.a; sourceTree = SOURCE_ROOT; };
 		212B192A0E8E591000CE185C /* Common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Common.cpp; path = ../Common/Common.cpp; sourceTree = SOURCE_ROOT; };
 		212B192B0E8E591000CE185C /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Exception.cpp; path = ../Common/Exception.cpp; sourceTree = SOURCE_ROOT; };
 		212B192C0E8E591000CE185C /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = ../Common/Log.cpp; sourceTree = SOURCE_ROOT; };
@@ -473,8 +473,8 @@
 		212B1AB00E8E690900CE185C /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../ffmpeg/osx/lib/libavcodec.a; sourceTree = SOURCE_ROOT; };
 		212B1AB40E8E693200CE185C /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = ../ffmpeg/osx/lib/libavdevice.a; sourceTree = SOURCE_ROOT; };
 		212B1AB50E8E693200CE185C /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../ffmpeg/osx/lib/libavutil.a; sourceTree = SOURCE_ROOT; };
-		212B1ABB0E8E69F700CE185C /* libboost_system-xgcc40-mt-1_39.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_system-xgcc40-mt-1_39.a"; path = "../boost/osx/lib/libboost_system-xgcc40-mt-1_39.a"; sourceTree = SOURCE_ROOT; };
-		212B1ABD0E8E69F700CE185C /* libboost_thread-xgcc40-mt-1_39.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_thread-xgcc40-mt-1_39.a"; path = "../boost/osx/lib/libboost_thread-xgcc40-mt-1_39.a"; sourceTree = SOURCE_ROOT; };
+		212B1ABB0E8E69F700CE185C /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../boost/osx/lib/libboost_system.a; sourceTree = SOURCE_ROOT; };
+		212B1ABD0E8E69F700CE185C /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = ../boost/osx/lib/libboost_thread.a; sourceTree = SOURCE_ROOT; };
 		212B1AD10E8E6C0500CE185C /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeg/osx/lib/libavformat.a; sourceTree = SOURCE_ROOT; };
 		212B1AD90E8E6E0100CE185C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		212B1ADD0E8E6E5000CE185C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = /usr/lib/libbz2.dylib; sourceTree = "<absolute>"; };
@@ -559,8 +559,8 @@
 				2160FCA10F30F48200B2C27A /* libavcodec.a in Frameworks */,
 				2160FCA20F30F48200B2C27A /* libavdevice.a in Frameworks */,
 				2160FCA30F30F48200B2C27A /* libavutil.a in Frameworks */,
-				2160FCA50F30F48200B2C27A /* libboost_system-xgcc40-mt-1_39.a in Frameworks */,
-				2160FCA60F30F48200B2C27A /* libboost_thread-xgcc40-mt-1_39.a in Frameworks */,
+				2160FCA50F30F48200B2C27A /* libboost_system.a in Frameworks */,
+				2160FCA60F30F48200B2C27A /* libboost_thread.a in Frameworks */,
 				2160FCA90F30F48200B2C27A /* libavformat.a in Frameworks */,
 				2160FCAA0F30F48200B2C27A /* libswscale.a in Frameworks */,
 				2160FCAB0F30F48200B2C27A /* libz.dylib in Frameworks */,
@@ -568,7 +568,7 @@
 				2160FCAD0F30F48200B2C27A /* liblua5.1.a in Frameworks */,
 				21DC0CA91263B98200D60C6A /* libcurl.dylib in Frameworks */,
 				2160FCAF0F30F48200B2C27A /* AppKit.framework in Frameworks */,
-				212316970F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a in Frameworks */,
+				212316970F50636700702B2C /* libboost_filesystem.a in Frameworks */,
 				21CE8E3E0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
 				215542301261FDC900AB51BF /* Sparkle.framework in Frameworks */,
 			);
@@ -587,8 +587,8 @@
 				21887A170EC6CDF9001ABD2E /* libavcodec.a in Frameworks */,
 				21887A180EC6CDF9001ABD2E /* libavdevice.a in Frameworks */,
 				21887A190EC6CDF9001ABD2E /* libavutil.a in Frameworks */,
-				21887A1B0EC6CDF9001ABD2E /* libboost_system-xgcc40-mt-1_39.a in Frameworks */,
-				21887A1D0EC6CDF9001ABD2E /* libboost_thread-xgcc40-mt-1_39.a in Frameworks */,
+				21887A1B0EC6CDF9001ABD2E /* libboost_system.a in Frameworks */,
+				21887A1D0EC6CDF9001ABD2E /* libboost_thread.a in Frameworks */,
 				21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */,
 				2161F1940ECF8CEF00FE48E9 /* libz.dylib in Frameworks */,
 				21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */,
@@ -596,7 +596,7 @@
 				21DC0CAC1263B99000D60C6A /* libcurl.dylib in Frameworks */,
 				2135D2690EC70571005E246D /* AppKit.framework in Frameworks */,
 				2181FAF00ECF42820078FDDA /* libswscale.a in Frameworks */,
-				212316960F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a in Frameworks */,
+				212316960F50636700702B2C /* libboost_filesystem.a in Frameworks */,
 				21CE8E3D0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
 				215542311261FDC900AB51BF /* Sparkle.framework in Frameworks */,
 			);
@@ -657,9 +657,9 @@
 				212B1ADD0E8E6E5000CE185C /* libbz2.dylib */,
 				212B1AD90E8E6E0100CE185C /* libz.dylib */,
 				212B1AD10E8E6C0500CE185C /* libavformat.a */,
-				212316950F50636700702B2C /* libboost_filesystem-xgcc40-mt-1_39.a */,
-				212B1ABB0E8E69F700CE185C /* libboost_system-xgcc40-mt-1_39.a */,
-				212B1ABD0E8E69F700CE185C /* libboost_thread-xgcc40-mt-1_39.a */,
+				212316950F50636700702B2C /* libboost_filesystem.a */,
+				212B1ABB0E8E69F700CE185C /* libboost_system.a */,
+				212B1ABD0E8E69F700CE185C /* libboost_thread.a */,
 				212B1AB40E8E693200CE185C /* libavdevice.a */,
 				212B1AB50E8E693200CE185C /* libavutil.a */,
 				212B1AB00E8E690900CE185C /* libavcodec.a */,
@@ -1334,6 +1334,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					MAC,
 					DEBUG,
+					"BOOST_FILESYSTEM_VERSION=2",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1365,6 +1366,10 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MAC,
+					"BOOST_FILESYSTEM_VERSION=2",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "ElectricSheep-Info.plist";
@@ -1412,6 +1417,7 @@
 					MAC,
 					SCREEN_SAVER,
 					DEBUG,
+					"BOOST_FILESYSTEM_VERSION=2",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1456,6 +1462,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					MAC,
 					SCREEN_SAVER,
+					"BOOST_FILESYSTEM_VERSION=2",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

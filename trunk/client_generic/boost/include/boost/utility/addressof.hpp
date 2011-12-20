@@ -27,6 +27,9 @@ template<class T> struct addr_impl_ref
 
     inline addr_impl_ref( T & v ): v_( v ) {}
     inline operator T& () const { return v_; }
+
+private:
+    addr_impl_ref & operator=(const addr_impl_ref &);
 };
 
 template<class T> struct addressof_impl

@@ -6,11 +6,11 @@
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
  * Author: Jeff Garland, Bart Garst
- * $Date: 2008-02-27 15:00:24 -0500 (Wed, 27 Feb 2008) $
+ * $Date: 2011-11-13 01:10:55 -0500 (Sun, 13 Nov 2011) $
  */
 
 /*! @file filetime_functions.hpp
- * Function(s) for converting between a FILETIME structure and a 
+ * Function(s) for converting between a FILETIME structure and a
  * time object. This file is only available on systems that have
  * BOOST_HAS_FTIME defined.
  */
@@ -51,13 +51,13 @@ namespace winapi {
             boost::uint16_t wHour;
             boost::uint16_t wMinute;
             boost::uint16_t wSecond;
-            boost::uint16_t wMilliseconds; 
+            boost::uint16_t wMilliseconds;
         };
 
-        __declspec(dllimport) void __stdcall GetSystemTimeAsFileTime(FILETIME* lpFileTime); 
-        __declspec(dllimport) int __stdcall FileTimeToLocalFileTime(const FILETIME* lpFileTime, FILETIME* lpLocalFileTime); 
-        __declspec(dllimport) void __stdcall GetSystemTime(SYSTEMTIME* lpSystemTime); 
-        __declspec(dllimport) int __stdcall SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime, FILETIME* lpFileTime); 
+        __declspec(dllimport) void __stdcall GetSystemTimeAsFileTime(FILETIME* lpFileTime);
+        __declspec(dllimport) int __stdcall FileTimeToLocalFileTime(const FILETIME* lpFileTime, FILETIME* lpLocalFileTime);
+        __declspec(dllimport) void __stdcall GetSystemTime(SYSTEMTIME* lpSystemTime);
+        __declspec(dllimport) int __stdcall SystemTimeToFileTime(const SYSTEMTIME* lpSystemTime, FILETIME* lpFileTime);
 
     } // extern "C"
 
@@ -73,12 +73,12 @@ namespace winapi {
         file_time ft_utc;
         GetSystemTimeAsFileTime(&ft_utc);
         FileTimeToLocalFileTime(&ft_utc, &ft);
-#elif defined(BOOST_NO_GETSYSTEMTIMEASFILETIME)
+#elif defined(BOOST_HAS_GETSYSTEMTIMEASFILETIME)
+        GetSystemTimeAsFileTime(&ft);
+#else
         system_time st;
         GetSystemTime(&st);
         SystemTimeToFileTime(&st, &ft);
-#else
-        GetSystemTimeAsFileTime(&ft);
 #endif
     }
 
@@ -96,9 +96,7 @@ namespace winapi {
     {
         /* shift is difference between 1970-Jan-01 & 1601-Jan-01
         * in 100-nanosecond intervals */
-        const uint64_t c1 = 27111902UL;
-        const uint64_t c2 = 3577643008UL; // issues warning without 'UL'
-        const uint64_t shift = (c1 << 32) + c2;
+        const uint64_t shift = 116444736000000000ULL; // (27111902 << 32) + 3577643008
 
         union {
             FileTimeT as_file_time;
@@ -115,8 +113,8 @@ namespace winapi {
 //! Create a time object from an initialized FILETIME struct.
 /*!
  * Create a time object from an initialized FILETIME struct.
- * A FILETIME struct holds 100-nanosecond units (0.0000001). When 
- * built with microsecond resolution the file_time's sub second value 
+ * A FILETIME struct holds 100-nanosecond units (0.0000001). When
+ * built with microsecond resolution the file_time's sub second value
  * will be truncated. Nanosecond resolution has no truncation.
  *
  * \note The function is templated on the FILETIME type, so that

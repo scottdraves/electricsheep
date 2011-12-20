@@ -144,6 +144,11 @@ namespace boost
                 start(0),milliseconds(~uintmax_t(0)),relative(true)
             {}
         };
+
+        inline uintmax_t pin_to_zero(intmax_t value)
+        {
+            return (value<0)?0u:(uintmax_t)value;
+        }
     }
 
     namespace this_thread
@@ -151,7 +156,7 @@ namespace boost
         void BOOST_THREAD_DECL yield();
 
         bool BOOST_THREAD_DECL interruptible_wait(detail::win32::handle handle_to_wait_for,detail::timeout target_time);
-        inline void interruptible_wait(unsigned long milliseconds)
+        inline void interruptible_wait(uintmax_t milliseconds)
         {
             interruptible_wait(detail::win32::invalid_handle_value,milliseconds);
         }
@@ -163,7 +168,7 @@ namespace boost
         template<typename TimeDuration>
         inline void sleep(TimeDuration const& rel_time)
         {
-            interruptible_wait(static_cast<unsigned long>(rel_time.total_milliseconds()));
+            interruptible_wait(detail::pin_to_zero(rel_time.total_milliseconds()));
         }
         inline void sleep(system_time const& abs_time)
         {

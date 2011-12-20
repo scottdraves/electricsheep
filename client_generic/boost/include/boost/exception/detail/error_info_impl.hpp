@@ -1,10 +1,16 @@
-//Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc.
+//Copyright (c) 2006-2010 Emil Dotchevski and Reverge Studios, Inc.
 
 //Distributed under the Boost Software License, Version 1.0. (See accompanying
 //file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef UUID_CE6983AC753411DDA764247956D89593
 #define UUID_CE6983AC753411DDA764247956D89593
+#if defined(__GNUC__) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma GCC system_header
+#endif
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(push,1)
+#endif
 
 #include <string>
 
@@ -19,12 +25,11 @@ boost
             {
             public:
 
-            virtual char const * tag_typeid_name() const = 0;
+            virtual std::string tag_typeid_name() const = 0;
             virtual std::string value_as_string() const = 0;
 
             protected:
 
-            virtual
             ~error_info_base() throw()
                 {
                 }
@@ -49,13 +54,22 @@ boost
             return value_;
             }
 
+        value_type &
+        value()
+            {
+            return value_;
+            }
+
         private:
 
-        char const * tag_typeid_name() const;
+        std::string tag_typeid_name() const;
         std::string value_as_string() const;
 
-        value_type const value_;
+        value_type value_;
         };
     }
 
+#if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
+#pragma warning(pop)
+#endif
 #endif

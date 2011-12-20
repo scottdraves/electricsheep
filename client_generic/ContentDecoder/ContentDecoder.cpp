@@ -29,6 +29,10 @@
 #include	"Settings.h"
 #include	<boost/filesystem.hpp>
 
+#ifdef MAC
+	#define USE_NEW_FFMPEG_API
+#endif
+
 using namespace boost;
 
 namespace ContentDecoder
@@ -149,13 +153,21 @@ bool	CContentDecoder::Open( const std::string &_filename )
 
 	Destroy();
 
+#ifdef USE_NEW_FFMPEG_API
+	if( DumpError( avformat_open_input( &m_pFormatContext, _filename.c_str(), NULL, NULL ) ) < 0 )
+#else
 	if( DumpError( av_open_input_file( &m_pFormatContext, _filename.c_str(), NULL, 0, NULL ) ) < 0 )
+#endif
 	{
 		g_Log->Warning( "Failed to open %s...", _filename.c_str() );
 		return false;
 	}
 
+#ifdef USE_NEW_FFMPEG_API
+	if( DumpError( avformat_find_stream_info( m_pFormatContext, NULL ) ) < 0 )
+#else
 	if( DumpError( av_find_stream_info( m_pFormatContext ) ) < 0 )
+#endif
 	{
 		g_Log->Error( "av_find_stream_info failed with %s...", _filename.c_str() );
 		return false;
@@ -167,11 +179,7 @@ bool	CContentDecoder::Open( const std::string &_filename )
 	m_VideoStreamID = -1;
     for( uint32 i=0; i<m_pFormatContext->nb_streams; i++ )
     {
-#ifdef MAC
-		if( m_pFormatContext->streams[i]->codec->codec_type == CODEC_TYPE_VIDEO )
-#else
         if( m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
-#endif
         {
             m_pVideoStream = m_pFormatContext->streams[i];
             m_VideoStreamID = i;
@@ -208,7 +216,11 @@ bool	CContentDecoder::Open( const std::string &_filename )
     m_pFormatContext->flags |= AVFMT_FLAG_IGNIDX;		//	Ignore index.
     //m_pFormatContext->flags |= AVFMT_FLAG_NONBLOCK;		//	Do not block when reading packets from input.
 
+#ifdef USE_NEW_FFMPEG_API
+    if( DumpError( avcodec_open2( m_pVideoCodecContext, m_pVideoCodec, NULL ) ) < 0 )
+#else
     if( DumpError( avcodec_open( m_pVideoCodecContext, m_pVideoCodec ) ) < 0 )
+#endif
     {
         g_Log->Error( "avcodec_open failed for %s", _filename.c_str() );
         return false;

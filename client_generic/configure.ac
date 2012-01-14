@@ -114,7 +114,7 @@ AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher
 fi
 fi
 
-WX_CXXFLAGS="`wx-config --cxxflags` -DBOOST_FILESYSTEM_VERSION=2"
+WX_CXXFLAGS="`wx-config --cxxflags` -DBOOST_FILESYSTEM_VERSION=2 -lboost_system"
 WX_LIBS="-static `wx-config --libs`"
 
 echo "WX_CXXFLAGS is $WX_CXXFLAGS"
@@ -291,6 +291,11 @@ AC_CHECK_HEADER([boost/thread.hpp],,
 dnl Check for boost/filesystem.hpp
 AC_CHECK_HEADER([boost/filesystem.hpp],,
 	[AC_MSG_ERROR([you must install libboost-filesystem to compile electricsheep.])
+])
+
+dnl Check for boost/system/config.hpp
+AC_CHECK_HEADER([boost/system/config.hpp],,
+	[AC_MSG_ERROR([you must install libboost-system to compile electricsheep.])
 ])
 
 AC_LANG_POP([C++])

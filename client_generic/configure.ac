@@ -114,8 +114,8 @@ AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher
 fi
 fi
 
-WX_CXXFLAGS="`wx-config --cxxflags` -DBOOST_FILESYSTEM_VERSION=2 -lboost_system"
-WX_LIBS="-static `wx-config --libs`"
+WX_CXXFLAGS="`wx-config --cxxflags`"
+WX_LIBS="-static `wx-config --libs` `wx-config --libs richtext`"
 
 echo "WX_CXXFLAGS is $WX_CXXFLAGS"
 echo "WX_LIBS is $WX_LIBS"
@@ -190,7 +190,7 @@ if test "$HAVE_GLEE" = "false"; then
       	 AC_MSG_ERROR([neither GLee.h nor GL/GLee.h were found. Please make sure you have GLee.h installed in your include path.])
       fi
       dnl found GLee.h in GL subdir
-      GLEE_CFLAGS="-I GL"
+      GLEE_CFLAGS="-I $includedir/GL -I/usr/include/GL"
    fi
 
    GLEE_LIBS="-lGLee"
@@ -199,6 +199,13 @@ fi
 AC_SUBST(GLEE_CFLAGS)
 AC_SUBST(GLEE_LIBS)
 
+
+dnl Check for curl
+
+PKG_CHECK_MODULES(CURL,libcurl)
+
+AC_SUBST(CURL_CFLAGS)
+AC_SUBST(CURL_LIBS)
 
 
 dnl Check for curl
@@ -301,6 +308,12 @@ AC_CHECK_HEADER([boost/system/config.hpp],,
 AC_LANG_POP([C++])
 
 
+BOOST_CXXFLAGS="-DBOOST_FILESYSTEM_VERSION=2"
+BOOST_LDADD="-lboost_system"
+
+AC_SUBST(BOOST_CXXFLAGS)
+AC_SUBST(BOOST_LDADD)
+
 
 dnl Check for libtinyxml
 AC_CHECK_LIB([tinyxml],[main],,
@@ -311,6 +324,17 @@ dnl Check for libglut
 AC_CHECK_LIB([glut],[glutMainLoop],,
 	[AC_MSG_ERROR([you must install libglut dev to compile electricsheep.])
 ])
+
+
+AC_CHECK_LIB([GL],[glXCreateNewContext],,
+	[AC_MSG_ERROR([you must install libGL to compile electricsheep.])
+])
+
+AC_CHECK_LIB([rt],[clock_gettime],,
+	[AC_MSG_ERROR([you must install librt to compile electricsheep.])
+])
+
+
 
 AC_OUTPUT([ 
 Makefile

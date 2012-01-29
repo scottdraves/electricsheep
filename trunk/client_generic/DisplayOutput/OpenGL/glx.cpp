@@ -31,6 +31,10 @@ typedef struct {
 static Atom XA_NET_WM_STATE;
 static Atom XA_NET_WM_STATE_ABOVE;
 static Atom XA_WIN_LAYER;
+static Atom XA_NET_WM_STATE_ADD;
+static Atom XA_NET_WM_STATE_MAXIMIZED_VERT;
+static Atom XA_NET_WM_STATE_MAXIMIZED_HORZ;
+static Atom XA_NET_WM_STATE_FULLSCREEN;
 
 static bool bScreensaverMode = false;
 
@@ -42,9 +46,15 @@ CUnixGL::CUnixGL() : CDisplayOutput()
 
 CUnixGL::~CUnixGL()
 {
+#ifdef LINUX_GNU
+  if (!bScreensaverMode) {
+#endif
     XUnmapWindow (m_pDisplay, m_Window);
     XDestroyWindow (m_pDisplay, m_Window);
-    XCloseDisplay (m_pDisplay);
+#ifdef LINUX_GNU
+  }
+#endif
+  XCloseDisplay (m_pDisplay);
 
 #ifdef LINUX_GNU
     if ( !bScreensaverMode )
@@ -54,6 +64,15 @@ CUnixGL::~CUnixGL()
 #endif
 
 }
+
+#ifdef LINUX_GNU
+
+static Bool WaitForNotify( Display *dpy, XEvent *event, XPointer arg ) {
+  return (event->type == MapNotify) && (event->xmap.window == (Window) arg);
+}
+
+#endif
+
 
 bool	CUnixGL::Initialize( const uint32 _width, const uint32 _height, const bool _bFullscreen )
 {
@@ -84,6 +103,7 @@ bool	CUnixGL::Initialize( const uint32 _width, const uint32 _height, const bool 
     XVisualInfo     *pVisualInfo = NULL;
     XSetWindowAttributes    winAttributes;
     int numElements;
+    XEvent event;
 
     int singleBufferAttributess[] = {
 		GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
@@ -133,14 +153,33 @@ bool	CUnixGL::Initialize( const uint32 _width, const uint32 _height, const bool 
 #ifdef LINUX_GNU
      const char *xss_id = getenv("XSCREENSAVER_WINDOW");
      if (xss_id && *xss_id) {
-      unsigned long id = 0;
-      sscanf (xss_id, " 0x%lx", &id);
-      m_Window = (Window) id;
+       int numReturned;
+       XVisualInfo *xvis;
+       XVisualInfo xvtmpl;
+       XWindowAttributes attr;
 
-      m_GlxContext = glXCreateContext ( m_pDisplay, pVisualInfo, 0, GL_TRUE);
-      m_GlxWindow = m_Window;
-      glXMakeCurrent ( m_pDisplay, m_Window, m_GlxContext);
-      bScreensaverMode = true;
+       unsigned long id = 0;
+       sscanf (xss_id, " 0x%lx", &id);
+       m_Window = (Window) id;
+       m_GlxWindow = m_Window;
+       XGetWindowAttributes(m_pDisplay, m_Window, &attr);
+       
+       xvtmpl.visual=attr.visual;
+       xvtmpl.visualid=XVisualIDFromVisual(attr.visual);
+       
+       xvis=XGetVisualInfo(m_pDisplay, VisualIDMask, &xvtmpl, &numReturned);
+       
+       assert (numReturned>0);
+       
+       m_GlxContext = glXCreateContext ( m_pDisplay, &xvis[0], 0, GL_TRUE);
+       
+       glXMakeCurrent ( m_pDisplay, m_Window, m_GlxContext);
+
+
+       m_Width=attr.width;
+       m_Height=attr.height;
+
+       bScreensaverMode = true;
      }
      else {
        m_Window = XCreateWindow( m_pDisplay, RootWindow( m_pDisplay, pVisualInfo->screen ), 0, 0, 
@@ -148,9 +187,13 @@ bool	CUnixGL::Initialize( const uint32 _width, const uint32 _height, const bool 
 				 pVisualInfo->depth, InputOutput,
 				 pVisualInfo->visual, CWBorderPixel | CWColormap | CWEventMask, &winAttributes);
 
+       XMapRaised( m_pDisplay, m_Window );
+       XIfEvent( m_pDisplay, &event, WaitForNotify, (XPointer) m_Window );
+
+       setFullScreen( _bFullscreen );
+
        m_GlxContext = glXCreateNewContext(m_pDisplay, renderFBConfig, GLX_RGBA_TYPE, 0, GL_TRUE);
        m_GlxWindow = glXCreateWindow(m_pDisplay, renderFBConfig, m_Window, 0);
-       XMapWindow (m_pDisplay, m_Window);
        glXMakeContextCurrent(m_pDisplay, m_GlxWindow, m_GlxWindow, m_GlxContext);
 
        /* disable screensaver and screen blanking in non-screensaver mode */
@@ -176,6 +219,10 @@ bool	CUnixGL::Initialize( const uint32 _width, const uint32 _height, const bool 
 			      pVisualInfo->depth, InputOutput,
 			      pVisualInfo->visual, CWBorderPixel | CWColormap | CWEventMask, &winAttributes);
 
+    if (!bScreensaverMode) setFullScreen( _bFullscreen );
+    XMapRaised( m_pDisplay, m_Window );
+    if (!bScreensaverMode && _bFullscreen) XIfEvent( m_pDisplay, &event, WaitForNotify, (XPointer) m_Window );
+
     m_GlxContext = glXCreateNewContext(m_pDisplay, renderFBConfig, GLX_RGBA_TYPE, 0, GL_TRUE);
     m_GlxWindow = glXCreateWindow(m_pDisplay, renderFBConfig, m_Window, 0);
     XMapWindow (m_pDisplay, m_Window);
@@ -185,7 +232,6 @@ bool	CUnixGL::Initialize( const uint32 _width, const uint32 _height, const bool 
     Atom wmDelete = XInternAtom(m_pDisplay, "WM_DELETE_WINDOW", True);
     XSetWMProtocols(m_pDisplay, m_Window, &wmDelete, 1);
 
-    if (!bScreensaverMode) setFullScreen( _bFullscreen );
     toggleVSync();
 
     XFree (pVisualInfo);
@@ -234,32 +280,118 @@ void CUnixGL::setWindowDecorations( bool enabled )
     unsigned long ulBytesAfter;
     Atom typeAtom;
     MotifWmHints newHints;
+    bool set=false;
 
     Atom hintsAtom = XInternAtom (m_pDisplay, "_MOTIF_WM_HINTS", True);
+    if (hintsAtom != None) {
 
-    XGetWindowProperty (m_pDisplay, m_Window, hintsAtom, 0,
-                        sizeof (MotifWmHints) / sizeof (long),
-                        False, AnyPropertyType, &typeAtom,
-                        &iFormat, &ulItems, &ulBytesAfter, &pucData);
+      XGetWindowProperty (m_pDisplay, m_Window, hintsAtom, 0,
+			  sizeof (MotifWmHints) / sizeof (long),
+			  False, AnyPropertyType, &typeAtom,
+			  &iFormat, &ulItems, &ulBytesAfter, &pucData);
 
-    newHints.flags = MWM_HINTS_DECORATIONS;
-    newHints.decorations = enabled ? 1:0;
+      newHints.flags = MWM_HINTS_DECORATIONS;
+      newHints.decorations = enabled ? 1:0;
 
-    XChangeProperty (m_pDisplay, m_Window, hintsAtom, hintsAtom,
-                    32, PropModeReplace, (unsigned char *) &newHints,
-                    sizeof (MotifWmHints) / sizeof (long));
+      XChangeProperty (m_pDisplay, m_Window, hintsAtom, hintsAtom,
+		       32, PropModeReplace, (unsigned char *) &newHints,
+		       sizeof (MotifWmHints) / sizeof (long));
+      set = true;
+
+    }
+
+
+      /* Now try to set KWM hints */
+    hintsAtom = XInternAtom(m_pDisplay, "KWM_WIN_DECORATION", True);
+    if (hintsAtom != None) {
+      long KWMHints = 0;
+
+      XChangeProperty(m_pDisplay, m_Window, hintsAtom, hintsAtom, 32,
+		      PropModeReplace,
+		      (unsigned char *) &KWMHints,
+		      sizeof(KWMHints) / 4);
+      set = true;
+    }
+    /* Now try to set GNOME hints */
+    hintsAtom = XInternAtom(m_pDisplay, "_WIN_HINTS", True);
+    if (hintsAtom != None) {
+      long GNOMEHints = 0;
+
+      XChangeProperty(m_pDisplay, m_Window, hintsAtom, hintsAtom, 32,
+		      PropModeReplace,
+		      (unsigned char *) &GNOMEHints,
+		      sizeof(GNOMEHints) / 4);
+      set = true;
+    }
+    /* Finally set the transient hints if necessary */
+    if (!set) {
+      XSetTransientForHint(m_pDisplay, m_Window, RootWindow(m_pDisplay, DefaultScreen(m_pDisplay)));
+    }
+
 }
+
+
+static bool
+isWindowMapped(Display *dpy, Window *xWin)
+{
+  XWindowAttributes attr;
+
+  XGetWindowAttributes(dpy, *xWin, &attr);
+  if (attr.map_state != IsUnmapped) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+
+
 
 void CUnixGL::setFullScreen(bool enabled)
 {
-    m_FullScreen = enabled;
-    setWindowDecorations(!m_FullScreen);
-
     XWindowChanges changes;
     unsigned int valueMask = CWX | CWY | CWWidth | CWHeight;
 
+    m_FullScreen = enabled;
+    setWindowDecorations(!m_FullScreen);
+
     if (m_FullScreen)
     {
+
+        XA_NET_WM_STATE = XInternAtom(m_pDisplay, "_NET_WM_STATE", False);
+	XA_NET_WM_STATE_ADD = XInternAtom(m_pDisplay, "_NET_WM_STATE_ADD", False);
+
+	XA_NET_WM_STATE_MAXIMIZED_VERT = XInternAtom(m_pDisplay, "_NET_WM_STATE_MAXIMIZED_VERT",False);
+	XA_NET_WM_STATE_MAXIMIZED_HORZ = XInternAtom(m_pDisplay,"_NET_WM_STATE_MAXIMIZED_HORZ",False);
+	XA_NET_WM_STATE_FULLSCREEN = XInternAtom(m_pDisplay,"_NET_WM_STATE_FULLSCREEN",False);
+	
+	
+	if (isWindowMapped(m_pDisplay, &m_Window)) {
+	  XEvent e;
+	  
+	  memset(&e,0,sizeof(e));
+	  e.xany.type = ClientMessage; 
+	  e.xclient.message_type = XA_NET_WM_STATE;
+	  e.xclient.format = 32;
+	  e.xclient.window = m_Window;
+	  e.xclient.data.l[0] = XA_NET_WM_STATE_ADD;
+	  e.xclient.data.l[1] = XA_NET_WM_STATE_FULLSCREEN;
+	  e.xclient.data.l[3] = 0l;
+	  
+	  XSendEvent(m_pDisplay, RootWindow(m_pDisplay, 0), 0,
+		     SubstructureNotifyMask | SubstructureRedirectMask, &e);
+	} else {
+	  int count = 0;
+	  Atom atoms[3];
+	  
+	  atoms[count++] = XA_NET_WM_STATE_FULLSCREEN;
+	  atoms[count++] = XA_NET_WM_STATE_MAXIMIZED_VERT;
+	  atoms[count++] = XA_NET_WM_STATE_MAXIMIZED_HORZ;
+	  XChangeProperty(m_pDisplay, m_Window, XA_NET_WM_STATE, XA_ATOM, 32,
+			  PropModeReplace, (unsigned char *)atoms, count);
+	}
+
         changes.x = 0;
         changes.y = 0;
         changes.width = m_WidthFS;
@@ -322,6 +454,7 @@ void CUnixGL::alwaysOnTop()
 
     long propvalue = 12;
     XChangeProperty( m_pDisplay, m_Window, XA_WIN_LAYER, XA_CARDINAL, 32, PropModeReplace, (unsigned char *)&propvalue, 1 );
+    XRaiseWindow( m_pDisplay, m_Window);
 }
 
 /*

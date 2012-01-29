@@ -139,6 +139,8 @@ bool	CTextureFlatGL::Upload( spCImage _spImage )
 	if( m_spImage == NULL )
 		m_spImage = _spImage;
 
+	if (m_spImage==NULL) return false;
+
 	CImageFormat	format = _spImage->GetFormat();
 
 	static const GLenum srcFormats[] =

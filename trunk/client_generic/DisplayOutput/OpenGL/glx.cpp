@@ -187,9 +187,12 @@ bool	CUnixGL::Initialize( const uint32 _width, const uint32 _height, const bool 
 				 pVisualInfo->depth, InputOutput,
 				 pVisualInfo->visual, CWBorderPixel | CWColormap | CWEventMask, &winAttributes);
 
+       setFullScreen( _bFullscreen );
+
        XMapRaised( m_pDisplay, m_Window );
        XIfEvent( m_pDisplay, &event, WaitForNotify, (XPointer) m_Window );
 
+       // need to call this twice !!
        setFullScreen( _bFullscreen );
 
        m_GlxContext = glXCreateNewContext(m_pDisplay, renderFBConfig, GLX_RGBA_TYPE, 0, GL_TRUE);

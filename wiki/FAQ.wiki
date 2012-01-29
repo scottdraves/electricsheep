@@ -4,7 +4,7 @@
  * [FAQ#Getting_Sheep Why don't I see any sheep, or just one or two sheep?]
  * [FAQ#Problems_with_Old_Laptops_and_PCs Does it crash on your old PC?]
  * [FAQ#Credit_Vanishes_or_Missing I don't see my name on the credit page, am I rendering?]
- * [FAQ#Rendering Why don't I render?]
+ * [FAQ#Not_Rendering Why don't I render?]
  * [FAQ#Security_and_Viruses Do the Sheep put my computer at risk to viruses?]
  * [FAQ#BitTorrent Why not use BitTorrent?]
 <p><br>
@@ -39,8 +39,7 @@ If on Windows, Electric Sheep crashes instantly when run, try turning on "Direct
 The [http://v2d7c.sheepserver.net/cgi/status.cgi?&detail=credit credits page] only tallies the contributions to the current flock. Your credit dies with the sheep. If it's downloading your client is probably rendering fine.
 
 There's also a bug in how the server tallies renders where only 1 in 4 frames is counted. That's a lot, but it is fair, so it should not affect the ranking.
-<p><br>
-----
+
 <p><br>
 ==Rendering==
 

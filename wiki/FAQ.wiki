@@ -41,7 +41,7 @@ The [http://v2d7c.sheepserver.net/cgi/status.cgi?&detail=credit credits page] on
 There's also a bug in how the server tallies renders where only 1 in 4 frames is counted. That's a lot, but it is fair, so it should not affect the ranking.
 
 <p><br>
-==Rendering==
+==Not Rendering==
 
 Most of the time, most users do not render.  This is fine, don't worry about it.  We have so many users that there is not enough work for everyone at all times, so most computers are idle.  This is good, as it means it uses less power and is greener!    In order to make it onto the leader-board you need persistence and luck.
 <p>

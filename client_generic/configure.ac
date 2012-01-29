@@ -294,14 +294,26 @@ AC_CHECK_HEADER([boost/thread.hpp],,
 	[AC_MSG_ERROR([you must install libboost-thread to compile electricsheep.])
 ])
 
+AC_CHECK_LIB([boost_thread],[main],,
+	[AC_MSG_ERROR([you must install libboost-thread to compile electricsheep.])
+])
+
 
 dnl Check for boost/filesystem.hpp
 AC_CHECK_HEADER([boost/filesystem.hpp],,
 	[AC_MSG_ERROR([you must install libboost-filesystem to compile electricsheep.])
 ])
 
+AC_CHECK_LIB([boost_filesystem],[main],,
+	[AC_MSG_ERROR([you must install libboost-filesystem to compile electricsheep.])
+])
+
 dnl Check for boost/system/config.hpp
 AC_CHECK_HEADER([boost/system/config.hpp],,
+	[AC_MSG_ERROR([you must install libboost-system to compile electricsheep.])
+])
+
+AC_CHECK_LIB([boost_system],[main],,
 	[AC_MSG_ERROR([you must install libboost-system to compile electricsheep.])
 ])
 

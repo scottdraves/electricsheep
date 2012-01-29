@@ -146,7 +146,7 @@ void	CRendererGL::Defaults()
 	SetCurrentGLContext();
 
 	glShadeModel( GL_FLAT );
-    glClearDepth( 0.0f );
+	glClearDepth( 0.0f );
 	glDisable( GL_BLEND );
 	glDisable( GL_DEPTH_TEST );
 	glDepthFunc( GL_ALWAYS );

@@ -13,7 +13,6 @@
 
 using boost::filesystem::path;
 using boost::filesystem::exists;
-using boost::filesystem::no_check;
 using boost::filesystem::directory_iterator;
 using boost::filesystem::extension;
 
@@ -217,7 +216,7 @@ bool	CStorageLua::Commit()
 
 		path tmpPath = m_sRoot;
 		tmpPath /= cfgfile;
-		std::string tmp = "table.save( g_Settings, [[" + tmpPath.file_string() + "]] )";
+		std::string tmp = "table.save( g_Settings, [[" + tmpPath.string() + "]] )";
 		m_pState->Execute( tmp );
 		Dirty( false );
 
@@ -244,7 +243,7 @@ bool	CStorageLua::Initialise( const std::string &_sRoot, const std::string &_sWo
 
 	m_bReadOnly = _bReadOnly;
     path tmpPath = _sRoot;
-	m_sRoot = tmpPath.file_string();
+	m_sRoot = tmpPath.string();
 
 #ifdef	WIN32
 	//	For -some- reason, boost refuses to leave the trailing slash here, but does so in Linux...
@@ -267,10 +266,10 @@ bool	CStorageLua::Initialise( const std::string &_sRoot, const std::string &_sWo
 	m_pState = new Base::Script::CLuaState();
 
     tmpPath = _sWorkingDir + "Scripts";
-	m_pState->Init( tmpPath.file_string().c_str() );
+	m_pState->Init( tmpPath.string().c_str() );
 
     tmpPath = _sWorkingDir + "Scripts/serialize.lua";
-	if (m_pState->Run( tmpPath.file_string().c_str() ) == false)
+	if (m_pState->Run( tmpPath.string().c_str() ) == false)
 		return false;
 
     //	Logging...
@@ -278,7 +277,7 @@ bool	CStorageLua::Initialise( const std::string &_sRoot, const std::string &_sWo
     lua_setglobal( m_pState->GetState(), "g_Log" );
 
 	tmpPath = m_sRoot + CLIENT_SETTINGS + ".cfg";
-	m_pState->Execute( "require( 'table' ) g_Settings, err = table.load( [[" + tmpPath.file_string() + "]] ) if g_Settings == nil then g_Log( err ) g_Settings = AutoTable( {} ) end" );
+	m_pState->Execute( "require( 'table' ) g_Settings, err = table.load( [[" + tmpPath.string() + "]] ) if g_Settings == nil then g_Log( err ) g_Settings = AutoTable( {} ) end" );
 
 	//	Store root.
 	m_pState->Execute( "g_Root = [[" + m_sRoot + "]]" );

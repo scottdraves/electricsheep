@@ -20,6 +20,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 ///////////////////////////////////////////////////////////////////////////////
+#include	<boost/filesystem.hpp>
 #include	<string>
 #include	<sys/stat.h>
 #include	"ContentDecoder.h"
@@ -27,7 +28,6 @@
 #include	"Log.h"
 #include	"Timer.h"
 #include	"Settings.h"
-#include	<boost/filesystem.hpp>
 
 #ifdef MAC
 	#define USE_NEW_FFMPEG_API
@@ -359,7 +359,7 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 			
 			_bSkipLoop = false;
 			boost::filesystem::path sys_name( name );
-			if ( !Open( sys_name.native_file_string() ) )
+			if ( !Open( sys_name.string() ) )
 			{
 				sheepfound = false;
 				continue;

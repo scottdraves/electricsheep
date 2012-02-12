@@ -26,14 +26,14 @@ bool GetFileList( std::vector<std::string> &_list, const std::string _dir, const
 			itr != end_itr;
 			++itr )
 	{
-		std::string dirname(itr->path().filename());
+		std::string dirname(itr->path().filename().string());
 		if (is_directory(itr->status()))
 		{
 			gotSheep |= GetFileList( _list, (itr->path().string() + std::string("/")), _extension, _usegoldsheep, _usefreesheep );
 		}
 		else
 		{
-			std::string fname(itr->path().filename());
+			std::string fname(itr->path().filename().string());
 			if (itr->path().extension() == std::string(".avi"))
 			{
 				int generation;

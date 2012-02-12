@@ -695,7 +695,7 @@ bool Shepherd::getSheep( const char *path, SheepArray *sheep )
 		}
 		else
 		{
-			std::string fname(itr->path().filename());
+			std::string fname(itr->path().filename().string());
 
 			if( Shepherd::filenameIsXxx( fname.c_str() ) )
 			{

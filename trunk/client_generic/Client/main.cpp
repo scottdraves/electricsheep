@@ -59,12 +59,6 @@ int32 main( int argc, char *argv[] )
 
 	CElectricSheepClient	client;
 
-#ifdef	WIN32
-	boost::filesystem::path::default_name_check( boost::filesystem::native );
-    ULONG lowfragmentationheap = 2;
-    HeapSetInformation(GetProcessHeap(), HeapCompatibilityInformation, &lowfragmentationheap, sizeof(lowfragmentationheap));
-#endif
-
 	if( client.Startup() )
 		client.Run();
 

@@ -22,7 +22,6 @@
 
 using boost::filesystem::path;
 using boost::filesystem::exists;
-using boost::filesystem::no_check;
 using boost::filesystem::directory_iterator;
 using boost::filesystem::extension;
 
@@ -224,12 +223,12 @@ class	CLuaPlaylist : public CPlaylist
 				
 		time_t atime = 0;
 
-		if ( !stat( fullPath.native_file_string().c_str(), &fs ) )
+		if ( !stat( fullPath.string().c_str(), &fs ) )
 		{
 			atime = fs.st_atime;
 		}
 
-		m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Add", "ssiiiii", (fullPath.branch_path().native_directory_string() + std::string("/")).c_str(), fullPath.leaf().c_str(), Generation, ID, First, Last, atime ) );
+		m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Add", "ssiiiii", (fullPath.branch_path().string() + std::string("/")).c_str(), fullPath.filename().string().c_str(), Generation, ID, First, Last, atime ) );
 		m_numSheep++;
 	}
 
@@ -268,15 +267,15 @@ class	CLuaPlaylist : public CPlaylist
 
 		if ( usedsheeptype == 0 )
 		{
-			if ( Base::GetFileList( files, _dir.native_directory_string().c_str(), "avi", true, false ) == false )
+			if ( Base::GetFileList( files, _dir.string().c_str(), "avi", true, false ) == false )
 				usedsheeptype = 2; // only gold, if any - revert to all if gold not found
 		}
 
 		if ( usedsheeptype == 1 ) // free sheep only
-			Base::GetFileList( files, _dir.native_directory_string().c_str(), "avi", false, true );
+			Base::GetFileList( files, _dir.string().c_str(), "avi", false, true );
 
 		if ( usedsheeptype > 1 ) // play all sheep, also handle case of error (2 is maximum allowed value)
-			Base::GetFileList( files, _dir.native_directory_string().c_str(), "avi", true, true );
+			Base::GetFileList( files, _dir.string().c_str(), "avi", true, true );
 
 		//	Clear the sheep context...
 		if( _bRebuild )
@@ -354,7 +353,7 @@ class	CLuaPlaylist : public CPlaylist
 					AutoMedianLevel( m_FlockMBs );
 				}
 
-				m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Init", "sibddbb", m_Path.native_directory_string().c_str(), loopIterations, seamlessPlayback, playEvenly, m_MedianLevel, m_AutoMedian, m_RandomMedian) );
+				m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Init", "sibddbb", m_Path.string().c_str(), loopIterations, seamlessPlayback, playEvenly, m_MedianLevel, m_AutoMedian, m_RandomMedian) );
 				
 				UpdateDirectory( m_Path );
 			}

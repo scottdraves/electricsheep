@@ -65,7 +65,6 @@
 
 using boost::filesystem::path;
 using boost::filesystem::exists;
-using boost::filesystem::no_check;
 using boost::filesystem::directory_iterator;
 using boost::filesystem::extension;
 
@@ -339,8 +338,8 @@ const bool	CPlayer::Startup()
 
 	//	Create playlist.
 	g_Log->Info( "Creating playlist..." );
-  	m_spPlaylist = new ContentDecoder::CLuaPlaylist(	scriptPath.native_directory_string(),
-														watchPath.native_directory_string(),
+  	m_spPlaylist = new ContentDecoder::CLuaPlaylist(	scriptPath.string(),
+														watchPath.string(),
 														m_UsedSheepType );
 
 	//	Create decoder last.

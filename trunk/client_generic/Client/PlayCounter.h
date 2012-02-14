@@ -60,14 +60,14 @@ class	CPlayCounter : public Base::CSingleton<CPlayCounter>
 #ifdef WIN32
 			pdata->PlayCountFile = _fsopen(generation_path.string().c_str(), "r+b", _SH_DENYWR); // deny write
 #else
-			pdata->PlayCountFile = fopen(generation_path.native_file_string().c_str(), "r+b"); // deny write
+			pdata->PlayCountFile = fopen(generation_path.string().c_str(), "r+b"); // deny write
 #endif
 			if (pdata->PlayCountFile == NULL) // file not found
 			{
 #ifdef WIN32
 				pdata->PlayCountFile = _fsopen(generation_path.string().c_str(), "w+b", _SH_DENYWR);
 #else
-				pdata->PlayCountFile = fopen(generation_path.native_file_string().c_str(), "w+b");
+				pdata->PlayCountFile = fopen(generation_path.string().c_str(), "w+b");
 #endif
 				if ( pdata->PlayCountFile == NULL ) // unable to open for writing
 				{

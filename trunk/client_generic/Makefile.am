@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = 1.7
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in \
                        stamp-h.in config.log config.cache config.status
 
-SUBDIRS = MSVC/SettingsGUI Client
+SUBDIRS = Client
 
 docdir = $(prefix)/share/doc/$(PACKAGE)-$(VERSION)
 sharedir = $(prefix)/share

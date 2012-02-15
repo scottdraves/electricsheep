@@ -187,7 +187,7 @@ uint64 GetFlockSizeBytes(wxString mpegpath, int sheeptype)
 	uint64 retval = 0;
 
 	try {
-	boost::filesystem::path p(mpegpath.c_str());
+	boost::filesystem::path p(mpegpath.ToStdString());
 
 	directory_iterator end_itr; // default construction yields past-the-end
 	for ( directory_iterator itr( p );

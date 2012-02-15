@@ -196,7 +196,7 @@ uint64 GetFlockSizeBytes(wxString mpegpath, int sheeptype)
 	{
 		if (!is_directory(itr->status()))
 		{
-			std::string fname(itr->path().filename());
+			std::string fname(itr->path().filename().string());
 			if (itr->path().extension() == std::string(".avi"))
 			{
 				int generation;
@@ -217,7 +217,7 @@ uint64 GetFlockSizeBytes(wxString mpegpath, int sheeptype)
 			}
 		}
 		else
-			retval += GetFlockSizeBytes(itr->string(), sheeptype);
+			retval += GetFlockSizeBytes(itr->path().string(), sheeptype);
 	}
 
 	}

@@ -1,4 +1,4 @@
-dnl Process this file with autoconf to produce a configure script.
+gdnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.57)
 
 ifdef([m4_pattern_allow],
@@ -320,10 +320,9 @@ AC_CHECK_LIB([boost_system],[main],,
 AC_LANG_POP([C++])
 
 
-BOOST_CXXFLAGS="-DBOOST_FILESYSTEM_VERSION=2"
+
 BOOST_LDADD="-lboost_system"
 
-AC_SUBST(BOOST_CXXFLAGS)
 AC_SUBST(BOOST_LDADD)
 
 

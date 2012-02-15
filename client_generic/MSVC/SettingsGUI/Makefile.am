@@ -52,7 +52,7 @@ electricsheep_preferences_SOURCES = \
 
 electricsheep_preferences_LDADD = -lboost_thread -lboost_filesystem $(CURL_LIBS) $(LUA_LIBS) -ltinyxml @WX_LDADD@ @BOOST_LDADD@
 
-AM_CXXFLAGS = $(linux_CFLAGS) @WX_CXXFLAGS@ @BOOST_CXXFLAGS@
+AM_CXXFLAGS = $(linux_CFLAGS) @WX_CXXFLAGS@
 
 
 

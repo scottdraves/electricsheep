@@ -213,14 +213,6 @@ AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
 
 
-dnl Check for curl
-
-PKG_CHECK_MODULES(CURL,libcurl)
-
-AC_SUBST(CURL_CFLAGS)
-AC_SUBST(CURL_LIBS)
-
-
 dnl Check for libpng
 
 PKG_CHECK_MODULES(PNG,libpng)

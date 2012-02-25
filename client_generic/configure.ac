@@ -50,6 +50,11 @@ case "{$target_os}" in
   ;;
 esac
 
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+
+if test x$PKG_CONFIG = xno; then
+   AC_MSG_ERROR([Cannot find pkg-config, make sure it is installed and in your PATH])
+fi
 
 
 AM_CONDITIONAL(IS_LINUX_GNU,$IS_LINUX_GNU)

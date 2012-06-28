@@ -64,7 +64,7 @@ And for *sheep*:
 
 The files names have 5 components, 4 are a 5 digit number, plus the extension.  The first (reading left to right) is the generation containing the sheep.  The 2nd is the ID of that sheep.  the 3rd and 4th are the keyframes at the beginning and end (first and last) of the sheep.  The keyframes are IDs of other sheep.
 
-The extension depends on the device.  For the regular screensaver client it's "avi" and that is what is used in the examples here.  Mobile devices use "mp4".
+The extension depends on the device.  For the regular screensaver client it's "avi" and that is what is used in the examples here.  Mobile devices use "mp4" or "shp".
 
 A sheep that is a loop has the same number for components 2, 3, and 4.  A sheep that is an edge has different numbers for the first and last keyframe.  Sheep will play seamlessly if the keyframes match.  So if the last field of one sheep is the same as the first field of the next, then they will fit together.  For example, the following files make a continuous sequence:
 {{{

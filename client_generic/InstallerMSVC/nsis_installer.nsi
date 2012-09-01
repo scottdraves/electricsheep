@@ -4,7 +4,7 @@
 !define PRODUCT_NAME "Electric Sheep"
 !define PRODUCT_SCR_STRING "es.scr"
 !define PRODUCT_EXE_STRING "es.exe"
-!define PRODUCT_VERSION "2.7b34"
+!define PRODUCT_VERSION "2.7b34c"
 !define PRODUCT_PUBLISHER "Electricsheep"
 !define PRODUCT_WEB_SITE "http://www.electricsheep.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Flam3.exe"
@@ -127,6 +127,8 @@ Section "MainSection" SEC01
 	AccessControl::GrantOnFile "$APPDATA\ElectricSheep\Logs" "(S-1-1-0)" "FullAccess"
 	CreateDirectory "$APPDATA\ElectricSheep\content"
 	AccessControl::GrantOnFile "$APPDATA\ElectricSheep\content" "(S-1-1-0)" "FullAccess"
+	AccessControl::GrantOnFile "$WINDIR\${PRODUCT_SCR_STRING}" "(S-1-1-0)" "GenericRead"
+	AccessControl::GrantOnFile "$WINDIR\${PRODUCT_SCR_STRING}" "(S-1-1-0)" "GenericExecute"
 	;CreateDirectory "$APPDATA\ElectricSheep\content\mpeg"
 	;AccessControl::GrantOnFile "$APPDATA\ElectricSheep\content\mpeg" "(S-1-1-0)" "FullAccess"
 	

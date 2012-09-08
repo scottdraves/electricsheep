@@ -63,6 +63,10 @@
 #include	"boost/filesystem/operations.hpp"
 #include	"boost/filesystem/convenience.hpp"
 
+#if defined(MAC) || defined(WIN32)
+	#define HONOR_VBL_SYNC
+#endif
+
 using boost::filesystem::path;
 using boost::filesystem::exists;
 using boost::filesystem::directory_iterator;
@@ -317,6 +321,13 @@ const bool	CPlayer::Startup()
 {
 	m_DisplayFps = g_Settings()->Get( "settings.player.display_fps", 60. );
 	
+#ifdef HONOR_VBL_SYNC
+	if ( g_Settings()->Get( "settings.player.vbl_sync", false ) )
+	{
+		m_DisplayFps = 0.0;
+	}
+#endif
+	
 	//	Grab some paths for the decoder.
     std::string content = g_Settings()->Root() + "content/";
 #ifndef LINUX_GNU
@@ -503,8 +514,10 @@ bool	CPlayer::EndFrameUpdate()
 		spFD = m_displayUnits[ 0 ].spFrameDisplay;
 	}
 	
-	if ( !spFD.IsNull() )
-		FpsCap( spFD->GetFps( m_PlayerFps, m_DisplayFps ) );
+	fp8 capFPS = spFD->GetFps( m_PlayerFps, m_DisplayFps );
+	
+	if ( !spFD.IsNull() && capFPS > 0.000001)
+		FpsCap( capFPS );
 	
 	return true;
 }

@@ -62,7 +62,9 @@ class	CFrameDisplay
 					m_spImageRef->Create( m_spFrameData->Width(), m_spFrameData->Height(), DisplayOutput::eImage_RGBA8, false, true );
 				}
 
-				_spTexture = m_spRenderer->NewTextureFlat();
+				if (_spTexture.IsNull())
+					_spTexture = m_spRenderer->NewTextureFlat();
+				
 				if( _spTexture == NULL )
 					return false;
 				

@@ -7,6 +7,8 @@
 #ifndef	_SINGLETON_H_
 #define	_SINGLETON_H_
 
+#include <stdio.h>
+
 #include	"base.h"
 #include	"Exception.h"
 

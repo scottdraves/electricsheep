@@ -105,14 +105,12 @@ followed by the output from one of these
 </get>
 }}}
 
-* gen = the generation currently live on the server.
-* id = unique sheep id
-* type = ignored
-* prog = ignored
-* job = which frame of the sheep to be rendered
-* frame = time to render.  this is like job but sometimes there are more than one job with the same time/frame.
-
-This seems to work, but I'm unsure of what args to use, since the frames are rendered as png now. I'm also not sure if the attributes of <get> are correct (i.e. job vs frame).
+  * gen = the generation currently live on the server.
+  * id = unique sheep id
+  * type = ignored
+  * prog = ignored
+  * job = which frame of the sheep to be rendered
+  * frame = time to render.  this is like job but sometimes there are more than one job with the same time/frame.
 
 the attributes of the "args" element are passed to flam3-render as environment variables.
 

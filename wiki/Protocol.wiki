@@ -82,16 +82,14 @@ $HOST/cgi/vote?u=$UID&v=$VERSION&id=$ID&vote=1
 }}}
 and against replace vote=1 with vote=-1.
 
-
 = Get A Rendering Job =
 {{{
-GET $HOST/cgi/get?n=$NICK&w=&v=$VERSION&u=$ACCOUNT&r=1&c=1
+GET $HOST/cgi/get?n=$NICK&w=$w&v=$VERSION&u=$ACCOUNT&r=1&c=1
 }}}
- Not sure what w, r, or c are
-
- w is set to SheepGenerator::URL() in the client code, but it is not clear what that means.
-
-r and c are both hardcoded to 1 in the client code with no clues as to what they are for
+$NICK is the account name (nick name) of the user.
+$w is the credit URL provided by the user.
+ 
+r and c are both hardcoded to 1 in the client code but they are ignored by the server.
 
 The response is gzipped XML
 {{{

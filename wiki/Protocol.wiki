@@ -81,3 +81,48 @@ To vote for a sheep issue this:
 $HOST/cgi/vote?u=$UID&v=$VERSION&id=$ID&vote=1
 }}}
 and against replace vote=1 with vote=-1.
+
+
+= Get A Rendering Job =
+
+GET $HOST/cgi/get?n=$NICK&w=&v=$VERSION&u=$ACCOUNT&r=1&c=1
+
+ Not sure what w, r, or c are
+
+ w is set to SheepGenerator::URL() in the client code, but it is not clear what that means.
+
+r and c are both hardcoded to 1 in the client code with no clues as to what they are for
+
+The response is gzipped XML
+<get gen="12" id="1" type="0" prog="flame" job="3" frame="3">
+<args bits="33" jpeg="100" />
+followed by the output from one of these
+
+* if loop: env rotate=$spex_file enclosed=0 frame=$frame_id nframes=$nframes /usr/bin/flam3-genome
+* if edge: env inter=$spex_file enclosed=0 frame=$frame_id nframes=$nframes /usr/bin/flam3-genome
+
+ And finished off by  </get>
+
+* gen = the generation currently live on the server.
+
+* id = unique sheep id
+
+* type =
+
+* prog =
+
+* job = which frame of the sheep to be rendered
+
+* frame = same as job
+
+ 
+
+This seems to work, but I'm unsure of what args to use, since the frames are rendered as png now. I'm also not sure if the attributes of <get> are correct (i.e. job vs frame).
+
+ 
+
+= Submit a Rendered Job =
+
+PUT $HOST/cgi/put?j=$JOB&id=$SHEEP_ID&s=2991969&g=$GENERATION&v=$VERSION&u=$ACCOUNT
+
+The PUT data is the complete rendered frame

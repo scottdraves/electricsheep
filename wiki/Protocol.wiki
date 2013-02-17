@@ -84,12 +84,11 @@ and against replace vote=1 with vote=-1.
 
 = Get A Rendering Job =
 {{{
-GET $HOST/cgi/get?n=$NICK&w=$w&v=$VERSION&u=$ACCOUNT&r=1&c=1
+GET $HOST/cgi/get?n=$NICK&w=$URL&v=$VERSION&u=$UID&r=1&c=1
 }}}
 $NICK is the account name (nick name) of the user.
-$w is the credit URL provided by the user.
- 
-r and c are both hardcoded to 1 in the client code but they are ignored by the server.
+$URL is the credit URL provided by the user.
+r and c are both hardcoded to 1 in the client but they are ignored by the server.
 
 The response is gzipped XML
 {{{
@@ -108,12 +107,14 @@ followed by the output from one of these
 
 * gen = the generation currently live on the server.
 * id = unique sheep id
-* type =
-* prog =
+* type = ignored
+* prog = ignored
 * job = which frame of the sheep to be rendered
-* frame = same as job
+* frame = time to render.  this is like job but sometimes there are more than one job with the same time/frame.
 
 This seems to work, but I'm unsure of what args to use, since the frames are rendered as png now. I'm also not sure if the attributes of <get> are correct (i.e. job vs frame).
+
+the attributes of the "args" element are passed to flam3-render as environment variables.
 
  = Submit a Rendered Job =
 

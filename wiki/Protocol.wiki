@@ -119,6 +119,7 @@ the attributes of the "args" element are passed to flam3-render as environment v
  = Submit a Rendered Job =
 
 {{{
-PUT $HOST/cgi/put?j=$JOB&id=$SHEEP_ID&s=2991969&g=$GENERATION&v=$VERSION&u=$ACCOUNT
+PUT $HOST/cgi/put?j=$JOB&id=$SHEEP_ID&s=$SIZE&g=$GENERATION&v=$VERSION&u=$UID
 }}}
-The PUT data is the complete rendered frame
+The PUT data is the complete rendered frame.
+$SIZE = the number of bytes to be uploaded

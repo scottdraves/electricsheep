@@ -97,8 +97,8 @@ The response is gzipped XML
 }}}
 followed by the output from one of these
 
-* if loop: env rotate=$spex_file enclosed=0 frame=$frame_id nframes=$nframes /usr/bin/flam3-genome
-* if edge: env inter=$spex_file enclosed=0 frame=$frame_id nframes=$nframes /usr/bin/flam3-genome
+  * if loop: env rotate=$spex_file enclosed=0 frame=$frame_id nframes=$nframes /usr/bin/flam3-genome
+  * if edge: env inter=$spex_file enclosed=0 frame=$frame_id nframes=$nframes /usr/bin/flam3-genome
 
  And finished off by 
 {{{

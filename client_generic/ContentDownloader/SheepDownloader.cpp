@@ -597,14 +597,18 @@ void	SheepDownloader::deleteCached( const int &size, const int getGenerationType
 
 				//	Store the file size.
 				total += curSheep->fileSize();
-				if ( oldest_sheep_time == 0 || oldest_sheep_time < curSheep->fileWriteTime() )
+				
+				if ( oldest_sheep_time == 0 || oldest_sheep_time > curSheep->fileWriteTime() )
 				{
 					oldest = i;
 					oldest_sheep_time = curSheep->fileWriteTime();
 				}
-				if( !oldest_time || 
-					(g_PlayCounter().PlayCount(curSheep->generation(), curSheep->id()) > highest_playcount) ||
-					( (g_PlayCounter().PlayCount(curSheep->generation(), curSheep->id()) == highest_playcount) && (curSheep->fileWriteTime() < oldest_time) )
+				
+				uint16 curPlayCount = g_PlayCounter().PlayCount(curSheep->generation(), curSheep->id());
+				
+				if( oldest_time == 0 || 
+					( curPlayCount > highest_playcount) ||
+					( (curPlayCount == highest_playcount) && (curSheep->fileWriteTime() < oldest_time) )
 					)
 				{
 					//	Update this as the file to delete if necessary.

@@ -317,10 +317,6 @@ class	CStatsConsole : public CConsole
 				_spRenderer->Apply();
 				_spRenderer->DrawSoftQuad( extent, Base::Math::CVector4( 0, 0, 0, 0.375f ), 16 );
 				
-				//dasvo - terrible hack - redo!!
-				if (!m_spFont.IsNull())
-					m_spFont->Reupload();
-
 				// align text at bottom
 				pos = extent.m_Y0 + edge;
 				for( i=m_Stats.begin(); i != m_Stats.end(); ++i )

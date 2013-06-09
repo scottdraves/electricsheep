@@ -376,6 +376,8 @@
 	
 	[seamlessPlayback setState: ESScreensaver_GetBoolSetting("settings.player.SeamlessPlayback", false)];
 	
+	[calculateTransitions setState: ESScreensaver_GetBoolSetting("settings.player.CalculateTransitions", false)];
+	
 	[synchronizeVBL setState: ESScreensaver_GetBoolSetting("settings.player.vbl_sync", false)];
 	
 	[blackoutMonitors setState: ESScreensaver_GetBoolSetting("settings.player.blackout_monitors", true)];
@@ -421,7 +423,7 @@
 
 	[proxyPassword setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.proxy_password", "") autorelease]];
 	
-	bool unlimited_cache = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache", false);
+	bool unlimited_cache = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache", true);
 	
 	SInt32 cache_size = ESScreensaver_GetIntSetting("settings.content.cache_size", 2000);
 
@@ -453,7 +455,7 @@
 	
 	[playbackMixingMode selectItemAtIndex:pmm];
 	
-	bool unlimited_cache_gold = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache_gold", false);
+	bool unlimited_cache_gold = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache_gold", true);
 	
 	SInt32 cache_size_gold = ESScreensaver_GetIntSetting("settings.content.cache_size_gold", 2000);
 
@@ -498,6 +500,8 @@
 	ESScreensaver_SetIntSetting("settings.player.DisplayMode", [[displayMode selectedCell] tag]);
 	
 	ESScreensaver_SetBoolSetting("settings.player.SeamlessPlayback", [seamlessPlayback state]);
+	
+	ESScreensaver_SetBoolSetting("settings.player.CalculateTransitions", [calculateTransitions state]);
 	
 	ESScreensaver_SetBoolSetting("settings.player.vbl_sync", [synchronizeVBL state]);
 	

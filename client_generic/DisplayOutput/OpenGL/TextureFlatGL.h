@@ -24,7 +24,11 @@ class CTextureFlatGL : public CTextureFlat
 	
 
 	public:
-			CTextureFlatGL( const uint32 _flags = 0 );
+#ifdef MAC
+			CTextureFlatGL( const uint32 _flags = 0, CGLContextObj glctx = NULL  );
+#else
+			CTextureFlatGL( const uint32 _flags = 0  );
+#endif
 			virtual ~CTextureFlatGL();
 
 			bool	Upload( spCImage _spImage );

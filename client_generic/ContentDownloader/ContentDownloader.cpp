@@ -94,9 +94,9 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 	Shepherd::setRootPath( root.c_str() );
 	Shepherd::setCacheSize( g_Settings()->Get( "settings.content.cache_size", 2000 ), 0 );
 	Shepherd::setCacheSize( g_Settings()->Get( "settings.content.cache_size_gold", 2000 ), 1 );
-	if (g_Settings()->Get( "settings.content.unlimited_cache", false) == true)
+	if (g_Settings()->Get( "settings.content.unlimited_cache", true) == true)
 		Shepherd::setCacheSize( 0, 0 );
-	if (g_Settings()->Get( "settings.content.unlimited_cache_gold", false) == true)
+	if (g_Settings()->Get( "settings.content.unlimited_cache_gold", true) == true)
 		Shepherd::setCacheSize( 0, 1 );
 	Shepherd::setPassword( g_Settings()->Get( "settings.content.password_md5", std::string("") ).c_str() );
 	Shepherd::setUniqueID( g_Settings()->Get( "settings.content.unique_id", generateID() ).c_str() );
@@ -198,7 +198,7 @@ const bool	CContentDownloader::Shutdown( void )
 		m_gDownloader->Abort();
 		m_gDownloadThread->interrupt();
 		
-		m_gDownloadThread->join();
+		m_gDownloadThread->timed_join(boost::posix_time::seconds(3));
 		
 		SAFE_DELETE( m_gDownloadThread );
 	}
@@ -216,7 +216,7 @@ const bool	CContentDownloader::Shutdown( void )
 	{
 		
 
-		gGeneratorThreads[i]->join();
+		gGeneratorThreads[i]->timed_join(boost::posix_time::seconds(3));
 
 		SAFE_DELETE( gGeneratorThreads[i] );
 		SAFE_DELETE( gGenerators[i] );

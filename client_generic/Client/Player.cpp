@@ -82,8 +82,6 @@ CPlayer::CPlayer()
 	m_spDecoder = NULL;
 	m_spPlaylist = NULL;
 	
-	m_curDisplayUnit = -1;
-
 	m_PlayerFps = 15;	//	http://en.wikipedia.org/wiki/23_(numerology)
 	m_DisplayFps = 60;
 
@@ -283,22 +281,22 @@ bool CPlayer::AddDisplay( uint32 screen )
 	spFrameDisplay->SetDisplaySize( spDisplay->Width(), spDisplay->Height() );
 	
 	{
-		DisplayUnit du;
+		DisplayUnit *du = new DisplayUnit;
 		
-		du.spFrameDisplay = spFrameDisplay;
-		du.spRenderer = spRenderer;
-		du.spDisplay = spDisplay;
-		du.m_MetaData.m_SheepID = 0;
-		du.m_MetaData.m_SheepGeneration = 0;
-		du.m_MetaData.m_Fade = 1.f;
-		du.m_MetaData.m_FileName = "";
-		du.m_MetaData.m_LastAccessTime = time(NULL);
-		du.m_MetaData.m_IsEdge = false;
+		du->spFrameDisplay = spFrameDisplay;
+		du->spRenderer = spRenderer;
+		du->spDisplay = spDisplay;
+		du->m_MetaData.m_SheepID = 0;
+		du->m_MetaData.m_SheepGeneration = 0;
+		du->m_MetaData.m_Fade = 1.f;
+		du->m_MetaData.m_FileName = "";
+		du->m_MetaData.m_LastAccessTime = time(NULL);
+		du->m_MetaData.m_IsEdge = false;
 		
 		if ( m_MultiDisplayMode == kMDIndividualMode && !Stopped() )
 		{
-			du.spDecoder = CreateContentDecoder( true );
-			du.spDecoder->Start();
+			du->spDecoder = CreateContentDecoder( true );
+			du->spDecoder->Start();
 		}
 		
 
@@ -363,7 +361,6 @@ const bool	CPlayer::Startup()
 
 ContentDecoder::CContentDecoder *CPlayer::CreateContentDecoder( bool _bStartByRandom )
 {
-
 	if ( m_spPlaylist.IsNull() )
 		return NULL;
 	
@@ -384,10 +381,7 @@ ContentDecoder::CContentDecoder *CPlayer::CreateContentDecoder( bool _bStartByRa
 
 #endif
 
-
-
-
-	return new ContentDecoder::CContentDecoder( m_spPlaylist, _bStartByRandom, g_Settings()->Get( "settings.player.BufferLength", 25 ), pf );
+	return new ContentDecoder::CContentDecoder( m_spPlaylist, _bStartByRandom, g_Settings()->Get( "settings.player.CalculateTransitions", true ), g_Settings()->Get( "settings.player.BufferLength", 25 ), pf );
 }
 
 /*
@@ -414,10 +408,10 @@ void	CPlayer::Start()
 			
 			for ( ; it != m_displayUnits.end(); it++ )
 			{
-				if ((*it).spDecoder.IsNull())
-					(*it).spDecoder = CreateContentDecoder( true );
+				if ((*it)->spDecoder.IsNull())
+					(*it)->spDecoder = CreateContentDecoder( true );
 					
-				if( !(*it).spDecoder->Start() )
+				if( !(*it)->spDecoder->Start() )
 					g_Log->Warning( "Nothing to play" );
 			}
 		}
@@ -447,8 +441,8 @@ void	CPlayer::Stop()
 			
 			for ( ; it != m_displayUnits.end(); it++ )
 			{
-				if (!(*it).spDecoder.IsNull())
-					(*it).spDecoder->Stop();
+				if (!(*it)->spDecoder.IsNull())
+					(*it)->spDecoder->Stop();
 			}
 		}
 	}
@@ -477,8 +471,20 @@ const bool	CPlayer::Shutdown( void )
 		
 		for ( ; it != m_displayUnits.end(); it++ )
 		{
-			if (!(*it).spDecoder.IsNull())
-				(*it).spDecoder->Close();
+			if (!(*it)->spDecoder.IsNull())
+				(*it)->spDecoder->Close();
+				
+		}
+	}
+	
+	{
+		boost::mutex::scoped_lock lockthis( m_displayListMutex );
+
+		DisplayUnitIterator it = m_displayUnits.begin();
+		
+		for ( ; it != m_displayUnits.end(); it++ )
+		{
+			delete (*it);
 		}
 	}
 
@@ -501,6 +507,25 @@ CPlayer::~CPlayer()
 
 bool	CPlayer::BeginFrameUpdate()
 {
+	if ( m_MultiDisplayMode == kMDSharedMode )
+	{
+		if (m_spDecoder.IsNull() == false)
+			m_spDecoder->ResetSharedFrame();
+	}
+	else
+	{
+		boost::mutex::scoped_lock lockthis( m_displayListMutex );
+
+		DisplayUnitIterator it = m_displayUnits.begin();
+		
+		for ( ; it != m_displayUnits.end(); it++ )
+		{
+			if (!(*it)->spDecoder.IsNull())
+				(*it)->spDecoder->ResetSharedFrame();
+				
+		}
+	}
+	
 	return true;
 }
 
@@ -511,7 +536,7 @@ bool	CPlayer::EndFrameUpdate()
 	{
 		boost::mutex::scoped_lock lockthis( m_displayListMutex );
 		
-		spFD = m_displayUnits[ 0 ].spFrameDisplay;
+		spFD = m_displayUnits[ 0 ]->spFrameDisplay;
 	}
 	
 	fp8 capFPS = spFD->GetFps( m_PlayerFps, m_DisplayFps );
@@ -524,47 +549,37 @@ bool	CPlayer::EndFrameUpdate()
 
 bool	CPlayer::BeginDisplayFrame( uint32 displayUnit )
 {
-	DisplayUnit du;
+	DisplayUnit* du;
 	
 	{
 		boost::mutex::scoped_lock lockthis( m_displayListMutex );
 		
 		if (displayUnit >= m_displayUnits.size())
 			return false;
-			
-		m_curDisplayUnit = displayUnit;
-		
+					
 		du = m_displayUnits[ displayUnit ];
 	}
 
-	if (du.spRenderer->BeginFrame() == false)
+	if (du->spRenderer->BeginFrame() == false)
 		return false;
-	
-	if (m_MultiDisplayMode == kMDSharedMode && displayUnit != 0)
-		m_spDecoder->LockFrame();
-	
+		
 	return true;
 }
 
-bool	CPlayer::EndDisplayFrame( bool drawn )
+bool	CPlayer::EndDisplayFrame( uint32 displayUnit, bool drawn )
 {
-	DisplayUnit du;
+	DisplayUnit* du;
 	
 	{	
 		boost::mutex::scoped_lock lockthis( m_displayListMutex );
 		
-		if (m_curDisplayUnit == uint32(-1) || m_curDisplayUnit >= m_displayUnits.size())
+		if (displayUnit >= m_displayUnits.size())
 			return false;
 			
-		if (m_MultiDisplayMode == kMDSharedMode && m_curDisplayUnit != 0)
-			m_spDecoder->UnlockFrame();
-		
-		du = m_displayUnits[ m_curDisplayUnit ];
+		du = m_displayUnits[ displayUnit ];
 	}
-	
-	m_curDisplayUnit = -1;
-		
-	return du.spRenderer->EndFrame( drawn );
+
+	return du->spRenderer->EndFrame( drawn );
 }
 
 //	Chill the remaining time to keep the framerate.
@@ -582,29 +597,33 @@ void CPlayer::FpsCap( const fp8 _cap )
 	Update().
 
 */
-bool	CPlayer::Update(bool &bPlayNoSheepIntro)
+bool	CPlayer::Update(uint32 displayUnit, bool &bPlayNoSheepIntro)
 {	
 	bPlayNoSheepIntro = false;
 
-	DisplayUnit du;
+	DisplayUnit* du;
 	
 	{
 		boost::mutex::scoped_lock lockthis( m_displayListMutex );
 		
-		if (m_curDisplayUnit == -1 || m_curDisplayUnit >= m_displayUnits.size())
+		if (displayUnit >= m_displayUnits.size())
 			return false;
 		
-		du = m_displayUnits[ m_curDisplayUnit ];
+		du = m_displayUnits[ displayUnit ];
 	}
 
-	du.spRenderer->Reset( eEverything );
-	du.spRenderer->Orthographic();
+	du->spRenderer->Reset( eEverything );
+	du->spRenderer->Orthographic();
+	du->spRenderer->Apply();
+	
+	{
+		boost::mutex::scoped_lock lockthis( m_updateMutex );
 
 	//	Update the frame display, it rests before doing any work to keep the framerate.
-	if( !du.spFrameDisplay->Update( du.spDecoder.IsNull() ? m_spDecoder : du.spDecoder, m_PlayerFps, m_DisplayFps, m_displayUnits[ m_curDisplayUnit ].m_MetaData ) )
+	if( !du->spFrameDisplay->Update( du->spDecoder.IsNull() ? m_spDecoder : du->spDecoder, m_PlayerFps, m_DisplayFps, du->m_MetaData ) )
 	{
 			if ( (m_spDecoder.IsNull() == false && m_spDecoder->PlayNoSheepIntro()) || 
-				 (du.spDecoder.IsNull() == false && du.spDecoder->PlayNoSheepIntro()) )
+				 (du->spDecoder.IsNull() == false && du->spDecoder->PlayNoSheepIntro()) )
 			{
 				bPlayNoSheepIntro = true;
 				return true;
@@ -613,8 +632,10 @@ bool	CPlayer::Update(bool &bPlayNoSheepIntro)
 			//	Failed to update screen here, do something noticeable like show a logo or something.. :)
 			//g_Log->Warning( "Failed to render frame..." );
 	}
+	}
+	
 	if ( (m_spDecoder.IsNull() == false && m_spDecoder->PlayNoSheepIntro()) || 
-		 (du.spDecoder.IsNull() == false && du.spDecoder->PlayNoSheepIntro()) )
+		 (du->spDecoder.IsNull() == false && du->spDecoder->PlayNoSheepIntro()) )
 	{
 		bPlayNoSheepIntro = true;
 		return true;

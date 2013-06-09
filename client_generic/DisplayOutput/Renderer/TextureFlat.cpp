@@ -14,7 +14,7 @@ namespace	DisplayOutput
 
 /*
 */
-CTextureFlat::CTextureFlat( const uint32 _flags ) : CTexture( _flags ), m_spImage( NULL ), m_texRect( Base::Math::CRect( 1, 1 ) )
+CTextureFlat::CTextureFlat( const uint32 _flags ) : CTexture( _flags ), m_spImage( NULL ), m_bDirty(false), m_texRect( Base::Math::CRect( 1, 1 ) )
 {
 }
 

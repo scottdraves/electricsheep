@@ -12,12 +12,23 @@ class	CShaderUniformGL : public CShaderUniform
 	uint32	m_Index;
 	uint32	m_Size;
 	uint8	*m_pData;
+	
+#ifdef MAC
+	CGLContextObj cgl_ctx;
+#endif
 
 	public:
-			CShaderUniformGL( const std::string _name, const eUniformType _eType, const uint32 _index = 0, const uint32 _size = 0 ) : CShaderUniform( _name, _eType ), m_Index( _index ), m_Size( _size )
+#ifdef MAC
+			CShaderUniformGL( CGLContextObj glCtx, const std::string _name, const eUniformType _eType, const uint32 _index = 0, const uint32 _size = 0 )
+#else
+			CShaderUniformGL( const std::string _name, const eUniformType _eType, const uint32 _index = 0, const uint32 _size = 0 )
+#endif
+			 : CShaderUniform( _name, _eType ), m_Index( _index ), m_Size( _size )
 			{
 				m_pData = NULL;
 				std::string type = "";
+				
+				cgl_ctx = glCtx;
 
 				switch( _eType )
 				{
@@ -71,7 +82,11 @@ class CShaderGL : public CShader
 #endif
 
 	public:
+#ifdef MAC
+			CShaderGL(CGLContextObj glCtx);
+#else
 			CShaderGL();
+#endif
 			virtual ~CShaderGL();
 
 			virtual	bool	Bind( void );

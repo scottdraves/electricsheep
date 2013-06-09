@@ -130,6 +130,8 @@ class	CAlignedBuffer
 			uint8 * GetBufferPtr( void ) const;
 			
 			bool IsValid() const { return ( m_Buffer != NULL ); }
+			
+			uint32 Size( void ) { return m_Size; }
 };
 
 };

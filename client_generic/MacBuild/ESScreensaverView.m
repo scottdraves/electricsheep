@@ -151,7 +151,11 @@ bool bStarted = false;
 
 	if (glView != NULL && [glView openGLContext])
 	{
+		ESScreensaver_InitClientStorage();
+		
 		ESScreenSaver_AddGLContext( (CGLContextObj)[[glView openGLContext] CGLContextObj] );
+		
+		ESScreensaver_DeinitClientStorage();
 	}
 	
 	int32 width = theRect.size.width;

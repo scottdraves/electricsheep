@@ -109,12 +109,16 @@ static const GLenum srcTypes[] =
 
 /*
 */
+#ifdef MAC
+CTextureFlatGL::CTextureFlatGL( const uint32 _flags, CGLContextObj glCtx ) : CTextureFlat( _flags )
+#else
 CTextureFlatGL::CTextureFlatGL( const uint32 _flags ) : CTextureFlat( _flags )
+#endif
 {
 	m_TexTarget = GL_TEXTURE_2D;
 	
 #ifdef MAC
-	cgl_ctx = CGLGetCurrentContext();
+	cgl_ctx = glCtx;//CGLGetCurrentContext();
 
 	if ( _flags & kRectTexture )
 		m_TexTarget = GL_TEXTURE_RECTANGLE_EXT;
@@ -195,13 +199,15 @@ bool	CTextureFlatGL::Upload( spCImage _spImage )
 #ifdef MAC
 			GLint save2,
 			save3,
-			save4;			
+			save4,
+			save5;			
 			
 			glGetIntegerv(GL_UNPACK_ALIGNMENT, &save2);
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 			glGetIntegerv(GL_UNPACK_ROW_LENGTH, &save3);
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, _spImage->GetPitch() / 4);
 			glGetIntegerv(GL_UNPACK_CLIENT_STORAGE_APPLE, &save4);
+			glGetIntegerv(GL_TEXTURE_STORAGE_HINT_APPLE, &save5);
 #endif
 			
 #ifndef LINUX_GNU
@@ -223,7 +229,7 @@ bool	CTextureFlatGL::Upload( spCImage _spImage )
 			if ( texWidth == imgWidth && texHeight == imgHeight )
 			{
 #ifdef MAC
-				glTexParameteri(m_TexTarget, GL_TEXTURE_STORAGE_HINT_APPLE , GL_STORAGE_SHARED_APPLE);
+				//glTexParameteri(m_TexTarget, GL_TEXTURE_STORAGE_HINT_APPLE , GL_STORAGE_SHARED_APPLE);
 				glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, GL_TRUE);
 #endif
 				glTexImage2D( m_TexTarget, mipMapLevel, internalFormat, texWidth, texHeight, 0, srcFormat, srcType, pSrc );
@@ -259,6 +265,7 @@ bool	CTextureFlatGL::Upload( spCImage _spImage )
 			}
 			
 #ifdef MAC
+			glTexParameteri(m_TexTarget, GL_TEXTURE_STORAGE_HINT_APPLE , save5);
 			glPixelStorei(GL_UNPACK_CLIENT_STORAGE_APPLE, save4);
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, save3);
 			glPixelStorei(GL_UNPACK_ALIGNMENT, save2);
@@ -286,6 +293,9 @@ bool	CTextureFlatGL::Bind( const uint32 _index )
 	glActiveTextureARB( GL_TEXTURE0 + _index );
 	glEnable( m_TexTarget );
 	glBindTexture( m_TexTarget, m_TexID );
+	
+	m_bDirty = false;
+	
 	VERIFYGL;
 	return true;
 }
@@ -295,8 +305,8 @@ bool	CTextureFlatGL::Bind( const uint32 _index )
 bool	CTextureFlatGL::Unbind( const uint32 _index )
 {
 	glActiveTextureARB( GL_TEXTURE0 + _index );
-	glDisable( m_TexTarget );
 	glBindTexture( m_TexTarget, 0 );
+	glDisable( m_TexTarget );
 	VERIFYGL;
 	return true;
 }

@@ -49,6 +49,8 @@
 		2135DB250EC75133005E246D /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135DB240EC75133005E246D /* ScreenSaver.framework */; };
 		213D535111F79C8D00CF500D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213D529B11F79B0000CF500D /* IOKit.framework */; };
 		213D540311F79C9800CF500D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213D529B11F79B0000CF500D /* IOKit.framework */; };
+		214554CE162B523D00D74851 /* thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 214554CC162B523D00D74851 /* thumbnail.png */; };
+		214554CF162B523D00D74851 /* thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 214554CD162B523D00D74851 /* thumbnail@2x.png */; };
 		214CC3670F34E5CF0083617B /* FontGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 214CC3660F34E5CF0083617B /* FontGL.cpp */; };
 		214CC3680F34E5CF0083617B /* FontGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 214CC3660F34E5CF0083617B /* FontGL.cpp */; };
 		215542301261FDC900AB51BF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2155422F1261FDC900AB51BF /* Sparkle.framework */; };
@@ -488,6 +490,8 @@
 		2135DA540EC74853005E246D /* ESScreensaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ESScreensaver.cpp; sourceTree = "<group>"; };
 		2135DB240EC75133005E246D /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = /System/Library/Frameworks/ScreenSaver.framework; sourceTree = "<absolute>"; };
 		213D529B11F79B0000CF500D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		214554CC162B523D00D74851 /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = SOURCE_ROOT; };
+		214554CD162B523D00D74851 /* thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbnail@2x.png"; sourceTree = SOURCE_ROOT; };
 		214B75060EBBA78900B5B897 /* Rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rect.cpp; path = ../Common/Math/Rect.cpp; sourceTree = SOURCE_ROOT; };
 		214CC3660F34E5CF0083617B /* FontGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FontGL.cpp; path = ../DisplayOutput/OpenGL/FontGL.cpp; sourceTree = SOURCE_ROOT; };
 		2155422F1261FDC900AB51BF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
@@ -839,6 +843,8 @@
 		2160FE160F30F82800B2C27A /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
+				214554CC162B523D00D74851 /* thumbnail.png */,
+				214554CD162B523D00D74851 /* thumbnail@2x.png */,
 				21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */,
 				21DE7CA6101901E900E77D68 /* Instructions.rtf */,
 				21006FBD1017BC2C004A6511 /* Credits.html */,
@@ -1013,6 +1019,8 @@
 				21ADBB271305D380000A9F20 /* green.tif in Resources */,
 				21ADBB281305D380000A9F20 /* red.tif in Resources */,
 				21ADBB291305D380000A9F20 /* yellow.tif in Resources */,
+				214554CE162B523D00D74851 /* thumbnail.png in Resources */,
+				214554CF162B523D00D74851 /* thumbnail@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

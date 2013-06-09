@@ -38,8 +38,8 @@ private:
 		ContentDecoder::sMetaData			m_MetaData; // current frame meta data
 	} DisplayUnit;
 	
-	typedef std::vector<DisplayUnit>		DisplayUnitList;
-	typedef std::vector<DisplayUnit>::iterator DisplayUnitIterator;
+	typedef std::vector<DisplayUnit*>		DisplayUnitList;
+	typedef std::vector<DisplayUnit*>::iterator DisplayUnitIterator;
 	
 	boost::mutex m_displayListMutex;
 	
@@ -56,8 +56,6 @@ private:
 	
 	DisplayUnitList							m_displayUnits;
 	
-	uint32									m_curDisplayUnit;
-
 	//	Playlist.
 	ContentDecoder::spCLuaPlaylist			m_spPlaylist;
 
@@ -85,6 +83,8 @@ private:
 
 	bool m_HasGoldSheep;
 	int m_UsedSheepType;
+	
+	boost::mutex	m_updateMutex;
 
 #ifdef	WIN32
 	HWND	m_hWnd;
@@ -123,8 +123,8 @@ private:
 			bool	BeginFrameUpdate();
 			bool	EndFrameUpdate();
 			bool	BeginDisplayFrame( uint32 displayUnit );
-			bool	EndDisplayFrame( bool drawn = true );
-			bool	Update(bool &bPlayNoSheepIntro);
+			bool	EndDisplayFrame( uint32 displayUnit, bool drawn = true );
+			bool	Update(uint32 displayUnit, bool &bPlayNoSheepIntro);
 			void	Start();
 			void	Stop();
 			
@@ -147,14 +147,14 @@ private:
 			{ 	
 				boost::mutex::scoped_lock lockthis( m_displayListMutex );
 
-				return m_displayUnits.empty() ? NULL :  m_displayUnits[0].spDisplay;
+				return m_displayUnits.empty() ? NULL :  m_displayUnits[0]->spDisplay;
 			}
 			
 			inline DisplayOutput::spCRenderer		Renderer()
 			{
 				boost::mutex::scoped_lock lockthis( m_displayListMutex );
 				
-				return m_displayUnits.empty() ? NULL :  m_displayUnits[0].spRenderer;	
+				return m_displayUnits.empty() ? NULL :  m_displayUnits[0]->spRenderer;	
 			}
 			
 			inline ContentDecoder::spCContentDecoder Decoder()
@@ -164,29 +164,29 @@ private:
 				if ( m_MultiDisplayMode == kMDSharedMode )
 					return m_spDecoder;
 				else
-					return m_displayUnits.empty() ? NULL :  m_displayUnits[0].spDecoder;
+					return m_displayUnits.empty() ? NULL :  m_displayUnits[0]->spDecoder;
 			}
 
 			//	Playlist stuff.
 			inline std::string GetCurrentPlayingSheepFile()
 			{
-				return m_displayUnits[0].m_MetaData.m_FileName;
+				return m_displayUnits[0]->m_MetaData.m_FileName;
 			}
 			inline uint32	GetCurrentPlayingSheepID()
 			{	
-				return m_displayUnits[0].m_MetaData.m_SheepID;
+				return m_displayUnits[0]->m_MetaData.m_SheepID;
 			};
 			inline uint32	GetCurrentPlayingSheepGeneration()
 			{	
-				return m_displayUnits[0].m_MetaData.m_SheepGeneration;
+				return m_displayUnits[0]->m_MetaData.m_SheepGeneration;
 			};
 			inline time_t	GetCurrentPlayingatime()
 			{	
-				return m_displayUnits[0].m_MetaData.m_LastAccessTime;
+				return m_displayUnits[0]->m_MetaData.m_LastAccessTime;
 			};
 			inline time_t	IsCurrentPlayingEdge()
 			{	
-				return m_displayUnits[0].m_MetaData.m_IsEdge;
+				return m_displayUnits[0]->m_MetaData.m_IsEdge;
 			};
 			inline int32	GetCurrentPlayingID()
 			{	
@@ -242,6 +242,8 @@ private:
 			inline void		SetMultiDisplayMode( MultiDisplayMode mode )	{ m_MultiDisplayMode = mode; }
 			inline bool		HasGoldSheep() { return m_HasGoldSheep; }
 			inline int		UsedSheepType() { return m_UsedSheepType; }
+			
+			inline int		GetDisplayCount() { return m_displayUnits.size(); }
 };
 
 /*

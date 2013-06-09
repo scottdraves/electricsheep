@@ -400,11 +400,11 @@ class	CLuaPlaylist : public CPlaylist
 				}
 
 				_bEnoughSheep = ( m_numSheep > kSheepNumTreshold );
-
+				
 				//	Gently ask lua about a new file.
 				int8	*ret = NULL;
 				int32	stackdelta = Base::Script::Call( m_pState->GetState(), "Next", "ib>s", _curID, _bStartByRandom, &ret );
-
+				
 				if( stackdelta == 1 && ret != NULL)
 					if ( *(const char *)ret )
 						_result = std::string( (const char *)ret );

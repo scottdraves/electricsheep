@@ -19,13 +19,17 @@ namespace DisplayOutput
 
 /*
 */
+#ifdef MAC
+CShaderGL::CShaderGL(CGLContextObj glCtx)
+#else
 CShaderGL::CShaderGL()
+#endif
 {
 	m_VertexShader = 0;
 	m_FragmentShader = 0;
 	m_Program = 0;
 #ifdef MAC
-	cgl_ctx = CGLGetCurrentContext();
+	cgl_ctx = glCtx;//CGLGetCurrentContext();
 #endif
 }
 
@@ -197,8 +201,17 @@ bool	CShaderGL::Build( const char *_pVertexShader, const char *_pFragmentShader 
 				{
 					//	Assign samplers to image units.
 					GLint location = glGetUniformLocationARB( m_Program, name );
-					glUniform1i( location, nSamplers );
+					
+					int pos;
+					
+					sscanf(name, "texUnit%d", &pos);
+					
+					glUniform1i( location, pos/*nSamplers*/ );
+#ifdef MAC
+					m_Samplers[ name ] = new CShaderUniformGL( cgl_ctx, name, eUniform_Sampler, location );
+#else
 					m_Samplers[ name ] = new CShaderUniformGL( name, eUniform_Sampler, location );
+#endif
 					nSamplers++;
 				}
 				else
@@ -235,8 +248,12 @@ bool	CShaderGL::Build( const char *_pVertexShader, const char *_pFragmentShader 
 								case GL_FLOAT_MAT3_ARB: eType = eUniform_Matrix3;	break;
 								case GL_FLOAT_MAT4_ARB: eType = eUniform_Matrix4;	break;
 							}
-
+						
+#ifdef MAC
+							m_Uniforms[ name ] = new CShaderUniformGL( cgl_ctx, name, eType, glGetUniformLocationARB( m_Program, name ), size );
+#else
 							m_Uniforms[ name ] = new CShaderUniformGL( name, eType, glGetUniformLocationARB( m_Program, name ), size );
+#endif
 						}
 						else if( bracket != NULL && bracket[1] > '0' )
 						{
@@ -360,15 +377,47 @@ void	CShaderUniformGL::Apply()
 {
 	if( !m_bDirty || m_pData == NULL )
 		return;
-
-	if( m_eType == eUniform_Sampler )
-		((Uniform_Func)g_UniformFunctionList[ eUniform_Int ] )( m_Index, m_Size, (GLint *)m_pData );
-	else if( m_eType >= eUniform_Matrix2 )
-		((Uniform_MatrixFunc)g_UniformFunctionList[ m_eType ] )( m_Index, m_Size, GL_TRUE, (fp4 *)m_pData );
-	else
+		
+	switch (m_eType)
 	{
-		((Uniform_Func)g_UniformFunctionList[ m_eType ] )( m_Index, m_Size, m_pData );
-		//glUniform1fvARB( m_Index, m_Size, m_pData );
+		case eUniform_Float:
+			glUniform1fvARB( m_Index, m_Size, (const GLfloat *)m_pData );
+			break;
+		case eUniform_Float2:
+			glUniform2fvARB( m_Index, m_Size, (const GLfloat *)m_pData );
+			break;
+		case eUniform_Float3:
+			glUniform3fvARB( m_Index, m_Size, (const GLfloat *)m_pData );
+			break;
+		case eUniform_Float4:
+			glUniform4fvARB( m_Index, m_Size, (const GLfloat *)m_pData );
+			break;
+		case eUniform_Int:
+		case eUniform_Boolean:
+		case eUniform_Sampler:
+			glUniform1ivARB( m_Index, m_Size, (const GLint *)m_pData );
+			break;
+		case eUniform_Int2:
+		case eUniform_Boolean2:
+			glUniform2ivARB( m_Index, m_Size, (const GLint *)m_pData );
+			break;
+		case eUniform_Int3:
+		case eUniform_Boolean3:
+			glUniform3ivARB( m_Index, m_Size, (const GLint *)m_pData );
+			break;
+		case eUniform_Int4:
+		case eUniform_Boolean4:
+			glUniform4ivARB( m_Index, m_Size, (const GLint *)m_pData );
+			break;
+		case eUniform_Matrix2:
+			glUniformMatrix2fvARB( m_Index, m_Size, GL_TRUE, (const GLfloat *)m_pData );
+			break;
+		case eUniform_Matrix3:
+			glUniformMatrix3fvARB( m_Index, m_Size, GL_TRUE, (const GLfloat *)m_pData );
+			break;
+		case eUniform_Matrix4:
+			glUniformMatrix4fvARB( m_Index, m_Size, GL_TRUE, (const GLfloat *)m_pData );
+			break;
 	}
 
 	VERIFYGL;

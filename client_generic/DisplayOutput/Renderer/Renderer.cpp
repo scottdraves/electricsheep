@@ -153,6 +153,16 @@ void	CRenderer::Apply()
 #if 0
 #warning FIXME (Keffo#1#): hum, same pointer, different tex?
 #endif
+		if (spTex.IsNull())
+		{
+			if (!spCurrTex.IsNull())
+			{
+				spCurrTex->Unbind( i );
+				spCurrTex = NULL;
+				m_aspActiveTextures[i] = NULL;
+			}
+		}
+		else
 		if( spTex != spCurrTex )
 		{
 			if( spCurrTex != NULL )
@@ -170,7 +180,11 @@ void	CRenderer::Apply()
 		//	Force bind if dirty.
 		if( spTex != NULL )
 			if( spTex->Dirty() )
+			{
 				spTex->Bind( i );
+				m_aspActiveTextures[ i ] = spTex;
+			}
+
 	}
 
 	//	Update shader.

@@ -394,6 +394,7 @@ function GetRandomSheep()
    end
 
    local s = nil
+   local evensheep = nil
 
    --    Return least played sheep.
    --if not context.pq:empty() then
@@ -405,14 +406,24 @@ function GetRandomSheep()
            --local s = context.pq:remove()
            local rndnum = g_CRand()
            local rnd = math.floor( 1 + rndnum * #context.pq )
+		   dump("rnd = " .. rnd);
            local s = context.pq[ rnd ]
+		   
            if PlayEvenly( s.rank ) then
-               dump( "Picked new sheep " .. s.id .. " from pq (playcount " .. s.playCount .. " ) rnd=" .. tostring(rnd) .. " rndnum=" .. tostring(rndnum) )
-               return s
+               evensheep = s
+			   
+			   if ( #context.pq < 20 ) or s.loopable then
+				dump( "Picked new sheep " .. s.id .. " from pq (playcount " .. s.playCount .. " ) rnd=" .. tostring(rnd) .. " rndnum=" .. tostring(rndnum) )
+				return s
+			   end
            end
            retry = retry + 1
        end 
    end
+   
+	if evensheep ~= nil then
+		s = evensheep
+	end
 
    if s == nil then
        dump( "Unable to grab a random sheep..." )
@@ -481,19 +492,6 @@ function GraphAlgo( _currentSheep )
 	end
 
 	dump( "GraphAlgo: CurrentSheep = " .. _currentSheep.id )
-
-	--	If sheep is a loop, let it play N times.
-	if _currentSheep.loopable == true then
-		_currentSheep.iterations = _currentSheep.iterations or 0
-
-		if _currentSheep.iterations < context.LoopIterations-1 then
-			_currentSheep.iterations = _currentSheep.iterations + 1
-			return  _currentSheep
-		else
-			dump( _currentSheep.id .. " looped " .. context.LoopIterations .. " times..." )
-			_currentSheep.iterations = 0
-		end
-	end
 
 	local loops = pq:new()
 	local edges = pq:new()
@@ -647,9 +645,7 @@ function Next( _curID, _startByRandom )
 		
 		dump("Next sheep chosen: " .. next.id .. " played " .. next. playCount .. " times") 
 		
-		if next.loopable == false or next.iterations == context.LoopIterations-1 then
-			next.playCount = next.playCount + 1
-		end
+		next.playCount = next.playCount + 1
 		
 		if next.playCount > context.MaturityTreshold then
 			next.maturity = 1.0

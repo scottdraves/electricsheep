@@ -264,7 +264,17 @@ class	CElectricSheep_Mac : public CElectricSheep
 				}
 				else
 				{
+#ifdef DO_THREAD_UPDATE
+					boost::mutex::scoped_lock lock( m_BarrierMutex );
+					
+					DestroyUpdateThreads();
+#endif
+
 					g_Player().AddDisplay( _glContext );
+										
+#ifdef DO_THREAD_UPDATE
+					CreateUpdateThreads();
+#endif
 				}
 			}
 		

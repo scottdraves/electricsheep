@@ -42,7 +42,7 @@ namespace ContentDecoder
 	CContentDecoder.
 
 */
-CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, const uint32 _queueLenght, PixelFormat _wantedFormat )
+CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, bool _bCalculateTransitions, const uint32 _queueLenght, PixelFormat _wantedFormat )
 {
 	g_Log->Info( "CContentDecoder()" );
 	m_FadeCount = g_Settings()->Get("settings.player.fadecount", 30);
@@ -53,6 +53,8 @@ CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom,
 	av_register_all();
 	
 	m_bStartByRandom = _bStartByRandom;
+	
+	m_bCalculateTransitions = _bCalculateTransitions;
 
 	m_pDecoderThread = NULL;
 	
@@ -60,15 +62,6 @@ CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom,
 	
 	m_NextSheepQueue.setMaxQueueElements(10);
 
-	m_pVideoStream = NULL;
-	m_pVideoCodecContext = NULL;
-	m_pFormatContext = NULL;
-
-	m_VideoStreamID = -1;
-
-	m_pScaler = NULL;
-	m_Width = 0;
-	m_Height = 0;
 	m_WantedPixelFormat = _wantedFormat;
 
 	m_bStop = true;
@@ -76,12 +69,8 @@ CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom,
 	m_spPlaylist = _spPlaylist;
 	
 	m_bForceNext = false;
-	
-	m_CurGeneration = 0;
-	m_CurSheepID = 0;
-	
-	m_lockedFrame = NULL;
-	m_bFrameLocked = false;
+		
+	m_sharedFrame = NULL;
 	
 	m_Initialized = false;
 	m_NoSheeps = true;
@@ -89,7 +78,9 @@ CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom,
 	m_FadeIn = m_FadeCount;
 	m_FadeOut = 0;
 	m_prevLast = 0;
-	m_totalFrameCount = 0;
+	
+	m_MainVideoInfo = NULL;//new sMainVideoInfo();
+	m_SecondVideoInfo = NULL;
 }
 
 /*
@@ -103,18 +94,16 @@ CContentDecoder::~CContentDecoder()
 void	CContentDecoder::Destroy()
 {
 	g_Log->Info( "Destroy()" );
-
-    if( m_pVideoCodecContext )
-    {
-        avcodec_close( m_pVideoCodecContext );
-        m_pVideoCodecContext = NULL;
-    }
-
-    if( m_pFormatContext )
-    {
-        av_close_input_file( m_pFormatContext );
-        m_pFormatContext = NULL;
-    }
+	
+	if (m_MainVideoInfo != NULL)
+	{
+		SAFE_DELETE(m_MainVideoInfo);
+	}
+	
+	if (m_SecondVideoInfo != NULL)
+	{
+		SAFE_DELETE(m_SecondVideoInfo);
+	}
 }
 
 /*
@@ -140,23 +129,30 @@ int	CContentDecoder::DumpError( int _err )
 
 /*
 */
-bool	CContentDecoder::Open( const std::string &_filename )
+bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
 {
-	m_iCurrentFileFrameCount = 0;
-	m_totalFrameCount = 0;
+	if (ovi == NULL)
+		return false;
+	
+	boost::filesystem::path sys_name( ovi->m_Path );
+
+	const std::string &_filename = sys_name.string();
+	
+	ovi->m_iCurrentFileFrameCount = 0;
+	ovi->m_totalFrameCount = 0;
 	struct stat fs;
 	if ( !::stat( _filename.c_str(), &fs ) )
 	{
-		m_CurrentFileatime = fs.st_atime;
+		ovi->m_CurrentFileatime = fs.st_atime;
 	}
 	g_Log->Info( "Opening: %s", _filename.c_str() );
 
-	Destroy();
+	//Destroy();
 
 #ifdef USE_NEW_FFMPEG_API
-	if( DumpError( avformat_open_input( &m_pFormatContext, _filename.c_str(), NULL, NULL ) ) < 0 )
+	if( DumpError( avformat_open_input( &ovi->m_pFormatContext, _filename.c_str(), NULL, NULL ) ) < 0 )
 #else
-	if( DumpError( av_open_input_file( &m_pFormatContext, _filename.c_str(), NULL, 0, NULL ) ) < 0 )
+	if( DumpError( av_open_input_file( &ovi->m_pFormatContext, _filename.c_str(), NULL, 0, NULL ) ) < 0 )
 #endif
 	{
 		g_Log->Warning( "Failed to open %s...", _filename.c_str() );
@@ -164,9 +160,9 @@ bool	CContentDecoder::Open( const std::string &_filename )
 	}
 
 #ifdef USE_NEW_FFMPEG_API
-	if( DumpError( avformat_find_stream_info( m_pFormatContext, NULL ) ) < 0 )
+	if( DumpError( avformat_find_stream_info( ovi->m_pFormatContext, NULL ) ) < 0 )
 #else
-	if( DumpError( av_find_stream_info( m_pFormatContext ) ) < 0 )
+	if( DumpError( av_find_stream_info( ovi->m_pFormatContext ) ) < 0 )
 #endif
 	{
 		g_Log->Error( "av_find_stream_info failed with %s...", _filename.c_str() );
@@ -176,57 +172,58 @@ bool	CContentDecoder::Open( const std::string &_filename )
 	//dump_format( m_pFormatContext, 0, _filename.c_str(), false );
 
 	//	Find video stream;
-	m_VideoStreamID = -1;
-    for( uint32 i=0; i<m_pFormatContext->nb_streams; i++ )
+	ovi->m_VideoStreamID = -1;
+    for( uint32 i=0; i<ovi->m_pFormatContext->nb_streams; i++ )
     {
-        if( m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
+        if( ovi->m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
         {
-            m_pVideoStream = m_pFormatContext->streams[i];
-            m_VideoStreamID = i;
+            ovi->m_pVideoStream = ovi->m_pFormatContext->streams[i];
+            ovi->m_VideoStreamID = i;
             break;
         }
     }
 
-    if( m_VideoStreamID == -1 )
+    if( ovi->m_VideoStreamID == -1 )
     {
         g_Log->Error( "Could not find video stream in %s", _filename.c_str() );
         return false;
     }
 
 	//	Find video codec.
-    m_pVideoCodecContext = m_pFormatContext->streams[ m_VideoStreamID ]->codec;
-    if( m_pVideoCodecContext == NULL )
+    ovi->m_pVideoCodecContext = ovi->m_pFormatContext->streams[ ovi->m_VideoStreamID ]->codec;
+    if( ovi->m_pVideoCodecContext == NULL )
     {
-        m_pVideoCodecContext = NULL;
         g_Log->Error( "Video CodecContext not found for %s", _filename.c_str() );
         return false;
     }
 
-    m_pVideoCodec = avcodec_find_decoder( m_pVideoCodecContext->codec_id );
+    ovi->m_pVideoCodec = avcodec_find_decoder( ovi->m_pVideoCodecContext->codec_id );
 
-    if( m_pVideoCodec == NULL )
+    if( ovi->m_pVideoCodec == NULL )
     {
-        m_pVideoCodecContext = NULL;
+        ovi->m_pVideoCodecContext = NULL;
         g_Log->Error( "Video Codec not found for %s", _filename.c_str() );
         return false;
     }
 
 	//m_pVideoCodecContext->workaround_bugs = 1;
     //m_pFormatContext->flags |= AVFMT_FLAG_GENPTS;		//	Generate pts if missing even if it requires parsing future frames.
-    m_pFormatContext->flags |= AVFMT_FLAG_IGNIDX;		//	Ignore index.
+    ovi->m_pFormatContext->flags |= AVFMT_FLAG_IGNIDX;		//	Ignore index.
     //m_pFormatContext->flags |= AVFMT_FLAG_NONBLOCK;		//	Do not block when reading packets from input.
 
 #ifdef USE_NEW_FFMPEG_API
-    if( DumpError( avcodec_open2( m_pVideoCodecContext, m_pVideoCodec, NULL ) ) < 0 )
+    if( DumpError( avcodec_open2( ovi->m_pVideoCodecContext, ovi->m_pVideoCodec, NULL ) ) < 0 )
 #else
-    if( DumpError( avcodec_open( m_pVideoCodecContext, m_pVideoCodec ) ) < 0 )
+    if( DumpError( avcodec_open( ovi->m_pVideoCodecContext, ovi->m_pVideoCodec ) ) < 0 )
 #endif
     {
         g_Log->Error( "avcodec_open failed for %s", _filename.c_str() );
         return false;
     }
 	
-	m_totalFrameCount = uint32((((double)m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(m_pVideoStream->r_frame_rate));
+	ovi->m_pFrame = avcodec_alloc_frame();
+	
+	ovi->m_totalFrameCount = uint32((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(ovi->m_pVideoStream->r_frame_rate));
 
 	g_Log->Info( "Open done()" );
 
@@ -247,12 +244,6 @@ void	CContentDecoder::Close()
 
 	m_spPlaylist = NULL;
 
-	if( m_pScaler )
-	{
-		av_free( m_pScaler );
-		m_pScaler = NULL;
-	}
-
 	g_Log->Info( "closed..." );
 
 }
@@ -268,6 +259,61 @@ void	CContentDecoder::Close()
 	}
 }*/
 
+sOpenVideoInfo*	CContentDecoder::GetNextSheepInfo()
+{
+	std::string name;
+
+	sOpenVideoInfo *retOVI = NULL;
+	
+	bool sheepfound = false;
+	
+	while ( !sheepfound && m_NextSheepQueue.pop(name, true) )
+	{
+		if ( name.empty() )
+			break;
+
+		uint32 Generation, ID, First, Last;
+		std::string fname;
+											
+		sheepfound = true;
+		
+		retOVI = new sOpenVideoInfo;
+		
+		retOVI->m_Path.assign(name);
+			
+		if( m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, First, Last, fname ) )
+		{				
+			boost::filesystem::path p( name );
+			
+			if ( !boost::filesystem::exists( p ) )
+			{
+				sheepfound = false;
+				continue;
+			}
+			
+			std::string xxxname( name );
+			xxxname.replace(xxxname.size() - 3, 3, "xxx");
+			
+			if ( boost::filesystem::exists( p/xxxname ) )
+			{
+				sheepfound = false;
+				continue;
+			}
+
+			retOVI->m_SheepID = ID;
+			retOVI->m_Generation = Generation;
+			retOVI->m_First = First;
+			retOVI->m_Last = Last;
+			retOVI->m_bSpecialSheep = false;
+		}
+		else
+		{
+			retOVI->m_bSpecialSheep = true;			
+		}
+	}
+	
+	return retOVI;
+}
 
 /*
 	Next().
@@ -275,109 +321,91 @@ void	CContentDecoder::Close()
 */
 bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 {
-	std::string name;
 
 	if( m_spPlaylist == NULL )
 	{
 		g_Log->Warning("Playlist == NULL");
 		return( false );
 	}
-
-	uint32 iter = 0;
 	
-	do 
-	{
-		bool sheepfound = false;
+	bool sameVideo = false;
 		
-		while ( !sheepfound && m_NextSheepQueue.pop(name, true) )
+	if (_bSkipLoop && !m_MainVideoInfo->m_bSpecialSheep && m_SecondVideoInfo != NULL && m_MainVideoInfo->EqualsTo(m_SecondVideoInfo) && m_MainVideoInfo->IsLoop())
+		SAFE_DELETE(m_SecondVideoInfo);
+		
+	if (m_MainVideoInfo != NULL && !m_MainVideoInfo->m_bSpecialSheep && m_SecondVideoInfo != NULL && m_MainVideoInfo->EqualsTo(m_SecondVideoInfo))
+		sameVideo = true;
+		
+	SAFE_DELETE(m_MainVideoInfo);
+	
+	m_MainVideoInfo = m_SecondVideoInfo;
+	
+	m_SecondVideoInfo = NULL;
+	
+	if (m_MainVideoInfo == NULL)
+	{
+		m_MainVideoInfo = GetNextSheepInfo();
+		
+		if (m_MainVideoInfo == NULL)
+			return false;
+	}
+	
+	if (!m_MainVideoInfo->m_bSpecialSheep)
+	{
+		if (m_SecondVideoInfo == NULL)
 		{
-			if ( name.empty() )
-				break;
-
-			uint32 Generation, ID, First, Last;
-			std::string fname;
-												
-			sheepfound = true;
-				
-			if( m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, First, Last, fname ) )
-			{				
-				boost::filesystem::path p( name );
-				
-				if ( !boost::filesystem::exists( p ) )
-				{
-					sheepfound = false;
-					continue;
-				}
-				
-				std::string xxxname( name );
-				xxxname.replace(xxxname.size() - 3, 3, "xxx");
-				
-				if ( boost::filesystem::exists( p/xxxname ) )
-				{
-					sheepfound = false;
-					continue;
-				}
-
-				while( m_SheepHistoryQueue.size() > 50 )
-				{
-					std::string tmpstr;
-					
-					m_SheepHistoryQueue.pop( tmpstr );
-				}
-				
-				m_SheepHistoryQueue.push( name );
-				
-				if ( _bSkipLoop && ID == m_CurSheepID )
-				{
-					iter++;
-					continue;
-				};
-				
-				if ( ( m_CurSheepID != ID || m_CurGeneration != Generation ) )
-				{				
-					m_spPlaylist->ChooseSheepForPlaying( Generation, ID );
-									
-					m_CurSheepID = ID;
-					
-					m_CurGeneration = Generation;
-					
-					m_IsEdge = !(First == Last && Last == ID);
-				}
+			if (m_MainVideoInfo->IsLoop() && m_MainVideoInfo->m_NumIterations < (m_LoopIterations - 1))
+			{
+				m_SecondVideoInfo = new sOpenVideoInfo(m_MainVideoInfo);
+				m_SecondVideoInfo->m_NumIterations++;
 			}
 			else
-			{
-				//here we have sheep which is not in form of XXXXX=XXXXX=XXXXX=XXXXX.avi, so it's sheep wait.avi or something.
-				
-				boost::filesystem::path p( name );
-				
-				if ( !boost::filesystem::exists( p ) )
-				{
-					m_NoSheeps = true;
-					return true;
-				}
-			}
-			
-			_bSkipLoop = false;
-			boost::filesystem::path sys_name( name );
-			if ( !Open( sys_name.string() ) )
-			{
-				sheepfound = false;
-				continue;
-			} else
-			{
-				//m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, First, m_prevLast, fname );
-				//m_NextSheepQueue.peek(name, true);
-				//m_spPlaylist->GetSheepInfoFromPath( name, Generation, ID, m_nextFirst, Last, fname );
-			}
-			
-			m_NoSheeps = false;
-			
-			return true;
-		}
-	} 
-	while ( _bSkipLoop && iter < m_LoopIterations);
+				m_SecondVideoInfo = GetNextSheepInfo();
 
-	return false;
+		}
+	}
+	else
+		m_NoSheeps = true;
+	
+	if (!m_MainVideoInfo->IsOpen())
+	{
+		if (!Open( m_MainVideoInfo ))
+			return false;
+	}
+	else
+	{
+		//if the video was already open (m_SecondVideoInfo previously),
+		//we need to assure seamless continuation
+		m_MainVideoInfo->m_NextIsSeam = true;
+	}
+	
+	if (m_MainVideoInfo->IsOpen())
+	{
+		if (!sameVideo)
+		{
+			while( m_SheepHistoryQueue.size() > 50 )
+			{
+				std::string tmpstr;
+				
+				m_SheepHistoryQueue.pop( tmpstr );
+			}
+			
+			m_SheepHistoryQueue.push( m_MainVideoInfo->m_Path );
+			
+			m_spPlaylist->ChooseSheepForPlaying( m_MainVideoInfo->m_Generation, m_MainVideoInfo->m_SheepID );
+		}
+		
+		m_NoSheeps = false;
+	}
+	else
+		return false;
+		
+	if (m_bCalculateTransitions && m_SecondVideoInfo != NULL && !m_SecondVideoInfo->IsOpen() && m_MainVideoInfo->m_Last != m_SecondVideoInfo->m_SheepID && m_MainVideoInfo->m_SheepID != m_SecondVideoInfo->m_First)
+	{
+		Open( m_SecondVideoInfo );
+	}
+
+	return true;
 }
 
 /*
@@ -451,28 +479,151 @@ void	CContentDecoder::CalculateNextSheep()
 	}
 }
 
+CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
+{
+	if (ovi == NULL)
+		return NULL;
+					
+	CVideoFrame *pVideoFrame = NULL;
+
+	AVFormatContext	*pFormatContext = ovi->m_pFormatContext;
+	AVFrame *pFrame = ovi->m_pFrame;
+	
+	if( pFormatContext != NULL )
+	{
+		AVPacket    packet;
+		av_init_packet(&packet);
+
+		if ( av_read_frame( pFormatContext, &packet ) >= 0 )
+		{
+			//printf( "av_read_frame done" );
+			if( packet.stream_index == ovi->m_VideoStreamID )
+			{
+				int	frameDecoded = 0;
+
+				//printf( "calling av_dup_packet" );
+				if( av_dup_packet( &packet ) < 0 )
+				{
+					g_Log->Warning( "av_dup_packet < 0" );
+					return NULL;
+				}
+				
+				AVCodecContext	*pVideoCodecContext = ovi->m_pVideoCodecContext;
+
+					//printf( "avcodec_decode_video(0x%x, 0x%x, 0x%x, 0x%x, %d)", m_pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
+
+#if (!defined(LINUX_GNU) || defined(HAVE_AVC_VID2))
+				int32 bytesDecoded = avcodec_decode_video2( pVideoCodecContext, pFrame, &frameDecoded, &packet );
+#else
+				int32 bytesDecoded = avcodec_decode_video( pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
+#endif
+					
+				//g_Log->Info( "avcodec_decode_video decoded %d bytes", bytesDecoded );
+				if( bytesDecoded < 0 )
+					g_Log->Warning( "Failed to decode video frame: bytesDecoded < 0" );
+
+				//	Do we have a fresh frame?
+				if( frameDecoded > 0 )
+				{
+					//g_Log->Info( "frame decoded" );
+
+					//if( pFrame->interlaced_frame )
+						//avpicture_deinterlace( (AVPicture *)pFrame, (AVPicture *)pFrame, m_pVideoCodecContext->pix_fmt, m_pVideoCodecContext->width, m_pVideoCodecContext->height );
+
+					//	If the decoded video has a different resolution, delete the scaler to trigger it to be recreated.
+					if( ovi->m_Width != (uint32)pVideoCodecContext->width || ovi->m_Height != (uint32)pVideoCodecContext->height )
+					{
+						g_Log->Info( "size doesn't match, recreating" );
+
+						if( ovi->m_pScaler )
+						{
+							g_Log->Info( "deleting m_pScalar" );
+							av_free( ovi->m_pScaler );
+							ovi->m_pScaler = NULL;
+						}
+					}
+
+					//	Make sure scaler is created.
+					if( ovi->m_pScaler == NULL )
+					{
+						g_Log->Info( "creating m_pScaler" );
+
+						ovi->m_pScaler = sws_getContext(	pVideoCodecContext->width, pVideoCodecContext->height, pVideoCodecContext->pix_fmt,
+														pVideoCodecContext->width, pVideoCodecContext->height, m_WantedPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
+
+						//	Store width & height now...
+						ovi->m_Width = pVideoCodecContext->width;
+						ovi->m_Height = pVideoCodecContext->height;
+
+						if( ovi->m_pScaler == NULL )
+							g_Log->Warning( "scaler == null" );
+					}
+
+					//printf( "creating pVideoFrame" );
+					pVideoFrame = new CVideoFrame( pVideoCodecContext, m_WantedPixelFormat, std::string(pFormatContext->filename) );
+					AVFrame	*pDest = pVideoFrame->Frame();
+
+					//printf( "calling sws_scale()" );
+					sws_scale( ovi->m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
+
+					++ovi->m_iCurrentFileFrameCount;
+					
+					/*if (m_totalFrameCount > 0)
+					{
+						//g_Log->Info("framcount %lu, %lf", (long)(((double)m_pFormatContext->duration/(double)AV_TIME_BASE)),av_q2d(m_pVideoStream->r_frame_rate));
+						if (m_iCurrentFileFrameCount == m_totalFrameCount - m_FadeCount)
+						{
+							if (m_prevLast != m_nextFirst)
+							{
+								//g_Log->Info("FADING prevLast %u nextFirst %u", m_prevLast, m_nextFirst);
+								m_FadeOut = m_FadeCount + 1;
+							}
+						}
+						pVideoFrame->SetMetaData_Fade(1.f);
+						if (m_FadeOut > 0)
+						{
+							--m_FadeOut;
+							if (m_FadeOut == 0)
+								m_FadeIn = 0;
+							pVideoFrame->SetMetaData_Fade(fp4(m_FadeOut) / fp4(m_FadeCount));
+							//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
+						}
+						if (m_FadeIn < m_FadeCount)
+						{
+							++m_FadeIn;
+							pVideoFrame->SetMetaData_Fade(fp4(m_FadeIn) / fp4(m_FadeCount));
+							//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
+						}
+					}*/
+
+					pVideoFrame->SetMetaData_SheepID( ovi->m_SheepID );
+					pVideoFrame->SetMetaData_SheepGeneration( ovi->m_Generation );
+					pVideoFrame->SetMetaData_IsEdge( ovi->IsEdge() );
+					pVideoFrame->SetMetaData_atime( ovi->m_CurrentFileatime );
+					pVideoFrame->SetMetaData_IsSeam( ovi->m_NextIsSeam );
+					ovi->m_NextIsSeam = false;
+				}
+			}
+
+			av_free_packet( &packet );
+		}
+	}
+			
+	return pVideoFrame;
+}
+
 /*
 	ReadPackets().
 	Thread function.
 */
 void	CContentDecoder::ReadPackets()
-{
-	AVFrame		*pFrame = NULL;
-	
-	AVPacket    packet;
-
-	av_init_packet(&packet);
-	
-	CVideoFrame *pVideoFrame = NULL;
-	
+{	
 	try {
 	
 		g_Log->Info( "Packet thread started..." );
 		
 		if( !NextSheepForPlaying() )
 			return;
-
-		pFrame = avcodec_alloc_frame();
 
 		while( true )
 		{			
@@ -482,122 +633,40 @@ void	CContentDecoder::ReadPackets()
 			
 			if (bNextForced)
 				ForceNext(false);
-		   
-			if( !bNextForced && m_pFormatContext != NULL && av_read_frame( m_pFormatContext, &packet ) >= 0 )
+				
+			bool bDoNextSheep = true;
+				
+			if (!bNextForced)
 			{
-				//printf( "av_read_frame done" );
-				if( packet.stream_index == m_VideoStreamID )
+				CVideoFrame *pMainVideoFrame = ReadOneFrame(m_MainVideoInfo);
+				
+				if (pMainVideoFrame != NULL)
 				{
-					int	frameDecoded = 0;
-
-					//printf( "calling av_dup_packet" );
-					if( av_dup_packet( &packet ) < 0 )
-					{
-						g_Log->Warning( "av_dup_packet < 0" );
-						continue;
-					}
-
-					//printf( "avcodec_decode_video(0x%x, 0x%x, 0x%x, 0x%x, %d)", m_pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
-
-#if (!defined(LINUX_GNU) || defined(HAVE_AVC_VID2))
-					int32 bytesDecoded = avcodec_decode_video2( m_pVideoCodecContext, pFrame, &frameDecoded, &packet );
-#else
-					int32 bytesDecoded = avcodec_decode_video( m_pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
-#endif
+					CVideoFrame *pSecondVideoFrame = NULL;
 					
-					//g_Log->Info( "avcodec_decode_video decoded %d bytes", bytesDecoded );
-					if( bytesDecoded < 0 )
-						g_Log->Warning( "Failed to decode video frame: bytesDecoded < 0" );
-
-					//	Do we have a fresh frame?
-					if( frameDecoded > 0 )
+#define kTransitionFrameLength	80
+				
+					if (m_SecondVideoInfo != NULL && m_SecondVideoInfo->IsOpen() && m_MainVideoInfo->m_iCurrentFileFrameCount >= (m_MainVideoInfo->m_totalFrameCount - kTransitionFrameLength))
+						pSecondVideoFrame = ReadOneFrame(m_SecondVideoInfo);
+					
+					if (pSecondVideoFrame != NULL)
 					{
-						//g_Log->Info( "frame decoded" );
-
-						//if( pFrame->interlaced_frame )
-							//avpicture_deinterlace( (AVPicture *)pFrame, (AVPicture *)pFrame, m_pVideoCodecContext->pix_fmt, m_pVideoCodecContext->width, m_pVideoCodecContext->height );
-
-						//	If the decoded video has a different resolution, delete the scaler to trigger it to be recreated.
-						if( m_Width != (uint32)m_pVideoCodecContext->width || m_Height != (uint32)m_pVideoCodecContext->height )
-						{
-							g_Log->Info( "size doesn't match, recreating" );
-
-							if( m_pScaler )
-							{
-								g_Log->Info( "deleting m_pScalar" );
-								av_free( m_pScaler );
-								m_pScaler = NULL;
-							}
-						}
-
-						//	Make sure scaler is created.
-						if( m_pScaler == NULL )
-						{
-							g_Log->Info( "creating m_pScaler" );
-
-							m_pScaler = sws_getContext(	m_pVideoCodecContext->width, m_pVideoCodecContext->height, m_pVideoCodecContext->pix_fmt,
-														m_pVideoCodecContext->width, m_pVideoCodecContext->height, m_WantedPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
-
-							//	Store width & height now...
-							m_Width = m_pVideoCodecContext->width;
-							m_Height = m_pVideoCodecContext->height;
-
-							if( m_pScaler == NULL )
-								g_Log->Warning( "scaler == null" );
-						}
-
-						//printf( "creating pVideoFrame" );
-						pVideoFrame = new CVideoFrame( m_pVideoCodecContext, m_WantedPixelFormat, std::string(m_pFormatContext->filename) );
-						AVFrame	*pDest = pVideoFrame->Frame();
-
-						//printf( "calling sws_scale()" );
-						sws_scale( m_pScaler, pFrame->data, pFrame->linesize, 0, m_pVideoCodecContext->height, pDest->data, pDest->linesize );
-
-						++m_iCurrentFileFrameCount;
-						
-						/*if (m_totalFrameCount > 0)
-						{
-							//g_Log->Info("framcount %lu, %lf", (long)(((double)m_pFormatContext->duration/(double)AV_TIME_BASE)),av_q2d(m_pVideoStream->r_frame_rate));
-							if (m_iCurrentFileFrameCount == m_totalFrameCount - m_FadeCount)
-							{
-								if (m_prevLast != m_nextFirst)
-								{
-									//g_Log->Info("FADING prevLast %u nextFirst %u", m_prevLast, m_nextFirst);
-									m_FadeOut = m_FadeCount + 1;
-								}
-							}
-							pVideoFrame->SetMetaData_Fade(1.f);
-							if (m_FadeOut > 0)
-							{
-								--m_FadeOut;
-								if (m_FadeOut == 0)
-									m_FadeIn = 0;
-								pVideoFrame->SetMetaData_Fade(fp4(m_FadeOut) / fp4(m_FadeCount));
-								//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
-							}
-							if (m_FadeIn < m_FadeCount)
-							{
-								++m_FadeIn;
-								pVideoFrame->SetMetaData_Fade(fp4(m_FadeIn) / fp4(m_FadeCount));
-								//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
-							}
-						}*/
-
-						pVideoFrame->SetMetaData_SheepID( m_CurSheepID );
-						pVideoFrame->SetMetaData_SheepGeneration( m_CurGeneration );
-						pVideoFrame->SetMetaData_IsEdge( m_IsEdge );
-						pVideoFrame->SetMetaData_atime( m_CurrentFileatime );
-						m_FrameQueue.push( pVideoFrame );
-						pVideoFrame = NULL;
-
-						//printf( "yielding..." );
-						m_pDecoderThread->yield();
+						pMainVideoFrame->SetMetaData_SecondFrame(pSecondVideoFrame);
+						pMainVideoFrame->SetMetaData_TransitionProgress((fp4)m_SecondVideoInfo->m_iCurrentFileFrameCount * 100.f / (fp4)kTransitionFrameLength);
 					}
+					else
+						pMainVideoFrame->SetMetaData_TransitionProgress(0.f);
+					
+					m_FrameQueue.push( pMainVideoFrame );
+					
+					bDoNextSheep = false;
+					
+					//printf( "yielding..." );
+					//m_pDecoderThread->yield();
 				}
-
-				av_free_packet( &packet );
 			}
-			else
+			
+			if (bDoNextSheep)
 			{					
 				g_Log->Info( "calling Next()" );
 				
@@ -613,30 +682,14 @@ void	CContentDecoder::ReadPackets()
 	{
 	}
 	
-	if (pVideoFrame)
-		delete pVideoFrame;
-	
-	av_free_packet( &packet );
-	
 	printf( "decoder thread ending..." );
-
-	if( pFrame )
-	{
-		av_free( pFrame );
-		pFrame = NULL;
-	}
 
 	g_Log->Info( "Ending decoder thread..." );
 }
 
-void CContentDecoder::LockFrame()
+void CContentDecoder::ResetSharedFrame()
 {
-	m_bFrameLocked = true;
-}
-
-void CContentDecoder::UnlockFrame()
-{
-   m_bFrameLocked = false;
+	m_sharedFrame = NULL;
 }
 
 /*
@@ -646,19 +699,24 @@ void CContentDecoder::UnlockFrame()
 */
 spCVideoFrame CContentDecoder::Frame()
 {
-	if ( m_bFrameLocked )
-		return m_lockedFrame;
-   
-	CVideoFrame *tmp = NULL;
-   
-	if ( !m_FrameQueue.pop( tmp, false ) )
+	//mutex::scoped_lock lock( m_sharedFrameMutex );
+	
+	if ( m_sharedFrame.IsNull() )
 	{
-		tmp = NULL;
+		CVideoFrame *tmp = NULL;
+	   
+		if ( !m_FrameQueue.pop( tmp, false ) )
+		{
+			tmp = NULL;
+		}
+	   
+		m_sharedFrame = tmp;
 	}
-   
-	m_lockedFrame = tmp;
-   
-	return m_lockedFrame;
+	else
+		m_sharedFrame->CopyBuffer();
+
+
+	return m_sharedFrame;
 }
 
 
@@ -690,8 +748,10 @@ bool	CContentDecoder::Start()
 	sp.sched_priority = 8; //Foreground NORMAL_PRIORITY_CLASS - THREAD_PRIORITY_BELOW_NORMAL
 	esnRetVal = pthread_setschedparam( (pthread_t)m_pNextSheepThread->native_handle(), SCHED_RR, &sp );
 #endif
+
 	while ( Initialized() == false )
 		thread::sleep( get_system_time() + posix_time::milliseconds(100) );
+		
 	m_pDecoderThread = new thread( bind( &CContentDecoder::ReadPackets, this ) );
 	
 	int retry = 0;

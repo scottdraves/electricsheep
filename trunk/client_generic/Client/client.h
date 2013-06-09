@@ -96,6 +96,15 @@ class	CElectricSheep
 		uint32 m_curPlayingID;
 		uint32 m_curPlayingGen;
 		uint64 m_lastPlayedSeconds;
+		
+#ifdef DO_THREAD_UPDATE
+		boost::barrier* m_pUpdateBarrier;
+		
+		boost::thread_group *m_pUpdateThreads;
+		
+		boost::mutex m_BarrierMutex;
+#endif
+		
 
 		//	Init tuplestorage.
 		bool	InitStorage(bool _bReadOnly = false)
@@ -149,6 +158,10 @@ class	CElectricSheep
 				m_AppData = std::string(getenv("HOME"))+"/.electricsheep/";
 				m_WorkingDir = SHAREDIR;
 #endif			
+#ifdef DO_THREAD_UPDATE
+				m_pUpdateBarrier = NULL;
+				m_pUpdateThreads = NULL;
+#endif
 			}
 
 			virtual ~CElectricSheep()
@@ -190,6 +203,10 @@ class	CElectricSheep
                 if( !g_Player().Startup() )
                     return false;
 					
+#ifdef DO_THREAD_UPDATE
+				CreateUpdateThreads();
+#endif
+
 				m_curPlayingID = 0;
 				m_curPlayingGen = 0;
 				m_lastPlayedSeconds = 0;
@@ -360,6 +377,10 @@ class	CElectricSheep
 			{
 				printf( "CElectricSheep::Shutdown()\n" );
 
+#ifdef DO_THREAD_UPDATE
+				DestroyUpdateThreads();
+#endif
+
 				m_spSplashPos = NULL;
 				m_spSplashNeg = NULL;
 				m_spSplashPNG = NULL;
@@ -450,15 +471,96 @@ class	CElectricSheep
 											
 				return ss.str();
 			}
+			
+#ifdef DO_THREAD_UPDATE
+			//
+			virtual void CreateUpdateThreads()
+			{
+				int displayCnt = g_Player().GetDisplayCount();
+									
+				m_pUpdateBarrier = new boost::barrier( displayCnt + 1 );
+				
+				m_pUpdateThreads = new boost::thread_group;
+				
+				for (int i = 0; i < displayCnt; i++)
+				{
+					boost::thread* th = new boost::thread(&CElectricSheep::UpdateFrameThread, this, i);
+#ifdef WIN32
+					SetThreadPriority( (HANDLE)th->native_handle(), THREAD_PRIORITY_HIGHEST );
+					SetThreadPriorityBoost( (HANDLE)th->native_handle(), FALSE );
+#else
+					struct sched_param sp;
+					sp.sched_priority = sched_get_priority_max(SCHED_RR); //HIGH_PRIORITY_CLASS - THREAD_PRIORITY_NORMAL
+					pthread_setschedparam( (pthread_t)th->native_handle(), SCHED_RR, &sp );
+#endif
+					m_pUpdateThreads->add_thread(th);
+				}
+			}
+			
+			//
+			virtual void DestroyUpdateThreads()
+			{
+				if ( m_pUpdateThreads != NULL )
+				{
+					m_pUpdateThreads->interrupt_all();
+					m_pUpdateThreads->join_all();
+					
+					SAFE_DELETE(m_pUpdateThreads);
+				}
+
+				SAFE_DELETE(m_pUpdateBarrier);
+			}
+#endif
 
 			//
 			virtual const bool Update()
 			{
-				int32 displayUnit = 0;
-				
 				g_Player().BeginFrameUpdate();
 
-				while ( g_Player().BeginDisplayFrame( displayUnit ) )
+#ifdef DO_THREAD_UPDATE
+				{
+					boost::mutex::scoped_lock lock( m_BarrierMutex );
+				
+					m_pUpdateBarrier->wait();
+				
+					m_pUpdateBarrier->wait();
+				}
+#else
+				int displayCnt = g_Player().GetDisplayCount();
+									
+				for (int i = 0; i < displayCnt; i++)
+				{
+					DoRealFrameUpdate(i);
+				}				
+#endif
+								
+				g_Player().EndFrameUpdate();
+
+				return true;
+			}
+			
+#ifdef DO_THREAD_UPDATE
+			virtual void UpdateFrameThread(int32 displayUnit)
+			{
+				try {
+					while (true)
+					{
+						m_pUpdateBarrier->wait();
+						
+						DoRealFrameUpdate(displayUnit);
+						
+						m_pUpdateBarrier->wait();
+					}
+				}
+				catch(boost::thread_interrupted const&)
+				{
+				}
+			}
+#endif
+			
+			virtual bool DoRealFrameUpdate(int32 displayUnit)
+			{
+				if ( g_Player().BeginDisplayFrame( displayUnit ) )
 				{
 				
 					//g_Player().Renderer()->BeginFrame();
@@ -471,7 +573,7 @@ class	CElectricSheep
 					}
 
 					bool drawNoSheepIntro = false;
-					bool drawn = g_Player().Update(drawNoSheepIntro);
+					bool drawn = g_Player().Update(displayUnit, drawNoSheepIntro);
 					
 					if ( (drawNoSheepIntro && displayUnit == 0) || (drawn && displayUnit == 0) )
 					{
@@ -853,14 +955,11 @@ class	CElectricSheep
 						g_Player().Display()->Update();
 					}
 
-					g_Player().EndDisplayFrame( drawn );
-					
-					displayUnit++;
+					g_Player().EndDisplayFrame( displayUnit, drawn );
 				}
 				
-				g_Player().EndFrameUpdate();
-
 				return true;
+
 			}
 
 			virtual bool HandleOneEvent( DisplayOutput::spCEvent &_event )

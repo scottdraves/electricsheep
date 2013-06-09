@@ -289,7 +289,7 @@ spCTextureFlat	CRendererGL::NewTextureFlat( spCImage _spImage, const uint32 _fla
 {
 	SetCurrentGLContext();
 
-	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ) );
+	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ), cgl_ctx );
 	spTex->Upload( _spImage );
 	return spTex;
 }
@@ -300,7 +300,7 @@ spCTextureFlat	CRendererGL::NewTextureFlat( const uint32 _flags )
 {
 	SetCurrentGLContext();
 
-	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ) );
+	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ), cgl_ctx );
 	return spTex;
 }
 
@@ -325,7 +325,11 @@ spCShader	CRendererGL::NewShader( const char *_pVertexShader, const char *_pFrag
 {
 	SetCurrentGLContext();
 	
+#ifdef MAC
+	spCShader spShader = new CShaderGL( cgl_ctx );
+#else
 	spCShader spShader = new CShaderGL();
+#endif
 	if( !spShader->Build( _pVertexShader, _pFragmentShader  ) )
 		return NULL;
 
@@ -627,7 +631,7 @@ void	CRendererGL::DrawSoftQuad( const Base::Math::CRect &_rect, const Base::Math
 
 void 	CRendererGL::SetCurrentGLContext()
 {
-#ifdef MAC
+#if 0//def MAC
 	CGLContextObj currContext = m_spDisplay->GetContext();
 	
 	if (currContext != NULL)

@@ -30,6 +30,9 @@
 
 namespace ContentDecoder
 {
+class CVideoFrame;
+
+MakeSmartPointers( CVideoFrame );
 
 struct sMetaData
 {
@@ -39,6 +42,9 @@ struct sMetaData
 	uint32 m_SheepGeneration;
 	time_t m_LastAccessTime;
 	bool m_IsEdge;
+	spCVideoFrame m_SecondFrame;
+	bool m_IsSeam;
+	fp4 m_TransitionProgress;
 };
 
 /*
@@ -71,6 +77,9 @@ class CVideoFrame
 				m_MetaData.m_SheepID = 0;
 				m_MetaData.m_SheepGeneration = 0;
 				m_MetaData.m_IsEdge = false;
+				m_MetaData.m_IsSeam = false;
+				m_MetaData.m_SecondFrame = NULL;
+				m_MetaData.m_TransitionProgress = 0.f;
 
 				m_Width = _pCodecContext->width;
 				m_Height = _pCodecContext->height;
@@ -128,6 +137,21 @@ class CVideoFrame
 				m_MetaData.m_LastAccessTime = _atime;
 			}
 
+			inline void SetMetaData_SecondFrame(CVideoFrame *pSecondFrame)
+			{
+				m_MetaData.m_SecondFrame = pSecondFrame;
+			}
+			
+			inline void SetMetaData_IsSeam(bool bIsSeam)
+			{
+				m_MetaData.m_IsSeam = bIsSeam;
+			}
+
+			inline void SetMetaData_TransitionProgress(fp4 progress)
+			{
+				m_MetaData.m_TransitionProgress = progress;
+			}
+
 			inline	void	Pts( const fp8 _pts )			{	m_Pts = _pts;		};
 			inline	fp8		Pts( void )						{	return m_Pts;		};
 			inline	uint32	Width()							{	return m_Width;		};
@@ -147,6 +171,17 @@ class CVideoFrame
 			{
 				return m_spBuffer;
 			};
+			
+			virtual void CopyBuffer()
+			{
+				Base::CAlignedBuffer *newBuffer = new Base::CAlignedBuffer( m_spBuffer->Size() );
+				
+				memcpy( newBuffer->GetBufferPtr(), m_spBuffer->GetBufferPtr(), m_spBuffer->Size() );
+				
+
+				m_spBuffer = newBuffer;
+			};
+
 
 			virtual inline const int32	Stride()
 			{
@@ -159,7 +194,6 @@ class CVideoFrame
 			//POOLED( CVideoFrame, Memory::CLinkPool );
 };
 
-MakeSmartPointers( CVideoFrame );
 
 }
 

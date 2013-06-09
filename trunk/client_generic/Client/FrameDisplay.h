@@ -26,6 +26,8 @@ class	CFrameDisplay
 		//	Temporary storage for decoded videoframe.
 		ContentDecoder::spCVideoFrame	m_spFrameData;
 		DisplayOutput::spCImage		m_spImageRef;
+		DisplayOutput::spCImage		m_spSecondImageRef;
+		
 		DisplayOutput::spCRenderer	m_spRenderer;
 
 		//	Dimensions of the display surface.
@@ -36,9 +38,11 @@ class	CFrameDisplay
 
 		//	Frame texture.
 		DisplayOutput::spCTextureFlat m_spVideoTexture;
+		
+		DisplayOutput::spCTextureFlat m_spSecondVideoTexture;
 
 		//	Grab a frame from the decoder and use it as a texture.
-		const bool	GrabFrame( ContentDecoder::spCContentDecoder _spDecoder, DisplayOutput::spCTextureFlat &_spTexture, ContentDecoder::sMetaData &_metadata )
+		const bool	GrabFrame( ContentDecoder::spCContentDecoder _spDecoder, DisplayOutput::spCTextureFlat &_spTexture, DisplayOutput::spCTextureFlat &_spSecondTexture, ContentDecoder::sMetaData &_metadata )
 		{
 			//_metadata.m_Fade = 1.0f;
 			m_MetaData = _metadata;
@@ -71,6 +75,30 @@ class	CFrameDisplay
 				//	Set image texturedata and upload to texture.
 				m_spImageRef->SetStorageBuffer( m_spFrameData->StorageBuffer() );
 				_spTexture->Upload( m_spImageRef );
+				
+				ContentDecoder::spCVideoFrame spSecondFrameData = _metadata.m_SecondFrame;
+				
+				if (!spSecondFrameData.IsNull())
+				{
+					if( m_spSecondImageRef->GetWidth() != spSecondFrameData->Width() || m_spSecondImageRef->GetHeight() != spSecondFrameData->Height() )
+					{
+						//	Frame differs in size, recreate ref image.
+						m_spSecondImageRef->Create( spSecondFrameData->Width(), spSecondFrameData->Height(), DisplayOutput::eImage_RGBA8, false, true );
+					}
+
+					if (_spSecondTexture.IsNull())
+						_spSecondTexture = m_spRenderer->NewTextureFlat();
+					
+					if( _spSecondTexture != NULL )
+					{
+						//	Set image texturedata and upload to texture.
+						m_spSecondImageRef->SetStorageBuffer( spSecondFrameData->StorageBuffer() );
+						_spSecondTexture->Upload( m_spSecondImageRef );
+					}
+				}
+				else
+					_spSecondTexture = NULL;
+
 			}
 			else
 			{
@@ -124,12 +152,14 @@ class	CFrameDisplay
 			CFrameDisplay( DisplayOutput::spCRenderer _spRenderer )
 			{
 				m_spVideoTexture = NULL;
+				m_spSecondVideoTexture = NULL;
 				m_spFrameData = NULL;
 				m_Clock = 0;
 				m_Acc = 0;
 				m_T = 0;
 				m_spRenderer = _spRenderer;
 				m_spImageRef = new DisplayOutput::CImage();
+				m_spSecondImageRef = new DisplayOutput::CImage();
 				m_bValid = true;
 				m_FadeCount = (fp8)g_Settings()->Get("settings.player.fadecount", 30);
 			}
@@ -137,6 +167,7 @@ class	CFrameDisplay
 			virtual ~CFrameDisplay()
 			{
 				m_spVideoTexture = NULL;
+				m_spSecondVideoTexture = NULL;
 			}
 
 			const bool Valid()	{	return m_bValid;	};
@@ -154,7 +185,7 @@ class	CFrameDisplay
    				if( UpdateInterframeDelta( _decodeFps ) )
    				{
 #if !defined(WIN32) && !defined(_MSC_VER)
-					if (!GrabFrame( _spDecoder, m_spVideoTexture, _metadata))
+					if (!GrabFrame( _spDecoder, m_spVideoTexture, m_spSecondVideoTexture, _metadata))
 					{
 						return false;
 					}
@@ -165,7 +196,7 @@ class	CFrameDisplay
 						currentalpha = m_LastAlpha;
 					}
 #else
-					if (GrabFrame( _spDecoder, m_spVideoTexture, _metadata))
+					if (GrabFrame( _spDecoder, m_spVideoTexture, m_spSecondVideoTexture, _metadata))
 					{
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
@@ -189,8 +220,19 @@ class	CFrameDisplay
 				m_spRenderer->Apply();
 
                 //UpdateInterframeDelta( _decodeFps );
+				
+				fp4 transCoef = m_MetaData.m_TransitionProgress / 100.0;
 
-				m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha ),  m_spVideoTexture->GetRect() );
+				m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha * (1.0 - transCoef) ),  m_spVideoTexture->GetRect() );
+				
+				if (!m_spSecondVideoTexture.IsNull())
+				{
+					//	Bind the second texture and render a quad covering the screen.
+					m_spRenderer->SetTexture( m_spSecondVideoTexture, 0 );
+					m_spRenderer->Apply();
+
+					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha * transCoef ),  m_spVideoTexture->GetRect() );
+				}
 
 				return true;
 			}

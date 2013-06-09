@@ -39,7 +39,7 @@ enum	eStateResetFlags
 
 enum	eRenderLimits
 {
-	MAX_TEXUNIT = 8
+	MAX_TEXUNIT = 29
 };
 
 enum	eRenderType

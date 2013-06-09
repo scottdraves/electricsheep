@@ -23,6 +23,8 @@
 
 /* Begin PBXBuildFile section */
 		21006FC81017BC4B004A6511 /* Credits.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21006FBD1017BC2C004A6511 /* Credits.html */; };
+		2100C5AB162B53DD00D42796 /* thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 2100C5A9162B53DD00D42796 /* thumbnail.png */; };
+		2100C5AC162B53DD00D42796 /* thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2100C5AA162B53DD00D42796 /* thumbnail@2x.png */; };
 		210335040F549BEF00A83F17 /* AlignedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 210335030F549BEF00A83F17 /* AlignedBuffer.cpp */; };
 		210335050F549BEF00A83F17 /* AlignedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 210335030F549BEF00A83F17 /* AlignedBuffer.cpp */; };
 		2118A3C40F51BEE800BA0582 /* ElectricSheep.icns in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2118A3B30F51BED100BA0582 /* ElectricSheep.icns */; };
@@ -422,6 +424,8 @@
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		21006FBD1017BC2C004A6511 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = SOURCE_ROOT; };
 		21008B760EB7D69900E64796 /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Console.h; path = ../Client/Console.h; sourceTree = SOURCE_ROOT; };
+		2100C5A9162B53DD00D42796 /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = SOURCE_ROOT; };
+		2100C5AA162B53DD00D42796 /* thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbnail@2x.png"; sourceTree = SOURCE_ROOT; };
 		210335030F549BEF00A83F17 /* AlignedBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AlignedBuffer.cpp; path = ../Common/AlignedBuffer.cpp; sourceTree = SOURCE_ROOT; };
 		2118A3B30F51BED100BA0582 /* ElectricSheep.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ElectricSheep.icns; sourceTree = SOURCE_ROOT; };
 		211CDDD60ED0BD9200EB9394 /* Download.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Download.cpp; sourceTree = "<group>"; };
@@ -839,6 +843,8 @@
 		2160FE160F30F82800B2C27A /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
+				2100C5A9162B53DD00D42796 /* thumbnail.png */,
+				2100C5AA162B53DD00D42796 /* thumbnail@2x.png */,
 				21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */,
 				21DE7CA6101901E900E77D68 /* Instructions.rtf */,
 				21006FBD1017BC2C004A6511 /* Credits.html */,
@@ -1016,6 +1022,8 @@
 				21ADBB271305D380000A9F20 /* green.tif in Resources */,
 				21ADBB281305D380000A9F20 /* red.tif in Resources */,
 				21ADBB291305D380000A9F20 /* yellow.tif in Resources */,
+				2100C5AB162B53DD00D42796 /* thumbnail.png in Resources */,
+				2100C5AC162B53DD00D42796 /* thumbnail@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1435,7 +1443,7 @@
 				);
 				"OTHER_LDFLAGS[arch=x86_64]" = "";
 				PRODUCT_NAME = "Electric Sheep";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				VALID_ARCHS = "i386 ppc x86_64";
 				WRAPPER_EXTENSION = saver;
 			};
@@ -1481,7 +1489,7 @@
 				"OTHER_LDFLAGS[arch=x86_64]" = "";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_NAME = "Electric Sheep";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				SEPARATE_STRIP = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_STYLE = all;

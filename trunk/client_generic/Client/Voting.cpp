@@ -37,7 +37,7 @@ CVote::~CVote()
 	    m_pThread->interrupt();
 		try
 		{
-			m_pThread->join();
+			m_pThread->timed_join(boost::posix_time::seconds(3));
 		}
 		catch (boost::thread_interrupted const &)
 		{}

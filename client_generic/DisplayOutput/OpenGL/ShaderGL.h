@@ -28,7 +28,9 @@ class	CShaderUniformGL : public CShaderUniform
 				m_pData = NULL;
 				std::string type = "";
 				
+#ifdef MAC
 				cgl_ctx = glCtx;
+#endif
 
 				switch( _eType )
 				{

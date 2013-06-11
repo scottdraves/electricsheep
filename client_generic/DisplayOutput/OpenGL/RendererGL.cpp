@@ -289,7 +289,12 @@ spCTextureFlat	CRendererGL::NewTextureFlat( spCImage _spImage, const uint32 _fla
 {
 	SetCurrentGLContext();
 
+#ifdef MAC
 	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ), cgl_ctx );
+#else
+	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ) );
+#endif
+
 	spTex->Upload( _spImage );
 	return spTex;
 }
@@ -300,7 +305,12 @@ spCTextureFlat	CRendererGL::NewTextureFlat( const uint32 _flags )
 {
 	SetCurrentGLContext();
 
+#ifdef MAC
 	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ), cgl_ctx );
+#else
+	spCTextureFlat	spTex = new CTextureFlatGL( _flags | ( ( GetTextureTargetType() == eTexture2DRect ) ? kRectTexture : 0 ) );
+#endif
+
 	return spTex;
 }
 

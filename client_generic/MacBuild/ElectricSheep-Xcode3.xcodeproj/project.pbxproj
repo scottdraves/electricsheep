@@ -1369,6 +1369,7 @@
 					ppc,
 					x86_64,
 				);
+				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1473,6 +1474,7 @@
 					ppc,
 					x86_64,
 				);
+				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1583,6 +1585,7 @@
 					ppc,
 					x86_64,
 				);
+				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;

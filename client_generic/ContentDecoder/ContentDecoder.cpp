@@ -601,6 +601,8 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
 					pVideoFrame->SetMetaData_IsEdge( ovi->IsEdge() );
 					pVideoFrame->SetMetaData_atime( ovi->m_CurrentFileatime );
 					pVideoFrame->SetMetaData_IsSeam( ovi->m_NextIsSeam );
+					pVideoFrame->SetMetaData_FrameIdx( ovi->m_iCurrentFileFrameCount );
+					pVideoFrame->SetMetaData_MaxFrameIdx( ovi->m_totalFrameCount );
 					ovi->m_NextIsSeam = false;
 				}
 			}

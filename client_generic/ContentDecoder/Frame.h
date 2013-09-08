@@ -45,6 +45,8 @@ struct sMetaData
 	spCVideoFrame m_SecondFrame;
 	bool m_IsSeam;
 	fp4 m_TransitionProgress;
+	uint32 m_FrameIdx;
+	uint32 m_MaxFrameIdx;
 };
 
 /*
@@ -150,6 +152,16 @@ class CVideoFrame
 			inline void SetMetaData_TransitionProgress(fp4 progress)
 			{
 				m_MetaData.m_TransitionProgress = progress;
+			}
+
+			inline void SetMetaData_FrameIdx(uint32 idx)
+			{
+				m_MetaData.m_FrameIdx = idx;
+			}
+
+			inline void SetMetaData_MaxFrameIdx(uint32 idx)
+			{
+				m_MetaData.m_MaxFrameIdx = idx;
 			}
 
 			inline	void	Pts( const fp8 _pts )			{	m_Pts = _pts;		};

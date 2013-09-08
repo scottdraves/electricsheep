@@ -76,6 +76,10 @@ class	CFrameDisplay
 				m_spImageRef->SetStorageBuffer( m_spFrameData->StorageBuffer() );
 				_spTexture->Upload( m_spImageRef );
 				
+#ifdef FRAME_DIAG
+				g_Log->Info( "Grabbing frame %ld/%ld from %ld (first)...", _metadata.m_FrameIdx, _metadata.m_MaxFrameIdx, _metadata.m_SheepID );
+#endif				
+				
 				ContentDecoder::spCVideoFrame spSecondFrameData = _metadata.m_SecondFrame;
 				
 				if (!spSecondFrameData.IsNull())
@@ -94,6 +98,14 @@ class	CFrameDisplay
 						//	Set image texturedata and upload to texture.
 						m_spSecondImageRef->SetStorageBuffer( spSecondFrameData->StorageBuffer() );
 						_spSecondTexture->Upload( m_spSecondImageRef );
+						
+#ifdef FRAME_DIAG
+						ContentDecoder::sMetaData tmpMetaData;
+						
+						spSecondFrameData->GetMetaData(tmpMetaData);
+						
+						g_Log->Info( "Grabbing frame %ld/%d from %ld (second)...", tmpMetaData.m_FrameIdx, tmpMetaData.m_MaxFrameIdx, tmpMetaData.m_SheepID );
+#endif
 					}
 				}
 				else

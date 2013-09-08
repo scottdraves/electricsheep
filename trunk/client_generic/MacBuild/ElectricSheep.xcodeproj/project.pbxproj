@@ -1355,9 +1355,10 @@
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 					"\"$(SRCROOT)/../lua5.1/src\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "Electric Sheep";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 ppc x86_64";
 			};
 			name = Debug;
@@ -1367,6 +1368,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1389,6 +1391,7 @@
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 					"\"$(SRCROOT)/../lua5.1/src\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1396,7 +1399,8 @@
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_NAME = "Electric Sheep";
-				SDKROOT = macosx10.6;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = YES;
 				VALID_ARCHS = "i386 ppc x86_64";
 			};
@@ -1411,6 +1415,7 @@
 					i386,
 					x86_64,
 				);
+				CODE_SIGN_IDENTITY = "";
 				CONFIGURATION_BUILD_DIR = "$(HOME)/Library/Screen Savers";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
@@ -1436,6 +1441,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-read_only_relocs",
@@ -1443,7 +1449,7 @@
 				);
 				"OTHER_LDFLAGS[arch=x86_64]" = "";
 				PRODUCT_NAME = "Electric Sheep";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 ppc x86_64";
 				WRAPPER_EXTENSION = saver;
 			};
@@ -1458,6 +1464,7 @@
 					i386,
 					x86_64,
 				);
+				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1482,6 +1489,7 @@
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = (
 					"-read_only_relocs",
 					suppress,
@@ -1489,7 +1497,8 @@
 				"OTHER_LDFLAGS[arch=x86_64]" = "";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_NAME = "Electric Sheep";
-				SDKROOT = macosx10.7;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = macosx;
 				SEPARATE_STRIP = NO;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_STYLE = all;
@@ -1532,13 +1541,14 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "proximus-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Carbon,
 				);
 				PRODUCT_NAME = proximus;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 ppc x86_64";
 				WRAPPER_EXTENSION = bundle;
 			};
@@ -1549,6 +1559,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -1556,13 +1567,15 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "proximus-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Carbon,
 				);
 				PRODUCT_NAME = proximus;
-				SDKROOT = macosx10.6;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VALID_ARCHS = "i386 ppc x86_64";
 				WRAPPER_EXTENSION = bundle;

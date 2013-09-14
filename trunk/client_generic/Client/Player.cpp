@@ -490,6 +490,8 @@ const bool	CPlayer::Shutdown( void )
 
 	m_spPlaylist = NULL;
 	
+	m_spDecoder = NULL;
+	
 	m_displayUnits.clear();
 	
 	m_bStarted = false;

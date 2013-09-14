@@ -21,6 +21,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 	//	Simple ringbuffer...
 	uint32	m_Frames[ kMaxFrames ];
 	uint32	m_NumFrames;
+	uint32  m_NumSecondFrames;
 	
 	bool m_bWaitNextFrame;
 
@@ -172,6 +173,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 					m_bValid = false;
 
 				m_NumFrames = 0;
+				m_NumSecondFrames = 0;
 
 				m_Frames[0] = 0;
 				m_Frames[1] = 1;
@@ -189,31 +191,32 @@ class	CCubicFrameDisplay : public CFrameDisplay
 			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
 			{
 				fp4 currentalpha = m_LastAlpha;
+				bool frameGrabbed = false;
+				bool isSeam = false;
+				
 				if (m_bWaitNextFrame)
 				{
 #if !defined(WIN32) && !defined(_MSC_VER)
 					if ( !GrabFrame( _spDecoder, m_spFrames[ m_Frames[3] ], m_spFrames[ m_Frames[3] + kMaxFrames ], _metadata) )
 					{
 						return false;
-					} else
-					{
-						m_MetaData = _metadata;
-						m_LastAlpha = m_MetaData.m_Fade;
-						currentalpha = m_LastAlpha;
+					} 
+					else
+					{	
+						frameGrabbed = true;
+
+						Reset();
+						
+						m_bWaitNextFrame = false;
 					}
-					
-					Reset();
-												
-					m_bWaitNextFrame = false;
-					m_NumFrames++;
+
 #else
 					if ( GrabFrame( _spDecoder, m_spFrames[ m_Frames[3] ], m_spFrames[ m_Frames[3] + kMaxFrames ], _metadata ) )
 					{
-						m_MetaData = _metadata;
-						m_LastAlpha = m_MetaData.m_Fade;
-						currentalpha = m_LastAlpha;
+						frameGrabbed = true;
+
 						Reset();
-						m_NumFrames++;													
+						
 						m_bWaitNextFrame = false;
 					}
 #endif						
@@ -240,13 +243,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 #endif
 						}
 						else
-						{
-							m_MetaData = _metadata;
-							m_LastAlpha = m_MetaData.m_Fade;
-							currentalpha = m_LastAlpha;
-						}
-
-						m_NumFrames++;
+							frameGrabbed = true;
 					}
 					else
 					{
@@ -255,17 +252,38 @@ class	CCubicFrameDisplay : public CFrameDisplay
 							, 0., 1.);
 					}
 				}
+				
+				if (frameGrabbed)
+				{
+					m_MetaData = _metadata;
+					m_LastAlpha = m_MetaData.m_Fade;
+					currentalpha = m_LastAlpha;
+						
+					m_NumFrames++;
+						
+					if (m_spFrames[ m_Frames[3] + kMaxFrames ].IsNull())
+						m_NumSecondFrames = 0;
+					else
+						m_NumSecondFrames++;
+						
+					isSeam = _metadata.m_IsSeam;
+				}
+
 
 				if (m_NumFrames > 0 && !m_spFrames[ m_Frames[3] ].IsNull())
 				{
 					//	Enable the shader.
 					m_spRenderer->SetShader( m_spShader );
 					
-					if (m_MetaData.m_IsSeam)
-					{
-						m_spFrames[ m_Frames[0] ] = m_spFrames[ m_Frames[0] + kMaxFrames ];							
-						m_spFrames[ m_Frames[1] ] = m_spFrames[ m_Frames[1] + kMaxFrames ];							
-						m_spFrames[ m_Frames[2] ] = m_spFrames[ m_Frames[2] + kMaxFrames ];							
+					if (isSeam)
+					{						
+						m_spFrames[ m_Frames[0] ] = m_spFrames[ m_Frames[0] + kMaxFrames ];
+						m_spFrames[ m_Frames[1] ] = m_spFrames[ m_Frames[1] + kMaxFrames ];
+						m_spFrames[ m_Frames[2] ] = m_spFrames[ m_Frames[2] + kMaxFrames ];
+												
+						m_spFrames[ m_Frames[0] + kMaxFrames ] = NULL;
+						m_spFrames[ m_Frames[1] + kMaxFrames ] = NULL;
+						m_spFrames[ m_Frames[2] + kMaxFrames ] = NULL;
 					}
 					
 					uint32 framesToUse = m_NumFrames;
@@ -279,10 +297,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 					{
 						uint32 realIdx = m_Frames[ kMaxFrames-framesToUse ];
 						
-						m_spRenderer->SetTexture( m_spFrames[ realIdx ], i + 1);
-						
-						if (!m_spFrames[ realIdx + kMaxFrames ].IsNull())
-							m_spRenderer->SetTexture( m_spFrames[ realIdx + kMaxFrames ], i + kMaxFrames + 1);
+						m_spRenderer->SetTexture( m_spFrames[ realIdx ], i + 1);						
 					}
 					
 					for (i = kMaxFrames-framesToUse; i < kMaxFrames; i++)
@@ -290,9 +305,31 @@ class	CCubicFrameDisplay : public CFrameDisplay
 						uint32 realIdx = m_Frames[i];
 
 						m_spRenderer->SetTexture( m_spFrames[ realIdx ], i + 1);
+					}
+					
+					if ( m_NumSecondFrames > 0 && !m_spFrames[ m_Frames[3] + kMaxFrames ].IsNull() )
+					{
+					
+						uint32 secFrameToUse = m_NumSecondFrames;
+					
+						if (secFrameToUse > kMaxFrames)
+							secFrameToUse = kMaxFrames;
 						
-						if (!m_spFrames[ realIdx + kMaxFrames ].IsNull())
+						uint32 i;
+						
+						for (i = 0; i < kMaxFrames-secFrameToUse; i++)
+						{
+							uint32 realIdx = m_Frames[ kMaxFrames-secFrameToUse ];
+														
 							m_spRenderer->SetTexture( m_spFrames[ realIdx + kMaxFrames ], i + kMaxFrames + 1);
+						}
+						
+						for (i = kMaxFrames-secFrameToUse; i < kMaxFrames; i++)
+						{
+							uint32 realIdx = m_Frames[i];
+							
+							m_spRenderer->SetTexture( m_spFrames[ realIdx + kMaxFrames ], i + kMaxFrames + 1);
+						}
 					}
 
 					//	B = 1,   C = 0   - cubic B-spline

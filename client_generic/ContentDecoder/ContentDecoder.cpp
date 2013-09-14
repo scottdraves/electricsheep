@@ -223,7 +223,7 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
 	
 	ovi->m_pFrame = avcodec_alloc_frame();
 	
-	ovi->m_totalFrameCount = uint32((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(ovi->m_pVideoStream->r_frame_rate));
+	ovi->m_totalFrameCount = uint32(((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(ovi->m_pVideoStream->r_frame_rate) + .5));
 
 	g_Log->Info( "Open done()" );
 
@@ -646,7 +646,7 @@ void	CContentDecoder::ReadPackets()
 				{
 					CVideoFrame *pSecondVideoFrame = NULL;
 					
-#define kTransitionFrameLength	80
+#define kTransitionFrameLength	60
 				
 					if (m_SecondVideoInfo != NULL && m_SecondVideoInfo->IsOpen() && m_MainVideoInfo->m_iCurrentFileFrameCount >= (m_MainVideoInfo->m_totalFrameCount - kTransitionFrameLength))
 						pSecondVideoFrame = ReadOneFrame(m_SecondVideoInfo);
@@ -654,7 +654,7 @@ void	CContentDecoder::ReadPackets()
 					if (pSecondVideoFrame != NULL)
 					{
 						pMainVideoFrame->SetMetaData_SecondFrame(pSecondVideoFrame);
-						pMainVideoFrame->SetMetaData_TransitionProgress((fp4)m_SecondVideoInfo->m_iCurrentFileFrameCount * 100.f / (fp4)kTransitionFrameLength);
+						pMainVideoFrame->SetMetaData_TransitionProgress((fp4)m_SecondVideoInfo->m_iCurrentFileFrameCount * 100.f / ((fp4)kTransitionFrameLength - 1.0f));
 					}
 					else
 						pMainVideoFrame->SetMetaData_TransitionProgress(0.f);

@@ -6,6 +6,10 @@
 #include	"Rect.h"
 #include	"Vector4.h"
 
+//#ifndef FRAME_DIAG
+//#define FRAME_DIAG
+//#endif
+
 /*
 	CFrameDisplay().
 	Basic display handling, simply blits texture.
@@ -77,7 +81,7 @@ class	CFrameDisplay
 				_spTexture->Upload( m_spImageRef );
 				
 #ifdef FRAME_DIAG
-				g_Log->Info( "Grabbing frame %ld/%ld from %ld (first)...", _metadata.m_FrameIdx, _metadata.m_MaxFrameIdx, _metadata.m_SheepID );
+				g_Log->Info( "Grabbing frame %ld/%ld from %ld (first)...prog - %f, seam - %d", _metadata.m_FrameIdx, _metadata.m_MaxFrameIdx, _metadata.m_SheepID, _metadata.m_TransitionProgress, _metadata.m_IsSeam );
 #endif				
 				
 				ContentDecoder::spCVideoFrame spSecondFrameData = _metadata.m_SecondFrame;
@@ -104,7 +108,7 @@ class	CFrameDisplay
 						
 						spSecondFrameData->GetMetaData(tmpMetaData);
 						
-						g_Log->Info( "Grabbing frame %ld/%d from %ld (second)...", tmpMetaData.m_FrameIdx, tmpMetaData.m_MaxFrameIdx, tmpMetaData.m_SheepID );
+						g_Log->Info( "Grabbing frame %ld/%d from %ld (second)...prog - %f, seam - %d", tmpMetaData.m_FrameIdx, tmpMetaData.m_MaxFrameIdx, tmpMetaData.m_SheepID, tmpMetaData.m_TransitionProgress, tmpMetaData.m_IsSeam );
 #endif
 					}
 				}

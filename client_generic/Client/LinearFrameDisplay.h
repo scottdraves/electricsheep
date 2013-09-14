@@ -131,6 +131,9 @@ class	CLinearFrameDisplay : public CFrameDisplay
 			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
 			{
 				fp4 currentalpha = m_LastAlpha;
+				bool frameGrabbed = false;
+				bool isSeam = false;
+				
 				if (m_bWaitNextFrame)
 				{
 #if !defined(WIN32) && !defined(_MSC_VER)
@@ -140,20 +143,19 @@ class	CLinearFrameDisplay : public CFrameDisplay
 					}
 					else
 					{
-						m_MetaData = _metadata;
-						m_LastAlpha = m_MetaData.m_Fade;
-						currentalpha = m_LastAlpha;
+						frameGrabbed = true;
+						
+						Reset();
+					
+						m_bWaitNextFrame = false;
+
 					}
 					
-					Reset();
-					
-					m_bWaitNextFrame = false;
 #else
 					if ( GrabFrame( _spDecoder, m_spFrames[ m_State ], m_spFrames[ m_State + kMaxFrames ], _metadata ) )
 					{
-						m_MetaData = _metadata;
-						m_LastAlpha = m_MetaData.m_Fade;
-						currentalpha = m_LastAlpha;
+						frameGrabbed = true;
+						
 						Reset();	
 						
 						m_bWaitNextFrame = false;
@@ -174,11 +176,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 #endif
 						}
 						else
-						{
-							m_MetaData = _metadata;
-							m_LastAlpha = m_MetaData.m_Fade;
-							currentalpha = m_LastAlpha;
-						}
+							frameGrabbed = true;
 					}
 					else
 					{
@@ -188,14 +186,26 @@ class	CLinearFrameDisplay : public CFrameDisplay
 					}
 
 				}
+				
+				if (frameGrabbed)
+				{
+					m_MetaData = _metadata;
+					m_LastAlpha = m_MetaData.m_Fade;
+					currentalpha = m_LastAlpha;
+					
+					isSeam = _metadata.m_IsSeam;
+				}
+
 
 				if ( m_spFrames[ m_State ] != NULL )
 				{
 					Base::Math::CRect texRect;
 					
-					if (m_MetaData.m_IsSeam)
+					if (isSeam)
 					{
-						m_spFrames[ !m_State ] = m_spFrames[ !m_State + kMaxFrames ];							
+						m_spFrames[ !m_State ] = m_spFrames[ !m_State + kMaxFrames ];
+						
+						m_spFrames[ !m_State + kMaxFrames ] = NULL;							
 					}
 					
 					m_spRenderer->SetShader( m_spShader );

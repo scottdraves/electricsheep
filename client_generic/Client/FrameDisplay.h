@@ -198,6 +198,8 @@ class	CFrameDisplay
 			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
 			{
 				fp4 currentalpha = m_LastAlpha;
+				bool isSeam = false;
+				
    				if( UpdateInterframeDelta( _decodeFps ) )
    				{
 #if !defined(WIN32) && !defined(_MSC_VER)
@@ -210,6 +212,7 @@ class	CFrameDisplay
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
 						currentalpha = m_LastAlpha;
+						isSeam = m_MetaData.m_IsSeam;
 					}
 #else
 					if (GrabFrame( _spDecoder, m_spVideoTexture, m_spSecondVideoTexture, _metadata))
@@ -217,6 +220,7 @@ class	CFrameDisplay
 						m_MetaData = _metadata;
 						m_LastAlpha = m_MetaData.m_Fade;
 						currentalpha = m_LastAlpha;
+						isSeam = m_MetaData.m_IsSeam;
 					}
 #endif
    				}
@@ -225,6 +229,11 @@ class	CFrameDisplay
 					currentalpha = (fp4)Base::Math::Clamped(m_LastAlpha + 
 						Base::Math::Clamped(m_InterframeDelta/m_FadeCount, 0., 1./m_FadeCount)
 						, 0., 1.);
+				}
+				
+				if (isSeam)
+				{
+					m_spSecondVideoTexture = NULL;
 				}
 				
 				if ( m_spVideoTexture.IsNull() )

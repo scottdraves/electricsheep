@@ -15,12 +15,6 @@ cd "$BASE_DIR"
 
 "$XCODE_CMD" -target All -configuration Release -project ElectricSheep-Xcode3.xcodeproj build
 
-mkdir -p "$DEST"
-
-"$PM_CMD" -d installer.pmdoc -o "$DEST/Electric Sheep_unsigned.mpkg"
-
-productsign --sign "Developer ID Application: Scott Draves (D7639HSC8D)" "$DEST/Electric Sheep_unsigned.mpkg" "$DEST/Electric Sheep.mpkg"
-
-rm -rf "$DEST/Electric Sheep_unsigned.mpkg"
+./build_installer_xcode3.sh "$1" "$2"
 
 cd -

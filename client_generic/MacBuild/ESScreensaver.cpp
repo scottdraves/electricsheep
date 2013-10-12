@@ -239,7 +239,10 @@ static uint64 GetFlockSizeBytes(const std::string& path, int sheeptype)
 		if (!is_directory(itr->status()))
 		{
 			std::string fname(itr->path().filename().string());
-			if (itr->path().extension() == std::string(".avi"))
+			
+			std::string ext(itr->path().extension().string());
+			
+			if ( ext == std::string(".avi"))
 			{
 				int generation;
 				int id;

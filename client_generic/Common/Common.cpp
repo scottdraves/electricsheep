@@ -34,7 +34,9 @@ bool GetFileList( std::vector<std::string> &_list, const std::string _dir, const
 		else
 		{
 			std::string fname(itr->path().filename().string());
-			if (itr->path().extension() == std::string(".avi"))
+			std::string ext(itr->path().extension().string());
+			
+			if (ext == std::string(".avi"))
 			{
 				int generation;
 				int id;

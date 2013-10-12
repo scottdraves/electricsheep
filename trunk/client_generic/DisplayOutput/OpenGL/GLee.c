@@ -43,7 +43,7 @@
 #include "GLee.h"
 
 #if defined(__APPLE__) || defined(__APPLE_CC__)
-	#include <Carbon/Carbon.h>
+	#include <ApplicationServices/ApplicationServices.h>
 #endif
 
 typedef GLuint(*GLEE_LINK_FUNCTION)(void);

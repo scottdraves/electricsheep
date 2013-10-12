@@ -354,7 +354,7 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 	{
 		if (m_SecondVideoInfo == NULL)
 		{
-			if (m_MainVideoInfo->IsLoop() && m_MainVideoInfo->m_NumIterations < (m_LoopIterations - 1))
+			if (m_MainVideoInfo->IsLoop() && m_LoopIterations > 0 && m_MainVideoInfo->m_NumIterations < (m_LoopIterations - 1))
 			{
 				m_SecondVideoInfo = new sOpenVideoInfo(m_MainVideoInfo);
 				m_SecondVideoInfo->m_NumIterations++;

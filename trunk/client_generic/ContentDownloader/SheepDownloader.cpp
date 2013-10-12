@@ -247,15 +247,15 @@ void SheepDownloader::handleListElement(TiXmlElement* listElement)
 			newSheep->setGeneration( currentGeneration() );
 
 			const char *a;
-			if (a = pChildNode->Attribute("id"))		newSheep->setId(atoi(a));
-			if (a = pChildNode->Attribute("type"))		newSheep->setType(atoi(a));
-			if (a = pChildNode->Attribute("time"))		newSheep->setFileWriteTime(atoi(a));
-			if (a = pChildNode->Attribute("size"))		newSheep->setFileSize(atol(a));
-			if (a = pChildNode->Attribute("rating"))	newSheep->setRating(atoi(a));
-			if (a = pChildNode->Attribute("first"))		newSheep->setFirstId(atoi(a));
-			if (a = pChildNode->Attribute("last"))		newSheep->setLastId(atoi(a));
-			if (a = pChildNode->Attribute("state"))		state = a;
-			if (a = pChildNode->Attribute("url"))		newSheep->setURL(a);
+			if ((a = pChildNode->Attribute("id")))		newSheep->setId(atoi(a));
+			if ((a = pChildNode->Attribute("type")))		newSheep->setType(atoi(a));
+			if ((a = pChildNode->Attribute("time")))		newSheep->setFileWriteTime(atoi(a));
+			if ((a = pChildNode->Attribute("size")))		newSheep->setFileSize(atol(a));
+			if ((a = pChildNode->Attribute("rating")))	newSheep->setRating(atoi(a));
+			if ((a = pChildNode->Attribute("first")))		newSheep->setFirstId(atoi(a));
+			if ((a = pChildNode->Attribute("last")))		newSheep->setLastId(atoi(a));
+			if ((a = pChildNode->Attribute("state")))		state = a;
+			if ((a = pChildNode->Attribute("url")))		newSheep->setURL(a);
 			// TODO: fix malformed state == NULL potential error
 			if( !strcmp(state, "done") && (0 == newSheep->type()) )
                 fServerFlock.push_back(newSheep);

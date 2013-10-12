@@ -73,7 +73,7 @@ static void encode( char *dst, const char *src )
 {
     static const char *hex = "0123456789ABCDEF";
     char t;
-    while( t = *src++ )
+    while( (t = *src++) )
     {
         if( isalnum(t) )	*dst++ = t;
         else
@@ -187,11 +187,11 @@ void SheepGenerator::handleGetElement(TiXmlElement* getElement, SheepUploader *u
 		return;
 
 	const char *a;
-	if (a = getElement->Attribute("gen"))		uploader->setSheepGeneration( atoi(a) );
-	if (a = getElement->Attribute("id"))		uploader->setSheepID( atoi(a) );
-	if (a = getElement->Attribute("job"))		uploader->setSheepJob( atoi(a) );
-	if (a = getElement->Attribute("time"))		uploader->setSheepTime( atoi(a) );
-	if (a = getElement->Attribute("frame"))
+	if ((a = getElement->Attribute("gen")))		uploader->setSheepGeneration( atoi(a) );
+	if ((a = getElement->Attribute("id")))		uploader->setSheepID( atoi(a) );
+	if ((a = getElement->Attribute("job")))		uploader->setSheepJob( atoi(a) );
+	if ((a = getElement->Attribute("time")))		uploader->setSheepTime( atoi(a) );
+	if ((a = getElement->Attribute("frame")))
 	{
 		g_Log->Info( "frame: %u", atoi(a) );
 		uploader->setSheepTime(atoi(a));

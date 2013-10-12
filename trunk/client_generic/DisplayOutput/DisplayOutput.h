@@ -7,7 +7,6 @@
 #include	"linkpool.h"
 #ifdef MAC
 #undef Random
-#include	<Carbon/Carbon.h>
 #include	<OpenGL/OpenGL.h>
 #endif
 

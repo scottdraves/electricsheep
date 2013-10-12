@@ -11,8 +11,6 @@
 #ifdef MAC
 #undef Random
 #include <OpenGL/CGLMacro.h>
-//#include <OpenGL/OpenGL.h>
-#include <Carbon/Carbon.h>
 #endif
 
 
@@ -32,7 +30,6 @@ class CRendererGL : public CRenderer
 #else
 #ifdef MAC
 	CGLContextObj m_glContext;
-	CGContextRef  m_textContext;
 	CGLContextObj cgl_ctx;
 #endif
 #endif

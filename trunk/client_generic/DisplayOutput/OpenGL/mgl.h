@@ -10,7 +10,7 @@
 #include "glee.h"
 #include "../DisplayOutput.h"
 #undef Random
-#include <Carbon/Carbon.h>
+#include <ApplicationServices/ApplicationServices.h>
 #include <OpenGL/OpenGL.h>
 
 
@@ -18,7 +18,6 @@ namespace DisplayOutput
 {
 	
 extern "C" {
-	HIViewRef CreateGLView( uint32 _width, uint32 _height, CGLContextObj *ctx );
 	void SetupPool();
 }
 	
@@ -44,7 +43,7 @@ class CMacGL : public CDisplayOutput
 
 			//static LRESULT CALLBACK	wndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
-			static char *Description()	{	return "Macintosh OpenGL display";	};
+			static const char *Description()	{	return "Macintosh OpenGL display";	};
 				
 			virtual bool	Initialize( CGLContextObj _glContext, bool _bPreview );
 			

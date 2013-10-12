@@ -64,13 +64,13 @@ class	CException
 			std::string	Text( void ) const;
 
 			//
-			static void Throw( char *_sz, char *_szFile,const uint32 _line )
+			static void Throw( const char *_sz, const char *_szFile,const uint32 _line )
 			{
 				throw( CException( _sz, _szFile, _line ) );
 			}
 
 			//
-			static void Throw( const std::string &_s, char *_szFile, const uint32 _line )
+			static void Throw( const std::string &_s, const char *_szFile, const uint32 _line )
 			{
 				throw( CException( _s, _szFile, _line ) );
 			}

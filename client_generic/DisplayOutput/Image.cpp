@@ -806,7 +806,7 @@ const bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const
 									(256 - wX) * (      wY) * src[ m_Width * nChannels ] +
 									(      wX) * (256 - wY) * src[ nChannels ] +
 									(      wX) * (      wY) * src[ (m_Width + 1) * nChannels ] ) >> 16;
-									*src++;
+									src++;
 					}
 				}
 			}
@@ -845,7 +845,7 @@ const bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const
 
 						res = icerp( a, b, c, d, wY );
 						*dest++ = (res < 0)? 0 : (res > 255)? 255 : res;
-						*src++;
+						src++;
 					}
 				}
 			}

@@ -50,6 +50,8 @@ class	CShaderUniformGL : public CShaderUniform
 					case	eUniform_Matrix2:	type = 	"Matrix2";	break;
 					case	eUniform_Matrix3:	type = 	"Matrix3";	break;
 					case	eUniform_Matrix4:	type = 	"Matrix4";	break;
+                    default:
+                        type = "";
 				}
 
 				if( type == "" )

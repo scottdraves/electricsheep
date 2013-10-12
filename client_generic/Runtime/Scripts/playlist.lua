@@ -56,7 +56,9 @@ end
 --	Add a sheep to the context, called from the directory-scanner in lua_playlist.h
 function Add( _filepath, _file, _generation, _id, _first, _last, _atime )	
 	
-	if context.allsheep[ _id ] == nil then	
+	local loopable = _first == _last;
+	
+	if context.allsheep[ _id ] == nil and (loopable == false or context.LoopIterations > 0) then	
 		--dump ( "Adding " .. _id )
 		context.dirty = true
 		
@@ -68,7 +70,7 @@ function Add( _filepath, _file, _generation, _id, _first, _last, _atime )
 		context.allsheep[ _id ].id = _id
 		context.allsheep[ _id ].first = _first
 		context.allsheep[ _id ].last = _last
-		context.allsheep[ _id ].loopable = _first == _last
+		context.allsheep[ _id ].loopable = loopable
 		context.allsheep[ _id ].atime = _atime
 		context.allsheep[ _id ].rank = 0
 		context.allsheep[ _id ].deleted = false
@@ -137,20 +139,23 @@ function RebuildConnections()
 
 	for k, v in pairs( context.sheep ) do
 		
-		if context.FirstLastCnt[ v.first ] == nil then
-			context.FirstLastCnt[ v.first ] = {}
-			context.FirstLastCnt[ v.first ].firstcnt = 1
-			context.FirstLastCnt[ v.first ].lastcnt = 0
-		else	
-			context.FirstLastCnt[ v.first ].firstcnt = context.FirstLastCnt[ v.first ].firstcnt + 1
-		end
+		if 0.999 >= v.rank * context.PlayEvenly then
 		
-		if context.FirstLastCnt[ v.last ] == nil then
-			context.FirstLastCnt[ v.last ] = {}
-			context.FirstLastCnt[ v.last ].firstcnt = 0
-			context.FirstLastCnt[ v.last ].lastcnt = 1
-		else
-			context.FirstLastCnt[ v.last ].lastcnt = context.FirstLastCnt[ v.last ].lastcnt + 1
+			if context.FirstLastCnt[ v.first ] == nil then
+				context.FirstLastCnt[ v.first ] = {}
+				context.FirstLastCnt[ v.first ].firstcnt = 1
+				context.FirstLastCnt[ v.first ].lastcnt = 0
+			else	
+				context.FirstLastCnt[ v.first ].firstcnt = context.FirstLastCnt[ v.first ].firstcnt + 1
+			end
+			
+			if context.FirstLastCnt[ v.last ] == nil then
+				context.FirstLastCnt[ v.last ] = {}
+				context.FirstLastCnt[ v.last ].firstcnt = 0
+				context.FirstLastCnt[ v.last ].lastcnt = 1
+			else
+				context.FirstLastCnt[ v.last ].lastcnt = context.FirstLastCnt[ v.last ].lastcnt + 1
+			end
 		end
 	end
 
@@ -276,7 +281,7 @@ function RemoveBrokenLoops()
 	for k, v in pairs( context.sheep ) do
 		g_IncDeadEndCutSurvivors()
 		count = count + 1
-		dump( "RemoveBrokenLoopsSurvivor: id=" .. tostring(v.id) .. ",first=" .. tostring(v.first) .. ",last=" .. tostring(v.last) .. ",atime=" .. tostring(v.atime) )		
+		dump( "RemoveBrokenLoopsSurvivor: id=" .. tostring(v.id) .. ",first=" .. tostring(v.first) .. ",last=" .. tostring(v.last) .. ",atime=" .. tostring(v.atime) .. ",rank=" .. tostring(v.rank) )		
 	end
 	
 	if count == 0 then
@@ -340,13 +345,17 @@ function Rebuild()
 		end
 	end
 	
-	local count = UpdateSheep()
+	local origcount = UpdateSheep()
 
-	if count == 0 then
+	if origcount == 0 then
 		return
 	end	
 	
-	if context.dirty == true then
+	--if context.PlayEvenly > 0.0 then
+		UpdateRanks()
+	--end
+	
+	--if context.dirty == true then
 
 		if context.SeamlessPlayback == true then
 			g_ClearDeadEndSurvivorsStats()
@@ -355,11 +364,8 @@ function Rebuild()
 		end
 		
 		context.dirty = false
-	end
-
-	--if context.PlayEvenly > 0.0 then
-		UpdateRanks()
 	--end
+
 
 	--	Fresh pq.
 	--context.pq:clear()
@@ -412,7 +418,7 @@ function GetRandomSheep()
            if PlayEvenly( s.rank ) then
                evensheep = s
 			   
-			   if ( #context.pq < 20 ) or s.loopable then
+			   if ( #context.pq < 20 ) or s.loopable or context.LoopIterations == 0 then
 				dump( "Picked new sheep " .. s.id .. " from pq (playcount " .. s.playCount .. " ) rnd=" .. tostring(rnd) .. " rndnum=" .. tostring(rndnum) )
 				return s
 			   end
@@ -507,9 +513,7 @@ function GraphAlgo( _currentSheep )
 		if ( v.deleted == false ) and ( v.id ~= _currentSheep.id ) then
 			if v.first == _currentSheep.last then --or v.last == _currentSheep.first then
 				if v.loopable == true then
-					if context.LoopIterations > 0 then
-						loops:insert( { prio = v.atime * v.maturity, sheep = v } )
-					end
+					loops:insert( { prio = v.atime * v.maturity, sheep = v } )
 				else
 					edges:insert( { prio = v.atime * v.maturity, sheep = v } )
 				end

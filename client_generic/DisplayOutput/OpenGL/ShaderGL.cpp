@@ -351,6 +351,7 @@ bool	CShaderUniformGL::SetData( void *_pData, const uint32 _size )
 			case	eUniform_Matrix2:	size = sizeof(fp4)*(4*2);	break;
 			case	eUniform_Matrix3:	size = sizeof(fp4)*(4*3);	break;
 			case	eUniform_Matrix4:	size = sizeof(fp4)*(4*4);	break;
+            default:                    size = 0;
 		}
 
 		if( _size != size )
@@ -418,6 +419,8 @@ void	CShaderUniformGL::Apply()
 		case eUniform_Matrix4:
 			glUniformMatrix4fvARB( m_Index, m_Size, GL_TRUE, (const GLfloat *)m_pData );
 			break;
+        default:
+            break;
 	}
 
 	VERIFYGL;

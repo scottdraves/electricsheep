@@ -327,7 +327,7 @@ class	CElectricSheep
 						{
 							char fNameFormatted[FILENAME_MAX];
 							snprintf(fNameFormatted, FILENAME_MAX, m_SplashFilename.c_str(), m_nSplashes);
-							if (test = fopen(fNameFormatted, "r"))
+							if ((test = fopen(fNameFormatted, "r")))
 							{
 								fclose(test);
 								m_nSplashes++;

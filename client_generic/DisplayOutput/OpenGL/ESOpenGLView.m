@@ -1,6 +1,5 @@
 #import <Cocoa/Cocoa.h>
 #import <OpenGL/gl.h>
-#import <Carbon/Carbon.h>
 #import <OpenGL/OpenGL.h>
 #import "ESOpenGLView.h"
 #import "base.h"

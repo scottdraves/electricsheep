@@ -151,6 +151,7 @@
 		2161F1940ECF8CEF00FE48E9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.dylib */; };
 		2169AE7F11397EF700689B02 /* isaac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2169AE7E11397EF700689B02 /* isaac.cpp */; };
 		2169AE8011397EF700689B02 /* isaac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2169AE7E11397EF700689B02 /* isaac.cpp */; };
+		217A3AA5180986C20006B74A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2188A6D117EB95F60078C91C /* Carbon.framework */; };
 		2181FAF00ECF42820078FDDA /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2181FAEF0ECF42820078FDDA /* libswscale.a */; };
 		2187F3860F463AA20004F8F9 /* TrebuchetMS-24.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */; };
 		2187F3870F463AB50004F8F9 /* TrebuchetMS-24.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */; };
@@ -198,6 +199,8 @@
 		21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD10E8E6C0500CE185C /* libavformat.a */; };
 		21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.dylib */; };
 		21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AF30E8E715E00CE185C /* liblua5.1.a */; };
+		2188A6D017EB94F30078C91C /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2188A6CF17EB94F30078C91C /* ApplicationServices.framework */; };
+		2188A6D217EB95F60078C91C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2188A6D117EB95F60078C91C /* Carbon.framework */; };
 		2199D0A80F574AC8007CEB9C /* SheepGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */; };
 		2199D0A90F574AC8007CEB9C /* SheepGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */; };
 		2199D0DC0F575949007CEB9C /* SheepUploader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0DB0F575949007CEB9C /* SheepUploader.cpp */; };
@@ -222,7 +225,6 @@
 		21DC0CA91263B98200D60C6A /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */; };
 		21DC0CAC1263B99000D60C6A /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */; };
 		21DE7CD91019020600E77D68 /* Instructions.rtf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21DE7CA6101901E900E77D68 /* Instructions.rtf */; };
-		21E1A7C01388032C00D938E6 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1CB50E8E928500CE185C /* Carbon.framework */; };
 		21E6A55410B5F97E00DAF0FF /* electricsheep-attr.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */; };
 		21E6A56110B5F9A000DAF0FF /* electricsheep-attr.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */; };
 		21EE633510139BCC000CE53E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EE633410139BCC000CE53E /* main.m */; };
@@ -484,7 +486,6 @@
 		212B1ADD0E8E6E5000CE185C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = /usr/lib/libbz2.dylib; sourceTree = "<absolute>"; };
 		212B1AF30E8E715E00CE185C /* liblua5.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua5.1.a; path = ../lua5.1/osx/lib/liblua5.1.a; sourceTree = SOURCE_ROOT; };
 		212B1B590E8E755A00CE185C /* mgl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgl.cpp; path = ../DisplayOutput/OpenGL/mgl.cpp; sourceTree = SOURCE_ROOT; };
-		212B1CB50E8E928500CE185C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		212CAF831141CA3F009DA85A /* TrebuchetMS-20.glf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TrebuchetMS-20.glf"; sourceTree = "<group>"; };
 		2135D2200EC70153005E246D /* ESOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESOpenGLView.m; path = ../DisplayOutput/OpenGL/ESOpenGLView.m; sourceTree = SOURCE_ROOT; };
 		2135D2670EC70571005E246D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -522,6 +523,8 @@
 		2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TrebuchetMS-24.glf"; sourceTree = "<group>"; };
 		218878D00EC6CD7E001ABD2E /* Electric Sheep.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Electric Sheep.saver"; sourceTree = BUILT_PRODUCTS_DIR; };
 		218878D10EC6CD7E001ABD2E /* ScreenSaver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ScreenSaver-Info.plist"; sourceTree = "<group>"; };
+		2188A6CF17EB94F30078C91C /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = ../../../../System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<group>"; };
+		2188A6D117EB95F60078C91C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
 		2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SheepGenerator.cpp; sourceTree = "<group>"; };
 		2199D0DB0F575949007CEB9C /* SheepUploader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SheepUploader.cpp; sourceTree = "<group>"; };
 		21AAA0ED0F70453200AC23A8 /* ESConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESConfiguration.h; sourceTree = "<group>"; };
@@ -554,7 +557,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21E1A7C01388032C00D938E6 /* Carbon.framework in Frameworks */,
 				213D540311F79C9800CF500D /* IOKit.framework in Frameworks */,
 				2160FC9D0F30F48200B2C27A /* CoreFoundation.framework in Frameworks */,
 				2160FC9E0F30F48200B2C27A /* GLUT.framework in Frameworks */,
@@ -569,6 +571,7 @@
 				2160FCAA0F30F48200B2C27A /* libswscale.a in Frameworks */,
 				2160FCAB0F30F48200B2C27A /* libz.dylib in Frameworks */,
 				2160FCAC0F30F48200B2C27A /* libbz2.dylib in Frameworks */,
+				217A3AA5180986C20006B74A /* Carbon.framework in Frameworks */,
 				2160FCAD0F30F48200B2C27A /* liblua5.1.a in Frameworks */,
 				21DC0CA91263B98200D60C6A /* libcurl.dylib in Frameworks */,
 				2160FCAF0F30F48200B2C27A /* AppKit.framework in Frameworks */,
@@ -583,6 +586,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				213D535111F79C8D00CF500D /* IOKit.framework in Frameworks */,
+				2188A6D017EB94F30078C91C /* ApplicationServices.framework in Frameworks */,
 				2135DB250EC75133005E246D /* ScreenSaver.framework in Frameworks */,
 				21887A130EC6CDF9001ABD2E /* CoreFoundation.framework in Frameworks */,
 				21887A140EC6CDF9001ABD2E /* GLUT.framework in Frameworks */,
@@ -592,6 +596,7 @@
 				21887A180EC6CDF9001ABD2E /* libavdevice.a in Frameworks */,
 				21887A190EC6CDF9001ABD2E /* libavutil.a in Frameworks */,
 				21887A1B0EC6CDF9001ABD2E /* libboost_system.a in Frameworks */,
+				2188A6D217EB95F60078C91C /* Carbon.framework in Frameworks */,
 				21887A1D0EC6CDF9001ABD2E /* libboost_thread.a in Frameworks */,
 				21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */,
 				2161F1940ECF8CEF00FE48E9 /* libz.dylib in Frameworks */,
@@ -649,6 +654,8 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2188A6D117EB95F60078C91C /* Carbon.framework */,
+				2188A6CF17EB94F30078C91C /* ApplicationServices.framework */,
 				2155422F1261FDC900AB51BF /* Sparkle.framework */,
 				21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */,
 				21CE8B950F6ED0F200DDF96A /* CoreServices.framework */,
@@ -656,7 +663,6 @@
 				2181FAEF0ECF42820078FDDA /* libswscale.a */,
 				2135DB240EC75133005E246D /* ScreenSaver.framework */,
 				2135D2670EC70571005E246D /* AppKit.framework */,
-				212B1CB50E8E928500CE185C /* Carbon.framework */,
 				212B1AF30E8E715E00CE185C /* liblua5.1.a */,
 				212B1ADD0E8E6E5000CE185C /* libbz2.dylib */,
 				212B1AD90E8E6E0100CE185C /* libz.dylib */,
@@ -1331,7 +1337,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_GC = unsupported;
@@ -1367,7 +1373,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -1410,7 +1416,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				BUILD_VARIANTS = (
 					i386,
 					x86_64,
@@ -1441,7 +1447,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-read_only_relocs",
@@ -1459,7 +1465,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				BUILD_VARIANTS = (
 					i386,
 					x86_64,
@@ -1489,7 +1495,7 @@
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (
 					"-read_only_relocs",
 					suppress,
@@ -1532,7 +1538,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1558,7 +1564,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

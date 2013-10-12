@@ -462,12 +462,12 @@ void	CLog::Log( const char *_pType, /*const char *_file, const uint32 _line, con
 		{
 			if( m_bActive )
 			{
-				fprintf( m_pFile, "[%s-%s]: '%s' x%u\n", s_MessageType, timeStamp, s_MessageSpam, s_MessageSpamCount );
+				fprintf( m_pFile, "[%s-%s]: '%s' x%lu\n", s_MessageType, timeStamp, s_MessageSpam, s_MessageSpamCount );
 				fflush( m_pFile );
 			}
 			else
 			{
-				fprintf( stdout, "[%s-%s]: '%s' x%u\n", s_MessageType, timeStamp, s_MessageSpam, s_MessageSpamCount );
+				fprintf( stdout, "[%s-%s]: '%s' x%lu\n", s_MessageType, timeStamp, s_MessageSpam, s_MessageSpamCount );
 				fflush( stdout );
 			}
 		} else

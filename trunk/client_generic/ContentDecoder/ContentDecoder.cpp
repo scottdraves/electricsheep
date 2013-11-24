@@ -29,10 +29,6 @@
 #include	"Timer.h"
 #include	"Settings.h"
 
-#ifdef MAC
-	#define USE_NEW_FFMPEG_API
-#endif
-
 using namespace boost;
 
 namespace ContentDecoder
@@ -223,7 +219,11 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
 	
 	ovi->m_pFrame = avcodec_alloc_frame();
 	
-	ovi->m_totalFrameCount = uint32(((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) * av_q2d(ovi->m_pVideoStream->r_frame_rate) + .5));
+	if (ovi->m_pVideoStream->nb_frames > 0)
+		ovi->m_totalFrameCount = ovi->m_pVideoStream->nb_frames;
+	else
+		ovi->m_totalFrameCount = uint32(((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) / av_q2d(ovi->m_pVideoStream->r_frame_rate) + .5));
+
 
 	g_Log->Info( "Open done()" );
 
@@ -484,134 +484,156 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
 	if (ovi == NULL)
 		return NULL;
 					
+	AVFormatContext	*pFormatContext = ovi->m_pFormatContext;
+
+	if( !pFormatContext )
+        return NULL;
+
+    AVPacket packet;
+    int	frameDecoded = 0;
+	AVFrame *pFrame = ovi->m_pFrame;
+    AVCodecContext	*pVideoCodecContext = ovi->m_pVideoCodecContext;
 	CVideoFrame *pVideoFrame = NULL;
 
-	AVFormatContext	*pFormatContext = ovi->m_pFormatContext;
-	AVFrame *pFrame = ovi->m_pFrame;
+	int numAttempt = 1;
 	
-	if( pFormatContext != NULL )
-	{
-		AVPacket    packet;
+	while(true)
+    {
 		av_init_packet(&packet);
-
-		if ( av_read_frame( pFormatContext, &packet ) >= 0 )
+        
+		if ( av_read_frame( pFormatContext, &packet ) < 0 )
+        {
+			break;
+		}
+		
+		//printf( "calling av_dup_packet" );
+		/*if( av_dup_packet( &packet ) < 0 )
 		{
-			//printf( "av_read_frame done" );
-			if( packet.stream_index == ovi->m_VideoStreamID )
-			{
-				int	frameDecoded = 0;
+			g_Log->Warning( "av_dup_packet < 0" );
+			break;
+		}*/
 
-				//printf( "calling av_dup_packet" );
-				if( av_dup_packet( &packet ) < 0 )
-				{
-					g_Log->Warning( "av_dup_packet < 0" );
-					return NULL;
-				}
-				
-				AVCodecContext	*pVideoCodecContext = ovi->m_pVideoCodecContext;
-
-					//printf( "avcodec_decode_video(0x%x, 0x%x, 0x%x, 0x%x, %d)", m_pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
+        //printf( "av_read_frame done" );
+        if( packet.stream_index != ovi->m_VideoStreamID )
+        {
+            g_Log->Error("Mismatching stream ID");
+			break;
+		}
+		
+        //printf( "avcodec_decode_video(0x%x, 0x%x, 0x%x, 0x%x, %d)", m_pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
 
 #if (!defined(LINUX_GNU) || defined(HAVE_AVC_VID2))
-				int32 bytesDecoded = avcodec_decode_video2( pVideoCodecContext, pFrame, &frameDecoded, &packet );
+        int32 bytesDecoded = avcodec_decode_video2( pVideoCodecContext, pFrame, &frameDecoded, &packet );
 #else
-				int32 bytesDecoded = avcodec_decode_video( pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
+        int32 bytesDecoded = avcodec_decode_video( pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
 #endif
-					
-				//g_Log->Info( "avcodec_decode_video decoded %d bytes", bytesDecoded );
-				if( bytesDecoded < 0 )
-					g_Log->Warning( "Failed to decode video frame: bytesDecoded < 0" );
-
-				//	Do we have a fresh frame?
-				if( frameDecoded > 0 )
-				{
-					//g_Log->Info( "frame decoded" );
-
-					//if( pFrame->interlaced_frame )
-						//avpicture_deinterlace( (AVPicture *)pFrame, (AVPicture *)pFrame, m_pVideoCodecContext->pix_fmt, m_pVideoCodecContext->width, m_pVideoCodecContext->height );
-
-					//	If the decoded video has a different resolution, delete the scaler to trigger it to be recreated.
-					if( ovi->m_Width != (uint32)pVideoCodecContext->width || ovi->m_Height != (uint32)pVideoCodecContext->height )
-					{
-						g_Log->Info( "size doesn't match, recreating" );
-
-						if( ovi->m_pScaler )
-						{
-							g_Log->Info( "deleting m_pScalar" );
-							av_free( ovi->m_pScaler );
-							ovi->m_pScaler = NULL;
-						}
-					}
-
-					//	Make sure scaler is created.
-					if( ovi->m_pScaler == NULL )
-					{
-						g_Log->Info( "creating m_pScaler" );
-
-						ovi->m_pScaler = sws_getContext(	pVideoCodecContext->width, pVideoCodecContext->height, pVideoCodecContext->pix_fmt,
-														pVideoCodecContext->width, pVideoCodecContext->height, m_WantedPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
-
-						//	Store width & height now...
-						ovi->m_Width = pVideoCodecContext->width;
-						ovi->m_Height = pVideoCodecContext->height;
-
-						if( ovi->m_pScaler == NULL )
-							g_Log->Warning( "scaler == null" );
-					}
-
-					//printf( "creating pVideoFrame" );
-					pVideoFrame = new CVideoFrame( pVideoCodecContext, m_WantedPixelFormat, std::string(pFormatContext->filename) );
-					AVFrame	*pDest = pVideoFrame->Frame();
-
-					//printf( "calling sws_scale()" );
-					sws_scale( ovi->m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
-
-					++ovi->m_iCurrentFileFrameCount;
-					
-					/*if (m_totalFrameCount > 0)
-					{
-						//g_Log->Info("framcount %lu, %lf", (long)(((double)m_pFormatContext->duration/(double)AV_TIME_BASE)),av_q2d(m_pVideoStream->r_frame_rate));
-						if (m_iCurrentFileFrameCount == m_totalFrameCount - m_FadeCount)
-						{
-							if (m_prevLast != m_nextFirst)
-							{
-								//g_Log->Info("FADING prevLast %u nextFirst %u", m_prevLast, m_nextFirst);
-								m_FadeOut = m_FadeCount + 1;
-							}
-						}
-						pVideoFrame->SetMetaData_Fade(1.f);
-						if (m_FadeOut > 0)
-						{
-							--m_FadeOut;
-							if (m_FadeOut == 0)
-								m_FadeIn = 0;
-							pVideoFrame->SetMetaData_Fade(fp4(m_FadeOut) / fp4(m_FadeCount));
-							//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
-						}
-						if (m_FadeIn < m_FadeCount)
-						{
-							++m_FadeIn;
-							pVideoFrame->SetMetaData_Fade(fp4(m_FadeIn) / fp4(m_FadeCount));
-							//g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
-						}
-					}*/
-
-					pVideoFrame->SetMetaData_SheepID( ovi->m_SheepID );
-					pVideoFrame->SetMetaData_SheepGeneration( ovi->m_Generation );
-					pVideoFrame->SetMetaData_IsEdge( ovi->IsEdge() );
-					pVideoFrame->SetMetaData_atime( ovi->m_CurrentFileatime );
-					pVideoFrame->SetMetaData_IsSeam( ovi->m_NextIsSeam );
-					pVideoFrame->SetMetaData_FrameIdx( ovi->m_iCurrentFileFrameCount );
-					pVideoFrame->SetMetaData_MaxFrameIdx( ovi->m_totalFrameCount );
-					ovi->m_NextIsSeam = false;
-				}
-			}
-
-			av_free_packet( &packet );
+                        
+		//g_Log->Info( "avcodec_decode_video decoded %d bytes", bytesDecoded );
+        if ( bytesDecoded < 0 )
+		{
+            g_Log->Warning( "Failed to decode video frame: bytesDecoded < 0" );
+			break;
 		}
-	}
+
+		//if frame could not be decoded (frameDecoded == 0) let's skip to next one.
+		if ( frameDecoded != 0 )
+        {
+            /*if ( numAttempt > 0 )
+                g_Log->Info("Frame decoded at %d. attempt", numAttempt + 1);*/
+            break;
+        }
+        
+		av_free_packet(&packet);
 			
-	return pVideoFrame;
+		numAttempt++;
+    }
+
+    //	Do we have a fresh frame?
+    if( frameDecoded != 0 )
+    {
+        //g_Log->Info( "frame decoded" );
+		
+		//if( pFrame->interlaced_frame )
+            //avpicture_deinterlace( (AVPicture *)pFrame, (AVPicture *)pFrame, m_pVideoCodecContext->pix_fmt, m_pVideoCodecContext->width, m_pVideoCodecContext->height );
+
+        //	If the decoded video has a different resolution, delete the scaler to trigger it to be recreated.
+        if( ovi->m_Width != (uint32)pVideoCodecContext->width || ovi->m_Height != (uint32)pVideoCodecContext->height )
+        {
+            g_Log->Info( "size doesn't match, recreating" );
+
+            if( ovi->m_pScaler )
+            {
+                g_Log->Info( "deleting m_pScalar" );
+                av_free( ovi->m_pScaler );
+                ovi->m_pScaler = NULL;
+            }
+        }
+
+        //	Make sure scaler is created.
+        if( ovi->m_pScaler == NULL )
+        {
+            g_Log->Info( "creating m_pScaler" );
+
+            ovi->m_pScaler = sws_getContext(	pVideoCodecContext->width, pVideoCodecContext->height, pVideoCodecContext->pix_fmt,
+                                            pVideoCodecContext->width, pVideoCodecContext->height, m_WantedPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
+
+            //	Store width & height now...
+            ovi->m_Width = pVideoCodecContext->width;
+            ovi->m_Height = pVideoCodecContext->height;
+
+            if( ovi->m_pScaler == NULL )
+                g_Log->Warning( "scaler == null" );
+        }
+
+        //printf( "creating pVideoFrame" );
+        pVideoFrame = new CVideoFrame( pVideoCodecContext, m_WantedPixelFormat, std::string(pFormatContext->filename) );
+        AVFrame	*pDest = pVideoFrame->Frame();
+
+        //printf( "calling sws_scale()" );
+        sws_scale( ovi->m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
+
+		ovi->m_iCurrentFileFrameCount += numAttempt;
+
+        /*if (m_totalFrameCount > 0)
+        {
+            //g_Log->Info("framcount %lu, %lf", (long)(((double)m_pFormatContext->duration/(double)AV_TIME_BASE)),av_q2d(m_pVideoStream->r_frame_rate));
+            if (m_iCurrentFileFrameCount == m_totalFrameCount - m_FadeCount)
+            {
+                if (m_prevLast != m_nextFirst)
+                {
+                    //g_Log->Info("FADING prevLast %u nextFirst %u", m_prevLast, m_nextFirst);
+                    m_FadeOut = m_FadeCount + 1;
+                }
+            }
+            pVideoFrame->SetMetaData_Fade(1.f);
+            if (m_FadeOut > 0)
+            {
+                --m_FadeOut;
+                if (m_FadeOut == 0)
+                    m_FadeIn = 0;
+                pVideoFrame->SetMetaData_Fade(fp4(m_FadeOut) / fp4(m_FadeCount));
+                //g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
+            }
+            if (m_FadeIn < m_FadeCount)
+            {
+                ++m_FadeIn;
+                pVideoFrame->SetMetaData_Fade(fp4(m_FadeIn) / fp4(m_FadeCount));
+                //g_Log->Info("FADING fadeout %u fadein %u framecount %u", m_FadeOut, m_FadeIn, m_iCurrentFileFrameCount);
+            }
+        }*/
+
+        pVideoFrame->SetMetaData_SheepID( ovi->m_SheepID );
+        pVideoFrame->SetMetaData_SheepGeneration( ovi->m_Generation );
+        pVideoFrame->SetMetaData_IsEdge( ovi->IsEdge() );
+        pVideoFrame->SetMetaData_atime( ovi->m_CurrentFileatime );
+        pVideoFrame->SetMetaData_IsSeam( ovi->m_NextIsSeam );
+        pVideoFrame->SetMetaData_FrameIdx( ovi->m_iCurrentFileFrameCount );
+        pVideoFrame->SetMetaData_MaxFrameIdx( ovi->m_totalFrameCount );
+        ovi->m_NextIsSeam = false;
+    }
+
+    av_free_packet( &packet );
+    return pVideoFrame;
 }
 
 /*
@@ -654,7 +676,11 @@ void	CContentDecoder::ReadPackets()
 					if (pSecondVideoFrame != NULL)
 					{
 						pMainVideoFrame->SetMetaData_SecondFrame(pSecondVideoFrame);
-						pMainVideoFrame->SetMetaData_TransitionProgress((fp4)m_SecondVideoInfo->m_iCurrentFileFrameCount * 100.f / ((fp4)kTransitionFrameLength - 1.0f));
+						 
+						if (m_SecondVideoInfo->m_iCurrentFileFrameCount < kTransitionFrameLength)
+							pMainVideoFrame->SetMetaData_TransitionProgress((fp4)m_SecondVideoInfo->m_iCurrentFileFrameCount * 100.f / ((fp4)kTransitionFrameLength - 1.f));
+						else 
+							pMainVideoFrame->SetMetaData_TransitionProgress(100.f);
 					}
 					else
 						pMainVideoFrame->SetMetaData_TransitionProgress(0.f);

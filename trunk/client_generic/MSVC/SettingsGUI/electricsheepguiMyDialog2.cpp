@@ -109,6 +109,30 @@ std::string Encode( const std::string &_src )
    return sResult;
 }
 
+DEFINE_EVENT_TYPE(EVT_TYPE_LOGINSTATUSUPDATE)
+DEFINE_EVENT_TYPE(EVT_TYPE_LOGININFOUPDATE)
+
+IMPLEMENT_DYNAMIC_CLASS(LoginStatusUpdateEvent, wxEvent)
+
+LoginStatusUpdateEvent::LoginStatusUpdateEvent(const wxString &text): m_text(text)
+{
+    SetEventType(EVT_TYPE_LOGINSTATUSUPDATE);
+    SetEventObject(NULL);
+}
+
+IMPLEMENT_DYNAMIC_CLASS(LoginInfoUpdateEvent, wxEvent)
+
+LoginInfoUpdateEvent::LoginInfoUpdateEvent(const wxString &text): m_text(text)
+{
+    SetEventType(EVT_TYPE_LOGININFOUPDATE);
+    SetEventObject(NULL);
+}
+
+BEGIN_EVENT_TABLE(electricsheepguiMyDialog2, wxDialog)
+    EVT_UPDATE_LOGIN_STATUS(electricsheepguiMyDialog2::OnLoginStatusUpdate)
+    EVT_UPDATE_LOGIN_INFO(electricsheepguiMyDialog2::OnLoginInfoUpdate)
+END_EVENT_TABLE()
+
 void electricsheepguiMyDialog2::SaveSettings()
 {
 	g_Settings()->Set("settings.app.log", m_DebugLog->GetValue());
@@ -359,8 +383,7 @@ void electricsheepguiMyDialog2::Login()
 	if (nickencoded == std::string("") || passencoded == std::string(""))
 	{
 		wxMutexGuiEnter();
-		m_staticText6->SetLabel("...Failed!...");
-		Layout();
+        FireLoginStatusUpdateEvent("...Failed!...");
 		wxMutexGuiLeave();
 		curl_easy_cleanup( pCurl );
 		curl_global_cleanup();
@@ -391,7 +414,7 @@ void electricsheepguiMyDialog2::Login()
 	curl_easy_setopt(pCurl, CURLOPT_CONNECTTIMEOUT, 15);
 
 	wxMutexGuiEnter();
-	m_staticText6->SetLabel("...talking...");
+    FireLoginStatusUpdateEvent("...talking...");
 	wxMutexGuiLeave();
 
 
@@ -429,27 +452,26 @@ void electricsheepguiMyDialog2::Login()
 						wxMutexGuiEnter();
 						if (m_Role == "error" || m_Role == "none")
 						{
-							m_staticText25->SetLabel("Become a member for access to our private server with more sheep,\nhigher resolution sheep, and other interactive features.\n");
+                            FireLoginInfoUpdateEvent("Become a member for access to our private server with more sheep,\nhigher resolution sheep, and other interactive features.\n");
 						} else
 						if (m_Role == "registered")
 						{
-							m_staticText25->SetLabel("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
+                            FireLoginInfoUpdateEvent("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
 						} else
 						if (m_Role == "member")
 						{
-							m_staticText25->SetLabel("Thank you for your membership, you may upgrade to Gold for higher\nresolution and other benefits.");
+                            FireLoginInfoUpdateEvent("Thank you for your membership, you may upgrade to Gold for higher\nresolution and other benefits.");
 						} else
 						if (m_Role == "gold")
 						{
-							m_staticText25->SetLabel("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
+                            FireLoginInfoUpdateEvent("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
 						}
 
 						if (m_Role == "registered" || m_Role == "member" || m_Role == "gold")
 						{
-							m_staticText6->SetLabel("...logged in!...");
+                            FireLoginStatusUpdateEvent("...logged in!...");
 
 							g_Settings()->Set("settings.content.registered", true);
-							Layout();
 							wxMutexGuiLeave();
 
 							curl_slist_free_all(slist);
@@ -459,7 +481,6 @@ void electricsheepguiMyDialog2::Login()
 							return;
 						}
 
-						Layout();
 						wxMutexGuiLeave();
 
 					}
@@ -469,8 +490,7 @@ void electricsheepguiMyDialog2::Login()
 	}
 	g_Settings()->Set("settings.content.registered", false);
 	wxMutexGuiEnter();
-	m_staticText6->SetLabel("...Failed!...");
-	Layout();
+    FireLoginStatusUpdateEvent("...Failed!...");
 	wxMutexGuiLeave();
 
 	curl_slist_free_all(slist);
@@ -607,6 +627,18 @@ void* LoginThread::Entry()
 		return 0;
 	sMainDialog->Login();
 	return 0;
+}
+
+void electricsheepguiMyDialog2::FireLoginStatusUpdateEvent(const wxString &text)
+{
+    LoginStatusUpdateEvent event(text);
+    AddPendingEvent(event);
+}
+
+void electricsheepguiMyDialog2::FireLoginInfoUpdateEvent(const wxString &text)
+{
+    LoginInfoUpdateEvent event(text);
+    AddPendingEvent(event);
 }
 
 void electricsheepguiMyDialog2::OnRunClick( wxCommandEvent& event )
@@ -934,3 +966,16 @@ void electricsheepguiMyDialog2::OnCancelClick( wxCommandEvent& event )
 {
 	this->Destroy();
 }
+
+void electricsheepguiMyDialog2::OnLoginStatusUpdate( LoginStatusUpdateEvent &event )
+{
+    m_staticText6->SetLabel( event.getText() );
+    Layout();
+}
+
+void electricsheepguiMyDialog2::OnLoginInfoUpdate( LoginInfoUpdateEvent &event )
+{
+    m_staticText25->SetLabel( event.getText() );
+    Layout();
+}
+

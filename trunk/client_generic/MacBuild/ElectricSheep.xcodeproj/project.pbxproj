@@ -206,6 +206,8 @@
 		2199D0DC0F575949007CEB9C /* SheepUploader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0DB0F575949007CEB9C /* SheepUploader.cpp */; };
 		2199D0DD0F575949007CEB9C /* SheepUploader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0DB0F575949007CEB9C /* SheepUploader.cpp */; };
 		219AB85611F3336F00A01A7B /* proximus.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21CE8B860F6ECFBA00DDF96A /* proximus.bundle */; };
+		21A8AFBB18416ECA00F77369 /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */; };
+		21A8AFBC18416ECA00F77369 /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */; };
 		21AAA0BD0F7040B500AC23A8 /* ElectricSheep.nib in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA09E0F70400D00AC23A8 /* ElectricSheep.nib */; };
 		21AAA0EF0F70453200AC23A8 /* ESConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AAA0EE0F70453200AC23A8 /* ESConfiguration.m */; };
 		21ADBB241305D380000A9F20 /* green.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB211305D380000A9F20 /* green.tif */; };
@@ -527,6 +529,7 @@
 		2188A6D117EB95F60078C91C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
 		2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SheepGenerator.cpp; sourceTree = "<group>"; };
 		2199D0DB0F575949007CEB9C /* SheepUploader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SheepUploader.cpp; sourceTree = "<group>"; };
+		21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = ../../../../usr/lib/libiconv.2.dylib; sourceTree = "<group>"; };
 		21AAA0ED0F70453200AC23A8 /* ESConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESConfiguration.h; sourceTree = "<group>"; };
 		21AAA0EE0F70453200AC23A8 /* ESConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESConfiguration.m; sourceTree = "<group>"; };
 		21ADBB211305D380000A9F20 /* green.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = green.tif; sourceTree = SOURCE_ROOT; };
@@ -565,6 +568,7 @@
 				2160FCA10F30F48200B2C27A /* libavcodec.a in Frameworks */,
 				2160FCA20F30F48200B2C27A /* libavdevice.a in Frameworks */,
 				2160FCA30F30F48200B2C27A /* libavutil.a in Frameworks */,
+				21A8AFBC18416ECA00F77369 /* libiconv.2.dylib in Frameworks */,
 				2160FCA50F30F48200B2C27A /* libboost_system.a in Frameworks */,
 				2160FCA60F30F48200B2C27A /* libboost_thread.a in Frameworks */,
 				2160FCA90F30F48200B2C27A /* libavformat.a in Frameworks */,
@@ -601,6 +605,7 @@
 				21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */,
 				2161F1940ECF8CEF00FE48E9 /* libz.dylib in Frameworks */,
 				21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */,
+				21A8AFBB18416ECA00F77369 /* libiconv.2.dylib in Frameworks */,
 				21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */,
 				21DC0CAC1263B99000D60C6A /* libcurl.dylib in Frameworks */,
 				2135D2690EC70571005E246D /* AppKit.framework in Frameworks */,
@@ -654,6 +659,7 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */,
 				2188A6D117EB95F60078C91C /* Carbon.framework */,
 				2188A6CF17EB94F30078C91C /* ApplicationServices.framework */,
 				2155422F1261FDC900AB51BF /* Sparkle.framework */,
@@ -1337,8 +1343,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -1373,7 +1381,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -1416,7 +1424,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUILD_VARIANTS = (
 					i386,
 					x86_64,
@@ -1465,7 +1473,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUILD_VARIANTS = (
 					i386,
 					x86_64,

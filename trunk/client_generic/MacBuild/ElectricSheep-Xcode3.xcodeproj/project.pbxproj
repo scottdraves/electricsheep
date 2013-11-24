@@ -49,6 +49,8 @@
 		2135DB250EC75133005E246D /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135DB240EC75133005E246D /* ScreenSaver.framework */; };
 		213D535111F79C8D00CF500D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213D529B11F79B0000CF500D /* IOKit.framework */; };
 		213D540311F79C9800CF500D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 213D529B11F79B0000CF500D /* IOKit.framework */; };
+		2140A9621840E3C6004E65F1 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2140A9611840E3C6004E65F1 /* libiconv.dylib */; };
+		2140A9631840E3C6004E65F1 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2140A9611840E3C6004E65F1 /* libiconv.dylib */; };
 		214554CE162B523D00D74851 /* thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 214554CC162B523D00D74851 /* thumbnail.png */; };
 		214554CF162B523D00D74851 /* thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 214554CD162B523D00D74851 /* thumbnail@2x.png */; };
 		214CC3670F34E5CF0083617B /* FontGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 214CC3660F34E5CF0083617B /* FontGL.cpp */; };
@@ -490,6 +492,7 @@
 		2135DA540EC74853005E246D /* ESScreensaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ESScreensaver.cpp; sourceTree = "<group>"; };
 		2135DB240EC75133005E246D /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = /System/Library/Frameworks/ScreenSaver.framework; sourceTree = "<absolute>"; };
 		213D529B11F79B0000CF500D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		2140A9611840E3C6004E65F1 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		214554CC162B523D00D74851 /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = SOURCE_ROOT; };
 		214554CD162B523D00D74851 /* thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbnail@2x.png"; sourceTree = SOURCE_ROOT; };
 		214B75060EBBA78900B5B897 /* Rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rect.cpp; path = ../Common/Math/Rect.cpp; sourceTree = SOURCE_ROOT; };
@@ -575,6 +578,7 @@
 				212316970F50636700702B2C /* libboost_filesystem.a in Frameworks */,
 				21CE8E3E0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
 				215542301261FDC900AB51BF /* Sparkle.framework in Frameworks */,
+				2140A9631840E3C6004E65F1 /* libiconv.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +607,7 @@
 				212316960F50636700702B2C /* libboost_filesystem.a in Frameworks */,
 				21CE8E3D0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
 				215542311261FDC900AB51BF /* Sparkle.framework in Frameworks */,
+				2140A9621840E3C6004E65F1 /* libiconv.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -649,6 +654,7 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2140A9611840E3C6004E65F1 /* libiconv.dylib */,
 				2155422F1261FDC900AB51BF /* Sparkle.framework */,
 				21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */,
 				21CE8B950F6ED0F200DDF96A /* CoreServices.framework */,

@@ -535,9 +535,14 @@ void CUnixGL::checkClientMessages()
         if( xEvent.type == KeyPress )			{	spEvent->m_bPressed = true;	}
         else if( xEvent.type == KeyRelease )	{	spEvent->m_bPressed = false;	}
 
-        KeySym keySymbol = XKeycodeToKeysym( m_pDisplay, xEvent.xkey.keycode, 0 );
+        // deprecated
+        //KeySym keySymbol = XKeycodeToKeysym( m_pDisplay, xEvent.xkey.keycode, 0 );
 
-        switch( keySymbol )
+        int keysyms_per_keycode_returned = 0;
+        KeySym *keySymbol = XGetKeyboardMapping( m_pDisplay, xEvent.xkey.keycode, 
+            1, &keysyms_per_keycode_returned ); 
+
+        switch( keySymbol[0] )
         {
 			case XK_F1:     spEvent->m_Code = CKeyEvent::KEY_F1;	break;
 			case XK_F2:     spEvent->m_Code = CKeyEvent::KEY_F2;	break;
@@ -554,6 +559,7 @@ void CUnixGL::checkClientMessages()
 			case XK_Escape:	spEvent->m_Code = CKeyEvent::KEY_Esc;	break;
         }
 
+        XFree(keySymbol);
 		spCEvent e = spEvent;
 		m_EventQueue.push( e );
     }

@@ -7,7 +7,7 @@ endif
 
 
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
 	-I $(top_srcdir) \
@@ -23,10 +23,10 @@ INCLUDES = \
 	-I ../../Client \
 	-I ../../Networking \
 	-I ../../tinyXml \
-	-I /usr/include/libavcodec \
-	-I /usr/include/libavformat \
-	-I /usr/include/libswscale \
-	-I /usr/include/libavutil
+	-I /usr/include/libswscale
+#	-I /usr/include/libavcodec \
+#	-I /usr/include/libavformat \
+#	-I /usr/include/libavutil
 
 bin_PROGRAMS = electricsheep-preferences
 
@@ -52,7 +52,8 @@ electricsheep_preferences_SOURCES = \
 
 electricsheep_preferences_LDADD = -lboost_thread -lboost_filesystem $(CURL_LIBS) $(LUA_LIBS) -ltinyxml @WX_LDADD@ @BOOST_LDADD@
 
-AM_CXXFLAGS = $(linux_CFLAGS) -fpermissive @WX_CXXFLAGS@
+#AM_CXXFLAGS = $(linux_CFLAGS) -fpermissive @WX_CXXFLAGS@
+AM_CXXFLAGS = $(linux_CFLAGS) @WX_CXXFLAGS@
 
 
 

@@ -62,7 +62,7 @@ install-data-local:
 	mkdir -p $(DESTDIR)$(gnome_screensaver_dir)
 	cp -rf $(srcdir)/Runtime/Scripts $(DESTDIR)$(sharedir)/electricsheep
 	mkdir -p $(DESTDIR)$(sharedir)/applications/
-	cp -f $(srcdir)/menu-entries/ElectricSheep.desktop $(DESTDIR)$(sharedir)/applications/
+	cp -f $(srcdir)/menu-entries/ElectricSheep.desktop.kde $(DESTDIR)$(sharedir)/applications/ElectricSheep.desktop
 	mkdir -p $(DESTDIR)$(sharedir)/pixmaps/
 	cp -f $(srcdir)/menu-entries/electricsheep.xpm $(DESTDIR)$(sharedir)/pixmaps/
 	cp -f $(srcdir)/Runtime/electricsheep-attr.png $(DESTDIR)$(sharedir)/electricsheep/

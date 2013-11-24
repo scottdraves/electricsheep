@@ -528,15 +528,18 @@ class	CElectricSheep
 #else
 				int displayCnt = g_Player().GetDisplayCount();
 									
+                bool ret = true;
 				for (int i = 0; i < displayCnt; i++)
 				{
-					DoRealFrameUpdate(i);
+					ret &= DoRealFrameUpdate(i);
+                    if ( !ret )
+                        break;
 				}				
 #endif
 								
 				g_Player().EndFrameUpdate();
 
-				return true;
+				return ret;
 			}
 			
 #ifdef DO_THREAD_UPDATE

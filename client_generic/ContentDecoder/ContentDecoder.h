@@ -23,6 +23,9 @@
 #ifndef _CONTENTDECODER_H
 #define _CONTENTDECODER_H
 
+#ifdef MAC
+#define USE_NEW_FFMPEG_API
+#endif
 
 //	FFmpeg headers.
 extern "C"{
@@ -109,8 +112,12 @@ struct sOpenVideoInfo
 
 		if( m_pFormatContext )
 		{
+#ifdef USE_NEW_FFMPEG_API
+			avformat_close_input( &m_pFormatContext );
+#else
 			av_close_input_file( m_pFormatContext );
 			m_pFormatContext = NULL;
+#endif  // USE_NEW_FFMPEG_API
 		}
 		
 		if( m_pScaler )

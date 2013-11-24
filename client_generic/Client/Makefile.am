@@ -9,7 +9,7 @@ AVC_DEFS=-DHAVE_AVC_VID2=1
 endif
 
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
 	-I $(top_srcdir) \

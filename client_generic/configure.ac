@@ -74,10 +74,10 @@ changequote([,])dnl
 dnl Check for WXWidgets
 WX_VER_291=""
 
-AC_PATH_PROG(WX_CONFIG, wx-config, no)
+AC_PATH_PROGS(WX_CONFIG, [wx-config-2.9 wx-config], no)
 
 if test x$WX_CONFIG != xno; then
-   WX_VERSION=`wx-config --version`
+   WX_VERSION=`$WX_CONFIG --version`
 
    WX_MAJOR=${WX_VERSION%%.*};
    WX_MINOR=${WX_VERSION#*.};
@@ -103,24 +103,24 @@ fi
 
 if test "$WX_VER_291" != "yes"; then
 
-dnl Use static version
-echo "installed version is too old,"
-echo "using static source version $reqwx"
+    dnl Use static version
+    echo "installed version is too old,"
+    echo "using static source version $reqwx"
 
-dnl Need to reset this, else it will override the value below !
-WX_CONFIG=""
+    dnl Need to reset this, else it will override the value below !
+    WX_CONFIG=""
 
-AC_CHECK_PROG(WX_CONFIG, wx-config, yes, no)
+    AC_CHECK_PROG(WX_CONFIG, wx-config, yes, no)
 
-if test $WX_CONFIG = no; then
-echo
-echo YOU CAN FIX THIS !
-AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher, and then run this configure script again.])
+    if test $WX_CONFIG = no; then
+        echo
+        echo YOU CAN FIX THIS !
+        AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher, and then run this configure script again.])
+    fi
 fi
-fi
 
-WX_CXXFLAGS="`wx-config --cxxflags`"
-WX_LIBS="-static `wx-config --libs` `wx-config --libs richtext`"
+WX_CXXFLAGS="`$WX_CONFIG --cxxflags`"
+WX_LIBS="-static `$WX_CONFIG --libs` `$WX_CONFIG --libs richtext`"
 
 echo "WX_CXXFLAGS is $WX_CXXFLAGS"
 echo "WX_LIBS is $WX_LIBS"
@@ -154,7 +154,7 @@ PKG_CHECK_MODULES(AVFORMAT,libavformat)
 AC_SUBST(AVFORMAT_CFLAGS)
 AC_SUBST(AVFORMAT_LIBS)
 
-
+AC_CHECK_LIB([avformat], [av_open_input_file], AC_DEFINE([USE_OLD_FFMPEG_API]), AC_DEFINE([USE_NEW_FFMPEG_API]))
 
 dnl Check for swscale
 
@@ -185,7 +185,7 @@ AC_SUBST(LUA_LIBS)
 
 dnl Check for glee
 
-PKG_CHECK_MODULES([GLEE],[glee], [HAVE_GLEE=true] , [HAVE_GLEE=false] )
+PKG_CHECK_MODULES([GLEE],[GLee], [HAVE_GLEE=true] , [HAVE_GLEE=false] )
 if test "$HAVE_GLEE" = "false"; then
    AC_MSG_CHECKING(for GLee.h)
    AC_CHECK_HEADERS(GLee.h GL/GLee.h)

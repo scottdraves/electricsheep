@@ -194,6 +194,7 @@ class	CElectricSheep_Linux : public CElectricSheep
 				try
 				{
 					printf( "CElectricSheep_Linux::Shutdown()\n" );
+                    CElectricSheep::Shutdown();
 				}
 				catch( Base::CException &_e )
 				{

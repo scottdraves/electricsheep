@@ -144,7 +144,7 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
 	g_Log->Info( "Opening: %s", _filename.c_str() );
 
 	//Destroy();
-
+#define USE_NEW_FFMPEG_API
 #ifdef USE_NEW_FFMPEG_API
 	if( DumpError( avformat_open_input( &ovi->m_pFormatContext, _filename.c_str(), NULL, NULL ) ) < 0 )
 #else

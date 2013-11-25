@@ -104,19 +104,9 @@ fi
 if test "$WX_VER_291" != "yes"; then
 
     dnl Use static version
-    echo "installed version is too old,"
-    echo "using static source version $reqwx"
+    echo "installed version of wx is too old,"
 
-    dnl Need to reset this, else it will override the value below !
-    WX_CONFIG=""
-
-    AC_CHECK_PROG(WX_CONFIG, wx-config, yes, no)
-
-    if test $WX_CONFIG = no; then
-        echo
-        echo YOU CAN FIX THIS !
-        AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher, and then run this configure script again.])
-    fi
+    AC_MSG_ERROR([Please install development libraries for wxWidgets 2.9.1 or higher, and then run this configure script again.])
 fi
 
 WX_CXXFLAGS="`$WX_CONFIG --cxxflags`"

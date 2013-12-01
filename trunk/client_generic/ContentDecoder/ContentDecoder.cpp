@@ -223,7 +223,8 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
 		ovi->m_totalFrameCount = ovi->m_pVideoStream->nb_frames;
 	else
 		ovi->m_totalFrameCount = uint32(((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) / av_q2d(ovi->m_pVideoStream->r_frame_rate) + .5));
-
+		
+	ovi->m_ReadingTrailingFrames = false;
 
 	g_Log->Info( "Open done()" );
 
@@ -495,15 +496,21 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
     AVCodecContext	*pVideoCodecContext = ovi->m_pVideoCodecContext;
 	CVideoFrame *pVideoFrame = NULL;
 
-	int numAttempt = 1;
-	
 	while(true)
     {
 		av_init_packet(&packet);
+		
+		packet.data = NULL;
+		packet.size = 0;
         
-		if ( av_read_frame( pFormatContext, &packet ) < 0 )
-        {
-			break;
+		if (!ovi->m_ReadingTrailingFrames)
+		{
+			if ( av_read_frame( pFormatContext, &packet ) < 0 )
+			{
+				ovi->m_ReadingTrailingFrames = true;
+				av_free_packet(&packet);
+				continue;
+			}
 		}
 		
 		//printf( "calling av_dup_packet" );
@@ -535,17 +542,15 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
 			break;
 		}
 
-		//if frame could not be decoded (frameDecoded == 0) let's skip to next one.
-		if ( frameDecoded != 0 )
+		//at the beginning of each file we can get few frames with frameDecoded==0 (multi-thread delay)
+		//all frames will be delayed and the few remaining frames come at the end when ovi->m_ReadingTrailingFrames == true
+		//only when frameDecoded == 0 and ovi->m_ReadingTrailingFrames == true, we are finally done with the file.
+		if ( frameDecoded != 0 || ovi->m_ReadingTrailingFrames )
         {
-            /*if ( numAttempt > 0 )
-                g_Log->Info("Frame decoded at %d. attempt", numAttempt + 1);*/
             break;
         }
         
 		av_free_packet(&packet);
-			
-		numAttempt++;
     }
 
     //	Do we have a fresh frame?
@@ -592,7 +597,7 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
         //printf( "calling sws_scale()" );
         sws_scale( ovi->m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
 
-		ovi->m_iCurrentFileFrameCount += numAttempt;
+		ovi->m_iCurrentFileFrameCount++;
 
         /*if (m_totalFrameCount > 0)
         {

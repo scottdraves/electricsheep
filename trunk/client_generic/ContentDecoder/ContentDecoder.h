@@ -75,7 +75,8 @@ struct sOpenVideoInfo
 		m_Last(0),
 		m_bSpecialSheep(false),
 		m_NumIterations(0),
-		m_NextIsSeam(false)
+		m_NextIsSeam(false),
+		m_ReadingTrailingFrames(false)
 		
 	{ }
 	
@@ -99,7 +100,8 @@ struct sOpenVideoInfo
 		m_Path(ovi->m_Path),
 		m_bSpecialSheep(ovi->m_bSpecialSheep),
 		m_NumIterations(ovi->m_NumIterations),
-		m_NextIsSeam(false)
+		m_NextIsSeam(false),
+		m_ReadingTrailingFrames(false)
 	{ }
 	
 	virtual ~sOpenVideoInfo()
@@ -173,6 +175,7 @@ struct sOpenVideoInfo
 	bool			m_bSpecialSheep;
 	uint32			m_NumIterations;
 	bool			m_NextIsSeam;
+	bool			m_ReadingTrailingFrames;
 };
 
 /*

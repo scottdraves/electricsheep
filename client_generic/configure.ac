@@ -175,7 +175,7 @@ AC_SUBST(LUA_LIBS)
 
 dnl Check for glee
 
-PKG_CHECK_MODULES([GLEE],[GLee], [HAVE_GLEE=true] , [HAVE_GLEE=false] )
+PKG_CHECK_MODULES([GLEE],[glee], [HAVE_GLEE=true] , [HAVE_GLEE=false] )
 if test "$HAVE_GLEE" = "false"; then
    AC_MSG_CHECKING(for GLee.h)
    AC_CHECK_HEADERS(GLee.h GL/GLee.h)
@@ -188,7 +188,7 @@ if test "$HAVE_GLEE" = "false"; then
       GLEE_CFLAGS="-I $includedir/GL -I/usr/include/GL"
    fi
 
-   GLEE_LIBS="-lGLee"
+   GLEE_LIBS="-lglee"
 fi
 
 AC_SUBST(GLEE_CFLAGS)

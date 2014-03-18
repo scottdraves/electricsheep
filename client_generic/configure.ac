@@ -177,20 +177,24 @@ dnl Check for glee
 
 PKG_CHECK_MODULES([GLEE],[glee], [HAVE_GLEE=true] , [HAVE_GLEE=false] )
 if test "$HAVE_GLEE" = "false"; then
-   AC_MSG_CHECKING(for GLee.h)
-   AC_CHECK_HEADERS(GLee.h GL/GLee.h)
 
-   if test "x$ac_cv_header_GLee_h" = "xno"; then
-      if test "xac_cv_header_GL_GLee_h" = "xno"; then
-      	 AC_MSG_ERROR([neither GLee.h nor GL/GLee.h were found. Please make sure you have GLee.h installed in your include path.])
+   PKG_CHECK_MODULES([GLEE],[GLee], [HAVE_GLEE=true] , [HAVE_GLEE=false] )
+   if test "$HAVE_GLEE" = "false"; then
+      AC_MSG_CHECKING(for GLee.h)
+      AC_CHECK_HEADERS(GLee.h GL/GLee.h)
+
+      if test "x$ac_cv_header_GLee_h" = "xno"; then
+      	 if test "xac_cv_header_GL_GLee_h" = "xno"; then
+      	    AC_MSG_ERROR([neither GLee.h nor GL/GLee.h were found. Please make sure you have GLee.h installed in your include path.])
+      	 fi
+      	 dnl found GLee.h in GL subdir
+      	 GLEE_CFLAGS="-I $includedir/GL -I/usr/include/GL"
       fi
-      dnl found GLee.h in GL subdir
-      GLEE_CFLAGS="-I $includedir/GL -I/usr/include/GL"
-   fi
 
-   GLEE_LIBS="-lglee"
+      GLEE_LIBS="-lGLee"
+      fi
+
 fi
-
 AC_SUBST(GLEE_CFLAGS)
 AC_SUBST(GLEE_LIBS)
 

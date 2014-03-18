@@ -191,7 +191,9 @@ if test "$HAVE_GLEE" = "false"; then
       	 GLEE_CFLAGS="-I $includedir/GL -I/usr/include/GL"
       fi
 
-      GLEE_LIBS="-lGLee"
+      AC_CHECK_LIB([GLee],[main],GLEE_LIBS="-lGLee",
+	AC_CHECK_LIB([glee],[main],GLEE_LIBS="-lglee",,))
+
       fi
 
 fi

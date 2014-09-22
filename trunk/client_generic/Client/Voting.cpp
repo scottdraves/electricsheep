@@ -112,7 +112,7 @@ void	CVote::ThreadFunc()
 	Vote().
 	Spawn a thread which sends a vote to the sheep server.
 */
-bool	CVote::Vote( const int32 _id, const uint8 _type, const fp4 _duration )
+bool	CVote::Vote( const uint32 _id, const uint8 _type, const fp4 _duration )
 {
 	const fp8 time = m_Timer.Time();
 

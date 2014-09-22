@@ -57,7 +57,9 @@ using namespace boost;
 static const uint32 MAXBUF = 1024;
 static const uint32 TIMEOUT = 600;
 static const uint32 MAX_TIMEOUT = 24*60*60U; // 1 day
+#ifndef DEBUG
 static const uint32 INIT_DELAY = 600;
+#endif
 
 //	Initialize the static class data.
 char *SheepGenerator::fNickName = NULL;
@@ -68,31 +70,12 @@ boost::mutex SheepGenerator::s_GeneratorMutex;
 
 boost::mutex SheepGenerator::s_NickNameMutex;
 
-//
-static void encode( char *dst, const char *src )
-{
-    static const char *hex = "0123456789ABCDEF";
-    char t;
-    while( (t = *src++) )
-    {
-        if( isalnum(t) )	*dst++ = t;
-        else
-        {
-            *dst++ = '%';
-            *dst++ = hex[(t >> 4) & 15];
-            *dst++ = hex[t & 15];
-        }
-    }
-
-	*dst = '\0';
-}
-
 /*
 */
 SheepGenerator::SheepGenerator()
 {
 	fHasMessage = false;
-	fGeneratorId = -1;
+	fGeneratorId = 0;
 	fTempFile = NULL;
 	m_DelayAfterRenderSec = g_Settings()->Get( "settings.generator.DelayAfterRenderSeconds", 1 );
 }
@@ -216,11 +199,11 @@ void SheepGenerator::handleGetElement(TiXmlElement* getElement, SheepUploader *u
 		{
 			char server_error_type[ MAXBUF ];
 
-			const char *a = pChildNode->Attribute("type");
+			const char *at = pChildNode->Attribute("type");
 
-			if( a )
+			if( at )
 			{
-				strncpy( server_error_type, a, MAXBUF );
+				strncpy( server_error_type, at, MAXBUF );
 
 				Shepherd::addMessageText( server_error_type, strlen( server_error_type ), 180 ); //	3 minutes
 			}
@@ -370,7 +353,7 @@ bool	SheepGenerator::getControlPoints( SheepUploader *uploader )
 		numBytes = gzread( gzinF, buf, 250 );
 		if (numBytes <= 0)
             break;
-		fwrite( buf, numBytes, 1, outXML );
+		fwrite( buf, static_cast<size_t>(numBytes), 1, outXML );
 	} while( !gzeof( gzinF ) );
 
 	fclose( outXML );
@@ -583,7 +566,7 @@ bool	SheepGenerator::generateSheep()
 								{
 									if( std::string( pAttribute->Name() ) == "retry" )
 									{
-										sleeptime = atoi( pAttribute->Value() );
+										//sleeptime = static_cast<uint32>(atoi( pAttribute->Value() ));
 										sleeptime = 0; // ignore value from server
 										g_Log->Info( "Retry in %dsec", sleeptime );
 									}
@@ -623,7 +606,6 @@ bool	SheepGenerator::generateSheep()
 				else
 				{
 					noWorkSleepDuration = 0;
-					sleeptime = 0;
 					thread::yield();
 				}
 			}

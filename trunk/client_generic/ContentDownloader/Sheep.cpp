@@ -46,7 +46,7 @@ Sheep::Sheep()
 	fLast = 0;
 	fType = 0;
 	fDeleted = false;
-	fGeneration = -1;
+	fGeneration = 0;
 	fIsTemp = false;
 }
 

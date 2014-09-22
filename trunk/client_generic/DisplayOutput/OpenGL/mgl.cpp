@@ -33,7 +33,7 @@ CMacGL::~CMacGL()
 {
 }
 
-void  CMacGL::ForceWidthAndHeight( int32 _width, int32 _height )
+void  CMacGL::ForceWidthAndHeight( uint32 _width, uint32 _height )
 {
 	m_Width = _width;
 	m_Height = _height;
@@ -41,7 +41,7 @@ void  CMacGL::ForceWidthAndHeight( int32 _width, int32 _height )
 	if ( m_glContext )
 	{		
 		CGLSetCurrentContext (m_glContext);
-		glViewport(0, 0, m_Width, m_Height);
+		glViewport(0, 0, static_cast<GLsizei>(m_Width), static_cast<GLsizei>(m_Height));
 	}
 }
 	
@@ -51,7 +51,7 @@ void	CMacGL::SetDefaultWidthAndHeight( uint32 defWidth, uint32 defHeight )
 	s_DefaultHeight = defHeight;
 }
 	
-bool CMacGL::Initialize( CGLContextObj _glContext, bool _bPreview)
+bool CMacGL::Initialize( CGLContextObj _glContext, bool /*_bPreview*/)
 {
 	if (_glContext)
 	{		
@@ -81,7 +81,7 @@ bool CMacGL::Initialize( CGLContextObj _glContext, bool _bPreview)
 }
 
 //
-void CMacGL::Title( const std::string &_title )
+void CMacGL::Title( const std::string &/*_title*/ )
 {
 }
 

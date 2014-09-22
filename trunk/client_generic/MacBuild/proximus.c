@@ -35,7 +35,7 @@ static void ResultCallback(void * client, CFArrayRef proxies, CFErrorRef error)
 	CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
-Boolean get_proxy_for_server105( const UInt8 *server, UInt8 *host, const UInt32 host_len, UInt8* user, const UInt32 userlen, UInt8 *pass, const UInt32 pass_len )
+Boolean get_proxy_for_server105( const UInt8 *server, UInt8 *host, const UInt32 host_len, UInt8* user, const UInt32 user_len, UInt8* pass, const UInt32 pass_len )
 {
 	OSStatus		err;
 	CFURLRef		url;
@@ -100,7 +100,7 @@ Boolean get_proxy_for_server105( const UInt8 *server, UInt8 *host, const UInt32 
 						// CFNetworkCopyProxiesForURL initialise some state within CFNetwork 
 						// that is required by CFNetworkCopyProxiesForAutoConfigurationScript.
 						
-						(void) CFNetworkCopyProxiesForURL(url, NULL);
+						CFRelease(CFNetworkCopyProxiesForURL(url, NULL));
 						
 						CFRunLoopSourceRef	rls = CFNetworkExecuteProxyAutoConfigurationURL(scriptURL, url, ResultCallback, &context);
 						if (rls == NULL) {
@@ -151,6 +151,19 @@ Boolean get_proxy_for_server105( const UInt8 *server, UInt8 *host, const UInt32 
 						}
 
 					}
+                    
+                    CFStringRef userNameStr = (CFStringRef) CFDictionaryGetValue(bestProxy, kCFProxyUsernameKey);
+                    
+					if ( userNameStr != NULL ) {
+                        CFStringGetCString(userNameStr, (char*)user, (CFIndex) user_len, kCFStringEncodingUTF8);
+					}
+                    
+                    CFStringRef passwordStr = (CFStringRef) CFDictionaryGetValue(bestProxy, kCFProxyPasswordKey);
+                    
+					if ( passwordStr != NULL ) {
+                        CFStringGetCString(passwordStr, (char*)pass, (CFIndex) pass_len, kCFStringEncodingUTF8);
+					}
+
 				}
 			}
 		}

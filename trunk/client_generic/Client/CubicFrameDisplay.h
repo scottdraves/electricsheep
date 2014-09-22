@@ -28,7 +28,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 	//	Mitchell Netravali Reconstruction Filter.
 	fp4	MitchellNetravali( const fp4 _x, const fp4 _B, const fp4 _C )
 	{
-		float ax = fabs(_x);
+		float ax = fabsf(_x);
 
 		if( ax < 1.f )
 			return( (12.f - 9.f * _B - 6.f * _C) * ax * ax * ax + (-18.f + 12.f * _B + 6.f * _C) * ax * ax + (6.f - 2.f * _B)) / 6.f;
@@ -188,7 +188,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 			}
 
 			//	Decode a frame every 1/_fpsCap seconds, store the previous 4 frames, and lerp between them.
-			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
+			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 /*_displayFps*/, ContentDecoder::sMetaData &_metadata )
 			{
 				fp4 currentalpha = m_LastAlpha;
 				bool frameGrabbed = false;
@@ -314,9 +314,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 					
 						if (secFrameToUse > kMaxFrames)
 							secFrameToUse = kMaxFrames;
-						
-						uint32 i;
-						
+												
 						for (i = 0; i < kMaxFrames-secFrameToUse; i++)
 						{
 							uint32 realIdx = m_Frames[ kMaxFrames-secFrameToUse ];
@@ -353,7 +351,7 @@ class	CCubicFrameDisplay : public CFrameDisplay
 				return true;
 			}
 
-			virtual fp8 GetFps( fp8 _decodeFps, fp8 _displayFps )
+			virtual fp8 GetFps( fp8 /*_decodeFps*/, fp8 _displayFps )
 			{
 				return _displayFps;
 			}

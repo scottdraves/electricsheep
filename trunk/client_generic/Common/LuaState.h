@@ -40,10 +40,10 @@ class	CLuaState
 			void	registerLib( const char *_pName, lua_CFunction _func );
 
 			//	Execute lua code.
-			const bool	Execute( const std::string &_command );
+			bool	Execute( const std::string &_command );
 
 			//	Run a lua script.
-			const bool	Run( const std::string &_script );
+			bool	Run( const std::string &_script );
 
 			//
 			lua_State	*GetState( void )	{	return( m_pState );	};

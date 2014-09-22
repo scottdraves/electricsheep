@@ -91,6 +91,9 @@ bool SheepUploader::uploadSheep()
 		g_Log->Error( "Frame doesn't exist(%s)!", fSheepFile );
 		return false;
 	}
+    
+    if  (fileSize <= 0)
+        return false;
 
 	
 	// Use only the file base name as uploader name, not the whole path.
@@ -111,7 +114,7 @@ bool SheepUploader::uploadSheep()
 																					CLIENT_VERSION,
 																					Shepherd::uniqueID() );
 
-	if( !spUpload->Perform( url, fSheepFile, fileSize ) )
+	if( !spUpload->PerformUpload( url, fSheepFile, static_cast<uint32>(fileSize) ) )
 	{
 		g_Log->Error( "Failed to upload %s.\n", url );
 

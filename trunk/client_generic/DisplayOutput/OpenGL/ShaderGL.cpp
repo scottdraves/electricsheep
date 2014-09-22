@@ -141,7 +141,7 @@ bool	CShaderGL::Build( const char *_pVertexShader, const char *_pFragmentShader 
 		else
 			infoLogPos += sprintf( infoLog + infoLogPos, "Vertex shader error:\n" );
 
-		glGetInfoLogARB( m_VertexShader, sizeof(infoLog) - infoLogPos, &len, infoLog + infoLogPos );
+		glGetInfoLogARB( m_VertexShader, sizeof(infoLog) - static_cast<size_t>(infoLogPos), &len, infoLog + infoLogPos );
 		infoLogPos += len;
 
 	}
@@ -162,7 +162,7 @@ bool	CShaderGL::Build( const char *_pVertexShader, const char *_pFragmentShader 
 		else
 			infoLogPos += sprintf( infoLog + infoLogPos, "Fragment shader error:\n" );
 
-		glGetInfoLogARB( m_FragmentShader, sizeof(infoLog) - infoLogPos, &len, infoLog + infoLogPos );
+		glGetInfoLogARB( m_FragmentShader, sizeof(infoLog) - static_cast<size_t>(infoLogPos), &len, infoLog + infoLogPos );
 		infoLogPos += len;
 	}
 	else
@@ -173,8 +173,8 @@ bool	CShaderGL::Build( const char *_pVertexShader, const char *_pFragmentShader 
 	{
 		glLinkProgramARB( m_Program );
 		glGetObjectParameterivARB( m_Program, GL_OBJECT_LINK_STATUS_ARB, &linkResult );
-		glGetInfoLogARB( m_Program, sizeof(infoLog) - infoLogPos, &len, infoLog + infoLogPos );
-		infoLogPos += len;
+		glGetInfoLogARB( m_Program, sizeof(infoLog) - static_cast<size_t>(infoLogPos), &len, infoLog + infoLogPos );
+		//infoLogPos += len;
 
 		if( len > 0 )
 			g_Log->Warning( infoLog );

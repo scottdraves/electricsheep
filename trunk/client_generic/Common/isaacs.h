@@ -14,11 +14,11 @@ Modified for inclusion with flam3 by Erik Reckase
 
 #define _ISAACS_H_
 
-typedef  unsigned long  int  ub4;   /* unsigned 4-byte quantities */
+typedef  unsigned int  ub4;   /* unsigned 4-byte quantities */
 
 #define UB4MAXVAL 0xffffffff
 
-typedef    signed long  int  sb4;
+typedef    signed int  sb4;
 
 #define SB4MAXVAL 0x7fffffff
 

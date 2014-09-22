@@ -59,7 +59,7 @@ class CMTimer : public ITimer
         mach_timebase_info_data_t tTBI;
 
         mach_timebase_info(&tTBI);
-        fp8 cv = ((long double) tTBI.numer) / ((long double) tTBI.denom);
+        fp8 cv = (static_cast<fp8>(tTBI.numer)) / (static_cast<fp8>(tTBI.denom));
 
         uint64_t now = mach_absolute_time();
         fp8 tNS = now * cv;
@@ -96,7 +96,7 @@ class CMTimer : public ITimer
 				mach_timebase_info_data_t tTBI;
 
                 mach_timebase_info(&tTBI);
-                fp8 cv = ((long double) tTBI.numer) / ((long double) tTBI.denom);
+                fp8 cv = (static_cast<fp8>(tTBI.numer)) / (static_cast<fp8>(tTBI.denom));
 
 				return cv * 1e-9;
 			}

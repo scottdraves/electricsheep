@@ -29,7 +29,6 @@ class CRendererGL : public CRenderer
 	HGLRC	m_RenderContext;
 #else
 #ifdef MAC
-	CGLContextObj m_glContext;
 	CGLContextObj cgl_ctx;
 #endif
 #endif
@@ -48,18 +47,18 @@ class CRendererGL : public CRenderer
 			CRendererGL();
 			virtual ~CRendererGL();
 
-			virtual const eRenderType	Type( void ) const {	return eGL;	};
+			virtual eRenderType	Type( void ) const {	return eGL;	};
 			virtual const std::string	Description( void ) const { return "OpenGL"; }
 
 			//
-			const bool	Initialize( spCDisplayOutput _spDisplay );
+			bool	Initialize( spCDisplayOutput _spDisplay );
 
 			//
 			void	Defaults();
 
 			//
-			const bool	BeginFrame( void );
-			const bool	EndFrame( bool drawn = true );
+			bool	BeginFrame( void );
+			bool	EndFrame( bool drawn = true );
 
 			//
 			void	Apply();

@@ -28,12 +28,12 @@ bool bStarted = false;
 	//if (isPreview)
 #endif
 	{
-		CFBundleRef bndl = dlbundle_ex();
+		CFBundleRef bndl = CopyDLBundle_ex();
 		NSBundle *nsbndl;
 		
 		if (bndl != NULL)
 		{
-			NSURL* url = (NSURL*)CFBundleCopyBundleURL(bndl);
+			NSURL* url = (NSURL*)CFBridgingRelease(CFBundleCopyBundleURL(bndl));
 			
 			nsbndl = [NSBundle bundleWithPath:[url path]];
 
@@ -45,6 +45,8 @@ bool bStarted = false;
 			{
 				[m_updater checkForUpdateInformation];
 			}
+            
+            CFRelease( bndl );
 		}
 	}
 	
@@ -143,8 +145,6 @@ bool bStarted = false;
 
 				// We make it a subview of the screensaver view
 				[self addSubview:glView];
-				
-				[glView release];
 			}
 		}
 	//}
@@ -158,8 +158,8 @@ bool bStarted = false;
 		ESScreensaver_DeinitClientStorage();
 	}
 	
-	int32 width = theRect.size.width;
-	int32 height = theRect.size.height;
+	uint32 width = (uint32)theRect.size.width;
+	uint32 height = (uint32)theRect.size.height;
 	
 #ifdef SCREEN_SAVER
 	m_isHidden = NO;
@@ -215,33 +215,33 @@ bool bStarted = false;
 	//[glView setNeedsDisplay:YES];
 }
 
-- (void)_animationThread:(ESScreensaverView *)source 
+- (void)_animationThread
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	@autoreleasepool {
 
-	if (animationLock != NULL)
-		[animationLock lock];
-		
-	while (!m_isStopped && !ESScreensaver_Stopped() && ESScreensaver_DoFrame())
-	{
-#ifdef SCREEN_SAVER
-		if (!m_isPreview && CGCursorIsVisible())
+		if (animationLock != NULL)
+			[animationLock lock];
+			
+		while (!m_isStopped && !ESScreensaver_Stopped() && ESScreensaver_DoFrame())
 		{
-			[NSCursor hide];
-			m_isHidden = YES;
-		}
+#ifdef SCREEN_SAVER
+			if (!m_isPreview && CGCursorIsVisible())
+			{
+				[NSCursor hide];
+				m_isHidden = YES;
+			}
 #endif		
-		//if (m_isStopped)
-			//break;
+			//if (m_isStopped)
+				//break;
+			
+			//if (glView != NULL)
+				//[glView setNeedsDisplay:YES];
+		}
 		
-		//if (glView != NULL)
-			//[glView setNeedsDisplay:YES];
+		if (animationLock != NULL)
+			[animationLock unlock];
+	
 	}
-	
-	if (animationLock != NULL)
-		[animationLock unlock];
-	
-	[pool release];
 }
 
 - (void)_beginThread
@@ -252,7 +252,7 @@ bool bStarted = false;
 		
 	m_isStopped = NO;
 	
-	[NSThread detachNewThreadSelector:@selector(_animationThread:) toTarget:self withObject:self];
+	[NSThread detachNewThreadSelector:@selector(_animationThread) toTarget:self withObject:nil];
 }
 
 - (void)_endThread
@@ -261,7 +261,6 @@ bool bStarted = false;
 	
 	[animationLock lock];
 	[animationLock unlock];
-	[animationLock release];
 	
 	animationLock = NULL;
 }
@@ -270,7 +269,7 @@ bool bStarted = false;
 {
 	[glView setFrame: [self frame]];
 	
-	ESScreensaver_ForceWidthAndHeight( [self frame].size.width, [self frame].size.height );
+	ESScreensaver_ForceWidthAndHeight( (uint32)[self frame].size.width, (uint32)[self frame].size.height );
 }
 
 
@@ -309,7 +308,7 @@ bool bStarted = false;
     BOOL handled = NO;
 	
     NSString *characters = [ev charactersIgnoringModifiers];
-    unsigned int characterIndex, characterCount = [characters length];
+    unsigned int characterIndex, characterCount = (unsigned int)[characters length];
     
     for (characterIndex = 0; characterIndex < characterCount; characterIndex++) {
 		unichar c = [characters characterAtIndex:characterIndex];
@@ -370,9 +369,9 @@ bool bStarted = false;
 }
 
 // Called immediately before relaunching.
-- (void)updaterWillRelaunchApplication:(SUUpdater *)updater
+- (void)updaterWillRelaunchApplication:(SUUpdater *) __unused updater
 {
-	if (m_config != NULL)
+    if (m_config != NULL)
 		[NSApp endSheet:[m_config window]];
 }
 
@@ -387,7 +386,7 @@ bool bStarted = false;
 }
 
 // Sent when a valid update is found by the update driver.
-- (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update
+- (void)updater:(SUUpdater *) __unused updater didFindValidUpdate:(SUAppcastItem *)update
 {
 	[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(doUpdate:) userInfo:update repeats:NO];
 }

@@ -169,7 +169,7 @@ class	CElectricSheep
 			}
 
 			//
-			virtual const bool	Startup()
+			virtual bool	Startup()
 			{
 				m_CpuUsageThreshold = g_Settings()->Get( "settings.player.cpuusagethreshold", 50 );
 
@@ -223,7 +223,7 @@ class	CElectricSheep
 
                 //	Get hud font size.
                 std::string	hudFontName = g_Settings()->Get( "settings.player.hudFontName", std::string("Trebuchet MS") );
-                int32		hudFontSize = g_Settings()->Get( "settings.player.hudFontSize", 24 );
+                uint32		hudFontSize = static_cast<uint32>(g_Settings()->Get( "settings.player.hudFontSize", 24 ));
 
 				m_PNGDelayTimer = g_Settings()->Get( "settings.player.pngdelaytimer", 600);
 
@@ -406,7 +406,7 @@ class	CElectricSheep
 				}
 			}
 
-			const bool	Run()
+			bool	Run()
 			{
 				while( true )
 				{
@@ -513,7 +513,7 @@ class	CElectricSheep
 #endif
 
 			//
-			virtual const bool Update()
+			virtual bool Update()
 			{
 				g_Player().BeginFrameUpdate();
 
@@ -526,10 +526,10 @@ class	CElectricSheep
 					m_pUpdateBarrier->wait();
 				}
 #else
-				int displayCnt = g_Player().GetDisplayCount();
+				uint32 displayCnt = g_Player().GetDisplayCount();
 									
                 bool ret = true;
-				for (int i = 0; i < displayCnt; i++)
+				for (uint32 i = 0; i < displayCnt; i++)
 				{
 					ret &= DoRealFrameUpdate(i);
                     if ( !ret )
@@ -561,7 +561,7 @@ class	CElectricSheep
 			}
 #endif
 			
-			virtual bool DoRealFrameUpdate(int32 displayUnit)
+			virtual bool DoRealFrameUpdate(uint32 displayUnit)
 			{
 				if ( g_Player().BeginDisplayFrame( displayUnit ) )
 				{
@@ -1040,7 +1040,7 @@ class	CElectricSheep
 				return false;
 			}
 
-			virtual const bool HandleEvents()
+			virtual bool HandleEvents()
 			{
 				DisplayOutput::spCDisplayOutput	spDisplay = g_Player().Display();
 

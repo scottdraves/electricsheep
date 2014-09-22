@@ -63,12 +63,9 @@ struct sOpenVideoInfo
 		m_pVideoCodec(NULL),
 		m_pVideoStream(NULL),
 		m_VideoStreamID(-1),
-		m_pScaler(NULL),
 		m_totalFrameCount(0),
 		m_CurrentFileatime(0),
 		m_iCurrentFileFrameCount(0),
-		m_Width(0),
-		m_Height(0),
 		m_Generation(0),
 		m_SheepID(0),
 		m_First(0),
@@ -87,12 +84,9 @@ struct sOpenVideoInfo
 		m_pVideoCodec(NULL),
 		m_pVideoStream(NULL),
 		m_VideoStreamID(-1),
-		m_pScaler(NULL),
 		m_totalFrameCount(0),
 		m_CurrentFileatime(0),
 		m_iCurrentFileFrameCount(0),
-		m_Width(0),
-		m_Height(0),
 		m_Generation(ovi->m_Generation),
 		m_SheepID(ovi->m_SheepID),
 		m_First(ovi->m_First),
@@ -122,15 +116,9 @@ struct sOpenVideoInfo
 #endif  // USE_NEW_FFMPEG_API
 		}
 		
-		if( m_pScaler )
-		{
-			av_free( m_pScaler );
-			m_pScaler = NULL;
-		}
-		
 		if ( m_pFrame )
 		{
-			av_free( m_pFrame );
+			av_frame_free( &m_pFrame );
 			m_pFrame = NULL;
 		}
 	}
@@ -160,13 +148,9 @@ struct sOpenVideoInfo
 	AVCodec			*m_pVideoCodec;
 	AVStream		*m_pVideoStream;
 	int32			m_VideoStreamID;
-	SwsContext		*m_pScaler;
 	uint32			m_totalFrameCount;
 	time_t			m_CurrentFileatime;
 	uint32			m_iCurrentFileFrameCount;
-	//	These are to track changes in input stream resolution, and recreate m_pScaler if needed.
-	uint32			m_Width;
-	uint32			m_Height;
 	uint32			m_Generation;
 	uint32			m_SheepID;
 	uint32			m_First;
@@ -186,13 +170,15 @@ class CContentDecoder
 {
 	bool			m_bStop;
 	uint32			m_prevLast;
-	uint32			m_nextFirst;
 
 
 	uint32				m_FadeIn;
 	uint32				m_FadeOut;
 	uint32				m_FadeCount;
 	
+    SwsContext		*m_pScaler;
+    uint32			m_ScalerWidth;
+    uint32			m_ScalerHeight;
 
 	//	Thread & threadfunction.
 	boost::thread	*m_pDecoderThread;
@@ -204,7 +190,6 @@ class CContentDecoder
 	//	Queue for decoded frames.
 	Base::CBlockingQueue<CVideoFrame *>	m_FrameQueue;
 	boost::mutex	m_ForceNextMutex;
-	uint32			m_CacheLow;
 
 	//	Codec context & working objects.
 	sOpenVideoInfo		*m_MainVideoInfo;
@@ -268,7 +253,7 @@ class CContentDecoder
 			inline uint32	GetCurrentPlayingID()				{	return (m_MainVideoInfo != NULL) ? m_MainVideoInfo->m_SheepID : 0;	};
 			inline uint32	GetCurrentPlayingGeneration()		{	return (m_MainVideoInfo != NULL) ? m_MainVideoInfo->m_Generation : 0; };
 
-			const uint32	QueueLength();
+			uint32	QueueLength();
 			
 			void ClearQueue( uint32 leave = 0 );
 			

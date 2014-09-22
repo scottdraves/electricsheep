@@ -23,6 +23,8 @@
 #ifndef _SHEEP_H_
 #define _SHEEP_H_
 
+#include "base.h"
+
 namespace ContentDownloader
 {
 
@@ -65,11 +67,11 @@ public:
 
 	// Sets the sheep file size on the server
 	//
-	void setFileSize(const long &size) { fFileSize = size; }
+	void setFileSize(const uint64 &size) { fFileSize = size; }
 
 	// gets the sheep file size
 	//
-	long fileSize() const { return fFileSize; }
+	uint64 fileSize() const { return fFileSize; }
 
 	// Sets the sheep file name
 	//
@@ -89,28 +91,28 @@ public:
 
 	// sets the sheep id
 	//
-	void setId( const int &id ) { fSheepId = id; }
+	void setId( const uint32 &id ) { fSheepId = id; }
 
 	// gets the sheep id
 	//
-	int id() const { return fSheepId; }
+	uint32 id() const { return fSheepId; }
 
 	// sets the the sheep that transitions into this sheep
 	//
-	void setFirstId( const int &first ) { fFirst = first; }
+	void setFirstId( const uint32 &first ) { fFirst = first; }
 
 	// gets the sheep that transitions into this sheep
 	//
-	int firstId() const { return fFirst; }
+	uint32 firstId() const { return fFirst; }
 
 	// sets the sheep that this sheep should transistion
 	// into
 	//
-	void setLastId( const int &last ) { fLast = last; }
+	void setLastId( const uint32 &last ) { fLast = last; }
 
 	// gets the sheep that this sheep should transition into
 	//
-	int lastId() const { return fLast; }
+	uint32 lastId() const { return fLast; }
 
 	// sets whether or not this sheep has been deleted from the
 	// server
@@ -139,11 +141,11 @@ public:
 
 	// set the sheep generation
 	//
-	void setGeneration( const int &gen ) { fGeneration = gen; }
+	void setGeneration( const uint32 &gen ) { fGeneration = gen; }
 
 	// returns the sheep generation
 	//
-	int generation() const { return fGeneration; }
+	uint32 generation() const { return fGeneration; }
 
 	// returns sheep generation type (currently 0 - normal, 1 - gold)
 	int getGenerationType() const 
@@ -169,16 +171,16 @@ private:
 	//
 	char		*fURL;
 	char		*fFileName;
-	long		fFileSize;
+	uint64		fFileSize;
 	time_t		fWriteTime;
 	int			fRating;
-	int			fSheepId;
-	int			fFirst;
-	int			fLast;
+	uint32		fSheepId;
+	uint32		fFirst;
+	uint32		fLast;
 	int			fType;
 	bool		fDeleted;
 	bool		fDownloaded;
-	int			fGeneration;
+	uint32			fGeneration;
 	bool		fIsTemp;
 };
 

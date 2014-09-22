@@ -103,4 +103,6 @@
 - (void)saveSettings;
 - (SUUpdater*) updater;
 
+- (void)dealloc;
+
 @end

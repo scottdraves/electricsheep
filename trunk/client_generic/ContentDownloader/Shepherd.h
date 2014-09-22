@@ -254,19 +254,19 @@ class Shepherd
 			static bool	RenderingAllowed();
 			static void SetRenderingAllowed(bool _yesno);
 
-			static const bool	AddOverflowMessage( const std::string _msg )
+			static bool	AddOverflowMessage( const std::string _msg )
 			{
 				boost::mutex::scoped_lock lockthis( s_OverflowMessageQueueMutex );
 				m_OverflowMessageQueue.push_back( new CTimedMessageBody( _msg, 60. ) );
 				return true;
 			}
 
-			static const bool	PopOverflowMessage( std::string &_dst )
+			static bool	PopOverflowMessage( std::string &_dst )
 			{
 				boost::mutex::scoped_lock lockthis( s_OverflowMessageQueueMutex );
 				if( m_OverflowMessageQueue.size() > 10 )
 				{
-					m_OverflowMessageQueue.erase(m_OverflowMessageQueue.begin(), m_OverflowMessageQueue.begin() + m_OverflowMessageQueue.size() - 10);
+					m_OverflowMessageQueue.erase(m_OverflowMessageQueue.begin(), m_OverflowMessageQueue.begin() + static_cast<std::vector<spCTimedMessageBody>::difference_type>(m_OverflowMessageQueue.size()) - 10);
 				}
 				if( m_OverflowMessageQueue.size() > 0 )
 				{
@@ -296,7 +296,7 @@ class Shepherd
 					
 					if (del == true)
 					{
-						m_OverflowMessageQueue.erase(m_OverflowMessageQueue.begin() + deletestart, m_OverflowMessageQueue.begin() + deleteend + 1);
+						m_OverflowMessageQueue.erase(m_OverflowMessageQueue.begin() + static_cast<std::vector<spCTimedMessageBody>::difference_type>(deletestart), m_OverflowMessageQueue.begin() + static_cast<std::vector<spCTimedMessageBody>::difference_type>(deleteend) + 1);
 					}
 
 					return true;
@@ -304,14 +304,14 @@ class Shepherd
 				return false;
 			}
 
-			static const bool	QueueMessage( const std::string _msg, const fp8 _duration )
+			static bool	QueueMessage( const std::string _msg, const fp8 _duration )
 			{
 				boost::mutex::scoped_lock lockthis( m_MessageQueueMutex );
 				m_MessageQueue.push( new CMessageBody( _msg, _duration ) );
 				return true;
 			}
 
-			static const bool	PopMessage( std::string &_dst, fp8 &_duration )
+			static bool	PopMessage( std::string &_dst, fp8 &_duration )
 			{
 				boost::mutex::scoped_lock lockthis( m_MessageQueueMutex );
 				if( m_MessageQueue.size() > 0 )

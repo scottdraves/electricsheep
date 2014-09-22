@@ -68,8 +68,6 @@ class	CLuaPlaylist : public CPlaylist
 	uint64			m_FlockMBs;
 	uint64			m_FlockGoldMBs;
 
-	int &m_UsedSheepType;
-
 	//	The lua state that will do all the work.
 	Base::Script::CLuaState	*m_pState;
 	
@@ -100,8 +98,8 @@ class	CLuaPlaylist : public CPlaylist
 	{
 		uint16 retval = 0;
 		
-		int generation = luaL_checkint( _pState, 1 );
-		int idx = luaL_checkint( _pState, 2 );
+		uint32 generation = static_cast<uint32>(luaL_checkint( _pState, 1 ));
+		uint32 idx = static_cast<uint32>(luaL_checkint( _pState, 2 ));
 				
 		g_PlayCounter().IncPlayCount( generation, idx );
 		
@@ -116,8 +114,8 @@ class	CLuaPlaylist : public CPlaylist
 	{
 		uint16 retval = 0;
 		
-		int generation = luaL_checkint( _pState, 1 );
-		int idx = luaL_checkint( _pState, 2 );
+		uint32 generation = static_cast<uint32>(luaL_checkint( _pState, 1 ));
+		uint32 idx = static_cast<uint32>(luaL_checkint( _pState, 2 ));
 		
 		retval = g_PlayCounter().PlayCount( generation, idx );
 		
@@ -138,7 +136,7 @@ class	CLuaPlaylist : public CPlaylist
 		if (randinitialized == false)
 		{
 			randinitialized = true;
-			long int default_isaac_seed = (long int)time(0);
+			ub4 default_isaac_seed = static_cast<ub4>(time(0));
 			for (size_t lp = 0; lp < RANDSIZ; lp++)
 				ISAAC_ctx.randrsl[lp] = default_isaac_seed;
 			irandinit(&ISAAC_ctx, true);
@@ -198,7 +196,7 @@ class	CLuaPlaylist : public CPlaylist
 		return(1);
 	}
 	//
-	void	DeduceGraphnessFromFilenameAndQueue( path const &_basedir, const std::string& _filename )
+	void	DeduceGraphnessFromFilenameAndQueue( path const &/*_basedir*/, const std::string& _filename )
 	{
 		uint32 Generation, ID, First, Last;
 		std::string sheep;
@@ -294,7 +292,7 @@ class	CLuaPlaylist : public CPlaylist
 	}
 
 	public:
-			CLuaPlaylist( const std::string &_scriptRoot, const std::string &_watchFolder, int &_usedsheeptype ) : CPlaylist(), m_UsedSheepType(_usedsheeptype)
+			CLuaPlaylist( const std::string &_scriptRoot, const std::string &_watchFolder, int &/*_usedsheeptype*/ ) : CPlaylist()/*, m_UsedSheepType(_usedsheeptype)*/
 			{
 				m_NormalInterval = fp8(g_Settings()->Get( "settings.player.NormalInterval", 100 ));
 				m_EmptyInterval = 10.0f;
@@ -432,14 +430,14 @@ class	CLuaPlaylist : public CPlaylist
 			}
 
 			//	Overrides the playlist to play _id next time.
-			void	Override( const int32 _id )
+			void	Override( const uint32 _id )
 			{
 				boost::mutex::scoped_lock locker( m_Lock );
 				m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Override", "i", _id ) );
 			}
 
 			//	Queues _id to be deleted.
-			void	Delete( const int32 _id )
+			void	Delete( const uint32 _id )
 			{
 				boost::mutex::scoped_lock locker( m_Lock );
 				m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Delete", "i", _id ) );

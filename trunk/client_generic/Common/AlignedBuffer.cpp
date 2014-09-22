@@ -142,10 +142,9 @@ uint8* CReusableAlignedBuffers::Reallocate( uint8 *buffer, uint32 size )
 }
 
 
-void CReusableAlignedBuffers::RealFree( uint8 *buffer, uint32 size )
+void CReusableAlignedBuffers::RealFree( uint8 *buffer, uint32 /*size*/ )
 {
-	if ( buffer != NULL )
-		free( buffer );
+    free( buffer );
 }
 
 /*

@@ -42,7 +42,7 @@ class	CSettings : public Base::CSingleton<CSettings>
 	public:
 			const char *Description()	{	return( "Settings" );	};
 
-			const bool	Shutdown( void )
+			bool	Shutdown( void )
 			{
 				g_Log->Info( "Shutdown()..." );
 

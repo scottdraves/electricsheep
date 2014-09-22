@@ -59,8 +59,8 @@ class	CLog : public CSingleton<CLog>
 	void	Log( const char *_pType, /*const char *_file, const uint32 _line, const char *_pFunc,*/ const char *_pStr );
 
 	public:
-			const bool	Startup();
-			const bool	Shutdown( void );
+			bool	Startup();
+			bool	Shutdown( void );
 			virtual ~CLog();
 
 			const char *Description()	{	return "Logger";	};
@@ -77,7 +77,7 @@ class	CLog : public CSingleton<CLog>
 			void	Fatal( const char *_pFmt, ... );
 
 			//	Provides singleton access.
-			static CLog *Instance( const char *_pFileStr, const uint32 _line, const char *_pFunc )
+			static CLog *Instance( const char* /*_pFileStr*/, const uint32 /*_line*/, const char* /*_pFunc*/ )
 			{
 				static	CLog	log;
 

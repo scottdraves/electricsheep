@@ -4,7 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	CFBundleRef dlbundle_ex( void );
+	CFBundleRef CopyDLBundle_ex( void );
 	void ESScreenSaver_AddGLContext( void *_glContext );
 	
 	bool ESScreensaver_Start( bool _bPreview, uint32 _width, uint32 _height );
@@ -18,7 +18,7 @@ extern "C" {
 	
 	CFStringRef ESScreensaver_GetVersion( void );
 	
-	CFStringRef ESScreensaver_GetStringSetting( const char *url, const char *defval );
+	CFStringRef ESScreensaver_CopyGetStringSetting( const char *url, const char *defval );
 	SInt32 ESScreensaver_GetIntSetting( const char *url, const SInt32 defval );
 	bool ESScreensaver_GetBoolSetting( const char *url, const bool defval );
 	double ESScreensaver_GetDoubleSetting( const char *url, const double defval );
@@ -32,14 +32,14 @@ extern "C" {
 	void ESScreensaver_SaveSettings( void );
 	
 	void ESScreensaver_InitClientStorage( void );
-	CFStringRef ESScreensaver_GetRoot( void );
+	CFStringRef ESScreensaver_CopyGetRoot( void );
 	void ESScreensaver_DeinitClientStorage( void );
 	
 	void ESScreensaver_SetUpdateAvailable( const char *verinfo );
 	
 	size_t ESScreensaver_GetFlockSizeMBs(const char *mpegpath, int sheeptype);
 	
-	CFStringRef ESScreensaver_GetRoleFromXML(const char *xml);
+	CFStringRef ESScreensaver_CopyGetRoleFromXML(const char *xml);
 	
 #ifdef __cplusplus
 }

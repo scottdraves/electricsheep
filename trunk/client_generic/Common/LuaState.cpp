@@ -280,7 +280,7 @@ static bool reportLua( lua_State *_pLuaState, const int32 _status )
 	Execute().
 	Execute lua code.
 */
-const bool	CLuaState::Execute( const std::string &_command )
+bool	CLuaState::Execute( const std::string &_command )
 {
 	int status = luaL_loadstring( m_pState, _command.c_str() );
 	if( status == 0 )
@@ -313,7 +313,7 @@ const bool	CLuaState::Execute( const std::string &_command )
 	Run().
 
 */
-const bool	CLuaState::Run( const std::string &_script )
+bool	CLuaState::Run( const std::string &_script )
 {
 	int status = luaL_loadfile( m_pState, _script.c_str() );
 	if( status == 0 )
@@ -345,7 +345,7 @@ int32 Call( lua_State *_pState, const char *_pFunc, const char *_pSig, ... )
 {
 	ASSERT( _pState != NULL );
 
-	uint32	stackSizeIn = lua_gettop( _pState );
+	uint32	stackSizeIn = static_cast<uint32>(lua_gettop( _pState ));
 	if( stackSizeIn != 0 )
 	{
 		g_Log->Error( "Lua stack not empty..." );
@@ -393,7 +393,7 @@ int32 Call( lua_State *_pState, const char *_pFunc, const char *_pSig, ... )
 				case 'x':	//	Binary string argument. Next argument MUST be an integer. (which will be skipped)
 						pBinarySource = va_arg( pArg, char * );
 						binaryLen = va_arg( pArg, int32 );
-						lua_pushlstring( _pState, pBinarySource, binaryLen );
+						lua_pushlstring( _pState, pBinarySource, static_cast<size_t>(binaryLen) );
 						_pSig++;
 						break;
 
@@ -481,7 +481,7 @@ int32 Call( lua_State *_pState, const char *_pFunc, const char *_pSig, ... )
 			HACK!
 			Pop delta from stack, keeping this function from raceing away!.
 		*/
-		delta = lua_gettop( _pState ) - stackSizeIn;
+		delta = lua_gettop( _pState ) - static_cast<int>(stackSizeIn);
 	}
 	/*catch( Base::CException &_e )
 	{

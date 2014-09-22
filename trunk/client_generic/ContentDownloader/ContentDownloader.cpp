@@ -53,7 +53,7 @@ static std::string generateID()
 
 	for( u=0; u<16; u++ )
 	{
-		unsigned r = rand();
+		unsigned r = static_cast<unsigned>(rand());
 		r = r ^ (salt[u>>1] >> ((u&1)<<2));
 		r &= 15;
 		if( r < 10 )
@@ -61,7 +61,7 @@ static std::string generateID()
 		else
 			r += 'A' - 10;
 
-		id[u] = r;
+		id[u] = static_cast<char>(r & 0xFF);
 	}
 
 	return 	std::string( id );
@@ -76,7 +76,7 @@ void	CContentDownloader::ServerFallback()
 
 /*
 */
-const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyInstance )
+bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyInstance )
 {
 	g_Log->Info( "Attempting to start contentdownloader...", _bPreview );
 	Shepherd::initializeShepherd();
@@ -122,9 +122,8 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 		SetThreadPriorityBoost( (HANDLE)m_gDownloadThread->native_handle(), TRUE );
 #else
 		struct sched_param sp;
-		int esnRetVal = 0;
 		sp.sched_priority = 6; //Background NORMAL_PRIORITY_CLASS - THREAD_PRIORITY_BELOW_NORMAL
-		esnRetVal = pthread_setschedparam( (pthread_t)m_gDownloadThread->native_handle(), SCHED_RR, &sp );
+		pthread_setschedparam( (pthread_t)m_gDownloadThread->native_handle(), SCHED_RR, &sp );
 #endif
 	}
 	else
@@ -142,7 +141,7 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 			ncpus = (uint32)sysInfo.dwNumberOfProcessors;
 #else
 	#ifdef MAC
-			ncpus = MPProcessors();
+			ncpus = static_cast<uint32>(MPProcessors());
         #else
 #ifdef LINUX_GNU
 			ncpus = sysconf( _SC_NPROCESSORS_ONLN );
@@ -186,7 +185,7 @@ const bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyIns
 
 /*
 */
-const bool	CContentDownloader::Shutdown( void )
+bool	CContentDownloader::Shutdown( void )
 {
 	//	Terminate the threads.
     g_Log->Info( "Terminating download thread." );

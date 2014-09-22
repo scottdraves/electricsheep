@@ -27,6 +27,8 @@ class	CEvent
 				Event_Power,
 				Event_NONE
 			};
+    
+            virtual ~CEvent() {}
 
 			virtual	eEventType	Type()	{	return( Event_NONE );	};
 
@@ -72,6 +74,9 @@ class	CKeyEvent : public CEvent
 			};
 
 			CKeyEvent() : m_bPressed( true ), m_Code( KEY_NONE )	{}
+    
+            virtual ~CKeyEvent() {}
+    
 			virtual eEventType	Type()	{	return( CEvent::Event_KEY );	};
 			bool    	m_bPressed;
 			eKeyCode	m_Code;
@@ -98,6 +103,9 @@ class	CMouseEvent : public CEvent
 			};
 
 			CMouseEvent() : m_Code( Mouse_NONE )	{}
+    
+            virtual ~CMouseEvent() {}
+    
 			virtual eEventType	Type()	{	return( CEvent::Event_Mouse );	};
 			eMouseCode	m_Code;
 
@@ -119,7 +127,10 @@ class	CPowerEvent : public CEvent
 {
 	public:
 			CPowerEvent()	{}
-			virtual eEventType	Type()	{	return( CEvent::Event_Power );	};
+    
+            virtual ~CPowerEvent() {}
+
+            virtual eEventType	Type()	{	return( CEvent::Event_Power );	};
 };
 
 MakeSmartPointers( CPowerEvent );
@@ -158,7 +169,7 @@ class	CDisplayOutput
 			virtual bool Initialize( CGLContextObj _glContext, bool _bPreview ) = PureVirtual;
 			virtual void SetContext( CGLContextObj glContext ) = PureVirtual;
 			virtual CGLContextObj GetContext( void ) = PureVirtual;
-			virtual void ForceWidthAndHeight( int32 _width, int32 _height ) = PureVirtual;
+			virtual void ForceWidthAndHeight( uint32 _width, uint32 _height ) = PureVirtual;
 #else
 			virtual bool Initialize( const uint32 _width, const uint32 _height, const bool _bFullscreen ) = PureVirtual;
 #endif

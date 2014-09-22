@@ -72,7 +72,7 @@ CDirectoryIterator::~CDirectoryIterator()
 	isDirectory().
 
 */
-const bool CDirectoryIterator::isDirectory( const std::string &_object )
+bool CDirectoryIterator::isDirectory( const std::string &_object )
 {
 	struct stat info;
 
@@ -93,7 +93,7 @@ const bool CDirectoryIterator::isDirectory( const std::string &_object )
 	Next().
 
 */
-const bool CDirectoryIterator::Next( std::string &_object )
+bool CDirectoryIterator::Next( std::string &_object )
 {
 #ifdef WIN32
 	struct _finddata_t c_file;

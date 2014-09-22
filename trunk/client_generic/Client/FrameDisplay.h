@@ -46,7 +46,7 @@ class	CFrameDisplay
 		DisplayOutput::spCTextureFlat m_spSecondVideoTexture;
 
 		//	Grab a frame from the decoder and use it as a texture.
-		const bool	GrabFrame( ContentDecoder::spCContentDecoder _spDecoder, DisplayOutput::spCTextureFlat &_spTexture, DisplayOutput::spCTextureFlat &_spSecondTexture, ContentDecoder::sMetaData &_metadata )
+		bool	GrabFrame( ContentDecoder::spCContentDecoder _spDecoder, DisplayOutput::spCTextureFlat &_spTexture, DisplayOutput::spCTextureFlat &_spSecondTexture, ContentDecoder::sMetaData &_metadata )
 		{
 			//_metadata.m_Fade = 1.0f;
 			m_MetaData = _metadata;
@@ -126,7 +126,7 @@ class	CFrameDisplay
 		}
 
 		//	Do some math to figure out the delta between frames...
-		const bool	UpdateInterframeDelta( const fp8 _fpsCap )
+		bool	UpdateInterframeDelta( const fp8 _fpsCap )
 		{
 			fp8	newTime = m_Timer.Time();
 			fp8 deltaTime = newTime - m_Clock;
@@ -186,20 +186,23 @@ class	CFrameDisplay
 				m_spSecondVideoTexture = NULL;
 			}
 
-			const bool Valid()	{	return m_bValid;	};
+			bool Valid()	{	return m_bValid;	};
 
 			//
-			void	SetDisplaySize( const uint32 _w, const uint32 _h )
+			void	SetDisplaySize( const uint32 /*_w*/, const uint32 /*_h*/ )
 			{
 				m_Size = Base::Math::CRect( 1, 1 );
 			}
 
 			//	Decode a frame, and render it.
-			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
+			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 /*_displayFps*/, ContentDecoder::sMetaData &_metadata )
 			{
 				fp4 currentalpha = m_LastAlpha;
 				bool isSeam = false;
 				
+                //making static analyzer happy...
+                (void)currentalpha;
+                
    				if( UpdateInterframeDelta( _decodeFps ) )
    				{
 #if !defined(WIN32) && !defined(_MSC_VER)
@@ -246,9 +249,9 @@ class	CFrameDisplay
 
                 //UpdateInterframeDelta( _decodeFps );
 				
-				fp4 transCoef = m_MetaData.m_TransitionProgress / 100.0;
+				fp4 transCoef = m_MetaData.m_TransitionProgress / 100.0f;
 
-				m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha * (1.0 - transCoef) ),  m_spVideoTexture->GetRect() );
+				m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha * (1.0f - transCoef) ),  m_spVideoTexture->GetRect() );
 				
 				if (!m_spSecondVideoTexture.IsNull())
 				{
@@ -262,7 +265,7 @@ class	CFrameDisplay
 				return true;
 			}
 			
-			virtual fp8 GetFps( fp8 _decodeFps, fp8 _displayFps )
+			virtual fp8 GetFps( fp8 /*_decodeFps*/, fp8 _displayFps )
 			{
 				return _displayFps;
 			}

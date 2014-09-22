@@ -26,17 +26,17 @@ class CRect
 			bool	IsNull() const;
 
 			//
-			const	fp4		Width() const;
-			const	fp4		Height() const;
+			fp4		Width() const;
+			fp4		Height() const;
 
 			//	Force integer.
-			const	int32	iWidth() const;
-			const	int32	iHeight() const;
+			int32	iWidth() const;
+			int32	iHeight() const;
 
 			//
-			const	fp4		Aspect( void ) const;
-			const	fp4		Area( void ) const;
-			const	uint32	iArea( void ) const;
+			fp4		Aspect( void ) const;
+			fp4		Area( void ) const;
+			uint32	iArea( void ) const;
 
 			//
 			bool	IsNormalized() const;
@@ -93,28 +93,28 @@ inline bool CRect::IsNull() const
 
 /*
 */
-inline const fp4 CRect::Width() const
+inline fp4 CRect::Width() const
 {
 	return( m_X1 - m_X0 );
 }
 
 /*
 */
-inline const fp4 CRect::Height() const
+inline fp4 CRect::Height() const
 {
 	return( m_Y1 - m_Y0 );
 }
 
 /*
 */
-inline const int32 CRect::iWidth() const
+inline int32 CRect::iWidth() const
 {
 	return( (int32)Width() );
 }
 
 /*
 */
-inline const int32 CRect::iHeight() const
+inline int32 CRect::iHeight() const
 {
 	return( (int32)Height() );
 }
@@ -145,21 +145,21 @@ inline bool	CRect::Inside( const CVector2 &_p ) const
 
 /*
 */
-inline const fp4 CRect::Aspect( void ) const
+inline fp4 CRect::Aspect( void ) const
 {
 	return( Height() / Width() );
 }
 
 /*
 */
-inline const fp4 CRect::Area( void ) const
+inline fp4 CRect::Area( void ) const
 {
 	return( Width() * Height() );
 }
 
 /*
 */
-inline const uint32 CRect::iArea( void ) const
+inline uint32 CRect::iArea( void ) const
 {
 	return( iWidth() * iHeight() );
 }

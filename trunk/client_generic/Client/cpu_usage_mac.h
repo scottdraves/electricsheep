@@ -13,7 +13,6 @@ class ESCpuUsage
 	Base::CTimer	m_Timer;
 	fp8				m_LastCPUCheckTime;
 	
-	fp8  m_LastSystemTime;
 	fp8  m_LastESTime;
 	
 	processor_info_array_t m_lastProcessorInfo;
@@ -114,7 +113,7 @@ public:
 					accTotal += total;
 				}
 				
-				_total = (fp8)accInUse * 100. / (fp8)accTotal;
+				_total = static_cast<int>((fp8)accInUse * 100. / (fp8)accTotal);
 				
 				_es /= numProcessors;
 

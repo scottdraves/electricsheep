@@ -302,7 +302,7 @@ bool	CCurlTransfer::Perform( const std::string &_url )
 	if( m_HttpCode != 200 )
 	{
 		//	Check if the response code is allowed.
-		std::vector< int >::const_iterator it = std::find( m_AllowedResponses.begin(), m_AllowedResponses.end(), m_HttpCode );
+		std::vector< uint32 >::const_iterator it = std::find( m_AllowedResponses.begin(), m_AllowedResponses.end(), m_HttpCode );
 		if( it == m_AllowedResponses.end() )
 		{
 			switch ( m_HttpCode )
@@ -356,7 +356,7 @@ CManager::CManager()
 	Startup().
 	Init network manager.
 */
-const bool	CManager::Startup()
+bool	CManager::Startup()
 {
 	curl_global_init( CURL_GLOBAL_DEFAULT );
 
@@ -373,7 +373,7 @@ const bool	CManager::Startup()
 	Startup().
 	De-init network manager.
 */
-const bool	CManager::Shutdown()
+bool	CManager::Shutdown()
 {
 	curl_global_cleanup();
 	return true;
@@ -384,7 +384,7 @@ const bool	CManager::Shutdown()
 	Called from CCurlTransfer::Perform().
 	Sets proxy & http authentication.
 */
-const CURLcode	CManager::Prepare( CURL *_pCurl )
+CURLcode	CManager::Prepare( CURL *_pCurl )
 {
 	g_Log->Info( "Prepare()" );
 
@@ -527,7 +527,7 @@ std::string CManager::Encode( const std::string &_src )
 {
 	g_Log->Info( "Encode()" );
 
-	const int8	dec2hex[ 16 + 1 ] = "0123456789ABCDEF";
+	const uint8	dec2hex[ 16 + 1 ] = "0123456789ABCDEF";
 	const uint8	*pSrc = (const uint8 *)_src.c_str();
 	const size_t srcLen= _src.length();
 	uint8 *const pStart = new uint8[ srcLen * 3 ];

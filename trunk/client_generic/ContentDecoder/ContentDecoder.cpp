@@ -41,13 +41,17 @@ namespace ContentDecoder
 CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, bool _bCalculateTransitions, const uint32 _queueLenght, PixelFormat _wantedFormat )
 {
 	g_Log->Info( "CContentDecoder()" );
-	m_FadeCount = g_Settings()->Get("settings.player.fadecount", 30);
+	m_FadeCount = static_cast<uint32>(g_Settings()->Get("settings.player.fadecount", 30));
 	//	We want errors!
 	av_log_set_level( AV_LOG_ERROR );
 
 	//	Register all formats and codecs.
 	av_register_all();
 	
+    m_pScaler = NULL;
+    m_ScalerWidth = 0;
+    m_ScalerHeight = 0;
+    
 	m_bStartByRandom = _bStartByRandom;
 	
 	m_bCalculateTransitions = _bCalculateTransitions;
@@ -100,6 +104,13 @@ void	CContentDecoder::Destroy()
 	{
 		SAFE_DELETE(m_SecondVideoInfo);
 	}
+    
+    if( m_pScaler )
+    {
+        g_Log->Info( "deleting m_pScalar" );
+        sws_freeContext( m_pScaler );
+        m_pScaler = NULL;
+    }
 }
 
 /*
@@ -174,7 +185,7 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
         if( ovi->m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
         {
             ovi->m_pVideoStream = ovi->m_pFormatContext->streams[i];
-            ovi->m_VideoStreamID = i;
+            ovi->m_VideoStreamID = static_cast<int32>(i);
             break;
         }
     }
@@ -217,10 +228,10 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
         return false;
     }
 	
-	ovi->m_pFrame = avcodec_alloc_frame();
+	ovi->m_pFrame = av_frame_alloc();
 	
 	if (ovi->m_pVideoStream->nb_frames > 0)
-		ovi->m_totalFrameCount = ovi->m_pVideoStream->nb_frames;
+		ovi->m_totalFrameCount = static_cast<uint32>(ovi->m_pVideoStream->nb_frames);
 	else
 		ovi->m_totalFrameCount = uint32(((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) / av_q2d(ovi->m_pVideoStream->r_frame_rate) + .5));
 		
@@ -562,31 +573,31 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
             //avpicture_deinterlace( (AVPicture *)pFrame, (AVPicture *)pFrame, m_pVideoCodecContext->pix_fmt, m_pVideoCodecContext->width, m_pVideoCodecContext->height );
 
         //	If the decoded video has a different resolution, delete the scaler to trigger it to be recreated.
-        if( ovi->m_Width != (uint32)pVideoCodecContext->width || ovi->m_Height != (uint32)pVideoCodecContext->height )
+        if( m_ScalerWidth != (uint32)pVideoCodecContext->width || m_ScalerHeight != (uint32)pVideoCodecContext->height )
         {
             g_Log->Info( "size doesn't match, recreating" );
 
-            if( ovi->m_pScaler )
+            if( m_pScaler )
             {
                 g_Log->Info( "deleting m_pScalar" );
-                av_free( ovi->m_pScaler );
-                ovi->m_pScaler = NULL;
+                sws_freeContext( m_pScaler );
+                m_pScaler = NULL;
             }
         }
 
         //	Make sure scaler is created.
-        if( ovi->m_pScaler == NULL )
+        if( m_pScaler == NULL )
         {
             g_Log->Info( "creating m_pScaler" );
 
-            ovi->m_pScaler = sws_getContext(	pVideoCodecContext->width, pVideoCodecContext->height, pVideoCodecContext->pix_fmt,
+            m_pScaler = sws_getContext(	pVideoCodecContext->width, pVideoCodecContext->height, pVideoCodecContext->pix_fmt,
                                             pVideoCodecContext->width, pVideoCodecContext->height, m_WantedPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
 
             //	Store width & height now...
-            ovi->m_Width = pVideoCodecContext->width;
-            ovi->m_Height = pVideoCodecContext->height;
+            m_ScalerWidth = static_cast<uint32>(pVideoCodecContext->width);
+            m_ScalerHeight = (uint32)pVideoCodecContext->height;
 
-            if( ovi->m_pScaler == NULL )
+            if( m_pScaler == NULL )
                 g_Log->Warning( "scaler == null" );
         }
 
@@ -595,8 +606,11 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
         AVFrame	*pDest = pVideoFrame->Frame();
 
         //printf( "calling sws_scale()" );
-        sws_scale( ovi->m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
-
+        sws_scale( m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
+        
+        if ( pVideoCodecContext->refcounted_frames )
+            av_frame_unref( pFrame );
+        
 		ovi->m_iCurrentFileFrameCount++;
 
         /*if (m_totalFrameCount > 0)
@@ -765,7 +779,8 @@ bool	CContentDecoder::Start()
 		return false;
 	}
 	
-	m_LoopIterations = g_Settings()->Get( "settings.player.LoopIterations", 2 );
+	//abs is a protection against malicious negative numbers giving large integer when converted to uint32
+    m_LoopIterations = static_cast<uint32>(g_Settings()->Get( "settings.player.LoopIterations", 2 ));
 
 	//	Start by opening, so we have a context to work with.
 	m_bStop = false;
@@ -777,9 +792,8 @@ bool	CContentDecoder::Start()
 	SetThreadPriorityBoost( (HANDLE)m_pNextSheepThread->native_handle(), TRUE );
 #else
 	struct sched_param sp;
-	int esnRetVal = 0;
 	sp.sched_priority = 8; //Foreground NORMAL_PRIORITY_CLASS - THREAD_PRIORITY_BELOW_NORMAL
-	esnRetVal = pthread_setschedparam( (pthread_t)m_pNextSheepThread->native_handle(), SCHED_RR, &sp );
+	pthread_setschedparam( (pthread_t)m_pNextSheepThread->native_handle(), SCHED_RR, &sp );
 #endif
 
 	while ( Initialized() == false )
@@ -839,7 +853,7 @@ void CContentDecoder::ClearQueue( uint32 leave )
 
 /*
 */
-const uint32	CContentDecoder::QueueLength()
+uint32	CContentDecoder::QueueLength()
 {
 	return (uint32)m_FrameQueue.size();
 }

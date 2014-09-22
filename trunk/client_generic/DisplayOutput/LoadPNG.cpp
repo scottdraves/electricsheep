@@ -34,9 +34,6 @@ bool	CImage::LoadPNG( const std::string &_fileName, const bool _wantMipMaps )
 	png_color_16 *pBackground;
 	png_byte **ppbRowPointers;
 
-	// avoid a compiler warning
-	size_t dummy;
-
 	// open the PNG input file
 	if( (file = fopen( _fileName.c_str(), "rb")) == NULL )
 	{
@@ -45,7 +42,7 @@ bool	CImage::LoadPNG( const std::string &_fileName, const bool _wantMipMaps )
 	}
 
 	// first check the eight byte PNG signature
-	dummy = fread( pbSig, 1, 8, file );
+	fread( pbSig, 1, 8, file );
 	if( png_sig_cmp( pbSig, 0, 8 ) != 0)
 	{
 		g_Log->Warning( "%s doesn't have a valid png signature...", _fileName.c_str() );
@@ -100,7 +97,7 @@ bool	CImage::LoadPNG( const std::string &_fileName, const bool _wantMipMaps )
 
 	// get again width, height and the new bit-depth and color-type
 	png_get_IHDR( png_ptr, info_ptr, (png_uint_32 *) &m_Width, (png_uint_32 *) &m_Height, &iBitDepth, &iColorType, NULL, NULL, NULL );
-	int nChannels = png_get_channels( png_ptr, info_ptr );
+	uint32 nChannels = png_get_channels( png_ptr, info_ptr );
 
 	switch( nChannels )
 	{

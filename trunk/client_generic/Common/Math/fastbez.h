@@ -34,7 +34,7 @@ class	CFastBezier
 				m_Curve[3] = _d;
 			}
 
-			const inline fp4 Sample( const fp4 _time ) const
+			inline fp4 Sample( const fp4 _time ) const
 			{
 				fp4	a[3];
 				fp4	b[2];

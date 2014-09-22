@@ -35,11 +35,11 @@ template <typename T> class CSingleton
 			virtual ~CSingleton()	{};
 
 			//	Users must implement this and set Active( false ), to catch unintended access after destruction.
-			virtual const bool Shutdown( void ) = PureVirtual;
+			virtual bool Shutdown( void ) = PureVirtual;
 
 			//
 			void		SingletonActive( const bool _state )	{	m_bSingletonActive = _state;	};
-			const bool	SingletonActive( void	)				{	return( m_bSingletonActive );	};
+			bool	SingletonActive( void	)				{	return( m_bSingletonActive );	};
 			virtual const char *Description() = PureVirtual;
 
 			//	Return instance.

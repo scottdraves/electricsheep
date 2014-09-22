@@ -50,19 +50,19 @@ class CFontDescription
 
 			//
 			void			Height( uint32 _h )			{	m_Height = _h;	};
-			const uint32	Height( void ) const		{	return( m_Height );	};
+			uint32	Height( void ) const		{	return( m_Height );	};
 
 			//
 			void			Style( const eStyle _w )	{	m_Style = _w;		};
-			const eStyle	Style( void ) const			{	return( m_Style );	};
+			eStyle	Style( void ) const			{	return( m_Style );	};
 
 			//
 			void			Italic( const bool _b )		{	m_bItalic = _b;			};
-			const bool		Italic( void ) const		{	return( m_bItalic );	};
+			bool		Italic( void ) const		{	return( m_bItalic );	};
 
 			//
 			void			Underline( const bool _b )	{	m_bUnderline = _b;		};
-			const bool		Underline( void ) const		{	return( m_bUnderline );	};
+			bool		Underline( void ) const		{	return( m_bUnderline );	};
 
 			//
 			void			AntiAliased( const bool _b )	{	m_bAntiAliased = _b;		};

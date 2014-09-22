@@ -10,7 +10,7 @@
 
 CElectricSheep_Mac	gClient;
 
-CFBundleRef dlbundle_ex( void )
+CFBundleRef CopyDLBundle_ex( void )
 {
 	
 	CFBundleRef bundle = NULL;
@@ -21,7 +21,13 @@ CFBundleRef dlbundle_ex( void )
 		const char *bundle_path = dirname( (char *)info.dli_fname );
 		
 		do {
-			CFURLRef bundleURL = CFURLCreateFromFileSystemRepresentation( kCFAllocatorDefault, (UInt8 *)bundle_path, strlen( bundle_path ), true );
+			if (bundle != NULL)
+            {
+                CFRelease(bundle);
+                bundle = NULL;
+            }
+            
+            CFURLRef bundleURL = CFURLCreateFromFileSystemRepresentation( kCFAllocatorDefault, (UInt8 *)bundle_path, (CFIndex)strlen( bundle_path ), true );
 			
 			bundle = CFBundleCreate( kCFAllocatorDefault, bundleURL );
 			
@@ -149,7 +155,7 @@ void ESScreensaver_InitClientStorage( void )
 	gClient.SetUpConfig();
 }
 
-CFStringRef ESScreensaver_GetRoot( void )
+CFStringRef ESScreensaver_CopyGetRoot( void )
 {	
 	std::string root = g_Settings()->Get("settings.content.sheepdir", g_Settings()->Root() + "content");
 	
@@ -163,7 +169,7 @@ CFStringRef ESScreensaver_GetRoot( void )
 }
 
 
-CFStringRef ESScreensaver_GetStringSetting( const char *url, const char *defval )
+CFStringRef ESScreensaver_CopyGetStringSetting( const char *url, const char *defval )
 {	
 	std::string val = g_Settings()->Get( std::string(url), std::string(defval) );
 	
@@ -256,7 +262,7 @@ static uint64 GetFlockSizeBytes(const std::string& path, int sheeptype)
 						struct stat sbuf;
 
 						if (stat( (mpegpath + "/" +fname).c_str(), &sbuf ) == 0)
-							retval += sbuf.st_size;
+							retval += (uint64)sbuf.st_size;
 					}
 				}
 			}
@@ -280,7 +286,7 @@ size_t ESScreensaver_GetFlockSizeMBs(const char *mpegpath, int sheeptype)
 
 }
 
-CFStringRef ESScreensaver_GetRoleFromXML(const char *xml)
+CFStringRef ESScreensaver_CopyGetRoleFromXML(const char *xml)
 {
 	TiXmlDocument doc;
 	if ( doc.Parse(xml, NULL, TIXML_ENCODING_UTF8 ) )

@@ -78,11 +78,13 @@ static const int32 MAX_TIMEOUT = 24*60*60; // 1 day
 #define MIN_MEGABYTES 1024
 #define MIN_READ_INTERVAL 3600
 
+#ifndef DEBUG
 static const uint32 INIT_DELAY = 60;
+#endif
 
 // Initialize the class data
 int SheepDownloader::fDownloadedSheep = 0;
-int SheepDownloader::fCurrentGeneration = -1;
+uint32 SheepDownloader::fCurrentGeneration = 0;
 bool SheepDownloader::fGotList = false;
 bool SheepDownloader::fListDirty = true;
 time_t SheepDownloader::fLastListTime = 0;
@@ -94,7 +96,7 @@ boost::mutex SheepDownloader::s_DownloaderMutex;
 SheepDownloader::SheepDownloader()
 {
 	fHasMessage = false;
-	fCurrentGeneration = -1;
+	fCurrentGeneration = 0;
 	m_bAborted = false;
 	fGotList = false;
 	fListDirty = true;
@@ -222,14 +224,17 @@ bool SheepDownloader::downloadSheep( Sheep *sheep )
 //
 void SheepDownloader::handleListElement(TiXmlElement* listElement)
 {
-	int cur_gen = -1;
+	int32 cur_gen = 0;
 
 	listElement->QueryIntAttribute("gen", &cur_gen);
 
 	if (cur_gen <= 0 )
-		g_Log->Error( "generation must be positive.\n" );
+    {
+		cur_gen = 0;
+        g_Log->Error( "generation must be positive.\n" );
+    }
 
-	setCurrentGeneration( cur_gen );
+	setCurrentGeneration( static_cast<uint32>(cur_gen) );
 
 	TiXmlElement* pChildNode;
 	for ( pChildNode = listElement->FirstChildElement(); pChildNode; pChildNode = pChildNode->NextSiblingElement() )
@@ -239,7 +244,7 @@ void SheepDownloader::handleListElement(TiXmlElement* listElement)
 		if( !strcmp( "sheep", name ) )
 		{
 			const char *state = NULL;
-			if( -1 == currentGeneration() )
+			if( 0 == currentGeneration() )
 				g_Log->Error( "malformed list, received sheep without generation set.\n" );
 
 			//	Create a new sheep and parse the attributes.
@@ -247,29 +252,33 @@ void SheepDownloader::handleListElement(TiXmlElement* listElement)
 			newSheep->setGeneration( currentGeneration() );
 
 			const char *a;
-			if ((a = pChildNode->Attribute("id")))		newSheep->setId(atoi(a));
+			if ((a = pChildNode->Attribute("id")))		newSheep->setId(static_cast<uint32>(atoi(a)));
 			if ((a = pChildNode->Attribute("type")))		newSheep->setType(atoi(a));
 			if ((a = pChildNode->Attribute("time")))		newSheep->setFileWriteTime(atoi(a));
-			if ((a = pChildNode->Attribute("size")))		newSheep->setFileSize(atol(a));
+			if ((a = pChildNode->Attribute("size")))		newSheep->setFileSize(static_cast<uint64>(atol(a)));
 			if ((a = pChildNode->Attribute("rating")))	newSheep->setRating(atoi(a));
-			if ((a = pChildNode->Attribute("first")))		newSheep->setFirstId(atoi(a));
-			if ((a = pChildNode->Attribute("last")))		newSheep->setLastId(atoi(a));
+			if ((a = pChildNode->Attribute("first")))		newSheep->setFirstId(static_cast<uint32>(atoi(a)));
+			if ((a = pChildNode->Attribute("last")))		newSheep->setLastId(static_cast<uint32>(atoi(a)));
 			if ((a = pChildNode->Attribute("state")))		state = a;
 			if ((a = pChildNode->Attribute("url")))		newSheep->setURL(a);
-			// TODO: fix malformed state == NULL potential error
-			if( !strcmp(state, "done") && (0 == newSheep->type()) )
-                fServerFlock.push_back(newSheep);
-			else
-			{
-				if( !strcmp( state, "expunge" ) )
-				{
-					char buf[ MAXBUF ];
-					sprintf(buf, "%s%05d=%05d=%05d=%05d.avi", Shepherd::mpegPath(), newSheep->generation(), newSheep->id(), newSheep->firstId(), newSheep->lastId() );
-					remove( buf );
-				}
+			
+            // TODO: fix malformed state, potential error
+			if (state != NULL)
+            {
+                if( !strcmp(state, "done") && (0 == newSheep->type()) )
+                    fServerFlock.push_back(newSheep);
+                else
+                {
+                    if( !strcmp( state, "expunge" ) )
+                    {
+                        char buf[ MAXBUF ];
+                        sprintf(buf, "%s%05d=%05d=%05d=%05d.avi", Shepherd::mpegPath(), newSheep->generation(), newSheep->id(), newSheep->firstId(), newSheep->lastId() );
+                        remove( buf );
+                    }
 
-				SAFE_DELETE( newSheep );
-			}
+                    SAFE_DELETE( newSheep );
+                }
+            }
 		}
 		else if( !strcmp( "message", name ) )
 		{
@@ -328,7 +337,7 @@ void SheepDownloader::listStartElement(void *userData, const char *name, const c
 			if( !strcmp( atts[i], "gen" ) )
 			{
 				dl->setCurrentGeneration( atoi( atts[i+1] ) );
-				if (dl->currentGeneration() <= 0 )
+				if (dl->currentGeneration() == 0 )
 					g_Log->Error( "generation must be positive.\n" );
 
 				break;
@@ -339,7 +348,7 @@ void SheepDownloader::listStartElement(void *userData, const char *name, const c
 	else if( !strcmp( "sheep", name ) )
 	{
 		const char *state = NULL;
-		if( -1 == dl->currentGeneration() )
+		if( 0 == dl->currentGeneration() )
 			g_Log->Error( "malformed list, received sheep without generation set.\n" );
 
 		//	Create a new sheep and parse the attributes.
@@ -530,7 +539,10 @@ void	SheepDownloader::updateCachedSheep()
 */
 int	SheepDownloader::cacheOverflow( const double &bytes, const int getGenerationType ) const
 {
-	boost::uintmax_t availableBytes;
+/*
+//karelsson - is it here for a reason???
+boost::uintmax_t availableBytes;
+
 
 #ifdef WIN32
 	ULARGE_INTEGER avBytes;
@@ -553,7 +565,7 @@ int	SheepDownloader::cacheOverflow( const double &bytes, const int getGeneration
 	}
 
 	availableBytes = (boost::uintmax_t)buf.f_bavail * (boost::uintmax_t)buf.f_bsize;
-#endif
+#endif*/
 
 	//	Return the overflow status
     return (Shepherd::cacheSize(getGenerationType) && (bytes > (1024.0 * 1024.0 * Shepherd::cacheSize(getGenerationType))));
@@ -564,14 +576,14 @@ int	SheepDownloader::cacheOverflow( const double &bytes, const int getGeneration
 	This function will make sure there is enough room in the cache for any newly downloaded files.
 	If the cache is to large than the oldest and worst rated files will be deleted.
 */
-void	SheepDownloader::deleteCached( const int &size, const int getGenerationType )
+void	SheepDownloader::deleteCached( const uint64 &size, const int getGenerationType )
 {
 	double total;
     time_t oldest_time; // oldest time for sheep with highest playcount
     int highest_playcount;
-    int best; // oldest sheep with highest playcount
+    uint32 best; // oldest sheep with highest playcount
 	time_t oldest_sheep_time; // oldest time for sheep (from whole flock)
-	int oldest; // oldest sheep index
+	uint32 oldest; // oldest sheep index
 
 //	updateCachedSheep();
 
@@ -631,7 +643,7 @@ void	SheepDownloader::deleteCached( const int &size, const int getGenerationType
 
 				std::string filename(fClientFlock[ best ]->fileName());
 				if (filename.find_last_of("/\\") != filename.npos)
-					filename.erase( filename.begin(), filename.begin() + filename.find_last_of("/\\") + 1);
+					filename.erase( filename.begin(), filename.begin() + static_cast<std::string::difference_type>(filename.find_last_of("/\\")) + 1);
 
 				uint16 playcount = g_PlayCounter().PlayCount( fClientFlock[ best ]->generation(), fClientFlock[ best ]->id() ) - 1;
 				std::stringstream temp;
@@ -702,7 +714,7 @@ void	SheepDownloader::deleteSheep( Sheep *sheep )
 
 /*
 */
-void	SheepDownloader::deleteSheepId( int sheepId )
+void	SheepDownloader::deleteSheepId( uint32 sheepId )
 {
 	for( uint32 i=0; i<fClientFlock.size(); i++ )
 	{
@@ -772,7 +784,7 @@ void	SheepDownloader::findSheepToDownload()
 		}
 #endif
 
-	boost::uintmax_t lpFreeBytesAvailable = 0, lpTotalNumberOfBytes = 0;
+    boost::uintmax_t lpFreeBytesAvailable = 0;
 
 	int32	failureSleepDuration = TIMEOUT;
 	int32	badSheepSleepDuration = TIMEOUT;
@@ -789,7 +801,6 @@ void	SheepDownloader::findSheepToDownload()
 			if ( GetDiskFreeSpaceExA( Shepherd::xmlPath(),(PULARGE_INTEGER)&winlpFreeBytesAvailable,(PULARGE_INTEGER)&winlpTotalNumberOfBytes,(PULARGE_INTEGER)&winlpRealBytesAvailable ) )
 			{
 				lpFreeBytesAvailable = winlpFreeBytesAvailable.QuadPart;
-				lpTotalNumberOfBytes = winlpTotalNumberOfBytes.QuadPart;
 			} else
 				incorrect_folder = true;
 #else
@@ -797,12 +808,11 @@ void	SheepDownloader::findSheepToDownload()
 			if( statfs( Shepherd::xmlPath(), &buf) >= 0 )
 			{
 				lpFreeBytesAvailable = (boost::uintmax_t)buf.f_bavail * (boost::uintmax_t)buf.f_bsize;
-				lpTotalNumberOfBytes = (boost::uintmax_t)buf.f_blocks * (boost::uintmax_t)buf.f_bsize;
 			} else
 				incorrect_folder = true;
 #endif
 
-			incorrect_folder = !isFolderAccessible( Shepherd::xmlPath() ) || !isFolderAccessible( Shepherd::mpegPath() );
+			incorrect_folder = incorrect_folder || ( !isFolderAccessible( Shepherd::xmlPath() ) || !isFolderAccessible( Shepherd::mpegPath() ) );
 			if( lpFreeBytesAvailable < ((boost::uintmax_t)MIN_MEGABYTES * 1024 * 1024) || incorrect_folder)
 			{
 				if (incorrect_folder)
@@ -833,7 +843,7 @@ void	SheepDownloader::findSheepToDownload()
 				best_rating_old = INT_MAX;
 
 				//	Reset the generation number.
-				setCurrentGeneration( -1 );
+				setCurrentGeneration( 0 );
 
 				//	Get the sheep list from the server.
 				if( getSheepList() )
@@ -899,7 +909,7 @@ void	SheepDownloader::findSheepToDownload()
 										{
 											best_rating = fServerFlock[i]->rating();
 											best_ctime = fServerFlock[i]->fileWriteTime();
-											best_anim = i;
+											best_anim = static_cast<int>(i);
 										}
 									}
 							}
@@ -911,21 +921,21 @@ void	SheepDownloader::findSheepToDownload()
 							best_ctime_old = best_ctime;
 							best_rating_old = best_rating;
 							//	Make enough room in the cache for it.
-							deleteCached( fServerFlock[ best_anim ]->fileSize(), fServerFlock[ best_anim ]->getGenerationType() );
+							deleteCached( fServerFlock[ static_cast<size_t>(best_anim) ]->fileSize(), fServerFlock[ static_cast<size_t>(best_anim) ]->getGenerationType() );
 
 							std::stringstream downloadingsheepstr;
 							downloadingsheepstr << "Downloading sheep " << downloadedcount+1 << "/" << fServerFlock.size() << "...\n";
-							Shepherd::setDownloadState(downloadingsheepstr.str() + fServerFlock[ best_anim ]->URL());
+							Shepherd::setDownloadState(downloadingsheepstr.str() + fServerFlock[ static_cast<size_t>(best_anim) ]->URL());
 						
 							g_Log->Info( "Best sheep to download rating=%d, fServerFlock index=%d, write time=%s", best_rating, best_anim, ctime(&best_ctime) );
-							if( downloadSheep( fServerFlock[ best_anim ] ) )
+							if( downloadSheep( fServerFlock[ static_cast<size_t>(best_anim) ] ) )
 							{
-								failureSleepDuration = 0;
+								//failureSleepDuration = 0;
 								badSheepSleepDuration = TIMEOUT;
 							} else
 							{
 								best_anim_old = best_anim;
-								best_anim_old_url = fServerFlock[ best_anim_old ]->URL();
+								best_anim_old_url = fServerFlock[ static_cast<size_t>(best_anim_old) ]->URL();
 							}
 						}
 						this_thread::interruption_point();
@@ -968,7 +978,7 @@ void	SheepDownloader::findSheepToDownload()
 
 				thread::sleep( get_system_time() + posix_time::seconds(failureSleepDuration) );
 				
-				failureSleepDuration = TIMEOUT;
+				//failureSleepDuration = TIMEOUT;
 
 			}
 		}
@@ -1036,7 +1046,7 @@ bool	SheepDownloader::getSheepList()
 		return false;
 
 	//	Reset the current generation
-	//setCurrentGeneration(-1);
+	//setCurrentGeneration( 0 );
 
 	//	Gzopen the compressed file to uncompress.
 	snprintf( filename, MAX_PATH, "%slist.gzip", xmlPath );
@@ -1056,7 +1066,7 @@ bool	SheepDownloader::getSheepList()
 		numBytes = gzread( gzinF, buf, 250 );
 		if (numBytes <= 0)
             break;
-		fwrite( buf, numBytes, 1, outXML );
+		fwrite( buf, static_cast<size_t>(numBytes), 1, outXML );
 	} while( !gzeof( gzinF ) );
 
 	//	Close the input and output file.
@@ -1070,27 +1080,6 @@ bool	SheepDownloader::getSheepList()
 	remove( filename );
 
 	return true;
-}
-
-/*
-*/
-bool	SheepDownloader::sheepOnServer( Sheep *sheep )
-{
- 	boost::mutex::scoped_lock lockthis( s_DownloaderMutex );
-
-	if( fGotList == true )
-	{
-		SheepArray::iterator is = fServerFlock.begin();
-		for( ; is != fServerFlock.end(); ++is )
-		{
-			if( !(*is)->id() == sheep->id() )
-				return true;
-		}
-	}
-	else
-		return true;
-
-	return false;
 }
 
 /*

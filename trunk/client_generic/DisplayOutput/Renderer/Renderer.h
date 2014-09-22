@@ -122,16 +122,16 @@ class CRenderer
 			CRenderer();
 			virtual ~CRenderer();
 
-			virtual const eRenderType	Type( void ) const = PureVirtual;
+			virtual eRenderType	Type( void ) const = PureVirtual;
 			virtual const std::string	Description( void ) const = PureVirtual;
 
 			//
-			virtual const bool	Initialize( spCDisplayOutput _spDisplay );
+			virtual bool	Initialize( spCDisplayOutput _spDisplay );
 			spCDisplayOutput Display()	{	return m_spDisplay;	};
 
 			//
-			virtual	const bool	BeginFrame( void )	{	return( true );	};
-			virtual	const bool	EndFrame( bool drawn = true )	{	return( true );	};
+			virtual	bool	BeginFrame( void )	{	return( true );	};
+			virtual	bool	EndFrame( bool /*drawn*/ = true )	{	return( true );	};
 
 			//	Textures.
 			virtual spCTextureFlat	NewTextureFlat( const uint32 flags = 0 ) = PureVirtual;
@@ -139,8 +139,8 @@ class CRenderer
 
 			//	Font.
 			virtual	spCBaseFont		NewFont( CFontDescription &_desc ) = PureVirtual;
-			virtual void			Text( spCBaseFont _spFont, const std::string &_text, const Base::Math::CVector4 &_color, const Base::Math::CRect &_rect, uint32 _flags ) {};
-			virtual Base::Math::CVector2	GetTextExtent( spCBaseFont _spFont, const std::string &_text )	{	return Base::Math::CVector2( 0, 0 );	};
+			virtual void			Text( spCBaseFont /*_spFont*/, const std::string &/*_text*/, const Base::Math::CVector4 &/*_color*/, const Base::Math::CRect &/*_rect*/, uint32 /*_flags*/ ) {};
+			virtual Base::Math::CVector2	GetTextExtent( spCBaseFont /*_spFont*/, const std::string &/*_text*/ )	{	return Base::Math::CVector2( 0, 0 );	};
 
 			virtual bool HasShaders() { return false; }
 			//	Shaders.
@@ -176,11 +176,11 @@ class CRenderer
 
 
 			//	Aux functions.
-			virtual void	DrawLine( const Base::Math::CVector2 &_start, const Base::Math::CVector2 &_end, const Base::Math::CVector4 &_color, const fp4 _width = 1.0f ) {};
-			virtual void	DrawRect( const Base::Math::CRect	&_rect, const Base::Math::CVector4 &_color, const fp4 _width = 1.0f )	{};
-			virtual void	DrawQuad( const Base::Math::CRect	&_rect, const Base::Math::CVector4 &_color ) {};
-			virtual void	DrawQuad( const Base::Math::CRect	&_rect, const Base::Math::CVector4 &_color, const Base::Math::CRect &_uvRect )	{};
-			virtual void	DrawSoftQuad( const Base::Math::CRect &_rect, const Base::Math::CVector4 &_color, const fp4 _width )	{};
+			virtual void	DrawLine( const Base::Math::CVector2 &/*_start*/, const Base::Math::CVector2 &/*_end*/, const Base::Math::CVector4 &/*_color*/, const fp4 /*_width = 1.0f*/ ) {};
+			virtual void	DrawRect( const Base::Math::CRect	&/*_rect*/, const Base::Math::CVector4 &/*_color*/, const fp4 /*_width = 1.0f*/ )	{};
+			virtual void	DrawQuad( const Base::Math::CRect	&/*_rect*/, const Base::Math::CVector4 &/*_color*/ ) {};
+			virtual void	DrawQuad( const Base::Math::CRect	&/*_rect*/, const Base::Math::CVector4 &/*_color*/, const Base::Math::CRect &/*_uvRect*/ )	{};
+			virtual void	DrawSoftQuad( const Base::Math::CRect &/*_rect*/, const Base::Math::CVector4 &/*_color*/, const fp4 /*_width*/ )	{};
 };
 
 MakeSmartPointers( CRenderer );

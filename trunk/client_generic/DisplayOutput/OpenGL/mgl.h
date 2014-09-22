@@ -30,10 +30,6 @@ class CMacGL : public CDisplayOutput
 	CGLContextObj	m_glContext;
 
 
-	//	Only valid when running as a screensaver.
-	bool		m_bScreensaver;
-	bool		m_bPreview;
-	
 	static uint32 s_DefaultWidth;
 	static uint32 s_DefaultHeight;
 
@@ -50,7 +46,7 @@ class CMacGL : public CDisplayOutput
 			virtual void SetContext( CGLContextObj glContext ) { m_glContext = glContext; }
 			virtual CGLContextObj GetContext( void ) { return m_glContext; }
 
-			virtual void ForceWidthAndHeight( int32 _width, int32 _height );
+			virtual void ForceWidthAndHeight( uint32 _width, uint32 _height );
 			
 			static void SetDefaultWidthAndHeight( uint32 defWidth, uint32 defHeight );
 	

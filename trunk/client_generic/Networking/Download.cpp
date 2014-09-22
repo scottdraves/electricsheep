@@ -99,7 +99,7 @@ CFileDownloader_TimeCondition::~CFileDownloader_TimeCondition()
 	Perform().
 
 */
-bool CFileDownloader_TimeCondition::Perform( const std::string &_url, const time_t _lastTime )
+bool CFileDownloader_TimeCondition::PerformDownloadWithTC( const std::string &_url, const time_t _lastTime )
 {
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_TIMECONDITION, this ) ) )	return false;
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_TIMEVALUE, _lastTime ) ) )	return false;

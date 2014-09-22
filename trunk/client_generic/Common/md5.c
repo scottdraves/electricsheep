@@ -52,10 +52,10 @@
       ( (unsigned char *) (p) )[ 3 ] = ( (n) & 0xFF000000 ) >> 24 )
 
 #define READ( p ) \
-    ( ( (unsigned char *) (p) )[ 0 ] | \
-      ( (unsigned char *) (p) )[ 1 ] << 8 | \
-      ( (unsigned char *) (p) )[ 2 ] << 16 | \
-      ( (unsigned char *) (p) )[ 3 ] << 24 )
+    ( (md5_uint32) ( ( (md5_uint32)( (unsigned char *) (p) )[ 0 ] ) | \
+      ( (md5_uint32)( (unsigned char *) (p) )[ 1 ] ) << 8 | \
+      ( (md5_uint32)( (unsigned char *) (p) )[ 2 ] ) << 16 | \
+      ( (md5_uint32)( (unsigned char *) (p) )[ 3 ] ) << 24 ) )
 
 /* This array contains the bytes used to pad the buffer to the next
    64-byte boundary.  (RFC 1321, 3.1: Step 1)  */
@@ -220,11 +220,11 @@ md5_process_bytes (const void *buffer, size_t len, struct md5_ctx *ctx)
 
       if (ctx->buflen > 64)
       {
-		md5_process_block (ctx->buffer, ctx->buflen & ~63, ctx);
+		md5_process_block (ctx->buffer, ctx->buflen & ~63u, ctx);
 
 		ctx->buflen &= 63;
 		/* The regions in the following copy operation cannot overlap.  */
-		memcpy (ctx->buffer, &ctx->buffer[(left_over + add) & ~63],
+		memcpy (ctx->buffer, &ctx->buffer[(left_over + add) & ~63u],
 			ctx->buflen);
       }
 
@@ -235,8 +235,8 @@ md5_process_bytes (const void *buffer, size_t len, struct md5_ctx *ctx)
   /* Process available complete blocks.  */
   if (len > 64)
     {
-      md5_process_block (buffer, len & ~63, ctx);
-      buffer = (const char *) buffer + (len & ~63);
+      md5_process_block (buffer, len & ~63u, ctx);
+      buffer = (const char *) buffer + (len & ~63u);
       len &= 63;
     }
 

@@ -151,10 +151,10 @@
 	NSMutableDictionary *animInfo;
 	
 	animInfo = [NSMutableDictionary dictionaryWithCapacity:2];
-	[animInfo setObject:window forKey:NSViewAnimationTargetKey];
-	[animInfo setObject:effect forKey:NSViewAnimationEffectKey];
+    animInfo[NSViewAnimationTargetKey] = window;
+	animInfo[NSViewAnimationEffectKey] = effect;
 	
-	anim = [[NSViewAnimation alloc] initWithViewAnimations:[NSArray arrayWithObject:animInfo]];
+	anim = [[NSViewAnimation alloc] initWithViewAnimations:@[ animInfo ]];
 	[anim setAnimationBlockingMode:NSAnimationNonblockingThreaded];
 	[anim setAnimationCurve:NSAnimationEaseIn];
 	[anim setDuration:0.3];

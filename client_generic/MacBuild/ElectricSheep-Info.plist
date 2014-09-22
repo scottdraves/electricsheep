@@ -6,10 +6,12 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleGetInfoString</key>
+	<string>2.7b36</string>
 	<key>CFBundleIconFile</key>
 	<string>ElectricSheep</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.elecricsheep.${PRODUCT_NAME:identifier}_App</string>
+	<string>org.elecricsheep.ElectricSheep.app</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -18,20 +20,18 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>2.7b36</string>
-	<key>CFBundleGetInfoString</key>
-	<string>2.7b36</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-	<key>SUPublicDSAKeyFile</key>
-	<string>dsa_pub.pem</string>
-	<key>SUFeedURL</key>
-	<string>http://sparkle.electricsheep.org/appcast.xml</string>
 	<key>LSMinimumSystemVersionByArchitecture</key>
 	<dict>
 		<key>x86_64</key>
 		<string>10.6.0</string>
 	</dict>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>SUFeedURL</key>
+	<string>http://sparkle.electricsheep.org/appcast.xml</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
 </dict>
 </plist>

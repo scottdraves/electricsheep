@@ -836,20 +836,20 @@ bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const eScal
 
 					for( k=0; k<nChannels; k++ )
 					{
-						b = icerp( src[ m_Width * nChannels], src[( m_Width + 1) * nChannels], src[(    m_Width + 2) * nChannels], src[(    m_Width + 3) * nChannels], wX) & 0xFF;
+						b = icerp( src[ m_Width * nChannels], src[( m_Width + 1) * nChannels], src[(    m_Width + 2) * nChannels], src[(    m_Width + 3) * nChannels], static_cast<int32>(wX)) & 0xFF;
 						if( sampleY > 0 )
-							a = icerp(src[0], src[nChannels], src[2 * nChannels], src[3 * nChannels], wX) & 0xFF;
+							a = icerp(src[0], src[nChannels], src[2 * nChannels], src[3 * nChannels], static_cast<int32>(wX)) & 0xFF;
 						else
 							a = b;
 
-						c = icerp(src[2 * m_Width * nChannels], src[(2 * m_Width + 1) * nChannels], src[(2 * m_Width + 2) * nChannels], src[(2 * m_Width + 3) * nChannels], wX) & 0xFF;
+						c = icerp(src[2 * m_Width * nChannels], src[(2 * m_Width + 1) * nChannels], src[(2 * m_Width + 2) * nChannels], src[(2 * m_Width + 3) * nChannels], static_cast<int32>(wX)) & 0xFF;
 						if( sampleY < _newHeight - 1 )
-							d = icerp(src[3 * m_Width * nChannels], src[(3 * m_Width + 1) * nChannels], src[(3 * m_Width + 2) * nChannels], src[(3 * m_Width + 3) * nChannels], wX) & 0xFF;
+							d = icerp(src[3 * m_Width * nChannels], src[(3 * m_Width + 1) * nChannels], src[(3 * m_Width + 2) * nChannels], src[(3 * m_Width + 3) * nChannels], static_cast<int32>(wX)) & 0xFF;
 						else
 							d = c;
 
-						res = icerp( a, b, c, d, wY ) & 0xFF;
-						*dest++ = (res < 0)? 0 : (res > 255)? 255 : res;
+						res = icerp( a, b, c, d, static_cast<int32>(wY) ) & 0xFF;
+						*dest++ = (res < 0)? 0 : (res > 255)? 255 : (res & 0xFF);
 						src++;
 					}
 				}
@@ -882,7 +882,7 @@ void	CImage::PutPixel( const int32 _x, const int32 _y, const fp4 _r, const fp4 _
 	fp4	rgba[4] = { _r, _g, _b, _a };
 
 	uint32	nDestChannels = m_Format.GetChannels();
-	uint8	*pData = (GetData(0) + (_y * GetPitch())) + (_x * m_Format.getBPPixel() );
+	uint8	*pData = (GetData(0) + (static_cast<uint32>(_y) * GetPitch())) + (static_cast<uint32>(_x) * m_Format.getBPPixel() );
 
 	if( m_Format.isFloat() )
 	{
@@ -916,7 +916,7 @@ void	CImage::GetPixel( const int32 _x, const int32 _y, fp4 &_r, fp4 &_g, fp4 &_b
 		return;
 
 	uint32	nSrcChannels = m_Format.GetChannels();
-	uint8	*pData = (GetData(0) + (_y * GetPitch())) + (_x * m_Format.getBPPixel() );
+	uint8	*pData = (GetData(0) + (static_cast<uint32>(_y) * GetPitch())) + (static_cast<uint32>(_x) * m_Format.getBPPixel() );
 	fp4		rgba[4];
     
     rgba[0] = rgba[1] = rgba[2] = rgba[3] = 0.0f;

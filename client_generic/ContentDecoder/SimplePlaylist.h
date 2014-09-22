@@ -30,9 +30,9 @@ class	CSimplePlaylist : public CPlaylist
 				return( true );
 			}
 
-			virtual uint32	Size()	{	return m_List.size();	}
+			virtual uint32	Size()	{	return static_cast<uint32>(m_List.size());	}
 
-			virtual bool	Next( std::string &_result, bool& _bEnoughSheep, uint32 _curID, const bool _bRebuild = false, bool _bStartByRandom = false )
+			virtual bool	Next( std::string &_result, bool& _bEnoughSheep, uint32 /*_curID*/, const bool /*_bRebuild*/ = false, bool /*_bStartByRandom*/ = false )
 			{
 				if( m_List.empty() )
 					return false;

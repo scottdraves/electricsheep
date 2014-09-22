@@ -14,7 +14,6 @@ namespace	Hud
 class   CHudEntry
 {
 	bool	m_bVisible;
-	bool	m_bAlwaysVisible;
 
 	protected:
 		Base::Math::CRect	m_Rect;
@@ -25,9 +24,9 @@ class   CHudEntry
 			virtual ~CHudEntry()    {};
 
 			void	SetTime( fp8 _startTime, fp8 _duration )	{	m_StartTime = _startTime; m_Duration = _duration; m_Delta = 0; m_bVisible = false;	};
-			virtual	bool	Render( const fp8 _time, DisplayOutput::spCRenderer _spRenderer )
+			virtual	bool	Render( const fp8 _time, DisplayOutput::spCRenderer /*_spRenderer*/ )
 			{
-				if( m_Duration != -1 )
+				if( m_Duration > 0.0f )
 				{
 					m_Delta = (_time - m_StartTime) / m_Duration;
 					if( m_Delta > 1.0 )
@@ -38,7 +37,7 @@ class   CHudEntry
 			};
 
 			void Visible( const bool _bState )	{	m_bVisible = _bState;	};
-			virtual const bool	Visible() const	{	return m_bVisible;	};
+			virtual bool	Visible() const	{	return m_bVisible;	};
 };
 
 MakeSmartPointers( CHudEntry );

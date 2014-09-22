@@ -83,14 +83,15 @@ class CVideoFrame
 				m_MetaData.m_SecondFrame = NULL;
 				m_MetaData.m_TransitionProgress = 0.f;
 
-				m_Width = _pCodecContext->width;
-				m_Height = _pCodecContext->height;
+				m_Width = static_cast<uint32>(_pCodecContext->width);
+				m_Height = static_cast<uint32>(_pCodecContext->height);
 
-				m_pFrame = avcodec_alloc_frame();
+				m_pFrame = av_frame_alloc();
+                
 				if (m_pFrame != NULL)
 				{
 					int32 numBytes = avpicture_get_size( _format, _pCodecContext->width, _pCodecContext->height );
-					m_spBuffer = new Base::CAlignedBuffer( numBytes * sizeof(uint8) );
+					m_spBuffer = new Base::CAlignedBuffer( static_cast<uint32>(numBytes) * sizeof(uint8) );
 					avpicture_fill( (AVPicture *)m_pFrame, m_spBuffer->GetBufferPtr(), _format, _pCodecContext->width, _pCodecContext->height );
 				} else
 					g_Log->Error( "m_pFrame == NULL" );
@@ -100,9 +101,9 @@ class CVideoFrame
 			{
 				if( m_pFrame )
 				{
-					av_free( m_pFrame );
+					av_frame_free( &m_pFrame );
 				}
-			}
+            }
 
 			inline void GetMetaData(sMetaData &_metadata)
 			{
@@ -195,7 +196,7 @@ class CVideoFrame
 			};
 
 
-			virtual inline const int32	Stride()
+			virtual inline int32	Stride()
 			{
 				if( !m_pFrame )
 					return 0;

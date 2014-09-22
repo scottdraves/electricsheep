@@ -184,27 +184,36 @@ inline fp4 RSqrtFast( fp4 _v )
 	ClosestPowerOfTwo().
 
 */
-inline const unsigned int ClosestPowerOfTwo( const unsigned int _x )
+inline unsigned int ClosestPowerOfTwo( const unsigned int _x )
 {
-	int	i,k;
+	unsigned int	i,k;
 
-	k = _x;
-	i = -1;
+	if ( _x == 0 )
+        return 0;
+    
+    k = _x;
+	i = 0;
 
-	while( k != 0)
+	while( k != 0 )
 	{
 		k >>= 1;
 		i++;
 	}
-
-	return( 1 << (i + ((_x >> (i-1)) & 1)) );
+    
+    if ( i==1 )
+        return 1;
+    else
+    {
+        i--;
+        return( 1 << (i + ((_x >> (i-1)) & 1)) );
+    }
 }
 
 /*
 	UpperPowerOfTwo().
 
 */
-inline const unsigned int UpperPowerOfTwo( const unsigned int x )
+inline unsigned int UpperPowerOfTwo( const unsigned int x )
 {
 	unsigned int i = 1;
 

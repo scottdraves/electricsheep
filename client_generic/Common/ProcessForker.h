@@ -320,11 +320,9 @@ class	CProcessForker
 	static const uint32 m_MaxParamCount = 20;
 
 	bool	m_bTerminate;
-	bool	m_bWaiting;
 	int		m_ChildPID;
 
 	const char 	*m_pAppName;
-	const char	*m_pAppDir;
 
 	char	*m_pEnv[m_MaxEnvCount + 1];
 	char	*m_pParam[m_MaxParamCount + 1];
@@ -332,8 +330,8 @@ class	CProcessForker
 	uint32  m_ParamSize;
 
 	public:
-			CProcessForker( const char *_pProcessName, bool _bTerminate = true, const char *_wd = NULL ) :
-				m_bWaiting(false), m_pAppName( _pProcessName ), m_bTerminate( _bTerminate ), m_pAppDir(_wd)
+			CProcessForker( const char *_pProcessName, bool _bTerminate = true, const char */*_wd*/ = NULL ) :
+				  m_bTerminate( _bTerminate ), m_pAppName( _pProcessName )
 			{
 				m_pEnv[0] = NULL;
 				m_EnvSize = 0;

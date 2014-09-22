@@ -403,8 +403,7 @@ Shepherd::filenameIsTmp(const char *name)
 
 void Shepherd::addMessageText(const char *s, size_t len, time_t timeout)
 {
-
-	QueueMessage( std::string( s ), (fp8)timeout );
+	QueueMessage( std::string( s, len ), (fp8)timeout );
 }
 
 const char *Shepherd::rootPath()
@@ -443,7 +442,7 @@ std::string Shepherd::computeMD5( const std::string& str )
 
 	std::string md5Str;
 
-	for (int i = 0; i < sizeof(digest); i++)
+	for (uint32 i = 0; i < sizeof(digest); i++)
 	{
 		const char *hex_digits = "0123456789ABCDEF";
 
@@ -678,10 +677,10 @@ bool Shepherd::getSheep( const char *path, SheepArray *sheep )
 			itr != end_itr;
 			++itr )
 	{
-		int id = -1;
-		int first = -1;
-		int last = -1;
-		int generation = -1;
+		uint32 id = 0;
+		uint32 first = 0;
+		uint32 last = 0;
+		uint32 generation = 0;
 		bool isTemp = false;
 		bool isDeleted = false;
 
@@ -760,7 +759,7 @@ bool Shepherd::getSheep( const char *path, SheepArray *sheep )
 
 			stat( fbuf, &sbuf );
 			newSheep->setFileWriteTime( sbuf.st_ctime );
-			newSheep->setFileSize( sbuf.st_size );
+			newSheep->setFileSize( static_cast<uint64>(sbuf.st_size) );
 
 			//	Add it to the return array.
 			sheep->push_back( newSheep );
@@ -847,8 +846,8 @@ std::string Shepherd::renderState( bool &isnew )
 
 //
 void Shepherd::FrameStarted()		{	if (renderingFrames) ++(*renderingFrames);	}
-int	Shepherd::FramesRendering()		{	return renderingFrames ? (long)*renderingFrames : 0;	}
-int	Shepherd::TotalFramesRendered()	{	return totalRenderedFrames ? (long)*totalRenderedFrames : 0;	}
+int	Shepherd::FramesRendering()		{	return renderingFrames ? static_cast<int>(*renderingFrames) : 0;	}
+int	Shepherd::TotalFramesRendered()	{	return totalRenderedFrames ? static_cast<int>(*totalRenderedFrames) : 0;	}
 bool Shepherd::RenderingAllowed()	{	return m_RenderingAllowed;	}
 void Shepherd::SetRenderingAllowed(bool _yesno)	{	m_RenderingAllowed = _yesno;	}
 

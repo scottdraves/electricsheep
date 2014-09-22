@@ -19,7 +19,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 
 	//	The two frames.
 	DisplayOutput::spCTextureFlat	m_spFrames[ 2 * kMaxFrames ];
-	int32	m_State;
+	uint32	m_State;
 
 	bool m_bWaitNextFrame;
 
@@ -128,7 +128,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 			}
 
 			//	Decode a frame every 1/_fpsCap seconds, store the previous frame, and lerp between them.
-			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 _displayFps, ContentDecoder::sMetaData &_metadata )
+			virtual bool	Update( ContentDecoder::spCContentDecoder _spDecoder, const fp8 _decodeFps, const fp8 /*_displayFps*/, ContentDecoder::sMetaData &_metadata )
 			{
 				fp4 currentalpha = m_LastAlpha;
 				bool frameGrabbed = false;
@@ -248,7 +248,7 @@ class	CLinearFrameDisplay : public CFrameDisplay
 				return true;
 			}
 
-			virtual fp8 GetFps( fp8 _decodeFps, fp8 _displayFps )
+			virtual fp8 GetFps( fp8 /*_decodeFps*/, fp8 _displayFps )
 			{
 				return _displayFps;
 			}

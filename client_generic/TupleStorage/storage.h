@@ -20,8 +20,8 @@ class IStorageInterface
 	protected:
 		std::string		m_sRoot;
 
-		void Dirty( const bool _state )	{	m_bDirty = _state;	};
-		const bool Dirty()				{	return m_bDirty;	};
+		void Dirty( bool _state )	{	m_bDirty = _state;	};
+		bool Dirty()				{	return m_bDirty;	};
 
 	public:
 			IStorageInterface() : m_bDirty( false ), m_sRoot( "./.Reg" )	{};
@@ -52,12 +52,12 @@ class IStorageInterface
 			virtual bool 	Commit() = PureVirtual;
 
 			//	Helpers.
-			static const bool	IoHierarchyHelper( const std::string &_uniformPath, std::string &_retPath, std::string &_retName );
-			static const bool	CreateDir( const std::string &_sPath );
-			static const bool	RemoveDir( const std::string &_sPath );
-			static const bool	CreateFullDirectory( const std::string &_sPath );
-			static const bool	RemoveFullDirectory( const std::string &_sPath, const bool _bSubdirectories = false );
-			static const bool	DirectoryEmpty( const std::string &_sPath );
+			static bool	IoHierarchyHelper( const std::string &_uniformPath, std::string &_retPath, std::string &_retName );
+			static bool	CreateDir( const std::string &_sPath );
+			static bool	RemoveDir( const std::string &_sPath );
+			static bool	CreateFullDirectory( const std::string &_sPath );
+			static bool	RemoveFullDirectory( const std::string &_sPath, const bool _bSubdirectories = false );
+			static bool	DirectoryEmpty( const std::string &_sPath );
 
 			//	Config.
 			virtual bool	Config( const std::string &_url ) = PureVirtual;

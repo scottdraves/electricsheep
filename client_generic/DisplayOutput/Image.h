@@ -266,10 +266,10 @@ inline void flipChannelsRB( uint8 *_pData, uint32 _nPixels, const uint32 _nChann
 */
 class	CImage	{
 
-	const uint32 getNumberOfMipMapsFromDimesions( void ) const;
-	const uint32 getMipMappedSize( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels, const CImageFormat &_format ) const;
-	const uint32 getNumPixels( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels ) const;
-	const bool	 createMipMaps( void );
+	uint32 getNumberOfMipMapsFromDimesions( void ) const;
+	uint32 getMipMappedSize( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels, const CImageFormat &_format ) const;
+	uint32 getNumPixels( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels ) const;
+	bool	 createMipMaps( void );
 
 	//	Image loaders.
 	bool	LoadDDS( const std::string &_fileName, const bool _wantMipMaps = true );
@@ -313,8 +313,8 @@ class	CImage	{
 			uint32	GetPitch( const uint32 _mipMapLevel = 0 ) const;
 
 			//
-			const bool	Scale( const uint32 _newWidth, const uint32 _newHeight, const eScaleFilters _eFilter );
-			const bool	Convert( const eImageFormat _newFormat );
+			bool	Scale( const uint32 _newWidth, const uint32 _newHeight, const eScaleFilters _eFilter );
+			bool	Convert( const eImageFormat _newFormat );
 
 			//
 			bool	GenerateMipmaps( void );
@@ -325,7 +325,7 @@ class	CImage	{
 			inline uint32		GetHeight( const uint32 _mipMapLevel = 0 )		const	{ uint32 a = m_Height >> _mipMapLevel; return( (a == 0)? 1 : a );	}
 			inline Base::Math::CRect	GetRect( void )							const	{ return( Base::Math::CRect( (fp4)m_Width, (fp4)m_Height ) );	};
 			inline uint32		GetNumMipMaps( void )							const	{ return( m_nMipMaps ); };
-			const  uint32		getMipMappedSize( const uint32 _firstMipMapLevel = 0, const uint32 _nMipMapLevels = 0x7FFFFFFF ) const;
+			uint32		getMipMappedSize( const uint32 _firstMipMapLevel = 0, const uint32 _nMipMapLevels = 0x7FFFFFFF ) const;
 			inline const CImageFormat	&GetFormat( void )						const	{ return( m_Format ); };
 
 			//

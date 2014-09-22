@@ -26,7 +26,7 @@ namespace DisplayOutput
  GetBlendConstant().
  
  */
-const int32	GetBlendConstant( const int32 _src )
+int32	GetBlendConstant( const int32 _src )
 {
 	static	int32	formatLut[] =
 	{
@@ -50,7 +50,7 @@ const int32	GetBlendConstant( const int32 _src )
  GetBlendMode().
  
  */
-const int32	GetBlendMode( const int32 _src )
+int32	GetBlendMode( const int32 _src )
 {
 	static	int32	formatLut[] =
 	{
@@ -84,7 +84,7 @@ CRendererGL::~CRendererGL()
 
 /*
 */
-const bool	CRendererGL::Initialize( spCDisplayOutput _spDisplay )
+bool	CRendererGL::Initialize( spCDisplayOutput _spDisplay )
 {
 	if( !CRenderer::Initialize( _spDisplay ) )
 		return false;
@@ -162,7 +162,7 @@ void	CRendererGL::Defaults()
 
 /*
 */
-const bool	CRendererGL::BeginFrame( void )
+bool	CRendererGL::BeginFrame( void )
 {
 #ifdef MAC
 	CGLContextObj currContext = m_spDisplay->GetContext();
@@ -181,7 +181,7 @@ const bool	CRendererGL::BeginFrame( void )
 	return true;
 }
 
-void CRendererGL::Verify( const char *_file, const int32 _line )
+void CRendererGL::Verify( const char */*_file*/, const int32 /*_line*/ )
 {
 	/*int error = glGetError();
 	if( error != GL_NO_ERROR )
@@ -205,7 +205,7 @@ void CRendererGL::Verify( const char *_file, const int32 _line )
 
 /*
 */
-const bool	CRendererGL::EndFrame( bool drawn )
+bool	CRendererGL::EndFrame( bool drawn )
 {
 	SetCurrentGLContext();
 	
@@ -245,13 +245,13 @@ void	CRendererGL::Apply()
 	{
 		glMatrixMode( GL_MODELVIEW );
 		glLoadMatrixf( (GLfloat *)(const fp4 *)m_WorldMat.m_Mat );
-		remBit( m_bDirtyMatrices, eWorld );
+		remBit( m_bDirtyMatrices, static_cast<uint32>(eWorld) );
 	}
 
 	//	Update view transformation.
 	if( isBit( m_bDirtyMatrices, eView ) )
 	{
-		remBit( m_bDirtyMatrices, eView );
+		remBit( m_bDirtyMatrices, static_cast<uint32>(eView) );
 	}
 
 	//	Update projection transformation.
@@ -259,7 +259,7 @@ void	CRendererGL::Apply()
 	{
 		glMatrixMode( GL_PROJECTION );
 		glLoadMatrixf( (GLfloat *)(const fp4 *)m_ProjMat.m_Mat );
-		remBit( m_bDirtyMatrices, eProjection );
+		remBit( m_bDirtyMatrices, static_cast<uint32>(eProjection) );
 	}
 	
 	//	Blend state.	Suboptimal!
@@ -365,7 +365,7 @@ spCBaseFont	CRendererGL::NewFont( CFontDescription &_desc )
 	return m_glFont;
 }
 		
-void CRendererGL::Text( spCBaseFont _spFont, const std::string &_text, const Base::Math::CVector4 &_color, const Base::Math::CRect &_rect, uint32 _flags )
+void CRendererGL::Text( spCBaseFont _spFont, const std::string &_text, const Base::Math::CVector4 &/*_color*/, const Base::Math::CRect &_rect, uint32 /*_flags*/ )
 {
 	SetCurrentGLContext();
 	
@@ -384,7 +384,7 @@ void CRendererGL::Text( spCBaseFont _spFont, const std::string &_text, const Bas
 	
 	for (size_t i = 0; i < _text.size(); i++)
 	{
-		char ch = _text[i];
+		uint8 ch = static_cast<uint8>(_text[i]);
 		
 		if (ch == '\n')
 		{
@@ -543,7 +543,7 @@ void	CRendererGL::DrawSoftQuad( const Base::Math::CRect &_rect, const Base::Math
 			for( uint32 x=0; x<32; x++ )
 			{
 				fp4 c = Base::Math::saturate(1.0f - powf( Base::Math::Sqrt( fp4(x*x + y*y) ) / 31.0f, 1.0f ));
-				tmpImage->PutPixel( x, y, c, c, c, c );
+				tmpImage->PutPixel( static_cast<int32>(x), static_cast<int32>(y), c, c, c, c );
 			}
 		
 		m_spSoftCorner = NewTextureFlat();

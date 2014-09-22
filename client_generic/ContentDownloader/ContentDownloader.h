@@ -33,8 +33,8 @@ class	CContentDownloader : public Base::CSingleton<CContentDownloader>
 	boost::thread			*m_gDownloadThread;
 
 	public:
-			const bool	Startup( const bool _bPreview, bool _bReadOnlyInstance = false );
-			const bool	Shutdown( void );
+			bool	Startup( const bool _bPreview, bool _bReadOnlyInstance = false );
+			bool	Shutdown( void );
 
 			const char *Description()	{	return "Content Downloader";	};
 

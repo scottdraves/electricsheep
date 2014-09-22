@@ -17,7 +17,7 @@
 
 #if defined( WIN32 ) || defined( __LITTLE_ENDIAN__ )
 	#define SWAP_LONG_(x) ((x << 24) | ((x << 8) & 0x00FF0000) |  ((x >> 8) & 0x0000FF00) | (x >> 24))
-	#define SWAP_SHORT_(x) ((x << 8) | (x >> 8))
+	#define SWAP_SHORT_(x) ((unsigned short)((unsigned short)(x) << 8) | (unsigned short)((unsigned short)(x) >> 8))
 #else
 	#define SWAP_LONG_(x) x
 	#define SWAP_SHORT_(x) x
@@ -167,7 +167,7 @@ fp4 CFontGL::StringWidth(const std::string& str) const
 {
 	fp4 total = 0.0;
 	for (uint32 i = 0; i != str.size(); ++i)
-		total += CharWidth(str[i]);
+		total += CharWidth(static_cast<uint8>(str[i]));
 	return total;
 }
 

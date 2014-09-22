@@ -14,11 +14,10 @@ namespace	Hud
 */
 class	CStat
 {
-	fp8		m_Time;
 	bool	m_bVisible;
 
 	public:
-			CStat( const std::string _name ) : m_Name( _name ), m_Time(0), m_bVisible(true)		{};
+			CStat( const std::string _name ) :  m_bVisible(true), m_Name( _name )		{};
 			virtual ~CStat()	{};
 
 			std::string		m_Name;
@@ -26,7 +25,7 @@ class	CStat
 			virtual	const std::string	Report( const fp8 _time ) = PureVirtual;
 
 			void	Visible( const bool _bState )	{ m_bVisible = _bState; };
-			const bool Visible( void ) const 	{ return m_bVisible; };
+			bool Visible( void ) const 	{ return m_bVisible; };
 };
 
 //MakeSmartPointers( CStat );
@@ -43,7 +42,7 @@ class CStringStat : public CStat
 			CStringStat( const std::string _name, const std::string _pre, const std::string _init ) : CStat( _name ), m_PreString(_pre), m_Value( _init ) {};
 			virtual ~CStringStat() {};
 
-			virtual const std::string	Report( const fp8 _time )
+			virtual const std::string	Report( const fp8 /*_time*/ )
 			{
 				std::stringstream s;
 				s << m_PreString << m_Value;
@@ -72,7 +71,7 @@ class CIntCounter : public CStat
 			CIntCounter( const std::string _name, const std::string _pre, const std::string _post ) : CStat( _name ), m_PreString(_pre), m_PostString(_post), m_Value(0) {};
 			virtual ~CIntCounter() {};
 
-			virtual const std::string	Report( const fp8 _time )
+			virtual const std::string	Report( const fp8 /*_time*/ )
             {
 				std::stringstream s;
 				s << m_PreString << uint32(m_Value) << m_PostString ;
@@ -157,7 +156,7 @@ class CTimeCountDownStat : public CStat
 			
 			virtual ~CTimeCountDownStat() {};
 
-			virtual const std::string	Report( const fp8 _time )
+			virtual const std::string	Report( const fp8 /*_time*/ )
 			{
 				std::stringstream s;
 				s << m_PreString << m_PreValue;

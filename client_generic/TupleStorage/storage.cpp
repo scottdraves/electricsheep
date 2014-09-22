@@ -25,7 +25,7 @@ namespace	TupleStorage
 	CreateDir().
 
 */
-const bool IStorageInterface::CreateDir( const std::string &_sPath )
+bool IStorageInterface::CreateDir( const std::string &_sPath )
 {
 #ifdef	WIN32
 	if( CreateDirectoryA( _sPath.c_str(), NULL ) != 0 )
@@ -52,7 +52,7 @@ const bool IStorageInterface::CreateDir( const std::string &_sPath )
 	RemoveDir().
 
 */
-const bool IStorageInterface::RemoveDir( const std::string &_sPath )
+bool IStorageInterface::RemoveDir( const std::string &_sPath )
 {
 #ifdef	WIN32
 	BOOL result = RemoveDirectoryA( _sPath.c_str() );
@@ -77,7 +77,7 @@ const bool IStorageInterface::RemoveDir( const std::string &_sPath )
 	CreateFullDirectory().
 
 */
-const bool IStorageInterface::CreateFullDirectory( const std::string &_sPath )
+bool IStorageInterface::CreateFullDirectory( const std::string &_sPath )
 {
 	//	Will be false once we're out of the "../../"'s, then we will actually create.
 	bool dotdot = true;
@@ -110,7 +110,7 @@ const bool IStorageInterface::CreateFullDirectory( const std::string &_sPath )
 	DirectoryEmpty().
 
 */
-const bool	IStorageInterface::DirectoryEmpty( const std::string &_sPath )
+bool	IStorageInterface::DirectoryEmpty( const std::string &_sPath )
 {
 	CDirectoryIterator	iterator( _sPath );
 
@@ -136,7 +136,7 @@ const bool	IStorageInterface::DirectoryEmpty( const std::string &_sPath )
 	RemoveFullDirectory().
 
 */
-const bool IStorageInterface::RemoveFullDirectory( const std::string &_sPath, const bool _bSubdirectories )
+bool IStorageInterface::RemoveFullDirectory( const std::string &_sPath, const bool _bSubdirectories )
 {
 	std::string	path = _sPath;
 
@@ -191,7 +191,7 @@ const bool IStorageInterface::RemoveFullDirectory( const std::string &_sPath, co
 	IoHierarchyHelper().
 
 */
-const bool IStorageInterface::IoHierarchyHelper( const std::string &_uniformPath, std::string &_retPath, std::string &_retName )
+bool IStorageInterface::IoHierarchyHelper( const std::string &_uniformPath, std::string &_retPath, std::string &_retName )
 {
 	std::string path = _uniformPath;
 

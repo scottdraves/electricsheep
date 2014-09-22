@@ -15,7 +15,7 @@ namespace	DisplayOutput
 	CImage().
 
 */
-CImage::CImage() : m_Width(0), m_Height(0), m_nMipMaps(0), m_Format( eImage_None ), m_bRef( false )
+CImage::CImage() :  m_Format( eImage_None ), m_Width(0), m_Height(0), m_nMipMaps(0), m_bRef( false )
 {
 }
 
@@ -113,7 +113,7 @@ uint8	*CImage::GetData( const uint32 _mipLevel ) const
 	SetData().
 
 */
-void	CImage::SetData( uint8	*_pData )
+void	CImage::SetData( uint8* /*_pData*/ )
 {
 	//if( !m_bRef /*|| m_nMipMaps > 1*/ )
 		//return;
@@ -134,7 +134,7 @@ uint32	CImage::GetPitch( const uint32 _level ) const
 
 /*
 */
-const uint32 CImage::getMipMappedSize( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels ) const
+uint32 CImage::getMipMappedSize( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels ) const
 {
 	return( getMipMappedSize( _firstMipMapLevel, _nMipMapLevels, m_Format ) );
 }
@@ -164,7 +164,7 @@ const uint32 CImage::getMipMappedSize( const uint32 _firstMipMapLevel, const uin
 	getMipMappedSize().
 
 */
-const uint32 CImage::getMipMappedSize( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels, const CImageFormat &_format ) const
+uint32 CImage::getMipMappedSize( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels, const CImageFormat &_format ) const
 {
 	uint32	w = GetWidth( _firstMipMapLevel ) << 1;
 	uint32	h = GetHeight( _firstMipMapLevel ) << 1;
@@ -198,7 +198,7 @@ const uint32 CImage::getMipMappedSize( const uint32 _firstMipMapLevel, const uin
 	getNumberOfMipMapsFromDimesions().
 
 */
-const uint32 CImage::getNumberOfMipMapsFromDimesions( void ) const
+uint32 CImage::getNumberOfMipMapsFromDimesions( void ) const
 {
 	uint32 m = (m_Width > m_Height)? m_Width : m_Height;
 	uint32 i = 0;
@@ -324,12 +324,9 @@ bool	CImage::Save( const std::string &_fileName )
 		return( false );
 	}
 
-	bool	foundExt = false;
-
 	//	DDS?
 	if( ext == "dds" )
 	{
-		foundExt = true;
 		if( !SaveDDS( _fileName ) )
 			return( false );
 	}
@@ -405,7 +402,7 @@ bool	CImage::SaveDDS( const std::string &_fileName )
 	DDSHeader header = {
 		MCHAR4('D','D','S',' '),
 		124,
-		DDSD_CAPS | DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | (m_nMipMaps > 1? DDSD_MIPMAPCOUNT : 0),
+		DDSD_CAPS | DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT | static_cast<unsigned int>(m_nMipMaps > 1? DDSD_MIPMAPCOUNT : 0),
 		m_Height,
 		m_Width,
 		0,
@@ -413,14 +410,14 @@ bool	CImage::SaveDDS( const std::string &_fileName )
 		(m_nMipMaps > 1)? m_nMipMaps : 0,
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		32,
-		m_Format.isCompressed() ? DDPF_FOURCC : ((nChannels < 3)? 0x00020000 : DDPF_RGB) | ((nChannels & 1)? 0 : DDPF_ALPHAPIXELS),
+		m_Format.isCompressed() ? DDPF_FOURCC : static_cast<unsigned int>((nChannels < 3)? 0x00020000 : DDPF_RGB) | static_cast<unsigned int>((nChannels & 1)? 0 : DDPF_ALPHAPIXELS),
 		m_Format.isCompressed() ? fourCC[ fmt - eImage_DXT1 ] : 0,
 		8 * nChannels,
-		(nChannels >= 3)? 0x00ff0000 : 0xFF,
-		(nChannels >= 3)? 0x0000ff00 : 0,
-		(nChannels >= 3)? 0x000000ff : 0,
+		static_cast<unsigned int>((nChannels >= 3)? 0x00ff0000 : 0xFF),
+		static_cast<unsigned int>((nChannels >= 3)? 0x0000ff00 : 0),
+		static_cast<unsigned int>((nChannels >= 3)? 0x000000ff : 0),
 		(nChannels >= 3)? 0xff000000 : (nChannels == 2)? 0xFF00 : 0,
-		DDSCAPS_TEXTURE | (m_nMipMaps > 1? DDSCAPS_MIPMAP | DDSCAPS_COMPLEX : 0),
+		DDSCAPS_TEXTURE | static_cast<unsigned int>(m_nMipMaps > 1? DDSCAPS_MIPMAP | DDSCAPS_COMPLEX : 0),
 		0,
 		{ 0, 0, 0 },
 	};
@@ -533,7 +530,7 @@ void	buildMipMapRGB565( uint16 *dest, uint16 *src, uint32 width, uint32 height )
 	createMipMaps().
 
 */
-const bool	CImage::createMipMaps( void )
+bool	CImage::createMipMaps( void )
 {
 	if( m_Format.isCompressed() )
 		return( false );
@@ -598,7 +595,7 @@ const bool	CImage::createMipMaps( void )
 
 /*
 */
-const uint32 CImage::getNumPixels( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels ) const
+uint32 CImage::getNumPixels( const uint32 _firstMipMapLevel, const uint32 _nMipMapLevels ) const
 {
 	uint32	w = GetWidth( _firstMipMapLevel ) << 1;
 	uint32	h = GetHeight( _firstMipMapLevel ) << 1;
@@ -621,7 +618,7 @@ const uint32 CImage::getNumPixels( const uint32 _firstMipMapLevel, const uint32 
 	Convert().
 
 */
-const bool	CImage::Convert( const eImageFormat _newFormatType )
+bool	CImage::Convert( const eImageFormat _newFormatType )
 {
 	if( _newFormatType == m_Format.m_Format )
 		return( false );
@@ -667,6 +664,8 @@ const bool	CImage::Convert( const eImageFormat _newFormatType )
 		do
 		{
 			fp4	rgba[4];
+            
+            rgba[0] = rgba[1] = rgba[2] = rgba[3] = 0.0f;
 
 			if( m_Format.isFloat() )
 			{
@@ -739,7 +738,7 @@ static int32 icerp( int32 _a, int32 _b, int32 _c, int32 _d, int32 _x )
 	Scale().
 
 */
-const bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const eScaleFilters _eFilter )
+bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const eScaleFilters _eFilter )
 {
 	if( !m_Format.isPlain() || m_Format.isFloat() )
 	{
@@ -754,6 +753,12 @@ const bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const
 
 		return( false );
 	}
+    
+    if ( _newHeight < 2 || _newWidth < 2 )
+    {
+        g_Log->Warning( "CImage::Scale(): No deal, new size too small." );
+        return ( false );
+    }
 
 	uint32 nChannels = m_Format.GetChannels();
 
@@ -802,11 +807,11 @@ const bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const
 
 					for( k=0; k<nChannels; k++ )
 					{
-						*dest++ = (	(256 - wX) * (256 - wY) * src[ 0 ] +
-									(256 - wX) * (      wY) * src[ m_Width * nChannels ] +
-									(      wX) * (256 - wY) * src[ nChannels ] +
-									(      wX) * (      wY) * src[ (m_Width + 1) * nChannels ] ) >> 16;
-									src++;
+						*dest++ = ((	(256 - wX) * (256 - wY) * static_cast<uint32>(src[ 0 ]) +
+									(256 - wX) * (      wY) * static_cast<uint32>(src[ m_Width * nChannels ]) +
+									(      wX) * (256 - wY) * static_cast<uint32>(src[ nChannels ]) +
+									(      wX) * (      wY) * static_cast<uint32>(src[ (m_Width + 1) * nChannels ]) ) >> 16) & 0xFF;
+                        src++;
 					}
 				}
 			}
@@ -831,19 +836,19 @@ const bool	CImage::Scale( const uint32 _newWidth, const uint32 _newHeight, const
 
 					for( k=0; k<nChannels; k++ )
 					{
-						b = icerp( src[ m_Width * nChannels], src[( m_Width + 1) * nChannels], src[(    m_Width + 2) * nChannels], src[(    m_Width + 3) * nChannels], wX);
+						b = icerp( src[ m_Width * nChannels], src[( m_Width + 1) * nChannels], src[(    m_Width + 2) * nChannels], src[(    m_Width + 3) * nChannels], wX) & 0xFF;
 						if( sampleY > 0 )
-							a = icerp(src[0], src[nChannels], src[2 * nChannels], src[3 * nChannels], wX);
+							a = icerp(src[0], src[nChannels], src[2 * nChannels], src[3 * nChannels], wX) & 0xFF;
 						else
 							a = b;
 
-						c = icerp(src[2 * m_Width * nChannels], src[(2 * m_Width + 1) * nChannels], src[(2 * m_Width + 2) * nChannels], src[(2 * m_Width + 3) * nChannels], wX);
+						c = icerp(src[2 * m_Width * nChannels], src[(2 * m_Width + 1) * nChannels], src[(2 * m_Width + 2) * nChannels], src[(2 * m_Width + 3) * nChannels], wX) & 0xFF;
 						if( sampleY < _newHeight - 1 )
-							d = icerp(src[3 * m_Width * nChannels], src[(3 * m_Width + 1) * nChannels], src[(3 * m_Width + 2) * nChannels], src[(3 * m_Width + 3) * nChannels], wX);
+							d = icerp(src[3 * m_Width * nChannels], src[(3 * m_Width + 1) * nChannels], src[(3 * m_Width + 2) * nChannels], src[(3 * m_Width + 3) * nChannels], wX) & 0xFF;
 						else
 							d = c;
 
-						res = icerp( a, b, c, d, wY );
+						res = icerp( a, b, c, d, wY ) & 0xFF;
 						*dest++ = (res < 0)? 0 : (res > 255)? 255 : res;
 						src++;
 					}
@@ -913,6 +918,8 @@ void	CImage::GetPixel( const int32 _x, const int32 _y, fp4 &_r, fp4 &_g, fp4 &_b
 	uint32	nSrcChannels = m_Format.GetChannels();
 	uint8	*pData = (GetData(0) + (_y * GetPitch())) + (_x * m_Format.getBPPixel() );
 	fp4		rgba[4];
+    
+    rgba[0] = rgba[1] = rgba[2] = rgba[3] = 0.0f;
 
 	if( m_Format.isFloat() )
 	{

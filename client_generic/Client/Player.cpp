@@ -315,7 +315,7 @@ bool CPlayer::AddDisplay( uint32 screen )
 
 /*
 */
-const bool	CPlayer::Startup()
+bool	CPlayer::Startup()
 {
 	m_DisplayFps = g_Settings()->Get( "settings.player.display_fps", 60. );
 	
@@ -381,7 +381,7 @@ ContentDecoder::CContentDecoder *CPlayer::CreateContentDecoder( bool _bStartByRa
 
 #endif
 
-	return new ContentDecoder::CContentDecoder( m_spPlaylist, _bStartByRandom, g_Settings()->Get( "settings.player.CalculateTransitions", true ), g_Settings()->Get( "settings.player.BufferLength", 25 ), pf );
+	return new ContentDecoder::CContentDecoder( m_spPlaylist, _bStartByRandom, g_Settings()->Get( "settings.player.CalculateTransitions", true ), (uint32)abs(g_Settings()->Get( "settings.player.BufferLength", 25 )), pf );
 }
 
 /*
@@ -452,7 +452,7 @@ void	CPlayer::Stop()
 
 /*
 */
-const bool	CPlayer::Shutdown( void )
+bool	CPlayer::Shutdown( void )
 {
 	g_Log->Info( "CPlayer::Shutdown()\n" );
 	

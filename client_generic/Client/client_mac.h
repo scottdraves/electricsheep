@@ -28,6 +28,8 @@
 
 #include "../MacBuild/ESScreensaver.h"
 
+#include "proximus.h"
+
 /*
 	CElectricSheep_Mac().
 	Mac specific client code.
@@ -42,9 +44,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 	Boolean m_proxyEnabled;
 	std::string m_verStr;
 	int m_lckFile;
-	
-	typedef Boolean (*get_proxy_for_serverT)( const UInt8 *server, UInt8 *host, const UInt32 host_len, UInt8* user, const UInt32 user_len, UInt8 *pass, const UInt32 pass_len );
-		
+			
 	public:
 			CElectricSheep_Mac() : CElectricSheep()
 			{
@@ -80,7 +80,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 					}
 				}
 				
-				CFBundleRef bundle = dlbundle_ex();
+				CFBundleRef bundle = CopyDLBundle_ex();
 				
 				if (bundle != NULL)
 				{
@@ -120,7 +120,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 			
 			CFStringRef GetBundleVersion()
 			{
-				CFBundleRef bundle = dlbundle_ex();
+				CFBundleRef bundle = CopyDLBundle_ex();
 				
 				if (bundle == NULL)
 					return NULL;
@@ -131,129 +131,10 @@ class	CElectricSheep_Mac : public CElectricSheep
 				
 				return (CFStringRef)verStr;
 			}
-			
-			static Boolean GetProxyForServer104( const UInt8 *server, UInt8 *host, const UInt32 host_len, UInt8* user, const UInt32 user_len, UInt8 *pass, const UInt32 pass_len )
-			{
-				Boolean             result;
-				CFDictionaryRef     proxyDict;
-				CFNumberRef         enableNum;
-				int                 enable;
-				CFStringRef         hostStr;
-				CFNumberRef         portNum;
 				
-				if (user && user_len > 0)
-					*user = 0;
-
-				if (pass && pass_len > 0)
-					*pass = 0;
-									
-				// Get the dictionary.
-				
-				proxyDict = SCDynamicStoreCopyProxies(NULL);
-				result = (proxyDict != NULL);
-
-				// Get the enable flag.  This isn't a CFBoolean, but a CFNumber.
-				
-				if (result) {
-					enableNum = (CFNumberRef) CFDictionaryGetValue(proxyDict,
-							kSCPropNetProxiesHTTPEnable);
-
-					result = (enableNum != NULL)
-							&& (CFGetTypeID(enableNum) == CFNumberGetTypeID());
-				}
-				if (result) {
-					result = CFNumberGetValue(enableNum, kCFNumberIntType,
-								&enable) && (enable != 0);
-				}
-				
-				// Get the proxy host.  DNS names must be in ASCII.  If you 
-				// put a non-ASCII character  in the "Secure Web Proxy"
-				// field in the Network preferences panel, the CFStringGetCString
-				// function will fail and this function will return false.
-				
-				if (result) {
-					hostStr = (CFStringRef) CFDictionaryGetValue(proxyDict,
-								kSCPropNetProxiesHTTPProxy);
-
-					result = (hostStr != NULL)
-						&& (CFGetTypeID(hostStr) == CFStringGetTypeID());
-				}
-				
-				// Get the proxy port.
-				
-				if (result) {
-					portNum = (CFNumberRef) CFDictionaryGetValue(proxyDict,
-							kSCPropNetProxiesHTTPPort);
-
-					result = (portNum != NULL)
-						&& (CFGetTypeID(portNum) == CFNumberGetTypeID());
-				}
-				if (result) {
-					CFStringRef fullHost = CFStringCreateWithFormat( NULL, NULL, CFSTR("http://%@:%@"), hostStr, portNum);
-					
-					if (fullHost != NULL)
-					{
-						result = CFStringGetCString(fullHost, (char*)host,
-							(CFIndex) host_len, kCFStringEncodingUTF8);
-							
-						CFRelease(fullHost);
-					}
-				}
-
-				// Clean up.
-				
-				if (proxyDict != NULL) {
-					CFRelease(proxyDict);
-				}
-				
-				if ( ! result ) {
-					*host = 0;
-				}
-				
-				return result;
-			}
-	
 			void GetClientProxy(void)
 			{
-				CFBundleRef proximusBundle = NULL;
-				get_proxy_for_serverT get_proxy_for_server = GetProxyForServer104;
-				
-				CFBundleRef bundle = dlbundle_ex();
-				
-				if (bundle != NULL)
-				{
-					CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(bundle);
-					
-					if (resourcesURL != NULL)
-					{
-						CFURLRef proximusURL = CFURLCreateCopyAppendingPathComponent( NULL, resourcesURL, CFSTR("proximus.bundle"), true );
-						
-						if (proximusURL != NULL)
-						{
-							proximusBundle = CFBundleCreate( NULL, proximusURL);
-							
-							if (proximusBundle != NULL)
-							{
-								void *func_ptr = CFBundleGetFunctionPointerForName( proximusBundle, CFSTR("get_proxy_for_server105") );
-
-								if (func_ptr)
-									get_proxy_for_server = (get_proxy_for_serverT)func_ptr;
-							}
-						
-							CFRelease(proximusURL);
-						}
-						
-						CFRelease(resourcesURL);
-					}
-					
-					CFRelease(bundle);
-				}
-				
-				if (get_proxy_for_server)
-					m_proxyEnabled = get_proxy_for_server( (const UInt8*)CLIENT_SERVER, m_proxyHost, sizeof(m_proxyHost) - 1, m_proxyUser, sizeof(m_proxyUser) - 1, m_proxyPass, sizeof(m_proxyPass) - 1 );
-					
-				if (proximusBundle != NULL)
-					CFRelease(proximusBundle);
+                m_proxyEnabled = get_proxy_for_server105( (const UInt8*)CLIENT_SERVER, m_proxyHost, sizeof(m_proxyHost) - 1, m_proxyUser, sizeof(m_proxyUser) - 1, m_proxyPass, sizeof(m_proxyPass) - 1 );
 			}
 			
 			void AddGLContext( CGLContextObj _glContext )
@@ -289,7 +170,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 			}	
 	
 			//
-			virtual const bool	Startup()
+			virtual bool	Startup()
 			{
 				using namespace DisplayOutput;
 
@@ -346,7 +227,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 
 
 			//
-			const bool Update()
+			bool Update()
 			{
 				using namespace DisplayOutput;
 				

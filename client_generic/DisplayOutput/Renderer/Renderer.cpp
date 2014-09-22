@@ -34,7 +34,7 @@ CRenderer::~CRenderer()
 
 /*
 */
-const bool	CRenderer::Initialize( spCDisplayOutput _spDisplay )
+bool	CRenderer::Initialize( spCDisplayOutput _spDisplay )
 {
     m_spDisplay = _spDisplay;
 
@@ -149,24 +149,22 @@ void	CRenderer::Apply()
 	for( uint32 i=0; i<MAX_TEXUNIT; i++ )
 	{
 		spCTexture	spTex = m_aspSelectedTextures[i];
-		spCTexture	spCurrTex = m_aspActiveTextures[i];
 #if 0
 #warning FIXME (Keffo#1#): hum, same pointer, different tex?
 #endif
 		if (spTex.IsNull())
 		{
-			if (!spCurrTex.IsNull())
+			if (!m_aspActiveTextures[i].IsNull())
 			{
-				spCurrTex->Unbind( i );
-				spCurrTex = NULL;
+				m_aspActiveTextures[i]->Unbind( i );
 				m_aspActiveTextures[i] = NULL;
 			}
 		}
 		else
-		if( spTex != spCurrTex )
+		if( spTex != m_aspActiveTextures[i] )
 		{
-			if( spCurrTex != NULL )
-				spCurrTex->Unbind( i );
+			if( m_aspActiveTextures[i] != NULL )
+				m_aspActiveTextures[i]->Unbind( i );
 
 			if( spTex != NULL )
 			{

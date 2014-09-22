@@ -25,7 +25,7 @@
 //		NSOpenGLPFAAlphaSize, (NSOpenGLPixelFormatAttribute)8,
         (NSOpenGLPixelFormatAttribute)nil
     };
-    return [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes] autorelease];
+    return [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
 }
 
 -(id) initWithFrame: (NSRect) frameRect

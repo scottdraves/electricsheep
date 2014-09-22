@@ -3,12 +3,13 @@
 #import "ESConfiguration.h"
 #import "Sparkle/Sparkle.h"
 
-@interface ESScreensaverView 
+@interface ESScreensaverView
 #ifdef SCREEN_SAVER
 : ScreenSaverView 
 #else
 : NSView 
 #endif
+<SUUpdaterDelegate>
 {
     // So what do you need to make an OpenGL screen saver? Just an NSOpenGLView (or subclass thereof)
     // So we'll put one in here.
@@ -43,7 +44,7 @@
 
 - (void)_beginThread;
 - (void)_endThread;
-- (void)_animationThread:(ESScreensaverView *)source;
+- (void)_animationThread;
 
 - (void)windowDidResize;
 

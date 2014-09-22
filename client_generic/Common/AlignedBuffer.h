@@ -67,24 +67,24 @@ class CReusableAlignedBuffers : public CSingleton<CReusableAlignedBuffers>
 		{
 			if ( s_PageSize == 0 )
 			{
-		#if WIN32
+		#if defined(WIN32) && WIN32
 				SYSTEM_INFO system_info;
 				GetSystemInfo (&system_info);
 				s_PageSize = (uint32)system_info.dwPageSize;
 		#else
-				s_PageSize = getpagesize();
+				s_PageSize = static_cast<uint32>(getpagesize());
 		#endif
 			}
 			
 			return s_PageSize; 
 		}
 		
-		const bool	Shutdown( void ) { return true; }
+		bool	Shutdown( void ) { return true; }
 		
 		const char *Description()	{	return "CReusableAlignedBuffers";	}
 		
 		//	Provides singleton access.
-		static CReusableAlignedBuffers *Instance( const char *_pFileStr, const uint32 _line, const char *_pFunc )
+		static CReusableAlignedBuffers *Instance( const char* /*_pFileStr*/, const uint32 /*_line*/, const char* /*_pFunc*/ )
 		{
 			static	CReusableAlignedBuffers	rab;
 

@@ -8,7 +8,7 @@
 
 #include	<boost/filesystem/path.hpp>
 #include	<boost/scoped_ptr.hpp>
-static const int gl_sMaxGeneration = 100000;
+static const uint32 gl_sMaxGeneration = 100000;
 #define max_sheep 100000
 #define max_play_count ((1<<16)-1)
 #define log_page_size 10
@@ -28,8 +28,10 @@ struct sPlayCountData
 class	CPlayCounter : public Base::CSingleton<CPlayCounter>
 {
 	friend class Base::CSingleton<CPlayCounter>;
+    
+    typedef std::map<uint32, sPlayCountData> PlayCountMap;
 
-	std::map<int, sPlayCountData> m_PlayCounts;
+	PlayCountMap m_PlayCounts;
 	path m_PlayCountFilePath;
 	bool m_ReadOnly;
 
@@ -41,13 +43,13 @@ class	CPlayCounter : public Base::CSingleton<CPlayCounter>
 
 	uint64	m_PlayCountTotal;
 
-	void InitPlayCounts(int generation)
+	void InitPlayCounts(uint32 generation)
 	{
 		if (generation >= gl_sMaxGeneration || generation == 0)
 			return;
 		m_PlayCountTotal = 0;
 
-		std::map<int, sPlayCountData>::iterator iter = m_PlayCounts.find(generation);
+		PlayCountMap::iterator iter = m_PlayCounts.find(generation);
 		if (iter == m_PlayCounts.end())
 		{
 			boost::scoped_ptr<sPlayCountData> pdata(new sPlayCountData);
@@ -169,7 +171,7 @@ public:
 
 	void ClosePlayCounts()
 	{
-		std::map<int, sPlayCountData>::iterator iter = m_PlayCounts.begin();
+		PlayCountMap::iterator iter = m_PlayCounts.begin();
 		while (iter != m_PlayCounts.end())
 		{
 			if (iter->second.PlayCountFile != NULL)
@@ -187,7 +189,7 @@ public:
 		m_PlayCounts.clear();
 	}
 
-	const bool Shutdown( void )
+	bool Shutdown( void )
 	{ 
 		ClosePlayCounts();
 
@@ -199,14 +201,14 @@ public:
 		m_PlayCountFilePath = dir;
 	}
 
-	void IncPlayCount( int generation, int id )
+	void IncPlayCount( uint32 generation, uint32 id )
 	{
 		if (id >= max_sheep || generation > gl_sMaxGeneration || generation == 0)
 			return;
-		if (m_PlayCountTotal > m_PlayCountDecayY && m_PlayCountDecayZ != 100)
+		if (m_PlayCountTotal > static_cast<uint64>(m_PlayCountDecayY) && m_PlayCountDecayZ != 100)
 		{
 			m_PlayCountTotal = 0;
-			for (std::map<int, sPlayCountData>::iterator jj = m_PlayCounts.begin(); jj != m_PlayCounts.end(); ++jj)
+			for (PlayCountMap::iterator jj = m_PlayCounts.begin(); jj != m_PlayCounts.end(); ++jj)
 			for (size_t ii = 0; ii < max_sheep; ++ii)
 			{
 				jj->second.PlayCounts[ii] = uint16(m_PlayCountDecayZ/100. * jj->second.PlayCounts[ii]);
@@ -214,7 +216,7 @@ public:
 			}
 		}
 
-		std::map<int, sPlayCountData>::iterator iter = m_PlayCounts.find(generation);
+		PlayCountMap::iterator iter = m_PlayCounts.find(generation);
 		if (iter == m_PlayCounts.end())
 			InitPlayCounts(generation);
 
@@ -223,11 +225,11 @@ public:
 		++m_PlayCountTotal;
 	}
 
-	uint16 PlayCount( int generation, int id )
+	uint16 PlayCount( uint32 generation, uint32 id )
 	{
 		if ( id < max_sheep  && generation != 0 && generation < gl_sMaxGeneration)
 		{
-			std::map<int, sPlayCountData>::iterator iter = m_PlayCounts.find(generation);
+			PlayCountMap::iterator iter = m_PlayCounts.find(generation);
 			if (iter == m_PlayCounts.end())
 				InitPlayCounts(generation);
 

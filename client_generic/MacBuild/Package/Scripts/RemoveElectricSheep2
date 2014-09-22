@@ -1,0 +1,19 @@
+#!/bin/sh
+
+DIR=`dirname $2`
+
+#remove obsolete ElectricSheep2.saver if found
+if [ -e "$DIR/ElectricSheep2.saver" ]; then
+
+	rm -rf "$DIR/ElectricSheep2.saver"
+
+fi
+
+#sets current screen saver the way 10.4 - 10.5 do
+
+sudo -u "$USER" defaults -currentHost write com.apple.screensaver moduleName "Electric Sheep"
+
+sudo -u "$USER" defaults -currentHost write com.apple.screensaver modulePath "$2"
+
+#sets current screen saver the way 10.6 does
+sudo -u "$USER" defaults -currentHost write com.apple.screensaver moduleDict -dict moduleName "Electric Sheep" path "$2" type 0

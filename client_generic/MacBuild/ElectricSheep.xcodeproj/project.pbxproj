@@ -108,8 +108,8 @@
 		2160FCA60F30F48200B2C27A /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABD0E8E69F700CE185C /* libboost_thread.a */; };
 		2160FCA90F30F48200B2C27A /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD10E8E6C0500CE185C /* libavformat.a */; };
 		2160FCAA0F30F48200B2C27A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2181FAEF0ECF42820078FDDA /* libswscale.a */; };
-		2160FCAB0F30F48200B2C27A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.dylib */; };
-		2160FCAC0F30F48200B2C27A /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.dylib */; };
+		2160FCAB0F30F48200B2C27A /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.1.2.5.dylib */; };
+		2160FCAC0F30F48200B2C27A /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.1.0.dylib */; };
 		2160FCAD0F30F48200B2C27A /* liblua5.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AF30E8E715E00CE185C /* liblua5.1.a */; };
 		2160FCAF0F30F48200B2C27A /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2135D2670EC70571005E246D /* AppKit.framework */; };
 		2160FE7C0F30F8A000B2C27A /* electricsheep-frown.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2160FE190F30F82800B2C27A /* electricsheep-frown.png */; };
@@ -148,10 +148,9 @@
 		2160FF000F30FA5400B2C27A /* English.lua in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2160FE330F30F82800B2C27A /* English.lua */; };
 		2160FF030F30FA5400B2C27A /* Portuguese.lua in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2160FE360F30F82800B2C27A /* Portuguese.lua */; };
 		2160FF040F30FA5400B2C27A /* Svenska.lua in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2160FE370F30F82800B2C27A /* Svenska.lua */; };
-		2161F1940ECF8CEF00FE48E9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.dylib */; };
+		2161F1940ECF8CEF00FE48E9 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.1.2.5.dylib */; };
 		2169AE7F11397EF700689B02 /* isaac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2169AE7E11397EF700689B02 /* isaac.cpp */; };
 		2169AE8011397EF700689B02 /* isaac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2169AE7E11397EF700689B02 /* isaac.cpp */; };
-		217A3AA5180986C20006B74A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2188A6D117EB95F60078C91C /* Carbon.framework */; };
 		2181FAF00ECF42820078FDDA /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2181FAEF0ECF42820078FDDA /* libswscale.a */; };
 		2187F3860F463AA20004F8F9 /* TrebuchetMS-24.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */; };
 		2187F3870F463AB50004F8F9 /* TrebuchetMS-24.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */; };
@@ -197,15 +196,21 @@
 		21887A1B0EC6CDF9001ABD2E /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABB0E8E69F700CE185C /* libboost_system.a */; };
 		21887A1D0EC6CDF9001ABD2E /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ABD0E8E69F700CE185C /* libboost_thread.a */; };
 		21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD10E8E6C0500CE185C /* libavformat.a */; };
-		21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.dylib */; };
+		21887A240EC6CDF9001ABD2E /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.1.0.dylib */; };
 		21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AF30E8E715E00CE185C /* liblua5.1.a */; };
 		2188A6D017EB94F30078C91C /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2188A6CF17EB94F30078C91C /* ApplicationServices.framework */; };
-		2188A6D217EB95F60078C91C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2188A6D117EB95F60078C91C /* Carbon.framework */; };
+		2197D55F19B06ED300EFA1F2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D55E19B06ED300EFA1F2 /* CoreVideo.framework */; };
+		2197D56019B06ED300EFA1F2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D55E19B06ED300EFA1F2 /* CoreVideo.framework */; };
+		2197D56219B06F4600EFA1F2 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D56119B06F4600EFA1F2 /* VideoDecodeAcceleration.framework */; };
+		2197D56319B06F4600EFA1F2 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D56119B06F4600EFA1F2 /* VideoDecodeAcceleration.framework */; };
+		2197D56519B06FC300EFA1F2 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D56419B06FC300EFA1F2 /* libswresample.a */; };
+		2197D56619B06FC300EFA1F2 /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D56419B06FC300EFA1F2 /* libswresample.a */; };
+		2197D56719B07FCF00EFA1F2 /* proximus.c in Sources */ = {isa = PBXBuildFile; fileRef = 21CE8B8E0F6ECFFC00DDF96A /* proximus.c */; };
+		2197D56819B0806F00EFA1F2 /* proximus.c in Sources */ = {isa = PBXBuildFile; fileRef = 21CE8B8E0F6ECFFC00DDF96A /* proximus.c */; };
 		2199D0A80F574AC8007CEB9C /* SheepGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */; };
 		2199D0A90F574AC8007CEB9C /* SheepGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */; };
 		2199D0DC0F575949007CEB9C /* SheepUploader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0DB0F575949007CEB9C /* SheepUploader.cpp */; };
 		2199D0DD0F575949007CEB9C /* SheepUploader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2199D0DB0F575949007CEB9C /* SheepUploader.cpp */; };
-		219AB85611F3336F00A01A7B /* proximus.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21CE8B860F6ECFBA00DDF96A /* proximus.bundle */; };
 		21A8AFBB18416ECA00F77369 /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */; };
 		21A8AFBC18416ECA00F77369 /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */; };
 		21AAA0BD0F7040B500AC23A8 /* ElectricSheep.nib in Resources */ = {isa = PBXBuildFile; fileRef = 21AAA09E0F70400D00AC23A8 /* ElectricSheep.nib */; };
@@ -218,14 +223,10 @@
 		21ADBB291305D380000A9F20 /* yellow.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21ADBB231305D380000A9F20 /* yellow.tif */; };
 		21C5D0940F9CF6D9001657E7 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 21C5D0930F9CF6D9001657E7 /* md5.c */; };
 		21C5D0950F9CF6D9001657E7 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 21C5D0930F9CF6D9001657E7 /* md5.c */; };
-		21CE8B8F0F6ECFFC00DDF96A /* proximus.c in Sources */ = {isa = PBXBuildFile; fileRef = 21CE8B8E0F6ECFFC00DDF96A /* proximus.c */; };
-		21CE8B960F6ED0F200DDF96A /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CE8B950F6ED0F200DDF96A /* CoreServices.framework */; };
-		21CE8B9E0F6ED14B00DDF96A /* proximus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 21CE8B860F6ECFBA00DDF96A /* proximus.bundle */; };
-		21CE8E3C0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */; };
 		21CE8E3D0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */; };
 		21CE8E3E0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */; };
-		21DC0CA91263B98200D60C6A /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */; };
-		21DC0CAC1263B99000D60C6A /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */; };
+		21DC0CA91263B98200D60C6A /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.4.dylib */; };
+		21DC0CAC1263B99000D60C6A /* libcurl.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 211CDDEB0ED0BE8300EB9394 /* libcurl.4.dylib */; };
 		21DE7CD91019020600E77D68 /* Instructions.rtf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21DE7CA6101901E900E77D68 /* Instructions.rtf */; };
 		21E6A55410B5F97E00DAF0FF /* electricsheep-attr.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */; };
 		21E6A56110B5F9A000DAF0FF /* electricsheep-attr.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */; };
@@ -263,20 +264,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2160FAAC0F30F43600B2C27A;
 			remoteInfo = ElectricSheepTestApp;
-		};
-		21CE8B9B0F6ED13900DDF96A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 21CE8B850F6ECFBA00DDF96A;
-			remoteInfo = proximus;
-		};
-		21CEA8E40F6F0E6500DDF96A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 21CE8B850F6ECFBA00DDF96A;
-			remoteInfo = proximus;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -368,7 +355,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				219AB85611F3336F00A01A7B /* proximus.bundle in CopyFiles */,
 				21E6A55410B5F97E00DAF0FF /* electricsheep-attr.png in CopyFiles */,
 				21598F920F571ECF00DDDFA6 /* flam3-animate in CopyFiles */,
 				2118A3C40F51BEE800BA0582 /* ElectricSheep.icns in CopyFiles */,
@@ -425,7 +411,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		21006FBD1017BC2C004A6511 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = SOURCE_ROOT; };
 		21008B760EB7D69900E64796 /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Console.h; path = ../Client/Console.h; sourceTree = SOURCE_ROOT; };
 		2100C5A9162B53DD00D42796 /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = SOURCE_ROOT; };
@@ -435,7 +421,7 @@
 		211CDDD60ED0BD9200EB9394 /* Download.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Download.cpp; sourceTree = "<group>"; };
 		211CDDD80ED0BD9200EB9394 /* Networking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Networking.cpp; sourceTree = "<group>"; };
 		211CDDDA0ED0BD9200EB9394 /* Upload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Upload.cpp; sourceTree = "<group>"; };
-		211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = /usr/lib/libcurl.dylib; sourceTree = "<absolute>"; };
+		211CDDEB0ED0BE8300EB9394 /* libcurl.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.4.dylib; path = usr/lib/libcurl.4.dylib; sourceTree = SDKROOT; };
 		212313190F503C4500702B2C /* ContentDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContentDownloader.cpp; sourceTree = "<group>"; };
 		2123131A0F503C4500702B2C /* ContentDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentDownloader.h; sourceTree = "<group>"; };
 		2123131B0F503C4500702B2C /* Sheep.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sheep.cpp; sourceTree = "<group>"; };
@@ -455,8 +441,8 @@
 		212B195F0E8E5CCE00CE185C /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../Client/main.cpp; sourceTree = SOURCE_ROOT; };
 		212B19600E8E5CCE00CE185C /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Player.cpp; path = ../Client/Player.cpp; sourceTree = SOURCE_ROOT; };
 		212B19610E8E5CCE00CE185C /* Voting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Voting.cpp; path = ../Client/Voting.cpp; sourceTree = SOURCE_ROOT; };
-		212B196C0E8E5D0800CE185C /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
-		212B19850E8E5E9200CE185C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		212B196C0E8E5D0800CE185C /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		212B19850E8E5E9200CE185C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		212B19E10E8E631800CE185C /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinystr.cpp; path = ../tinyXml/tinystr.cpp; sourceTree = SOURCE_ROOT; };
 		212B19E20E8E631800CE185C /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml.cpp; path = ../tinyXml/tinyxml.cpp; sourceTree = SOURCE_ROOT; };
 		212B19E30E8E631800CE185C /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlerror.cpp; path = ../tinyXml/tinyxmlerror.cpp; sourceTree = SOURCE_ROOT; };
@@ -484,20 +470,20 @@
 		212B1ABB0E8E69F700CE185C /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../boost/osx/lib/libboost_system.a; sourceTree = SOURCE_ROOT; };
 		212B1ABD0E8E69F700CE185C /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = ../boost/osx/lib/libboost_thread.a; sourceTree = SOURCE_ROOT; };
 		212B1AD10E8E6C0500CE185C /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../ffmpeg/osx/lib/libavformat.a; sourceTree = SOURCE_ROOT; };
-		212B1AD90E8E6E0100CE185C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		212B1ADD0E8E6E5000CE185C /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = /usr/lib/libbz2.dylib; sourceTree = "<absolute>"; };
+		212B1AD90E8E6E0100CE185C /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		212B1ADD0E8E6E5000CE185C /* libbz2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.1.0.dylib; path = usr/lib/libbz2.1.0.dylib; sourceTree = SDKROOT; };
 		212B1AF30E8E715E00CE185C /* liblua5.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua5.1.a; path = ../lua5.1/osx/lib/liblua5.1.a; sourceTree = SOURCE_ROOT; };
 		212B1B590E8E755A00CE185C /* mgl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgl.cpp; path = ../DisplayOutput/OpenGL/mgl.cpp; sourceTree = SOURCE_ROOT; };
 		212CAF831141CA3F009DA85A /* TrebuchetMS-20.glf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TrebuchetMS-20.glf"; sourceTree = "<group>"; };
 		2135D2200EC70153005E246D /* ESOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESOpenGLView.m; path = ../DisplayOutput/OpenGL/ESOpenGLView.m; sourceTree = SOURCE_ROOT; };
-		2135D2670EC70571005E246D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		2135D2670EC70571005E246D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		2135DA520EC7479A005E246D /* ESScreensaverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESScreensaverView.m; sourceTree = "<group>"; };
 		2135DA540EC74853005E246D /* ESScreensaver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ESScreensaver.cpp; sourceTree = "<group>"; };
-		2135DB240EC75133005E246D /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = /System/Library/Frameworks/ScreenSaver.framework; sourceTree = "<absolute>"; };
+		2135DB240EC75133005E246D /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
 		213D529B11F79B0000CF500D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		214B75060EBBA78900B5B897 /* Rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rect.cpp; path = ../Common/Math/Rect.cpp; sourceTree = SOURCE_ROOT; };
 		214CC3660F34E5CF0083617B /* FontGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FontGL.cpp; path = ../DisplayOutput/OpenGL/FontGL.cpp; sourceTree = SOURCE_ROOT; };
-		2155422F1261FDC900AB51BF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
+		2155422F1261FDC900AB51BF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = SOURCE_ROOT; };
 		215545A812620D3000AB51BF /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		21598F860F571EB000DDDFA6 /* flam3-animate */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "flam3-animate"; sourceTree = "<group>"; };
 		2160FAAD0F30F43600B2C27A /* Electric Sheep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Electric Sheep.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -525,11 +511,16 @@
 		2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TrebuchetMS-24.glf"; sourceTree = "<group>"; };
 		218878D00EC6CD7E001ABD2E /* Electric Sheep.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Electric Sheep.saver"; sourceTree = BUILT_PRODUCTS_DIR; };
 		218878D10EC6CD7E001ABD2E /* ScreenSaver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ScreenSaver-Info.plist"; sourceTree = "<group>"; };
-		2188A6CF17EB94F30078C91C /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = ../../../../System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<group>"; };
-		2188A6D117EB95F60078C91C /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
+		2188A6CF17EB94F30078C91C /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		2191E23719B5111700F5B82D /* FrameDisplay.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FrameDisplay.h; path = ../Client/FrameDisplay.h; sourceTree = "<group>"; };
+		2191E23819B5111700F5B82D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StartupScreen.h; path = ../Client/StartupScreen.h; sourceTree = "<group>"; };
+		2191E23919B5113E00F5B82D /* SmartPtr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; name = SmartPtr.h; path = ../Common/SmartPtr.h; sourceTree = "<group>"; };
+		2197D55E19B06ED300EFA1F2 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		2197D56119B06F4600EFA1F2 /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoDecodeAcceleration.framework; path = System/Library/Frameworks/VideoDecodeAcceleration.framework; sourceTree = SDKROOT; };
+		2197D56419B06FC300EFA1F2 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = ../ffmpeg/osx/lib/libswresample.a; sourceTree = SOURCE_ROOT; };
 		2199D0A70F574AC8007CEB9C /* SheepGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SheepGenerator.cpp; sourceTree = "<group>"; };
 		2199D0DB0F575949007CEB9C /* SheepUploader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SheepUploader.cpp; sourceTree = "<group>"; };
-		21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = ../../../../usr/lib/libiconv.2.dylib; sourceTree = "<group>"; };
+		21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.dylib; path = usr/lib/libiconv.2.dylib; sourceTree = SDKROOT; };
 		21AAA0ED0F70453200AC23A8 /* ESConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESConfiguration.h; sourceTree = "<group>"; };
 		21AAA0EE0F70453200AC23A8 /* ESConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESConfiguration.m; sourceTree = "<group>"; };
 		21ADBB211305D380000A9F20 /* green.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = green.tif; sourceTree = SOURCE_ROOT; };
@@ -537,12 +528,10 @@
 		21ADBB231305D380000A9F20 /* yellow.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = yellow.tif; sourceTree = SOURCE_ROOT; };
 		21C5D0920F9CF6D9001657E7 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = md5.h; path = ../Common/md5.h; sourceTree = SOURCE_ROOT; };
 		21C5D0930F9CF6D9001657E7 /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = md5.c; path = ../Common/md5.c; sourceTree = SOURCE_ROOT; };
-		21CE8B860F6ECFBA00DDF96A /* proximus.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = proximus.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		21CE8B870F6ECFBA00DDF96A /* proximus-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "proximus-Info.plist"; sourceTree = "<group>"; };
 		21CE8B8D0F6ECFFC00DDF96A /* proximus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proximus.h; sourceTree = "<group>"; };
 		21CE8B8E0F6ECFFC00DDF96A /* proximus.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = proximus.c; sourceTree = "<group>"; };
-		21CE8B950F6ED0F200DDF96A /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
-		21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
+		21CE8B950F6ED0F200DDF96A /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		21D90D010EA1D52000F8E5D5 /* Hud.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Hud.cpp; path = ../Client/Hud.cpp; sourceTree = SOURCE_ROOT; };
 		21D944A90E8F6245001C141E /* client_mac.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = client_mac.h; path = ../Client/client_mac.h; sourceTree = SOURCE_ROOT; };
 		21DD8C6F0EA9BA5F00BB9EC7 /* Splash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Splash.h; path = ../Client/Splash.h; sourceTree = SOURCE_ROOT; };
@@ -566,18 +555,20 @@
 				2160FC9F0F30F48200B2C27A /* OpenGL.framework in Frameworks */,
 				2160FCA00F30F48200B2C27A /* libpng.a in Frameworks */,
 				2160FCA10F30F48200B2C27A /* libavcodec.a in Frameworks */,
+				2197D56319B06F4600EFA1F2 /* VideoDecodeAcceleration.framework in Frameworks */,
 				2160FCA20F30F48200B2C27A /* libavdevice.a in Frameworks */,
+				2197D56019B06ED300EFA1F2 /* CoreVideo.framework in Frameworks */,
 				2160FCA30F30F48200B2C27A /* libavutil.a in Frameworks */,
 				21A8AFBC18416ECA00F77369 /* libiconv.2.dylib in Frameworks */,
+				2197D56619B06FC300EFA1F2 /* libswresample.a in Frameworks */,
 				2160FCA50F30F48200B2C27A /* libboost_system.a in Frameworks */,
 				2160FCA60F30F48200B2C27A /* libboost_thread.a in Frameworks */,
 				2160FCA90F30F48200B2C27A /* libavformat.a in Frameworks */,
 				2160FCAA0F30F48200B2C27A /* libswscale.a in Frameworks */,
-				2160FCAB0F30F48200B2C27A /* libz.dylib in Frameworks */,
-				2160FCAC0F30F48200B2C27A /* libbz2.dylib in Frameworks */,
-				217A3AA5180986C20006B74A /* Carbon.framework in Frameworks */,
+				2160FCAB0F30F48200B2C27A /* libz.1.2.5.dylib in Frameworks */,
+				2160FCAC0F30F48200B2C27A /* libbz2.1.0.dylib in Frameworks */,
 				2160FCAD0F30F48200B2C27A /* liblua5.1.a in Frameworks */,
-				21DC0CA91263B98200D60C6A /* libcurl.dylib in Frameworks */,
+				21DC0CA91263B98200D60C6A /* libcurl.4.dylib in Frameworks */,
 				2160FCAF0F30F48200B2C27A /* AppKit.framework in Frameworks */,
 				212316970F50636700702B2C /* libboost_filesystem.a in Frameworks */,
 				21CE8E3E0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
@@ -590,6 +581,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				213D535111F79C8D00CF500D /* IOKit.framework in Frameworks */,
+				2197D56519B06FC300EFA1F2 /* libswresample.a in Frameworks */,
 				2188A6D017EB94F30078C91C /* ApplicationServices.framework in Frameworks */,
 				2135DB250EC75133005E246D /* ScreenSaver.framework in Frameworks */,
 				21887A130EC6CDF9001ABD2E /* CoreFoundation.framework in Frameworks */,
@@ -598,30 +590,22 @@
 				21887A160EC6CDF9001ABD2E /* libpng.a in Frameworks */,
 				21887A170EC6CDF9001ABD2E /* libavcodec.a in Frameworks */,
 				21887A180EC6CDF9001ABD2E /* libavdevice.a in Frameworks */,
+				2197D55F19B06ED300EFA1F2 /* CoreVideo.framework in Frameworks */,
 				21887A190EC6CDF9001ABD2E /* libavutil.a in Frameworks */,
 				21887A1B0EC6CDF9001ABD2E /* libboost_system.a in Frameworks */,
-				2188A6D217EB95F60078C91C /* Carbon.framework in Frameworks */,
 				21887A1D0EC6CDF9001ABD2E /* libboost_thread.a in Frameworks */,
 				21887A210EC6CDF9001ABD2E /* libavformat.a in Frameworks */,
-				2161F1940ECF8CEF00FE48E9 /* libz.dylib in Frameworks */,
-				21887A240EC6CDF9001ABD2E /* libbz2.dylib in Frameworks */,
+				2161F1940ECF8CEF00FE48E9 /* libz.1.2.5.dylib in Frameworks */,
+				21887A240EC6CDF9001ABD2E /* libbz2.1.0.dylib in Frameworks */,
 				21A8AFBB18416ECA00F77369 /* libiconv.2.dylib in Frameworks */,
 				21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */,
-				21DC0CAC1263B99000D60C6A /* libcurl.dylib in Frameworks */,
+				21DC0CAC1263B99000D60C6A /* libcurl.4.dylib in Frameworks */,
 				2135D2690EC70571005E246D /* AppKit.framework in Frameworks */,
 				2181FAF00ECF42820078FDDA /* libswscale.a in Frameworks */,
+				2197D56219B06F4600EFA1F2 /* VideoDecodeAcceleration.framework in Frameworks */,
 				212316960F50636700702B2C /* libboost_filesystem.a in Frameworks */,
 				21CE8E3D0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
 				215542311261FDC900AB51BF /* Sparkle.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		21CE8B840F6ECFBA00DDF96A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				21CE8B960F6ED0F200DDF96A /* CoreServices.framework in Frameworks */,
-				21CE8E3C0F6EE12B00DDF96A /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -659,19 +643,21 @@
 		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2197D56119B06F4600EFA1F2 /* VideoDecodeAcceleration.framework */,
+				2197D55E19B06ED300EFA1F2 /* CoreVideo.framework */,
 				21A8AFBA18416ECA00F77369 /* libiconv.2.dylib */,
-				2188A6D117EB95F60078C91C /* Carbon.framework */,
 				2188A6CF17EB94F30078C91C /* ApplicationServices.framework */,
 				2155422F1261FDC900AB51BF /* Sparkle.framework */,
 				21CE8E3B0F6EE12B00DDF96A /* SystemConfiguration.framework */,
 				21CE8B950F6ED0F200DDF96A /* CoreServices.framework */,
-				211CDDEB0ED0BE8300EB9394 /* libcurl.dylib */,
+				211CDDEB0ED0BE8300EB9394 /* libcurl.4.dylib */,
 				2181FAEF0ECF42820078FDDA /* libswscale.a */,
+				2197D56419B06FC300EFA1F2 /* libswresample.a */,
 				2135DB240EC75133005E246D /* ScreenSaver.framework */,
 				2135D2670EC70571005E246D /* AppKit.framework */,
 				212B1AF30E8E715E00CE185C /* liblua5.1.a */,
-				212B1ADD0E8E6E5000CE185C /* libbz2.dylib */,
-				212B1AD90E8E6E0100CE185C /* libz.dylib */,
+				212B1ADD0E8E6E5000CE185C /* libbz2.1.0.dylib */,
+				212B1AD90E8E6E0100CE185C /* libz.1.2.5.dylib */,
 				212B1AD10E8E6C0500CE185C /* libavformat.a */,
 				212316950F50636700702B2C /* libboost_filesystem.a */,
 				212B1ABB0E8E69F700CE185C /* libboost_system.a */,
@@ -693,7 +679,6 @@
 			children = (
 				218878D00EC6CD7E001ABD2E /* Electric Sheep.saver */,
 				2160FAAD0F30F43600B2C27A /* Electric Sheep.app */,
-				21CE8B860F6ECFBA00DDF96A /* proximus.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -730,7 +715,6 @@
 		21293B890F71751E00406DD4 /* proximus */ = {
 			isa = PBXGroup;
 			children = (
-				21CE8B870F6ECFBA00DDF96A /* proximus-Info.plist */,
 				21CE8B8D0F6ECFFC00DDF96A /* proximus.h */,
 				21CE8B8E0F6ECFFC00DDF96A /* proximus.c */,
 			);
@@ -740,6 +724,7 @@
 		212B19380E8E591F00CE185C /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				2191E23919B5113E00F5B82D /* SmartPtr.h */,
 				2169AE7E11397EF700689B02 /* isaac.cpp */,
 				214B75030EBBA76700B5B897 /* Math */,
 				210335030F549BEF00A83F17 /* AlignedBuffer.cpp */,
@@ -768,6 +753,8 @@
 				21C5D0920F9CF6D9001657E7 /* md5.h */,
 				21C5D0930F9CF6D9001657E7 /* md5.c */,
 				21AAA0ED0F70453200AC23A8 /* ESConfiguration.h */,
+				2191E23719B5111700F5B82D /* FrameDisplay.h */,
+				2191E23819B5111700F5B82D /* StartupScreen.h */,
 				21AAA0EE0F70453200AC23A8 /* ESConfiguration.m */,
 				2135DA540EC74853005E246D /* ESScreensaver.cpp */,
 				2135DA520EC7479A005E246D /* ESScreensaverView.m */,
@@ -858,9 +845,9 @@
 				2100C5A9162B53DD00D42796 /* thumbnail.png */,
 				2100C5AA162B53DD00D42796 /* thumbnail@2x.png */,
 				21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */,
-				21DE7CA6101901E900E77D68 /* Instructions.rtf */,
 				21006FBD1017BC2C004A6511 /* Credits.html */,
 				21598F860F571EB000DDDFA6 /* flam3-animate */,
+				21DE7CA6101901E900E77D68 /* Instructions.rtf */,
 				2118A3B30F51BED100BA0582 /* ElectricSheep.icns */,
 				212CAF831141CA3F009DA85A /* TrebuchetMS-20.glf */,
 				2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */,
@@ -941,11 +928,11 @@
 				2160FEE50F30F9A800B2C27A /* CopyFiles */,
 				2160FEE60F30F9A800B2C27A /* CopyFiles */,
 				2155439B1262042D00AB51BF /* CopyFiles */,
+				2197D55B19B05C4300EFA1F2 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				21CE8B9C0F6ED13900DDF96A /* PBXTargetDependency */,
 			);
 			name = ElectricSheepTestApp;
 			productName = ElectricSheep;
@@ -965,33 +952,16 @@
 				2160FF3F0F30FA6100B2C27A /* CopyFiles */,
 				2160FF400F30FA6100B2C27A /* CopyFiles */,
 				215542511261FE2100AB51BF /* CopyFiles */,
+				2197D55A19B05BFE00EFA1F2 /* Run Script */,
 			);
 			buildRules = (
 				2135DA930EC74C6B005E246D /* PBXBuildRule */,
 			);
 			dependencies = (
-				21CEA8E50F6F0E6500DDF96A /* PBXTargetDependency */,
 			);
 			name = ScreenSaver;
 			productName = ScreenSaver;
 			productReference = 218878D00EC6CD7E001ABD2E /* Electric Sheep.saver */;
-			productType = "com.apple.product-type.bundle";
-		};
-		21CE8B850F6ECFBA00DDF96A /* proximus */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 21CE8B8A0F6ECFBD00DDF96A /* Build configuration list for PBXNativeTarget "proximus" */;
-			buildPhases = (
-				21CE8B820F6ECFBA00DDF96A /* Resources */,
-				21CE8B830F6ECFBA00DDF96A /* Sources */,
-				21CE8B840F6ECFBA00DDF96A /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = proximus;
-			productName = proximus;
-			productReference = 21CE8B860F6ECFBA00DDF96A /* proximus.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -1018,7 +988,6 @@
 			targets = (
 				218878CF0EC6CD7E001ABD2E /* ScreenSaver */,
 				2160FAAC0F30F43600B2C27A /* ElectricSheepTestApp */,
-				21CE8B850F6ECFBA00DDF96A /* proximus */,
 				21A36C27101FA2840086E7C8 /* All */,
 			);
 		};
@@ -1039,18 +1008,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		21CE8B820F6ECFBA00DDF96A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		21EE636610139D86000CE53E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21CE8B9E0F6ED14B00DDF96A /* proximus.bundle in Resources */,
 				21EE636210139D68000CE53E /* MainMenu.xib in Resources */,
 				21EE636310139D68000CE53E /* ElectricSheep.nib in Resources */,
 				215545A912620D3000AB51BF /* dsa_pub.pem in Resources */,
@@ -1063,6 +1024,33 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2197D55A19B05BFE00EFA1F2 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "LOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${FRAMEWORKS_FOLDER_PATH}\"\nIDENTITY=\"Developer ID Application: Scott Draves\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/Sparkle.framework/Versions/A\"\n";
+		};
+		2197D55B19B05C4300EFA1F2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "LOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${FRAMEWORKS_FOLDER_PATH}\"\nIDENTITY=\"Developer ID Application: Scott Draves\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/Sparkle.framework/Versions/A\"\n";
+		};
 		21F05A7B0ED213240064EDD0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1083,6 +1071,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2197D56719B07FCF00EFA1F2 /* proximus.c in Sources */,
 				2160FAB30F30F45100B2C27A /* Common.cpp in Sources */,
 				2160FAB40F30F45100B2C27A /* Exception.cpp in Sources */,
 				2160FAB50F30F45100B2C27A /* Log.cpp in Sources */,
@@ -1141,6 +1130,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2197D56819B0806F00EFA1F2 /* proximus.c in Sources */,
 				218878D50EC6CDE2001ABD2E /* Common.cpp in Sources */,
 				218878D60EC6CDE2001ABD2E /* Exception.cpp in Sources */,
 				218878D70EC6CDE2001ABD2E /* Log.cpp in Sources */,
@@ -1193,14 +1183,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		21CE8B830F6ECFBA00DDF96A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				21CE8B8F0F6ECFFC00DDF96A /* proximus.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1213,16 +1195,6 @@
 			isa = PBXTargetDependency;
 			target = 2160FAAC0F30F43600B2C27A /* ElectricSheepTestApp */;
 			targetProxy = 21A36C2C101FA2970086E7C8 /* PBXContainerItemProxy */;
-		};
-		21CE8B9C0F6ED13900DDF96A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 21CE8B850F6ECFBA00DDF96A /* proximus */;
-			targetProxy = 21CE8B9B0F6ED13900DDF96A /* PBXContainerItemProxy */;
-		};
-		21CEA8E50F6F0E6500DDF96A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 21CE8B850F6ECFBA00DDF96A /* proximus */;
-			targetProxy = 21CEA8E40F6F0E6500DDF96A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1250,14 +1222,17 @@
 		1DEB924C08733DCA0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					x86_64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CONFIGURATION_BUILD_DIR = build/Debug;
 				FRAMEWORK_SEARCH_PATHS = Frameworks;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = MAC;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MAC,
+					NDEBUG,
+					NS_BLOCK_ASSERTIONS,
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1277,8 +1252,6 @@
 					../DisplayOutput/OpenGL,
 					../DisplayOutput/Renderer,
 					../ffmpeg/osx/include,
-					"/usr/local/include/boost-1_36",
-					/usr/local/include,
 					../Networking,
 					../libpng/include,
 					../boost/include,
@@ -1289,21 +1262,37 @@
 					"\"$(SRCROOT)/../libpng/osx/lib\"",
 					"\"$(SRCROOT)/../ffmpeg/osx/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wconversion",
+					"-Wempty-body",
+					"-Wextra",
+					"-Wfloat-equal",
+					"-Wimplicit-retain-self",
+					"-Wnewline-eof",
+					"-Wshadow",
+					"-Wsign-compare",
+					"-Wundef",
+				);
 			};
 			name = Debug;
 		};
 		1DEB924D08733DCA0010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					x86_64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CONFIGURATION_BUILD_DIR = build/Release;
 				FRAMEWORK_SEARCH_PATHS = Frameworks;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_PREPROCESSOR_DEFINITIONS = MAC;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MAC,
+					NDEBUG,
+					NS_BLOCK_ASSERTIONS,
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1323,8 +1312,6 @@
 					../DisplayOutput/OpenGL,
 					../DisplayOutput/Renderer,
 					../ffmpeg/osx/include,
-					"/usr/local/include/boost-1_36",
-					/usr/local/include,
 					../Networking,
 					../libpng/include,
 					../boost/include,
@@ -1335,7 +1322,20 @@
 					"\"$(SRCROOT)/../libpng/osx/lib\"",
 					"\"$(SRCROOT)/../ffmpeg/osx/lib\"",
 				);
-				SDKROOT = macosx10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wconversion",
+					"-Wempty-body",
+					"-Wextra",
+					"-Wfloat-equal",
+					"-Wimplicit-retain-self",
+					"-Wnewline-eof",
+					"-Wshadow",
+					"-Wsign-compare",
+					"-Wundef",
+				);
 			};
 			name = Release;
 		};
@@ -1343,16 +1343,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = NO;
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					MAC,
 					DEBUG,
@@ -1371,8 +1377,10 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_NAME = "Electric Sheep";
 				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = NO;
 				VALID_ARCHS = "i386 ppc x86_64";
 			};
 			name = Debug;
@@ -1381,11 +1389,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_ENABLE_BUILTIN_FUNCTIONS = NO;
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -1393,25 +1407,16 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					MAC,
 					"BOOST_FILESYSTEM_VERSION=3",
+					NDEBUG,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "ElectricSheep-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../libpng/osx/lib\"",
-					"\"$(SRCROOT)/../ffmpeg/osx/lib\"",
-					"\"$(SRCROOT)/../boost/osx/lib\"",
-					"\"$(SRCROOT)/../lua5.1/src\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_NAME = "Electric Sheep";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -1424,18 +1429,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				BUILD_VARIANTS = (
-					i386,
-					x86_64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
+				BUILD_VARIANTS = normal;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
-				CONFIGURATION_BUILD_DIR = "$(HOME)/Library/Screen Savers";
+				CONFIGURATION_BUILD_DIR = build/Debug;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_GC = supported;
+				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -1451,10 +1454,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "ScreenSaver-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/ScreenSavers";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../boost/osx/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -1473,17 +1473,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				BUILD_VARIANTS = (
-					i386,
-					x86_64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
+				BUILD_VARIANTS = normal;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
+				CONFIGURATION_BUILD_DIR = build/Release;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEPLOYMENT_POSTPROCESSING = NO;
-				GCC_ENABLE_OBJC_GC = supported;
+				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -1492,16 +1491,15 @@
 					MAC,
 					SCREEN_SAVER,
 					"BOOST_FILESYSTEM_VERSION=3",
+					NDEBUG,
+					NS_BLOCK_ASSERTIONS,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "ScreenSaver-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../boost/osx/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINKER_DISPLAYS_MANGLED_NAMES = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_LDFLAGS = (
@@ -1524,9 +1522,11 @@
 		21A36C28101FA2850086E7C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = All;
 			};
 			name = Debug;
@@ -1534,65 +1534,12 @@
 		21A36C29101FA2850086E7C8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = All;
 				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		21CE8B880F6ECFBC00DDF96A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "proximus-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PRODUCT_NAME = proximus;
-				SDKROOT = macosx;
-				VALID_ARCHS = "i386 ppc x86_64";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		21CE8B890F6ECFBC00DDF96A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "proximus-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Carbon,
-				);
-				PRODUCT_NAME = proximus;
-				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				VALID_ARCHS = "i386 ppc x86_64";
-				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -1631,15 +1578,6 @@
 			buildConfigurations = (
 				21A36C28101FA2850086E7C8 /* Debug */,
 				21A36C29101FA2850086E7C8 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		21CE8B8A0F6ECFBD00DDF96A /* Build configuration list for PBXNativeTarget "proximus" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				21CE8B880F6ECFBC00DDF96A /* Debug */,
-				21CE8B890F6ECFBC00DDF96A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

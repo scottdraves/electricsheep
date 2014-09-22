@@ -34,8 +34,8 @@ class	CDirectoryIterator
 			~CDirectoryIterator();
 
 			//
-			const bool Next( std::string &_object );
-			const bool isDirectory( const std::string &_object );
+			bool Next( std::string &_object );
+			bool isDirectory( const std::string &_object );
 
 //			POOLED( CDirectoryIterator, Memory::CLinkPool );
 };

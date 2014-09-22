@@ -5,7 +5,7 @@
 
 @implementation ESConfiguration
 
-- (IBAction)ok:(id)sender
+- (IBAction)ok:(id) __unused sender
 {
 	ESScreensaver_InitClientStorage();
 
@@ -16,32 +16,31 @@
 	[NSApp endSheet:[self window]];
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction)cancel:(id) __unused sender
 {
 	[NSApp endSheet:[self window]];
 }
 
 - (void)awakeFromNib  // was - (NSWindow *)window
 {
-	CFBundleRef bndl = dlbundle_ex();
+	CFBundleRef bndl = CopyDLBundle_ex();
 	
-	NSURL *imgUrl = (NSURL*)CFBundleCopyResourceURL(bndl, CFSTR("red.tif"), NULL, NULL);
+	NSURL *imgUrl = (NSURL*)CFBridgingRelease(CFBundleCopyResourceURL(bndl, CFSTR("red.tif"), NULL, NULL));
 	
 	redImage = [[NSImage alloc] initWithContentsOfURL:imgUrl]; 
 	
-	[imgUrl release];
 	
-	imgUrl = (NSURL*)CFBundleCopyResourceURL(bndl, CFSTR("yellow.tif"), NULL, NULL);
+	imgUrl = (NSURL*)CFBridgingRelease(CFBundleCopyResourceURL(bndl, CFSTR("yellow.tif"), NULL, NULL));
 
 	yellowImage = [[NSImage alloc] initWithContentsOfURL:imgUrl];
 	
-	[imgUrl release];
 	
-	imgUrl = (NSURL*)CFBundleCopyResourceURL(bndl, CFSTR("green.tif"), NULL, NULL);
+	imgUrl = (NSURL*)CFBridgingRelease(CFBundleCopyResourceURL(bndl, CFSTR("green.tif"), NULL, NULL));
 	
 	greenImage = [[NSImage alloc] initWithContentsOfURL:imgUrl];
+    
+    CFRelease( bndl );
 	
-	[imgUrl release];
 	
 	m_checkTimer = nil;
 	
@@ -67,7 +66,7 @@
 	
 	NSMutableString *retStr = [NSMutableString stringWithCapacity:sizeof(digest)*2];
 	
-	for (int i = 0; i < sizeof(digest); i++)
+	for (uint32 i = 0; i < sizeof(digest); i++)
 	{
 		char *hex_digits = "0123456789ABCDEF";
 		
@@ -89,7 +88,6 @@
     // set the attributed string to the NSTextField
     [aboutText setAttributedStringValue: string];
 	
-	[string release];
 }
 
 - (void)fixFlockSize
@@ -128,14 +126,14 @@
 	}
 }
 
-- (void)setCheckingLogin:(Boolean)cl
+- (void)setCheckingLogin:(Boolean) __unused cl
 {
 	
 }
 
 
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
+- (void)connection:(NSURLConnection *) __unused connection
+  didFailWithError:(NSError *) __unused error
 { 
 	[loginStatusImage setImage:yellowImage];
 	[loginTestStatusText setStringValue:@"The server is unreachable."];
@@ -145,13 +143,13 @@
 	[signInButton setEnabled:YES];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+- (void)connectionDidFinishLoading:(NSURLConnection *) __unused connection
 {
 	// do something with the data
 	// receivedData is declared as a method instance elsewhere
 	// NSLog(@"Succeeded! Received bytes of data");
 	
-	int len = [m_httpData length];
+	uint64 len = [m_httpData length];
 	
 	if (len > 0)
 	{
@@ -164,13 +162,13 @@
 		else
 			xml[sizeof(xml) - 1] = 0;
 			
-		NSString *rolestr = (NSString*)ESScreensaver_GetRoleFromXML(xml);
+		NSString *rolestr = (__bridge_transfer NSString*)ESScreensaver_CopyGetRoleFromXML(xml);
 		   
 		if (![rolestr isEqual:@"error"] && ![rolestr isEqual:@"none"])
 		{
 			[loginStatusImage setImage:greenImage];
-			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Logged in (role: %@).", rolestr ? rolestr : @"N/A"]];
-			m_roleString = [rolestr retain];
+			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Logged in (role: %@).", rolestr ?: @"N/A"]];
+			m_roleString = rolestr;
 		}
 		else
 		{
@@ -187,7 +185,6 @@
 		[loginTestStatusText setStringValue:@"Incorrect response from the server."];
 	}
 	
-	[m_httpData release];
 	
 	m_checkingLogin = NO;
 	
@@ -214,7 +211,7 @@
 	}						
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (void)connection:(NSURLConnection *) __unused connection didReceiveResponse:(NSURLResponse *)response
 {
     // This method is called when the server has determined that it
     // has enough information to create the NSURLResponse.
@@ -227,11 +224,13 @@
 	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
     
     if (![httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+#ifdef DEBUG
         NSLog(@"Unknown response type: %@", response);
+#endif
         return;
     }
 		
-	int _statusCode = [httpResponse statusCode];	
+	int _statusCode = (int)[httpResponse statusCode];
 
 	
 	if (_statusCode == 200)
@@ -245,7 +244,7 @@
 
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+- (void)connection:(NSURLConnection *) __unused connection didReceiveData:(NSData *)data
 {
     // Append the new data to receivedData.
     // receivedData is an instance variable declared elsewhere.
@@ -274,7 +273,7 @@
 
 	[loginTestStatusText setStringValue:@"Testing Login..."];
 	
-	m_httpData = [[NSMutableData dataWithCapacity:10] retain];
+	m_httpData = [NSMutableData dataWithCapacity:10];
 			
 	NSString *newNickname = [drupalLogin stringValue];
 	
@@ -336,8 +335,6 @@
 			[m_checkTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
 			return;
 		}
-		else
-			[m_checkTimer release];
 	}
 			
 	m_checkTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(startTest:) userInfo:nil repeats:NO];
@@ -358,9 +355,9 @@
 	
 	[displayMode selectCellWithTag:dm];
 	
-	SInt32 scr = ESScreensaver_GetIntSetting("settings.player.screen", 0);
+	UInt32 scr = (UInt32)abs(ESScreensaver_GetIntSetting("settings.player.screen", 0));
 	
-	SInt32 scrcnt = [[NSScreen screens] count];
+	UInt32 scrcnt = (UInt32)[[NSScreen screens] count];
 	
 	if ( scr >= scrcnt && scrcnt > 0 )
 		scr = scrcnt - 1;
@@ -401,9 +398,9 @@
 
 	[useProxy setState: ESScreensaver_GetBoolSetting("settings.content.use_proxy", false)];
 			
-	[proxyHost setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.proxy", "") autorelease]];
+	[proxyHost setStringValue: (__bridge_transfer NSString*)ESScreensaver_CopyGetStringSetting("settings.content.proxy", "")];
 		
-	m_origNickname = (NSString*)ESScreensaver_GetStringSetting("settings.generator.nickname", "");
+	m_origNickname = (__bridge_transfer NSString*)ESScreensaver_CopyGetStringSetting("settings.generator.nickname", "");
 	
 	//[m_origNickname retain];
 	
@@ -411,7 +408,7 @@
 	
 	[drupalLogin setDelegate:self];
 	
-	m_origPassword = (NSString*)ESScreensaver_GetStringSetting("settings.content.password_md5", "");
+	m_origPassword = (__bridge_transfer NSString*)ESScreensaver_CopyGetStringSetting("settings.content.password_md5", "");
 	
 	//[m_origPassword retain];
 
@@ -419,9 +416,9 @@
 	
 	[drupalPassword setDelegate:self];
 	
-	[proxyLogin setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.proxy_username", "") autorelease]];
+	[proxyLogin setStringValue: (__bridge_transfer NSString*)ESScreensaver_CopyGetStringSetting("settings.content.proxy_username", "")];
 
-	[proxyPassword setStringValue: [(NSString*)ESScreensaver_GetStringSetting("settings.content.proxy_password", "") autorelease]];
+	[proxyPassword setStringValue: (__bridge_transfer NSString*)ESScreensaver_CopyGetStringSetting("settings.content.proxy_password", "")];
 	
 	bool unlimited_cache = ESScreensaver_GetBoolSetting("settings.content.unlimited_cache", true);
 	
@@ -448,7 +445,7 @@
 
 	[debugLog setState: ESScreensaver_GetBoolSetting("settings.app.log", false)];
 
-	[contentFldr setStringValue: [[(NSString*)ESScreensaver_GetStringSetting("settings.content.sheepdir", "") autorelease] stringByAbbreviatingWithTildeInPath]];
+	[contentFldr setStringValue: [(__bridge_transfer NSString*)ESScreensaver_CopyGetStringSetting("settings.content.sheepdir", "") stringByAbbreviatingWithTildeInPath]];
 	
 	
 	SInt32 pmm = ESScreensaver_GetIntSetting("settings.player.PlaybackMixingMode", 0);
@@ -471,7 +468,7 @@
 	[goldCacheSize setIntValue: cache_size_gold];
 	
 
-	[version setStringValue:(NSString*)ESScreensaver_GetVersion()];
+	[version setStringValue:(__bridge NSString*)ESScreensaver_GetVersion()];
 		
 	[self fixFlockSize];
 	
@@ -497,7 +494,7 @@
 
 	ESScreensaver_SetIntSetting("settings.player.LoopIterations", [loopIterations intValue]);
 
-	ESScreensaver_SetIntSetting("settings.player.DisplayMode", [[displayMode selectedCell] tag]);
+	ESScreensaver_SetIntSetting("settings.player.DisplayMode", (SInt32)[[displayMode selectedCell] tag]);
 	
 	ESScreensaver_SetBoolSetting("settings.player.SeamlessPlayback", [seamlessPlayback state]);
 	
@@ -509,9 +506,9 @@
 
 	ESScreensaver_SetIntSetting("settings.player.PlayEvenly", [playEvenly intValue]);
 
-	ESScreensaver_SetIntSetting("settings.player.screen", [display indexOfSelectedItem]);
+	ESScreensaver_SetIntSetting("settings.player.screen", (SInt32)[display indexOfSelectedItem]);
 	
-	ESScreensaver_SetIntSetting("settings.player.MultiDisplayMode", [multiDisplayMode indexOfSelectedItem]);
+	ESScreensaver_SetIntSetting("settings.player.MultiDisplayMode", (SInt32)[multiDisplayMode indexOfSelectedItem]);
 
 	ESScreensaver_SetBoolSetting("settings.player.silent_mode", [silentMode state]);
 	
@@ -522,7 +519,7 @@
 	SUUpdater *upd = [self updater];
 
 	if (upd)
-		[upd setAutomaticallyChecksForUpdates:[autoUpdates state]];
+		[upd setAutomaticallyChecksForUpdates:[autoUpdates state] ? YES : NO];
 
 	ESScreensaver_SetBoolSetting("settings.content.use_proxy", [useProxy state]);
 
@@ -557,7 +554,7 @@
 	ESScreensaver_SetBoolSetting("settings.app.log", [debugLog state]);
 	
 	
-	ESScreensaver_SetIntSetting("settings.player.PlaybackMixingMode", [playbackMixingMode indexOfSelectedItem]);
+	ESScreensaver_SetIntSetting("settings.player.PlaybackMixingMode", (SInt32)[playbackMixingMode indexOfSelectedItem]);
 		
 	bool unlimited_cache_gold = ([[goldCacheType selectedCell] tag] == 0);
 	
@@ -569,7 +566,7 @@
 }
 
 
-- (IBAction)goToCreateAccountPage:(id)sender
+- (IBAction)goToCreateAccountPage:(id) __unused sender
 {
 	NSURL *helpURL = [NSURL URLWithString: @"http://community.electricsheep.org/user/register"];
 	
@@ -590,7 +587,7 @@
 	}
 }
 
-- (IBAction)goToLearnMorePage:(id)sender
+- (IBAction)goToLearnMorePage:(id) __unused sender
 {
 	NSString *newNickname = [drupalLogin stringValue];
 	
@@ -602,13 +599,17 @@
 	
 	NSString *urlstr = [NSString stringWithFormat:@"http://electricsheep.org/account/%@?u=%@&p=%@", urlrole, urlnickname, urlpass ];
 
-	NSURL *helpURL = [NSURL URLWithString: urlstr];
+	CFRelease( urlnickname );
+    CFRelease( urlpass );
+    CFRelease( urlrole );
+    
+    NSURL *helpURL = [NSURL URLWithString: urlstr];
 	
 	[[NSWorkspace sharedWorkspace] openURL:helpURL];
 }
 
 
-- (IBAction)chooseContentFolder:(id)sender
+- (IBAction)chooseContentFolder:(id) __unused sender
 {
     NSTextField *field = nil;
     
@@ -616,18 +617,18 @@
 
     if (field) {
         NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-        int result = NSOKButton;
+        NSInteger result = NSOKButton;
         NSString *path = [[field stringValue] stringByExpandingTildeInPath];
 					
         [openPanel setCanChooseFiles:NO];
         [openPanel setCanChooseDirectories:YES];
         [openPanel setCanCreateDirectories:YES];
         [openPanel setAllowsMultipleSelection:NO];
-        [openPanel setDirectory:[path stringByStandardizingPath]];
+        [openPanel setDirectoryURL:[NSURL fileURLWithPath:[path stringByStandardizingPath] isDirectory:YES]];
         
-        result = [openPanel runModalForDirectory:nil file:nil types:nil];
+        result = [openPanel runModal];
         if (result == NSOKButton) {
-            [field setObjectValue:[[openPanel directory] stringByAbbreviatingWithTildeInPath]];
+            [field setObjectValue:[[[openPanel directoryURL] path] stringByAbbreviatingWithTildeInPath]];
         }
     }
 	
@@ -656,12 +657,12 @@
 		[upd checkForUpdates:sender];
 }
 
-- (IBAction)doSignIn:(id)sender
+- (IBAction)doSignIn:(id) __unused sender
 {
 	[self startTest:nil];
 }
 
-- (IBAction)goToHelpPage:(id)sender
+- (IBAction)goToHelpPage:(id) __unused sender
 {
 	NSString *urlStr = [NSString stringWithFormat:@"http://electricsheep.org/client/%s", CLIENT_VERSION];
 	
@@ -670,5 +671,10 @@
 	[[NSWorkspace sharedWorkspace] openURL:helpURL];
 }
 
+- (void)dealloc
+{
+    [drupalLogin setDelegate:nil];
+    [drupalPassword setDelegate:nil];
+}
 
 @end

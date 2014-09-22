@@ -41,7 +41,7 @@ class	CShaderUniform
 		eUniformType	m_eType;
 
 	public:
-			CShaderUniform( const std::string _name, const eUniformType _eType ) : m_Name( _name ), m_eType( _eType ), m_bDirty(true)	{}
+			CShaderUniform( const std::string _name, const eUniformType _eType ) :  m_bDirty(true), m_Name( _name ), m_eType( _eType )	{}
 			virtual ~CShaderUniform()	{}
 
 			virtual bool	SetData( void *_pData, const uint32 _size ) = PureVirtual;

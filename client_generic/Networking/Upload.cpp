@@ -26,7 +26,7 @@ CFileUploader::~CFileUploader()
 	Perform().
 	Upload specific Perform function.
 */
-bool	CFileUploader::Perform( const std::string &_url, const std::string &_file, const uint32 _fileSize )
+bool	CFileUploader::PerformUpload( const std::string &_url, const std::string &_file, const uint32 _fileSize )
 {
 	//	Open input file to transfer.
 	FILE *pFile = fopen( _file.c_str(), "rb" );

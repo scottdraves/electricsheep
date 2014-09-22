@@ -1,10 +1,9 @@
 #import "ESWindow.h"
 #import "ESScreensaver.h" 
-#import "Carbon/Carbon.h"
 
 @implementation ESController
 
-- (void)launchHelp: (id)sender
+- (void)launchHelp: (id) __unused sender
 {
 	[[NSWorkspace sharedWorkspace] openFile:[[NSBundle mainBundle] pathForResource:@"Instructions" ofType:@"rtf"]];
 }
@@ -35,9 +34,11 @@
 	ESScreensaver_InitClientStorage();
 	
 	SInt32 pmm = ESScreensaver_GetIntSetting("settings.player.PlaybackMixingMode", 0);
+    
+    NSString *root = (__bridge_transfer NSString*)ESScreensaver_CopyGetRoot();
 	
-	const char *mpegpath = [[NSString stringWithFormat:@"%@/mpeg",[(NSString*)ESScreensaver_GetRoot() autorelease]] UTF8String];
-	
+	const char *mpegpath = [[NSString stringWithFormat:@"%@/mpeg", root] UTF8String];
+    
 	if (pmm == 1 || mpegpath == NULL || *mpegpath == 0 || ESScreensaver_GetFlockSizeMBs(mpegpath, 1) == 0) //playing only free sheep???
 	{
 		frame.size.width = 800;
@@ -55,6 +56,8 @@
 	[self setFrame: [self frameRectForContentRect:frame] display:NO];
 
 	[self makeKeyWindow];
+    
+    [self setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary] ;
 
 	mESView = [[ESScreensaverView alloc] initWithFrame: frame isPreview:NO];
 	
@@ -65,9 +68,7 @@
 		[mESView setAutoresizingMask: (NSViewWidthSizable | NSViewHeightSizable)];
 		
 		[mESView setAutoresizesSubviews:YES];
-		
-		[mESView setFullScreen:NO];
-			
+					
 		[self makeFirstResponder: mESView];
 				
 		[mESView startAnimation];
@@ -76,125 +77,7 @@
 
 - (void)switchFullScreen:(id)sender
 {
-	NSScreen *targetScreen = [self screen];
-
-	if(!mIsFullScreen)
-	{
-		// get screen that will be used for the full-screen display, create a borderless window the same size as the current content frame
-		NSView *content = [self contentView];
-		
-		SetSystemUIMode( kUIModeAllHidden, 0);
-
-		mFullScreenWindow = [[ESWindow alloc] 
-								initWithContentRect:[self contentRectForFrameRect:[self frame]]
-								styleMask:NSBorderlessWindowMask
-								backing:NSBackingStoreBuffered
-								defer:NO
-								screen:targetScreen];
-								
-		[mFullScreenWindow setTitle:[self title]];
-		
-		//[mFullScreenWindow setHidesOnDeactivate:YES];
-		
-		[mFullScreenWindow setOriginalWindow:self];
-								
-		[mFullScreenWindow setBackgroundColor:[NSColor blackColor]];
-
-		// switch the content view from targetWindow to the newly created window
-		[content retain];
-
-		[self setContentView:nil];
-
-		[mFullScreenWindow setContentView:content];
-		
-		[content setAutoresizingMask: (NSViewWidthSizable | NSViewHeightSizable)];
-		
-		[mFullScreenWindow makeFirstResponder: content];
-
-		[content release];
-
-		// hide old window
-		[self orderOut:nil];
-
-		// now that the content has changed to the fullScreenWindow, draw a new frame (for OpenGL purposes) and make new window key and in front, with me as a delegate
-		[mFullScreenWindow makeKeyAndOrderFront:nil];
-				
-		[mFullScreenWindow setLevel:kCGNormalWindowLevel];
-				
-		// get fullScreenWindow to resize to full screen
-		[mFullScreenWindow setFrame:[targetScreen frame] display:YES animate:YES];
-		
-		if (CGCursorIsVisible())
-		{
-			[NSCursor hide];
-		}
-		
-		mBlackouMonitors = ESScreensaver_GetBoolSetting("settings.player.blackout_monitors", true);
-		
-		if (mBlackouMonitors)
-			[self blackScreensExcept:targetScreen];
-		else
-			mBlackingWindows = nil;
-
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self
-										 selector:@selector(fullscreenWindowMoved:)
-											 name:NSWindowDidMoveNotification
-										   object:mFullScreenWindow];
-
-
-		// set fullScreen flag
-		mIsFullScreen = YES;
-	}
-	else
-	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self
-														name:NSWindowDidMoveNotification
-													  object:mFullScreenWindow];
-
-		/*// release the captured screen
-		NSNumber *screenNumber = [[[mFullScreenWindow screen] deviceDescription] objectForKey:@"NSScreenNumber"];
-		CGDisplayRelease((screenNumber != nil) ? (CGDirectDisplayID)[screenNumber unsignedLongValue] : kCGDirectMainDisplay);*/
-
-		// restore normal window, resize the fullScreenWindow to the content frame for the desktop window
-		[mFullScreenWindow setFrame:[self contentRectForFrameRect:[self frame]] display:YES animate:YES];
-
-		// switch the content view from the fullScreenWindow back to the ordinary window
-		NSView *content = [mFullScreenWindow contentView];
-		[content retain];
-
-		[mFullScreenWindow setContentView:nil];
-
-		[self setContentView:content];
-		
-		[self makeFirstResponder: content];
-
-		[content release];
-
-		// redraw and make the ordinary window front and key
-		[self makeKeyAndOrderFront:nil];
-
-		// release the fullscreen window
-		[mFullScreenWindow release]; 
-		
-		mFullScreenWindow = nil;
-		
-		if (!CGCursorIsVisible())
-		{
-			[NSCursor unhide];
-		}
-
-		SetSystemUIMode( kUIModeNormal, 0);
-		
-		[self unblackScreens];
-
-		// set fullscreen flag
-		mIsFullScreen = NO;
-	}
-	
-	[mESView setFullScreen:mIsFullScreen];
-
-	[mESView windowDidResize];
+    [self toggleFullScreen:sender];
 }
 
 /*
@@ -204,7 +87,6 @@
 {
 	if (mBlackingWindows != nil)
 	{
-		[mBlackingWindows release];
 		mBlackingWindows = nil;
 	}
 		
@@ -215,19 +97,19 @@
 	NSRect fs_rect;
 	for (i = 0; i < [[NSScreen screens] count]; i++) { 
 		
-		NSScreen *actScreen = [[NSScreen screens] objectAtIndex:i];
+        NSScreen *actScreen = NSScreen.screens[i];
 		
 		if (actScreen == nil || fullscreen == actScreen)
 			continue;
 		
 		// when blacking the main screen, hide the menu bar and dock
 		if (actScreen == [NSScreen mainScreen])
-			SetSystemUIMode( kUIModeAllSuppressed, 0);
+			[[NSApplication sharedApplication] setPresentationOptions:NSApplicationPresentationFullScreen | NSApplicationPresentationAutoHideDock | NSApplicationPresentationAutoHideMenuBar];
 		
 		fs_rect = [actScreen frame];
 		fs_rect.origin = NSZeroPoint;
 		win = [[NSWindow alloc] initWithContentRect:fs_rect styleMask:NSBorderlessWindowMask 
-											backing:NSBackingStoreBuffered defer:NO screen:[[NSScreen screens] objectAtIndex:i]];
+											backing:NSBackingStoreBuffered defer:NO screen:NSScreen.screens[i]];
 		[win setBackgroundColor:[NSColor blackColor]];
 		[win setLevel:NSScreenSaverWindowLevel];
 		[win orderFront:nil];
@@ -236,7 +118,6 @@
 		[self fadeWindow:win withEffect:NSViewAnimationFadeInEffect];
 		
 		[mBlackingWindows addObject:win];
-		[win release];
 	}
 	
 }
@@ -254,10 +135,9 @@
 		/*if (![[AppController sharedController] animateInterface])
 			[[mBlackingWindows objectAtIndex:i] close];
 		else*/
-			[self fadeWindow:[mBlackingWindows objectAtIndex:i] withEffect:NSViewAnimationFadeOutEffect];
+			[self fadeWindow:mBlackingWindows[i] withEffect:NSViewAnimationFadeOutEffect];
 	}
 	
-	[mBlackingWindows release];
 	mBlackingWindows = nil;
 }
 
@@ -280,10 +160,9 @@
 	[anim setDuration:0.3];
 	
 	[anim startAnimation];
-	[anim release];
 }
 
-- (void) fullscreenWindowMoved:(NSNotification *)notification
+- (void) fullscreenWindowMoved:(NSNotification *) __unused notification
 {
 	// triggered when fullscreen window changes spaces
 	NSRect screen_frame = [[mFullScreenWindow screen] frame];
@@ -292,7 +171,7 @@
 
 
 
-- (void)windowWillClose:(NSNotification *)notification
+- (void)windowWillClose:(NSNotification *) __unused notification
 {
 	if ( mESView != nil )
 	{
@@ -300,7 +179,7 @@
 	}
 }
 
-- (void)showPreferences:(id)sender
+- (void)showPreferences:(id) __unused sender
 {
 	if ( !mIsFullScreen && mESView && [mESView hasConfigureSheet] )
 	{
@@ -316,7 +195,7 @@
 	}
 }
 
-- (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+- (void)didEndSheet:(NSWindow *)sheet returnCode:(int) __unused returnCode contextInfo:(void *) __unused contextInfo
 {
     [sheet orderOut:self];
 	
@@ -330,7 +209,7 @@
 }
 
 
-- (void)windowDidResize:(NSNotification *)notification
+- (void)windowDidResize:(NSNotification *) __unused notification
 {
 	if ( mInSheet )
 		return;
@@ -339,7 +218,7 @@
 		[mESView windowDidResize];
 }
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *) __unused theApplication
 {
 	return YES;
 }
@@ -364,22 +243,23 @@
 	return mIsFullScreen;
 }
 
-- (void)keyDown:(NSEvent *)ev;
+- (void)keyDown:(NSEvent *)ev
 {
     BOOL handled = NO;
 	
     NSString *characters = [ev charactersIgnoringModifiers];
-    unsigned int characterIndex, characterCount = [characters length];
+    unsigned int characterIndex, characterCount = (unsigned int)[characters length];
     
     for (characterIndex = 0; characterIndex < characterCount; characterIndex++) {
 		unichar c = [characters characterAtIndex:characterIndex];
 		switch (c) {
 			case 0x1B: //ESC key
 				{
-					ESWindow *wnd = [self originalWindow];
-					if ( wnd != nil && [wnd isFullScreen] )
+                    BOOL isFS = (([[NSApplication sharedApplication] currentSystemPresentationOptions] & NSApplicationPresentationFullScreen) == NSApplicationPresentationFullScreen);
+                    
+                    if ( isFS )
 					{
-						[wnd switchFullScreen:self];
+						[self switchFullScreen:self];
 					}
 				}
 				handled = YES;

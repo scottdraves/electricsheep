@@ -16,7 +16,7 @@ class	CCrossFade : public CHudEntry
 	DisplayOutput::spCTextureFlat m_spTexture;
 	bool m_bSkipped;
 	bool m_bSkipToNext;
-	int32 m_currID;
+	uint32 m_currID;
 
 	public:
 			CCrossFade( uint32 width, uint32 height, bool skipToNext ) : CHudEntry( Base::Math::CRect(fp4(width), fp4(height) ) ), m_bSkipped(false), m_bSkipToNext(skipToNext)
@@ -29,7 +29,7 @@ class	CCrossFade : public CHudEntry
 				{
 					for (uint32 y = 0; y < height; y++)
 					{
-						tmpImage->PutPixel(x, y, 0, 0, 0, 255);
+						tmpImage->PutPixel(static_cast<int32>(x), static_cast<int32>(y), 0, 0, 0, 255);
 					}
 				}
 				
@@ -42,7 +42,7 @@ class	CCrossFade : public CHudEntry
 			}
 
 			//	Override to make it always visible.
-			virtual const bool	Visible() const	{	return true;	};
+			virtual bool	Visible() const	{	return true;	};
 			
 			void Reset()
 			{

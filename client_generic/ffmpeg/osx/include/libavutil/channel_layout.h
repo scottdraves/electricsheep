@@ -79,7 +79,7 @@
 
 /**
  * @}
- * @defgroup channel_mask_c Audio channel convenience macros
+ * @defgroup channel_mask_c Audio channel layouts
  * @{
  * */
 #define AV_CH_LAYOUT_MONO              (AV_CH_FRONT_CENTER)
@@ -114,12 +114,12 @@ enum AVMatrixEncoding {
     AV_MATRIX_ENCODING_NONE,
     AV_MATRIX_ENCODING_DOLBY,
     AV_MATRIX_ENCODING_DPLII,
+    AV_MATRIX_ENCODING_DPLIIX,
+    AV_MATRIX_ENCODING_DPLIIZ,
+    AV_MATRIX_ENCODING_DOLBYEX,
+    AV_MATRIX_ENCODING_DOLBYHEADPHONE,
     AV_MATRIX_ENCODING_NB
 };
-
-/**
- * @}
- */
 
 /**
  * Return a channel layout id that matches name, or 0 if no match is found.
@@ -215,6 +215,7 @@ int av_get_standard_channel_layout(unsigned index, uint64_t *layout,
                                    const char **name);
 
 /**
+ * @}
  * @}
  */
 

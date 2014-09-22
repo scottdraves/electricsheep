@@ -101,13 +101,13 @@ private:
 	void FpsCap( const fp8 _cap );
 
 	public:
-			const bool	Startup();
-			const bool	Shutdown( void );
+			bool	Startup();
+			bool	Shutdown( void );
 			virtual ~CPlayer();
 
 			const char *Description()	{	return( "Player" );	};
 
-			const bool  Closed( void )
+			bool  Closed( void )
 			{
 			    DisplayOutput::spCDisplayOutput spDisplay = Display();
 				
@@ -188,7 +188,7 @@ private:
 			{	
 				return m_displayUnits[0]->m_MetaData.m_IsEdge;
 			};
-			inline int32	GetCurrentPlayingID()
+			inline uint32	GetCurrentPlayingID()
 			{	
 				ContentDecoder::spCContentDecoder decoder = Decoder();
 				
@@ -198,7 +198,7 @@ private:
 				return decoder->GetCurrentPlayingID();	
 			};
 			
-			inline int32	GetCurrentPlayingGeneration()
+			inline uint32	GetCurrentPlayingGeneration()
 			{	
 				ContentDecoder::spCContentDecoder decoder = Decoder();
 				
@@ -208,7 +208,7 @@ private:
 				return decoder->GetCurrentPlayingGeneration();
 			};
 			
-			inline void		Delete( const int32 _id )			{	if ( !m_spPlaylist.IsNull() ) m_spPlaylist->Delete( _id );	};
+			inline void		Delete( const uint32 _id )			{	if ( !m_spPlaylist.IsNull() ) m_spPlaylist->Delete( _id );	};
 			inline void		SkipToNext( void )
 			{
 				ContentDecoder::spCContentDecoder decoder = Decoder();
@@ -243,7 +243,7 @@ private:
 			inline bool		HasGoldSheep() { return m_HasGoldSheep; }
 			inline int		UsedSheepType() { return m_UsedSheepType; }
 			
-			inline int		GetDisplayCount() { return m_displayUnits.size(); }
+			inline uint32		GetDisplayCount() { return static_cast<uint32>(m_displayUnits.size()); }
 };
 
 /*

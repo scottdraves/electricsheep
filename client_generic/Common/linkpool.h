@@ -121,7 +121,7 @@ template <size_t _size, size_t TGrow = 4> class CLinkPool : public CPoolBase
 			}
 
 			//	Used below to track access.
-			const bool	SingletonActive( void	)	{	return( m_bSingletonActive );	};
+			bool	SingletonActive( void	)	{	return( m_bSingletonActive );	};
 
 			//	Return instance.
 			static CLinkPool &Instance()

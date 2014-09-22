@@ -41,7 +41,6 @@ struct DDSHeader {
 bool	CImage::LoadDDS( const std::string &_fileName, const bool _wantMipMaps )
 {
 	DDSHeader	header;
-	size_t dummy;
 
 	FILE *pFileData = fopen( _fileName.c_str(), "rb" );
 	if( !pFileData )
@@ -50,7 +49,7 @@ bool	CImage::LoadDDS( const std::string &_fileName, const bool _wantMipMaps )
 		return( false );
 	}
 
-	dummy = fread( &header, sizeof(header), 1, pFileData );
+	fread( &header, sizeof(header), 1, pFileData );
 	if( header.ddsIdentifier != MCHAR4('D', 'D', 'S', ' ') )
 	{
 		ThrowStr( ("CImage::LoadDDS() No valid header in " + _fileName) );
@@ -111,7 +110,7 @@ bool	CImage::LoadDDS( const std::string &_fileName, const bool _wantMipMaps )
 		size = readSize;
 
 	m_spData = new Base::CAlignedBuffer( size );
-	dummy = fread( m_spData->GetBufferPtr(), readSize, 1, pFileData );
+	fread( m_spData->GetBufferPtr(), readSize, 1, pFileData );
 
 	/*if( m_Format.is( eImage_RGB8 ) || m_Format.is( eImage_RGBA8 ) )
 	{

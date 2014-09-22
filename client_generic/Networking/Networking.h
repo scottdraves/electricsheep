@@ -36,7 +36,7 @@ class	CCurlTransfer
     char errorBuffer[ CURL_ERROR_SIZE ];
 
 	//	Map of respons codes allowed. This is checkd on failed perform's.
-	std::vector< int > m_AllowedResponses;
+	std::vector< uint32 > m_AllowedResponses;
 
 	protected:
 		CURL		*m_pCurl;
@@ -61,7 +61,7 @@ class	CCurlTransfer
 
 		const std::string	&Name() const				{	return m_Name;			};
 		const std::string	&Status() const				{	return m_Status;		};
-		const long 			ResponseCode() const		{	return m_HttpCode;		};
+		long 			ResponseCode() const		{	return m_HttpCode;		};
 		const std::string	SpeedString() const			{	return m_AverageSpeed;	};
 };
 
@@ -89,7 +89,7 @@ class	CFileDownloader_TimeCondition : public CFileDownloader
 		CFileDownloader_TimeCondition( const std::string &_name );
 		virtual ~CFileDownloader_TimeCondition();
 
-		bool	Perform( const std::string &_url, const time_t _lastTime );
+		bool	PerformDownloadWithTC( const std::string &_url, const time_t _lastTime );
 };
 
 //
@@ -99,7 +99,7 @@ class	CFileUploader : public CCurlTransfer
 		CFileUploader( const std::string &_name );
 		virtual ~CFileUploader();
 
-		bool	Perform( const std::string &_url, const std::string &_file, const uint32 _filesize );
+		bool	PerformUpload( const std::string &_url, const std::string &_file, const uint32 _filesize );
 };
 
 //	Def some smart pointers for these.
@@ -138,8 +138,8 @@ class	CManager : public Base::CSingleton<CManager>
 	bool			m_Aborted;
 
 	public:
-			const bool	Startup();
-			const bool	Shutdown();
+			bool	Startup();
+			bool	Shutdown();
 			virtual ~CManager()	{m_bSingletonActive = false;};
 
 			const char *Description()	{	return "Network manager";	};
@@ -153,7 +153,7 @@ class	CManager : public Base::CSingleton<CManager>
 			void	Logout();
 
 			//	Called by CCurlTransfer prior to each Perform() call to handle proxy & authentication.
-			const CURLcode Prepare( CURL *_pCurl );
+			CURLcode Prepare( CURL *_pCurl );
 
 			//	Used by the transfers to update progress.
 			void	UpdateProgress( CCurlTransfer *_pTransfer, const fp8 _percentComplete, const fp8 _bytesTransferred );
@@ -170,7 +170,7 @@ class	CManager : public Base::CSingleton<CManager>
 			static std::string Encode( const std::string &_src );
 
 			//	Threadsafe.
-			static CManager *Instance( const char *_pFileStr, const uint32 _line, const char *_pFunc )
+			static CManager *Instance( const char */*_pFileStr*/, const uint32 /*_line*/, const char */*_pFunc*/ )
 			{
 				//printf( "g_NetworkManager( %s(%d): %s )\n", _pFileStr, _line, _pFunc );
 				//fflush( stdout );

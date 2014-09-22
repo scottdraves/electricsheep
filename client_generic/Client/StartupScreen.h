@@ -93,7 +93,6 @@ class	CStartupScreen : public CHudEntry
 				// draw text
 
 				//fp4 step = (fp4)m_Desc.Height() / (fp4)_spRenderer->Display()->Height();
-				fp4	pos = 0;
 				fp4 edge = 24 / (fp4)_spRenderer->Display()->Width();
 
 				Base::Math::CRect	extent;
@@ -122,7 +121,6 @@ class	CStartupScreen : public CHudEntry
 				if (!m_spFont.IsNull())
 					m_spFont->Reupload();
 				
-				pos = edge;
 				_spRenderer->Text( m_spFont, m_StartupMessage, Base::Math::CVector4( 1, 1, 1, 1 ), Base::Math::CRect( r.m_X0+edge, r.m_Y0+edge, r.m_X1, r.m_Y1 ), 0 );
 
 				return true;

@@ -55,7 +55,7 @@ class SheepGenerator
 
 	char            *fTempFile;
 	bool			fHasMessage;
-	int				fGeneratorId;
+	uint32				fGeneratorId;
 	int32			m_DelayAfterRenderSec;
 
 	protected:
@@ -93,8 +93,8 @@ class SheepGenerator
 			static int playBeep();
 
 			//	Sets/gets generator thread ID.
-			void setGeneratorId(const int &id) { fGeneratorId = id; }
-			int generatorId() const { return fGeneratorId; }
+			void setGeneratorId(const uint32 id) { fGeneratorId = id; }
+			uint32 generatorId() const { return fGeneratorId; }
 			
 			void Abort( void );
 

@@ -46,7 +46,7 @@ class	CServerMessage : public CConsole
 			}
 
 			//	Override to make it always visible.
-			virtual const bool	Visible() const	{	return true;	};
+			virtual bool	Visible() const	{	return true;	};
 
 			//
 			bool	Render( const fp8 _time, DisplayOutput::spCRenderer _spRenderer )

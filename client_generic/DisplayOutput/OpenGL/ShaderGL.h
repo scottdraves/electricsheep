@@ -9,8 +9,8 @@ namespace	DisplayOutput
 
 class	CShaderUniformGL : public CShaderUniform
 {
-	uint32	m_Index;
-	uint32	m_Size;
+	int32	m_Index;
+	int32	m_Size;
 	uint8	*m_pData;
 	
 #ifdef MAC
@@ -19,9 +19,9 @@ class	CShaderUniformGL : public CShaderUniform
 
 	public:
 #ifdef MAC
-			CShaderUniformGL( CGLContextObj glCtx, const std::string _name, const eUniformType _eType, const uint32 _index = 0, const uint32 _size = 0 )
+			CShaderUniformGL( CGLContextObj glCtx, const std::string _name, const eUniformType _eType, const int32 _index = 0, const int32 _size = 0 )
 #else
-			CShaderUniformGL( const std::string _name, const eUniformType _eType, const uint32 _index = 0, const uint32 _size = 0 )
+			CShaderUniformGL( const std::string _name, const eUniformType _eType, const int32 _index = 0, const int32 _size = 0 )
 #endif
 			 : CShaderUniform( _name, _eType ), m_Index( _index ), m_Size( _size )
 			{

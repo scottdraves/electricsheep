@@ -15,9 +15,9 @@ cd "$BASE_DIR"
 
 mkdir -p "$DEST_TMP" "$SAVER_TMP" "$APP_TMP"
 
-cp -r "$WD/Electric Sheep.app" "$APP_TMP"
+cp -PR "$WD/Electric Sheep.app" "$APP_TMP"
 
-cp -r "$WD/Electric Sheep.saver" "$SAVER_TMP"
+cp -PR "$WD/Electric Sheep.saver" "$SAVER_TMP"
 
 pkgbuild --root "$APP_TMP" \
     --component-plist "Package/ElectricSheepAppComponents.plist" \

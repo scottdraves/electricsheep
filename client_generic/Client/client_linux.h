@@ -32,7 +32,7 @@ class	CElectricSheep_Linux : public CElectricSheep
 			}
 
 			//
-			virtual const bool	Startup()
+			virtual bool	Startup()
 			{
 				using namespace DisplayOutput;
 
@@ -67,7 +67,7 @@ class	CElectricSheep_Linux : public CElectricSheep
 				return true;
 			}
 
-			virtual const bool HandleEvents()
+			virtual bool HandleEvents()
 			{
 				DisplayOutput::spCDisplayOutput	spDisplay = g_Player().Display();
 
@@ -87,7 +87,7 @@ class	CElectricSheep_Linux : public CElectricSheep
 
 
 			//
-			const bool Update()
+			bool Update()
 			{
 			  using namespace DisplayOutput;
 

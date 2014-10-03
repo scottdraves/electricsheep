@@ -23,10 +23,6 @@
 #ifndef _CONTENTDECODER_H
 #define _CONTENTDECODER_H
 
-#ifdef MAC
-#define USE_NEW_FFMPEG_API
-#endif
-
 //	FFmpeg headers.
 extern "C"{
 #if defined(WIN32) || defined(MAC) || defined (LINUX_GNU)

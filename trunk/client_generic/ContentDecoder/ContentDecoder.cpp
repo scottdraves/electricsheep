@@ -228,7 +228,11 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
         return false;
     }
 	
-	ovi->m_pFrame = av_frame_alloc();
+#ifdef USE_NEW_FFMPEG_API
+    ovi->m_pFrame = av_frame_alloc();
+#else
+    ovi->m_pFrame = avcodec_alloc_frame();
+#endif
 	
 	if (ovi->m_pVideoStream->nb_frames > 0)
 		ovi->m_totalFrameCount = static_cast<uint32>(ovi->m_pVideoStream->nb_frames);
@@ -608,8 +612,10 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
         //printf( "calling sws_scale()" );
         sws_scale( m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
         
+#ifdef USE_NEW_FFMPEG_API
         if ( pVideoCodecContext->refcounted_frames )
             av_frame_unref( pFrame );
+#endif
         
 		ovi->m_iCurrentFileFrameCount++;
 

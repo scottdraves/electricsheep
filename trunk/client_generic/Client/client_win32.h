@@ -144,7 +144,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 			}
 
 			//
-			virtual const bool	Startup()
+			virtual bool	Startup()
 			{
 				//	Check for multiple instances.
 
@@ -559,7 +559,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 				return false;
 			}
 
-			virtual const bool HandleEvents()
+			virtual bool HandleEvents()
 			{
 				DisplayOutput::spCDisplayOutput	spDisplay = g_Player().Display();
 
@@ -577,7 +577,7 @@ class	CElectricSheep_Win32 : public CElectricSheep
 				return true;
 			}
 			//
-			const bool Update()
+			bool Update()
 			{
 				g_Player().Framerate( m_CurrentFps );
 

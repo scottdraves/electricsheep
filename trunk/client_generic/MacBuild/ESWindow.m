@@ -253,7 +253,7 @@
     for (characterIndex = 0; characterIndex < characterCount; characterIndex++) {
 		unichar c = [characters characterAtIndex:characterIndex];
 		switch (c) {
-			case 0x1B: //ESC key
+			/*case 0x1B: //ESC key
 				{
                     BOOL isFS = (([[NSApplication sharedApplication] currentSystemPresentationOptions] & NSApplicationPresentationFullScreen) == NSApplicationPresentationFullScreen);
                     
@@ -263,7 +263,7 @@
 					}
 				}
 				handled = YES;
-				break;
+				break;*/
 								
 			default:
 				break;

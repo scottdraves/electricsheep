@@ -114,7 +114,11 @@ struct sOpenVideoInfo
 		
 		if ( m_pFrame )
 		{
+#ifdef USE_NEW_FFMPEG_ALLOC_API
 			av_frame_free( &m_pFrame );
+#else
+			avcodec_free_frame( &m_pFrame );
+#endif
 			m_pFrame = NULL;
 		}
 	}

@@ -29,6 +29,10 @@
 #include	"AlignedBuffer.h"
 
 #if defined(LIBAVCODEC_VERSION_INT) && (LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(55,28,1))
+#define USE_NEW_FFMPEG_ALLOC_API
+#endif
+
+#ifdef MAC
 #define USE_NEW_FFMPEG_API
 #endif
 
@@ -91,7 +95,7 @@ class CVideoFrame
 				m_Height = static_cast<uint32>(_pCodecContext->height);
 
 
-#ifdef USE_NEW_FFMPEG_API
+#ifdef USE_NEW_FFMPEG_ALLOC_API
                 m_pFrame = av_frame_alloc();
 #else
                 m_pFrame = avcodec_alloc_frame();
@@ -110,7 +114,7 @@ class CVideoFrame
 			{
 				if( m_pFrame )
 				{
-#ifdef USE_NEW_FFMPEG_API
+#ifdef USE_NEW_FFMPEG_ALLOC_API
                     av_frame_free( &m_pFrame );
 #else
 					avcodec_free_frame( &m_pFrame );

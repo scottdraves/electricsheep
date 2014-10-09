@@ -228,7 +228,7 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
         return false;
     }
 	
-#ifdef USE_NEW_FFMPEG_API
+#ifdef USE_NEW_FFMPEG_ALLOC_API
     ovi->m_pFrame = av_frame_alloc();
 #else
     ovi->m_pFrame = avcodec_alloc_frame();
@@ -612,7 +612,7 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
         //printf( "calling sws_scale()" );
         sws_scale( m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
         
-#ifdef USE_NEW_FFMPEG_API
+#ifdef USE_NEW_FFMPEG_ALLOC_API
         if ( pVideoCodecContext->refcounted_frames )
             av_frame_unref( pFrame );
 #endif

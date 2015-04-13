@@ -9290,9 +9290,9 @@ void __GLeeExtList_clean(ExtensionList *extList)
 
 void __GLeeExtList_add(ExtensionList *extList, const char * extName)
 {
-	int length=strlen(extName)+1;
-	int i=extList->numNames;
-	int n=i+1;
+	size_t length=strlen(extName)+1;
+	size_t i=(size_t)extList->numNames;
+	size_t n=i+1;
 	if (i==0)
 	{
 		extList->lengths=(int *)malloc(sizeof(int));
@@ -9304,7 +9304,7 @@ void __GLeeExtList_add(ExtensionList *extList, const char * extName)
 	}
 	extList->names[i]=(char *)malloc(length*sizeof(char));
 	strcpy(extList->names[i],extName);
-	extList->lengths[i]=length;
+	extList->lengths[i]=(int)length;
 	extList->numNames++;
 }
 
@@ -9479,7 +9479,7 @@ GLEE_EXTERN GLint GLeeForceLink(const char * extensionName)
 {
 	int type=0; 
 	int extNum;
-	int len=strlen(extensionName);
+	size_t len=strlen(extensionName);
 	if (len<5) return GLEE_LINK_FAIL;
 	if (!__GLeeInitedLoadFunctions)
 	{
@@ -9497,7 +9497,7 @@ GLEE_EXTERN GLint GLeeForceLink(const char * extensionName)
 	else if (extensionName[2]=='X') type=2;	
 	extNum=__GLeeGetExtensionNumber(extensionName,type);
 	if (extNum==-1) return GLEE_LINK_FAIL;
-	if (type==0) return __GLeeGLLoadFunction[extNum]();
+	if (type==0) return (GLint)__GLeeGLLoadFunction[extNum]();
 #ifdef WIN32
 	if (type==1) return __GLeeWGLLoadFunction[extNum]();
 #elif defined(__APPLE__) || defined(__APPLE_CC__)	

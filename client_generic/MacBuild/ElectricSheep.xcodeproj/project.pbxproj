@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		211E8EA61ADB403700C0B833 /* boost_download */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 211E8EA91ADB403700C0B833 /* Build configuration list for PBXAggregateTarget "boost_download" */;
+			buildPhases = (
+				211E8EAA1ADB404900C0B833 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = boost_download;
+			productName = boost_download;
+		};
 		21A36C27101FA2840086E7C8 /* All */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 21A36C2F101FA2BC0086E7C8 /* Build configuration list for PBXAggregateTarget "All" */;
@@ -23,8 +34,6 @@
 
 /* Begin PBXBuildFile section */
 		21006FC81017BC4B004A6511 /* Credits.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21006FBD1017BC2C004A6511 /* Credits.html */; };
-		2100C5AB162B53DD00D42796 /* thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 2100C5A9162B53DD00D42796 /* thumbnail.png */; };
-		2100C5AC162B53DD00D42796 /* thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2100C5AA162B53DD00D42796 /* thumbnail@2x.png */; };
 		210335040F549BEF00A83F17 /* AlignedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 210335030F549BEF00A83F17 /* AlignedBuffer.cpp */; };
 		210335050F549BEF00A83F17 /* AlignedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 210335030F549BEF00A83F17 /* AlignedBuffer.cpp */; };
 		2118A3C40F51BEE800BA0582 /* ElectricSheep.icns in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2118A3B30F51BED100BA0582 /* ElectricSheep.icns */; };
@@ -55,12 +64,12 @@
 		214CC3680F34E5CF0083617B /* FontGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 214CC3660F34E5CF0083617B /* FontGL.cpp */; };
 		215542301261FDC900AB51BF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2155422F1261FDC900AB51BF /* Sparkle.framework */; };
 		215542311261FDC900AB51BF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2155422F1261FDC900AB51BF /* Sparkle.framework */; };
-		215542561261FE2F00AB51BF /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2155422F1261FDC900AB51BF /* Sparkle.framework */; };
-		215543551262042500AB51BF /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2155422F1261FDC900AB51BF /* Sparkle.framework */; };
+		215542561261FE2F00AB51BF /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2155422F1261FDC900AB51BF /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		215543551262042500AB51BF /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2155422F1261FDC900AB51BF /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		215545A912620D3000AB51BF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 215545A812620D3000AB51BF /* dsa_pub.pem */; };
 		215545AA12620D3000AB51BF /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 215545A812620D3000AB51BF /* dsa_pub.pem */; };
-		21598F920F571ECF00DDDFA6 /* flam3-animate in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21598F860F571EB000DDDFA6 /* flam3-animate */; };
-		21598FA00F571EE000DDDFA6 /* flam3-animate in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21598F860F571EB000DDDFA6 /* flam3-animate */; };
+		21598F920F571ECF00DDDFA6 /* flam3-animate in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21598F860F571EB000DDDFA6 /* flam3-animate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		21598FA00F571EE000DDDFA6 /* flam3-animate in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21598F860F571EB000DDDFA6 /* flam3-animate */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		2160FAB30F30F45100B2C27A /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 212B192A0E8E591000CE185C /* Common.cpp */; };
 		2160FAB40F30F45100B2C27A /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 212B192B0E8E591000CE185C /* Exception.cpp */; };
 		2160FAB50F30F45100B2C27A /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 212B192C0E8E591000CE185C /* Log.cpp */; };
@@ -199,6 +208,7 @@
 		21887A240EC6CDF9001ABD2E /* libbz2.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1ADD0E8E6E5000CE185C /* libbz2.1.0.dylib */; };
 		21887A250EC6CDF9001ABD2E /* liblua5.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AF30E8E715E00CE185C /* liblua5.1.a */; };
 		2188A6D017EB94F30078C91C /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2188A6CF17EB94F30078C91C /* ApplicationServices.framework */; };
+		21934CB919F3C2430096E7D7 /* thumbnail.tif in Resources */ = {isa = PBXBuildFile; fileRef = 21934CB819F3C2430096E7D7 /* thumbnail.tif */; };
 		2197D55F19B06ED300EFA1F2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D55E19B06ED300EFA1F2 /* CoreVideo.framework */; };
 		2197D56019B06ED300EFA1F2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D55E19B06ED300EFA1F2 /* CoreVideo.framework */; };
 		2197D56219B06F4600EFA1F2 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2197D56119B06F4600EFA1F2 /* VideoDecodeAcceleration.framework */; };
@@ -247,10 +257,25 @@
 			isEditable = 1;
 			outputFiles = (
 			);
+			script = "";
 		};
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
+		211E8EAB1ADB406D00C0B833 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 211E8EA61ADB403700C0B833;
+			remoteInfo = boost_download;
+		};
+		211E8EAD1ADB407800C0B833 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 211E8EA61ADB403700C0B833;
+			remoteInfo = boost_download;
+		};
 		21A36C2A101FA2920086E7C8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
@@ -414,8 +439,6 @@
 		09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		21006FBD1017BC2C004A6511 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = SOURCE_ROOT; };
 		21008B760EB7D69900E64796 /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Console.h; path = ../Client/Console.h; sourceTree = SOURCE_ROOT; };
-		2100C5A9162B53DD00D42796 /* thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail.png; sourceTree = SOURCE_ROOT; };
-		2100C5AA162B53DD00D42796 /* thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumbnail@2x.png"; sourceTree = SOURCE_ROOT; };
 		210335030F549BEF00A83F17 /* AlignedBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AlignedBuffer.cpp; path = ../Common/AlignedBuffer.cpp; sourceTree = SOURCE_ROOT; };
 		2118A3B30F51BED100BA0582 /* ElectricSheep.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ElectricSheep.icns; sourceTree = SOURCE_ROOT; };
 		211CDDD60ED0BD9200EB9394 /* Download.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Download.cpp; sourceTree = "<group>"; };
@@ -515,6 +538,7 @@
 		2191E23719B5111700F5B82D /* FrameDisplay.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FrameDisplay.h; path = ../Client/FrameDisplay.h; sourceTree = "<group>"; };
 		2191E23819B5111700F5B82D /* StartupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StartupScreen.h; path = ../Client/StartupScreen.h; sourceTree = "<group>"; };
 		2191E23919B5113E00F5B82D /* SmartPtr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; name = SmartPtr.h; path = ../Common/SmartPtr.h; sourceTree = "<group>"; };
+		21934CB819F3C2430096E7D7 /* thumbnail.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = thumbnail.tif; sourceTree = SOURCE_ROOT; };
 		2197D55E19B06ED300EFA1F2 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		2197D56119B06F4600EFA1F2 /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoDecodeAcceleration.framework; path = System/Library/Frameworks/VideoDecodeAcceleration.framework; sourceTree = SDKROOT; };
 		2197D56419B06FC300EFA1F2 /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = ../ffmpeg/osx/lib/libswresample.a; sourceTree = SOURCE_ROOT; };
@@ -842,8 +866,7 @@
 		2160FE160F30F82800B2C27A /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
-				2100C5A9162B53DD00D42796 /* thumbnail.png */,
-				2100C5AA162B53DD00D42796 /* thumbnail@2x.png */,
+				21934CB819F3C2430096E7D7 /* thumbnail.tif */,
 				21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */,
 				21006FBD1017BC2C004A6511 /* Credits.html */,
 				21598F860F571EB000DDDFA6 /* flam3-animate */,
@@ -928,11 +951,11 @@
 				2160FEE50F30F9A800B2C27A /* CopyFiles */,
 				2160FEE60F30F9A800B2C27A /* CopyFiles */,
 				2155439B1262042D00AB51BF /* CopyFiles */,
-				2197D55B19B05C4300EFA1F2 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				211E8EAC1ADB406D00C0B833 /* PBXTargetDependency */,
 			);
 			name = ElectricSheepTestApp;
 			productName = ElectricSheep;
@@ -946,18 +969,17 @@
 				21AAA0C80F7040ED00AC23A8 /* Resources */,
 				218878CD0EC6CD7E001ABD2E /* Sources */,
 				218878CE0EC6CD7E001ABD2E /* Frameworks */,
-				21F05A7B0ED213240064EDD0 /* ShellScript */,
 				2160FF3D0F30FA6100B2C27A /* CopyFiles */,
 				2160FF3E0F30FA6100B2C27A /* CopyFiles */,
 				2160FF3F0F30FA6100B2C27A /* CopyFiles */,
 				2160FF400F30FA6100B2C27A /* CopyFiles */,
 				215542511261FE2100AB51BF /* CopyFiles */,
-				2197D55A19B05BFE00EFA1F2 /* Run Script */,
 			);
 			buildRules = (
 				2135DA930EC74C6B005E246D /* PBXBuildRule */,
 			);
 			dependencies = (
+				211E8EAE1ADB407800C0B833 /* PBXTargetDependency */,
 			);
 			name = ScreenSaver;
 			productName = ScreenSaver;
@@ -970,7 +992,12 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0610;
+				TargetAttributes = {
+					211E8EA61ADB403700C0B833 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+				};
 			};
 			buildConfigurationList = 1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "ElectricSheep" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -989,6 +1016,7 @@
 				218878CF0EC6CD7E001ABD2E /* ScreenSaver */,
 				2160FAAC0F30F43600B2C27A /* ElectricSheepTestApp */,
 				21A36C27101FA2840086E7C8 /* All */,
+				211E8EA61ADB403700C0B833 /* boost_download */,
 			);
 		};
 /* End PBXProject section */
@@ -1000,11 +1028,10 @@
 			files = (
 				21AAA0BD0F7040B500AC23A8 /* ElectricSheep.nib in Resources */,
 				215545AA12620D3000AB51BF /* dsa_pub.pem in Resources */,
+				21934CB919F3C2430096E7D7 /* thumbnail.tif in Resources */,
 				21ADBB271305D380000A9F20 /* green.tif in Resources */,
 				21ADBB281305D380000A9F20 /* red.tif in Resources */,
 				21ADBB291305D380000A9F20 /* yellow.tif in Resources */,
-				2100C5AB162B53DD00D42796 /* thumbnail.png in Resources */,
-				2100C5AC162B53DD00D42796 /* thumbnail@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,21 +1051,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2197D55A19B05BFE00EFA1F2 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "LOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${FRAMEWORKS_FOLDER_PATH}\"\nIDENTITY=\"Developer ID Application: Scott Draves\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/Sparkle.framework/Versions/A\"\n";
-		};
-		2197D55B19B05C4300EFA1F2 /* ShellScript */ = {
+		211E8EAA1ADB404900C0B833 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1049,20 +1062,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "LOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${FRAMEWORKS_FOLDER_PATH}\"\nIDENTITY=\"Developer ID Application: Scott Draves\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/Sparkle.framework/Versions/A\"\n";
-		};
-		21F05A7B0ED213240064EDD0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#strip -x -S \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"";
+			shellScript = "${PROJECT_DIR}/../boost/osx/get_boost.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1186,6 +1186,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		211E8EAC1ADB406D00C0B833 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 211E8EA61ADB403700C0B833 /* boost_download */;
+			targetProxy = 211E8EAB1ADB406D00C0B833 /* PBXContainerItemProxy */;
+		};
+		211E8EAE1ADB407800C0B833 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 211E8EA61ADB403700C0B833 /* boost_download */;
+			targetProxy = 211E8EAD1ADB407800C0B833 /* PBXContainerItemProxy */;
+		};
 		21A36C2B101FA2920086E7C8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 218878CF0EC6CD7E001ABD2E /* ScreenSaver */;
@@ -1222,7 +1232,6 @@
 		1DEB924C08733DCA0010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CONFIGURATION_BUILD_DIR = build/Debug;
 				FRAMEWORK_SEARCH_PATHS = Frameworks;
@@ -1283,7 +1292,6 @@
 		1DEB924D08733DCA0010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CONFIGURATION_BUILD_DIR = build/Release;
 				FRAMEWORK_SEARCH_PATHS = Frameworks;
@@ -1339,6 +1347,20 @@
 			};
 			name = Release;
 		};
+		211E8EA71ADB403700C0B833 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		211E8EA81ADB403700C0B833 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		2160FAB00F30F43700B2C27A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1348,6 +1370,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1394,6 +1417,7 @@
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1434,11 +1458,13 @@
 				BUILD_VARIANTS = normal;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = build/Debug;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -1479,12 +1505,14 @@
 				BUILD_VARIANTS = normal;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Scott Draves (D7639HSC8D)";
+				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = build/Release;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEPLOYMENT_POSTPROCESSING = NO;
 				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -1554,6 +1582,15 @@
 			buildConfigurations = (
 				1DEB924C08733DCA0010E9CD /* Debug */,
 				1DEB924D08733DCA0010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		211E8EA91ADB403700C0B833 /* Build configuration list for PBXAggregateTarget "boost_download" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				211E8EA71ADB403700C0B833 /* Debug */,
+				211E8EA81ADB403700C0B833 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

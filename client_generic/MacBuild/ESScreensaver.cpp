@@ -64,11 +64,8 @@ bool ESScreensaver_Start( bool _bPreview, uint32 _width, uint32 _height )
 		//g_Player().Stop();
 	}
 		
-	if (g_Player().Display() != NULL)
-	{		
-		//g_Player().Display()->SetContext((CGLContextObj)_glContext);
-		g_Player().Display()->ForceWidthAndHeight( _width, _height );
-	}
+    //g_Player().Display()->SetContext((CGLContextObj)_glContext);
+    g_Player().ForceWidthAndHeight(0, _width, _height );
 
 	//g_Player().SetGLContext((CGLContextObj)_glContext, _bPreview);
 	
@@ -107,7 +104,7 @@ bool ESScreensaver_Stopped( void )
 
 void ESScreensaver_ForceWidthAndHeight( uint32 _width, uint32 _height )
 {
-	g_Player().Display()->ForceWidthAndHeight( _width, _height );
+	g_Player().ForceWidthAndHeight(0, _width, _height );
 }
 
 void ESScreensaver_Deinit( void )

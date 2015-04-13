@@ -377,6 +377,8 @@
 	
 	[synchronizeVBL setState: ESScreensaver_GetBoolSetting("settings.player.vbl_sync", false)];
 	
+    [preserveAR setState: ESScreensaver_GetBoolSetting("settings.player.preserve_AR", false)];
+
 	[blackoutMonitors setState: ESScreensaver_GetBoolSetting("settings.player.blackout_monitors", true)];
 	
 #ifdef SCREEN_SAVER
@@ -501,6 +503,8 @@
 	ESScreensaver_SetBoolSetting("settings.player.CalculateTransitions", [calculateTransitions state]);
 	
 	ESScreensaver_SetBoolSetting("settings.player.vbl_sync", [synchronizeVBL state]);
+    
+    ESScreensaver_SetBoolSetting("settings.player.preserve_AR", [preserveAR state]);
 	
 	ESScreensaver_SetBoolSetting("settings.player.blackout_monitors", [blackoutMonitors state]);
 

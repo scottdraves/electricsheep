@@ -345,7 +345,10 @@ class	CCubicFrameDisplay : public CFrameDisplay
 
 					m_spRenderer->SetBlend( "alphablend" );
 					m_spRenderer->Apply();
-					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1, 1, 1, currentalpha), m_spFrames[ m_Frames[3] ]->GetRect() );
+                    
+                    UpdateTexRect( m_spFrames[ m_Frames[3] ]->GetRect() );
+                    
+					m_spRenderer->DrawQuad( m_texRect, Base::Math::CVector4( 1, 1, 1, currentalpha), m_spFrames[ m_Frames[3] ]->GetRect() );
 				}
 
 				return true;

@@ -21,6 +21,7 @@
 	IBOutlet NSButton* autoUpdates;
 	IBOutlet NSButton* negVoteKills;
 	IBOutlet NSButton* calculateTransitions;
+    IBOutlet NSButton* preserveAR;
 			
     IBOutlet NSTextField* drupalLogin;
     IBOutlet NSSecureTextField* drupalPassword;

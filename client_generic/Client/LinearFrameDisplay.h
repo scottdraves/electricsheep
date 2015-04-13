@@ -241,8 +241,9 @@ class	CLinearFrameDisplay : public CFrameDisplay
 					m_spShader->Set( "transPct", m_MetaData.m_TransitionProgress);
 					m_spRenderer->Apply();
 					
-					
-					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1, 1, 1, currentalpha ), texRect );
+                    UpdateTexRect( texRect );
+                    
+                    m_spRenderer->DrawQuad( m_texRect, Base::Math::CVector4( 1, 1, 1, currentalpha ), texRect );
 				}
 
 				return true;

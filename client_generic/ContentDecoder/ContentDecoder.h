@@ -189,7 +189,7 @@ class CContentDecoder
 
 	//	Queue for decoded frames.
 	Base::CBlockingQueue<CVideoFrame *>	m_FrameQueue;
-	boost::mutex	m_ForceNextMutex;
+	boost::shared_mutex	m_ForceNextMutex;
 
 	//	Codec context & working objects.
 	sOpenVideoInfo		*m_MainVideoInfo;
@@ -207,7 +207,7 @@ class CContentDecoder
 	
 	uint32			m_LoopIterations;
 	
-	bool			m_bForceNext;
+	int32			m_bForceNext;
 	
 	spCVideoFrame	m_sharedFrame;
 	boost::mutex	m_sharedFrameMutex;
@@ -222,7 +222,7 @@ class CContentDecoder
 
 	bool	Open( sOpenVideoInfo *ovi );
 	sOpenVideoInfo*		GetNextSheepInfo();
-	bool	NextSheepForPlaying( bool _bSkipLoop = false );
+	bool	NextSheepForPlaying( int32 _forceNext = 0 );
 	void	Destroy();
 	
 	CVideoFrame *ReadOneFrame(sOpenVideoInfo *ovi);
@@ -257,9 +257,8 @@ class CContentDecoder
 			
 			void ClearQueue( uint32 leave = 0 );
 			
-			void ForceNext( bool forced = true );
-			void ForcePrevious( uint32 _numPrevious );
-			bool NextForced( void );
+			void ForceNext( int32 forced = 1 );
+			int32 NextForced( void );
 };
 
 MakeSmartPointers( CContentDecoder );

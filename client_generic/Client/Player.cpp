@@ -385,6 +385,36 @@ ContentDecoder::CContentDecoder *CPlayer::CreateContentDecoder( bool _bStartByRa
 }
 
 /*
+ 
+ */
+void CPlayer::ForceWidthAndHeight(uint32 du, uint32 _w, uint32 _h)
+{
+    boost::mutex::scoped_lock lockthis( m_displayListMutex );
+    
+    if (du >= m_displayUnits.size())
+        return;
+    
+	const DisplayUnit* duptr = m_displayUnits[du];
+    
+    if (duptr == NULL)
+        return;
+    
+#ifdef MAC
+    if (!duptr->spDisplay.IsNull())
+    {
+        spCDisplayOutput disp = duptr->spDisplay;
+        disp->ForceWidthAndHeight(_w, _h);
+    }
+#endif
+    
+    if (!duptr->spFrameDisplay.IsNull())
+    {
+        spCFrameDisplay fd = duptr->spFrameDisplay;
+        fd->SetDisplaySize(_w, _h);
+    }
+}
+
+/*
 
 */
 void	CPlayer::Start()

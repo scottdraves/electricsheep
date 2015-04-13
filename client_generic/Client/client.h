@@ -315,30 +315,53 @@ class	CElectricSheep
                 
 				// PNG splash
 				m_SplashFilename = g_Settings()->Get( "settings.player.attrpngfilename", g_Settings()->Get( "settings.app.InstallDir", defaultDir ) + "electricsheep-attr.png"  );
-
+                
+                bool splashFound = false;
+                
 				const char *percent;
 
-				if (m_SplashFilename.empty() == false && (percent = strchr(m_SplashFilename.c_str(), '%')))
-				{
-					if (percent[1] == 'd')
-					{
-						FILE *test;
-						while (1)
-						{
-							char fNameFormatted[FILENAME_MAX];
-							snprintf(fNameFormatted, FILENAME_MAX, m_SplashFilename.c_str(), m_nSplashes);
-							if ((test = fopen(fNameFormatted, "r")))
-							{
-								fclose(test);
-								m_nSplashes++;
-							}
-							else 
-							{
-								break;
-							}
-						}
-					}
-				}
+				if ( m_SplashFilename.empty() == false )
+                {
+                    if (( percent = strchr(m_SplashFilename.c_str(), '%') ))
+                    {
+                        if (percent[1] == 'd')
+                        {
+                            FILE *test;
+                            while (1)
+                            {
+                                char fNameFormatted[FILENAME_MAX];
+                                snprintf(fNameFormatted, FILENAME_MAX, m_SplashFilename.c_str(), m_nSplashes);
+                                if ((test = fopen(fNameFormatted, "r")))
+                                {
+                                    splashFound = true;
+                                    fclose(test);
+                                    m_nSplashes++;
+                                }
+                                else 
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        FILE *test = fopen( m_SplashFilename.c_str(), "r" );
+                        
+                        if ( test != NULL )
+                        {
+                            splashFound = true;
+                            fclose( test );
+                        }
+                    }
+                }
+
+                
+                if ( !splashFound )
+                {
+                    m_SplashFilename = g_Settings()->Get( "settings.app.InstallDir", defaultDir ) + "electricsheep-attr.png";
+                    g_Settings()->Set( "settings.player.attrpngfilename", m_SplashFilename );
+                }
 
 
 				// if multiple splashes are found then they are loaded when the timer goes off, not here

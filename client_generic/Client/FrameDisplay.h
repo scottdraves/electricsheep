@@ -22,6 +22,14 @@ class	CFrameDisplay
 	fp8		m_T;
 
 	fp4		m_LastAlpha;
+    
+    fp8     m_LastTexMoveClock;
+    
+    fp4     m_CurTexMoveOff;
+    
+    fp4     m_CurTexMoveDir;
+    
+    const fp8 TEX_MOVE_SECS = 60.f * 30.f; //30 minutes
 
 	protected:
 		fp8		m_FadeCount;
@@ -35,7 +43,10 @@ class	CFrameDisplay
 		DisplayOutput::spCRenderer	m_spRenderer;
 
 		//	Dimensions of the display surface.
-		Base::Math::CRect	m_Size;
+		Base::Math::CRect	m_dispSize;
+    
+        //  texture Rect
+        Base::Math::CRect   m_texRect;
 
 		//	To keep track of elapsed time.
 		Base::CTimer	m_Timer;
@@ -44,6 +55,8 @@ class	CFrameDisplay
 		DisplayOutput::spCTextureFlat m_spVideoTexture;
 		
 		DisplayOutput::spCTextureFlat m_spSecondVideoTexture;
+    
+        bool m_bPreserveAR;
 
 		//	Grab a frame from the decoder and use it as a texture.
 		bool	GrabFrame( ContentDecoder::spCContentDecoder _spDecoder, DisplayOutput::spCTextureFlat &_spTexture, DisplayOutput::spCTextureFlat &_spSecondTexture, ContentDecoder::sMetaData &_metadata )
@@ -178,6 +191,12 @@ class	CFrameDisplay
 				m_spSecondImageRef = new DisplayOutput::CImage();
 				m_bValid = true;
 				m_FadeCount = (fp8)g_Settings()->Get("settings.player.fadecount", 30);
+                
+                m_bPreserveAR = g_Settings()->Get("settings.player.preserve_AR", false);
+                m_texRect = Base::Math::CRect( 1, 1 );
+                m_LastTexMoveClock = -1;
+                m_CurTexMoveOff = 0;
+                m_CurTexMoveDir = 1.;
 			}
 
 			virtual ~CFrameDisplay()
@@ -189,9 +208,10 @@ class	CFrameDisplay
 			bool Valid()	{	return m_bValid;	};
 
 			//
-			void	SetDisplaySize( const uint32 /*_w*/, const uint32 /*_h*/ )
+			void	SetDisplaySize( const uint32 _w, const uint32 _h )
 			{
-				m_Size = Base::Math::CRect( 1, 1 );
+				m_dispSize = Base::Math::CRect( _w, _h );
+                m_CurTexMoveOff = 0.f;
 			}
 
 			//	Decode a frame, and render it.
@@ -251,15 +271,17 @@ class	CFrameDisplay
 				
 				fp4 transCoef = m_MetaData.m_TransitionProgress / 100.0f;
 
-				m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha * (1.0f - transCoef) ),  m_spVideoTexture->GetRect() );
+                UpdateTexRect( m_spVideoTexture->GetRect() );
+                
+                m_spRenderer->DrawQuad( m_texRect, Base::Math::CVector4( 1,1,1, currentalpha * (1.0f - transCoef) ), m_spVideoTexture->GetRect() );
 				
 				if (!m_spSecondVideoTexture.IsNull())
 				{
 					//	Bind the second texture and render a quad covering the screen.
 					m_spRenderer->SetTexture( m_spSecondVideoTexture, 0 );
 					m_spRenderer->Apply();
-
-					m_spRenderer->DrawQuad( m_Size, Base::Math::CVector4( 1,1,1, currentalpha * transCoef ),  m_spVideoTexture->GetRect() );
+                    
+                    m_spRenderer->DrawQuad( m_texRect, Base::Math::CVector4( 1,1,1, currentalpha * transCoef ), m_spVideoTexture->GetRect() );
 				}
 
 				return true;
@@ -269,6 +291,84 @@ class	CFrameDisplay
 			{
 				return _displayFps;
 			}
+    
+            virtual void UpdateTexRect(const Base::Math::CRect& texDim)
+            {
+                m_texRect.m_X0 = 0.f;
+                m_texRect.m_Y0 = 0.f;
+                m_texRect.m_X1 = 1.f;
+                m_texRect.m_Y1 = 1.f;
+                
+                if (!m_bPreserveAR)
+                    return;
+                
+                bool landscape = true;
+                
+                fp4 r1 = (fp4)m_dispSize.Width() / (fp4)m_dispSize.Height();
+                fp4 r2 = texDim.Width() / texDim.Height();
+                
+                if (r2 > r1)
+                {
+                    r1 = 1.f / r1;
+                    r2 = 1.f / r2;
+                    landscape = false;
+                }
+                
+                fp4 bars =  (r1 - r2) / (2 * r1);
+                    
+                if (bars > 0)
+                {
+                    fp8 acttm = m_Timer.Time();
+                    
+                    if (m_LastTexMoveClock < 0)
+                    {
+                        m_LastTexMoveClock = acttm;
+                    }
+                    
+                    if ((acttm - m_LastTexMoveClock) > TEX_MOVE_SECS)
+                    {
+                        m_CurTexMoveOff += bars / 20.f * m_CurTexMoveDir;
+                        m_LastTexMoveClock = acttm;
+                    }
+                    
+                    fp4 *a = NULL, *b = NULL;
+                    
+                    if (landscape)
+                    {
+                        a = &m_texRect.m_X0;
+                        b = &m_texRect.m_X1;
+                    }
+                    else
+                    {
+                        a = &m_texRect.m_Y0;
+                        b = &m_texRect.m_Y1;
+                    }
+                    
+                    if (a == NULL || b == NULL)
+                        return;
+                    
+                    *a  += bars + m_CurTexMoveOff;
+                    *b  -= bars - m_CurTexMoveOff;
+                    
+                    if (*a <= 0.f)
+                    {
+                        *b += -*a;
+                        *a += -*a;
+                        m_CurTexMoveOff -= bars / 20.f * m_CurTexMoveDir;
+                        m_CurTexMoveDir = -m_CurTexMoveDir;
+                    }
+                    
+                    if (*b >= 1.f)
+                    {
+                        *a -= *b - 1.f;
+                        *b -= *b - 1.f;
+                        m_CurTexMoveOff -= bars / 20.f * m_CurTexMoveDir;
+                        m_CurTexMoveDir = -m_CurTexMoveDir;
+                    }
+
+                }
+                
+            }
 };
 
 MakeSmartPointers( CFrameDisplay );

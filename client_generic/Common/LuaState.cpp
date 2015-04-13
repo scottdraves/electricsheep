@@ -170,7 +170,7 @@ void	CLuaState::Init( const std::string &_basePath )
 	lua_cpcall( m_pState, luaopen_jit, NULL );
 #endif
 
-#ifdef AMD64
+#if defined(AMD64) || defined(__LP64__)
 	Execute( "_PLATFORM = 'x64'" );
 #else
 	Execute( "_PLATFORM = 'x86'" );

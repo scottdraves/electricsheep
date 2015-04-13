@@ -449,15 +449,17 @@ bool	SheepGenerator::generateSheep()
 #endif
 
 #ifndef	DEBUG
-		std::stringstream tmp;
-				
-		tmp << "Rendering starts in {" << std::fixed << std::setprecision(0) << (int32)ContentDownloader::INIT_DELAY << "}...";
+        {
+            std::stringstream tmp;
+                    
+            tmp << "Rendering starts in {" << std::fixed << std::setprecision(0) << (int32)ContentDownloader::INIT_DELAY << "}...";
 
-		Shepherd::setRenderState(tmp.str());
-		//	Make sure we are really deeply settled asleep, avoids lots of timed out frames.
-		g_Log->Info( "Chilling for %d seconds before trying to render frames...", ContentDownloader::INIT_DELAY );
-		
-		thread::sleep( get_system_time() + posix_time::seconds(ContentDownloader::INIT_DELAY) );
+            Shepherd::setRenderState(tmp.str());
+            //	Make sure we are really deeply settled asleep, avoids lots of timed out frames.
+            g_Log->Info( "Chilling for %d seconds before trying to render frames...", ContentDownloader::INIT_DELAY );
+            
+            thread::sleep( get_system_time() + posix_time::seconds(ContentDownloader::INIT_DELAY) );
+        }
 #endif
 
 		uint32	failureSleepDuration = TIMEOUT;

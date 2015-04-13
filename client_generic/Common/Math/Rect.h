@@ -88,7 +88,7 @@ inline CRect::CRect( const CVector2 &_a, const CVector2 &_b ) : m_X0( _a.m_X ), 
 */
 inline bool CRect::IsNull() const
 {
-	return( (m_X0 == m_X1) && (m_Y0 == m_Y1) );
+	return( Width() == 0.0f && Height() == 0.0f );
 }
 
 /*
@@ -161,7 +161,7 @@ inline fp4 CRect::Area( void ) const
 */
 inline uint32 CRect::iArea( void ) const
 {
-	return( iWidth() * iHeight() );
+	return uint32( iWidth() * iHeight() );
 }
 
 };

@@ -11,13 +11,16 @@ namespace Base
 template <typename T> class CBlockingQueue
 {
 public:
-	typedef boost::mutex::scoped_lock   scoped_lock;
+    typedef boost::shared_lock<boost::shared_mutex> reader_lock;
+    typedef boost::upgrade_lock<boost::shared_mutex> writer_lock;
+    
+	//typedef boost::mutex::scoped_lock   scoped_lock;
 
 	CBlockingQueue() { m_maxQueueElements = 0xFFFFFFFF; }
 
 	bool push( const T& el, bool pushBack = true,  bool checkMax = true )
 	{
-		scoped_lock lock( m_mutex );
+		writer_lock lock( m_mutex );
 
 		if ( checkMax && m_queue.size() == m_maxQueueElements )
 		{
@@ -36,7 +39,7 @@ public:
 
 	bool peek( T& el, bool wait = false, bool popFront = true )
 	{
-		scoped_lock lock(m_mutex);
+		writer_lock lock(m_mutex);
 		
 		if ( wait )
 		{
@@ -68,10 +71,17 @@ public:
 		
 		return true;
 	}
+    
+    void peekn( T& el, size_t n )
+    {
+        reader_lock lock(m_mutex);
+        
+        el = m_queue[n];
+    }
 
 	bool pop( T& el, bool wait = false, bool popFront = true )
 	{
-		scoped_lock lock(m_mutex);
+		writer_lock lock(m_mutex);
 		
 		if ( wait )
 		{
@@ -106,19 +116,19 @@ public:
 
 	bool empty()
 	{
-		scoped_lock lock( m_mutex );
+		reader_lock lock( m_mutex );
 		return m_queue.empty();
 	}
 
 	size_t size()
 	{
-		scoped_lock lock( m_mutex );
+		reader_lock lock( m_mutex );
 		return m_queue.size();
 	}
 
 	void clear( size_t leave )
 	{
-		scoped_lock lock( m_mutex );
+		writer_lock lock( m_mutex );
 		
 		if ( leave == 0 )
 		{
@@ -143,14 +153,14 @@ public:
 	
 	void setMaxQueueElements( size_t max )
 	{
-		scoped_lock lock( m_mutex );
+		writer_lock lock( m_mutex );
 		
 		m_maxQueueElements = max;
 	}
 	
 	bool waitForEmpty()
 	{
-		scoped_lock lock( m_mutex );
+		reader_lock lock( m_mutex );
 		
 		if (m_queue.empty())
 			return true;
@@ -161,7 +171,7 @@ public:
 	}
 
 private:
-	boost::mutex m_mutex;
+	boost::shared_mutex m_mutex;
 	boost::condition m_fullCond;
 	boost::condition m_emptyCond;
 	boost::condition m_nonEmptyCond;

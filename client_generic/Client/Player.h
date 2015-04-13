@@ -143,11 +143,14 @@ private:
 			inline void		Fullscreen( const bool _bState )	{	m_bFullscreen = _bState; };
 			inline bool		Stopped()							{	return !m_bStarted;	};
 			
-			inline DisplayOutput::spCDisplayOutput	Display()	
+			inline DisplayOutput::spCDisplayOutput	Display(uint32 du = 0)
 			{ 	
 				boost::mutex::scoped_lock lockthis( m_displayListMutex );
+                
+                if (du >= m_displayUnits.size())
+                    return NULL;
 
-				return m_displayUnits.empty() ? NULL :  m_displayUnits[0]->spDisplay;
+				return m_displayUnits[du]->spDisplay;
 			}
 			
 			inline DisplayOutput::spCRenderer		Renderer()
@@ -226,7 +229,7 @@ private:
 				if ( decoder.IsNull() )
 					return;
 
-				decoder->ForcePrevious( 2 );
+				decoder->ForceNext( -2 );
 			}
 			
 			inline void		RepeatSheep( void )
@@ -236,7 +239,7 @@ private:
 				if ( decoder.IsNull() )
 					return;
 
-				decoder->ForcePrevious( 1 );
+				decoder->ForceNext( -1 );
 			}
 			
 			inline void		SetMultiDisplayMode( MultiDisplayMode mode )	{ m_MultiDisplayMode = mode; }
@@ -244,6 +247,8 @@ private:
 			inline int		UsedSheepType() { return m_UsedSheepType; }
 			
 			inline uint32		GetDisplayCount() { return static_cast<uint32>(m_displayUnits.size()); }
+    
+            void ForceWidthAndHeight(uint32 du, uint32 _w, uint32 _h);
 };
 
 /*

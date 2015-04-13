@@ -28,6 +28,7 @@
 #include	<queue>
 #include	"boost/thread/mutex.hpp"
 #include	"boost/detail/atomic_count.hpp"
+#include    "boost/atomic.hpp"
 #include	"Timer.h"
 #include	"Sheep.h"
 #include	"Log.h"
@@ -73,8 +74,9 @@ class	CTimedMessageBody
 };
 
 MakeSmartPointers( CTimedMessageBody );
-
-
+    
+typedef boost::atomic<char *> atomic_char_ptr;
+    
 /*
 	Shepherd.
 	This class is responsible for managing the threads to create, render, and download sheep.
@@ -97,27 +99,27 @@ class Shepherd
 	static uint64 s_ClientFlockGoldBytes;
 	static uint64 s_ClientFlockGoldCount;
 
-	static char *fRootPath;
-	static char *fMpegPath;
-	static char *fXmlPath;
-	static char *fJpegPath;
-	static char *fRedirectServerName;
-	static char *fServerName;
-	static char *fProxy;
-	static char *fProxyUser;
-	static char *fProxyPass;
+	static atomic_char_ptr fRootPath;
+	static atomic_char_ptr fMpegPath;
+	static atomic_char_ptr fXmlPath;
+	static atomic_char_ptr fJpegPath;
+	static atomic_char_ptr fRedirectServerName;
+	static atomic_char_ptr fServerName;
+	static atomic_char_ptr fProxy;
+	static atomic_char_ptr fProxyUser;
+	static atomic_char_ptr fProxyPass;
 	static int	fSaveFrames;
 	static int	fUseProxy;
 	static int	fCacheSize;
 	static int	fCacheSizeGold;
 	static int	fFuseLen;
 	static int	fRegistered;
-	static char *fPassword;
-	static char *fUniqueID;
+	static atomic_char_ptr fPassword;
+	static atomic_char_ptr fUniqueID;
 	static bool fShutdown;
 	static int fChangeRes;
 	static int fChangingRes;
-	static char *s_Role;
+	static atomic_char_ptr fRole;
 	static boost::detail::atomic_count	*renderingFrames;
 	static boost::detail::atomic_count	*totalRenderedFrames;
 	static bool m_RenderingAllowed;
@@ -131,16 +133,14 @@ class Shepherd
 
 	static boost::mutex	s_ShepherdMutex;
 	
-	static boost::mutex	s_DownloadStateMutex;
+	static boost::shared_mutex	s_DownloadStateMutex;
 
-	static boost::mutex	s_RenderStateMutex;
+	static boost::shared_mutex	s_RenderStateMutex;
 
 	static boost::mutex	s_ComputeServerNameMutex;
 	
-	static boost::mutex	s_GetServerNameMutex;
-	
-	static boost::mutex s_RoleMutex;
-	
+	static boost::shared_mutex	s_GetServerNameMutex;
+		
 
 	static time_t s_LastRequestTime;
 
@@ -222,6 +222,8 @@ class Shepherd
 
 			//
 			static void notifyShepherdOfHisUntimleyDeath();
+    
+            static void setNewAndDeleteOldString(atomic_char_ptr &str, char *newval, boost::memory_order mem_ord = boost::memory_order_relaxed);
 			static void setRootPath( const char *path );
 			static const char *rootPath();
 			static const char *mpegPath();

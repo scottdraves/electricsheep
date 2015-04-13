@@ -335,7 +335,7 @@ sOpenVideoInfo*	CContentDecoder::GetNextSheepInfo()
 	Next().
 	Advance to next playlist entry.
 */
-bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
+bool	CContentDecoder::NextSheepForPlaying( int32 _forceNext )
 {
 
 	if( m_spPlaylist == NULL )
@@ -344,14 +344,44 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 		return( false );
 	}
 	
-	bool sameVideo = false;
-		
-	if (_bSkipLoop && !m_MainVideoInfo->m_bSpecialSheep && m_SecondVideoInfo != NULL && m_MainVideoInfo->EqualsTo(m_SecondVideoInfo) && m_MainVideoInfo->IsLoop())
-		SAFE_DELETE(m_SecondVideoInfo);
-		
-	if (m_MainVideoInfo != NULL && !m_MainVideoInfo->m_bSpecialSheep && m_SecondVideoInfo != NULL && m_MainVideoInfo->EqualsTo(m_SecondVideoInfo))
-		sameVideo = true;
-		
+	if (_forceNext != 0 )
+    {
+        std::string secondPath("");
+        
+        if (m_SecondVideoInfo != NULL && m_SecondVideoInfo->m_NumIterations == 0)
+           secondPath.assign(m_SecondVideoInfo->m_Path);
+        
+        SAFE_DELETE(m_SecondVideoInfo);
+        
+        if (_forceNext < 0)
+        {
+            uint32 _numPrevious = (uint32)(-_forceNext);
+            
+            if ( m_SheepHistoryQueue.size() > 0 )
+            {
+                if (!secondPath.empty())
+                    m_NextSheepQueue.push( secondPath, false, false );
+                
+                std::string name;
+                
+                for ( uint32 i = 0; i < _numPrevious; i++ )
+                {
+                    while ( m_SheepHistoryQueue.pop( name, false, false ) )
+                    {
+                        m_NextSheepQueue.push( name, false, false );
+                        
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (!secondPath.empty())
+                m_NextSheepQueue.push(secondPath, false, false);
+        }
+    }
+				
 	SAFE_DELETE(m_MainVideoInfo);
 	
 	m_MainVideoInfo = m_SecondVideoInfo;
@@ -397,7 +427,7 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 	
 	if (m_MainVideoInfo->IsOpen())
 	{
-		if (!sameVideo)
+		if (m_MainVideoInfo->m_NumIterations == 0)
 		{
 			while( m_SheepHistoryQueue.size() > 50 )
 			{
@@ -416,7 +446,7 @@ bool	CContentDecoder::NextSheepForPlaying( bool _bSkipLoop )
 	else
 		return false;
 		
-	if (m_bCalculateTransitions && m_SecondVideoInfo != NULL && !m_SecondVideoInfo->IsOpen() && m_MainVideoInfo->m_Last != m_SecondVideoInfo->m_SheepID && m_MainVideoInfo->m_SheepID != m_SecondVideoInfo->m_First)
+	if (m_bCalculateTransitions && m_SecondVideoInfo != NULL && !m_SecondVideoInfo->IsOpen() && m_MainVideoInfo->m_Last != m_SecondVideoInfo->m_SheepID && m_MainVideoInfo->m_SheepID != m_SecondVideoInfo->m_First && (m_MainVideoInfo->m_Generation / 10000) == (m_SecondVideoInfo->m_Generation / 10000))
 	{
 		Open( m_SecondVideoInfo );
 	}
@@ -678,14 +708,14 @@ void	CContentDecoder::ReadPackets()
 		{			
 			this_thread::interruption_point();
 
-			bool bNextForced = NextForced();
+            int32 nextForced = NextForced();
 			
-			if (bNextForced)
-				ForceNext(false);
+			if (nextForced != 0)
+				ForceNext( 0 );
 				
 			bool bDoNextSheep = true;
 				
-			if (!bNextForced)
+			if (nextForced == 0)
 			{
 				CVideoFrame *pMainVideoFrame = ReadOneFrame(m_MainVideoInfo);
 				
@@ -723,9 +753,9 @@ void	CContentDecoder::ReadPackets()
 			{					
 				g_Log->Info( "calling Next()" );
 				
-				NextSheepForPlaying( bNextForced );
+				NextSheepForPlaying( nextForced );
 				
-				if ( bNextForced )
+				if ( nextForced != 0 )
 					ClearQueue();
 			}
 		}
@@ -866,53 +896,17 @@ uint32	CContentDecoder::QueueLength()
 
 /*
 */
-void CContentDecoder::ForcePrevious( uint32 _numPrevious )
+void CContentDecoder::ForceNext( int32 forced )
 { 
-	if ( m_SheepHistoryQueue.size() >= _numPrevious )
-	{
-		std::string name, lastname;
-		uint32 i;
-				
-		for ( i = 0; i < _numPrevious; i++ )
-		{
-			lastname.assign("");
-			
-			while ( m_SheepHistoryQueue.pop( name, false, false ) )
-			{
-				if ( lastname.empty() )
-					lastname = name;
-					
-				if ( lastname != name )
-					break;
-					
-				m_NextSheepQueue.push( name, false, false );
-				
-				name.assign("");
-			}
-			
-			if ( !name.empty() )
-				m_SheepHistoryQueue.push( name );
-		}
-		
-		ForceNext( true );
-	}
-};
-
-
-
-/*
-*/
-void CContentDecoder::ForceNext( bool forced )
-{ 
-	mutex::scoped_lock lock( m_ForceNextMutex );
+    upgrade_lock<boost::shared_mutex> lock( m_ForceNextMutex );
 	m_bForceNext = forced;
 };
 
 /*
 */
-bool CContentDecoder::NextForced( void )
+int32 CContentDecoder::NextForced( void )
 { 
-	mutex::scoped_lock lock( m_ForceNextMutex );
+	shared_lock<boost::shared_mutex> lock( m_ForceNextMutex );
 	return m_bForceNext;
 };
 

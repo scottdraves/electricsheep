@@ -59,23 +59,23 @@ uint64 Shepherd::s_ClientFlockBytes = 0;
 uint64 Shepherd::s_ClientFlockGoldBytes = 0;
 uint64 Shepherd::s_ClientFlockCount = 0;
 uint64 Shepherd::s_ClientFlockGoldCount = 0;
-char *Shepherd::fRootPath = NULL;
-char *Shepherd::fMpegPath = NULL;
-char *Shepherd::fXmlPath = NULL;
-char *Shepherd::fJpegPath = NULL;
-char *Shepherd::fRedirectServerName = NULL;
-char *Shepherd::fServerName = NULL;
-char *Shepherd::fProxy = NULL;
-char *Shepherd::fProxyUser = NULL;
-char *Shepherd::fProxyPass = NULL;
+atomic_char_ptr Shepherd::fRootPath(NULL);
+atomic_char_ptr Shepherd::fMpegPath(NULL);
+atomic_char_ptr Shepherd::fXmlPath(NULL);
+atomic_char_ptr Shepherd::fJpegPath(NULL);
+atomic_char_ptr Shepherd::fRedirectServerName(NULL);
+atomic_char_ptr Shepherd::fServerName(NULL);
+atomic_char_ptr Shepherd::fProxy(NULL);
+atomic_char_ptr Shepherd::fProxyUser(NULL);
+atomic_char_ptr Shepherd::fProxyPass(NULL);
 int Shepherd::fUseProxy = 0;
 int Shepherd::fSaveFrames = 0;
 int Shepherd::fCacheSize = 100;
 int Shepherd::fCacheSizeGold = 100;
 int Shepherd::fRegistered = 0;
-char *Shepherd::fPassword = NULL;
-char *Shepherd::fUniqueID = NULL;
-char *Shepherd::s_Role = NULL;
+atomic_char_ptr Shepherd::fPassword(NULL);
+atomic_char_ptr Shepherd::fUniqueID(NULL);
+atomic_char_ptr Shepherd::fRole(NULL);
 boost::detail::atomic_count *Shepherd::renderingFrames = NULL;
 boost::detail::atomic_count *Shepherd::totalRenderedFrames = NULL;
 bool Shepherd::m_RenderingAllowed = true;
@@ -88,14 +88,12 @@ boost::mutex	Shepherd::s_OverflowMessageQueueMutex;
 
 boost::mutex	Shepherd::s_ShepherdMutex;
 
-boost::mutex	Shepherd::s_DownloadStateMutex;
-boost::mutex	Shepherd::s_RenderStateMutex;
+boost::shared_mutex	Shepherd::s_DownloadStateMutex;
+boost::shared_mutex	Shepherd::s_RenderStateMutex;
 
-boost::mutex	Shepherd::s_GetServerNameMutex;
+boost::shared_mutex	Shepherd::s_GetServerNameMutex;
 
 boost::mutex	Shepherd::s_ComputeServerNameMutex;
-
-boost::mutex	Shepherd::s_RoleMutex;
 
 bool Shepherd::fShutdown = false;
 int Shepherd::fChangeRes = 0;
@@ -146,7 +144,7 @@ void	Shepherd::notifyShepherdOfHisUntimleyDeath()
 	SheepDownloader::closeDownloader();
 	SheepGenerator::closeGenerator();
 
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
+	//boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
 	SAFE_DELETE_ARRAY( fRootPath );
 	SAFE_DELETE_ARRAY( fMpegPath );
@@ -159,13 +157,12 @@ void	Shepherd::notifyShepherdOfHisUntimleyDeath()
 	SAFE_DELETE_ARRAY( fProxyUser );
 	SAFE_DELETE_ARRAY( fProxyPass );
 	SAFE_DELETE_ARRAY( fUniqueID );
-	SAFE_DELETE_ARRAY( s_Role );
+	SAFE_DELETE_ARRAY( fRole );
 
 	SAFE_DELETE( totalRenderedFrames );
 	SAFE_DELETE( renderingFrames );
 
 	std::vector<char *>::const_iterator it;
-
 	
 	char *str;
 	
@@ -175,6 +172,14 @@ void	Shepherd::notifyShepherdOfHisUntimleyDeath()
 	}
 	
 	fStringsToDelete.clear(0);
+}
+    
+void Shepherd::setNewAndDeleteOldString(atomic_char_ptr &str, char *newval, boost::memory_order mem_ord)
+{
+    char *toDelete = str.exchange(newval, mem_ord);
+    
+    if (toDelete != NULL)
+        fStringsToDelete.push(toDelete);
 }
 
 void Shepherd::setRootPath(const char *path)
@@ -194,96 +199,76 @@ void Shepherd::setRootPath(const char *path)
 	{
 		len--; runner--;
 	}
-
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	//	delete the old path
-	if ( fRootPath != NULL )
-		fStringsToDelete.push( fRootPath );
-
-	// allocate the memory to hold the string.
-	if(*runner != PATH_SEPARATOR_C)
-		fRootPath = new char[len + 2];
-	else
-		fRootPath = new char[len + 1];
+    
+    //we need space for trailing \ character
+    char *newRootPath = new char[len + 2];
 
 	// copy the data
-	memcpy(fRootPath, path, len);
+	memcpy(newRootPath, path, len);
 
 	// check for the trailing \ character
 	if(*runner != PATH_SEPARATOR_C)
 	{
-		fRootPath[len] = PATH_SEPARATOR_C;
-		fRootPath[len + 1] = '\0';
+		newRootPath[len] = PATH_SEPARATOR_C;
+		newRootPath[len + 1] = '\0';
 	}
 	else
-		fRootPath[len] = '\0';
+		newRootPath[len] = '\0';
 
 	// create the directory for the path
 #ifdef WIN32
-	CreateDirectoryA(fRootPath, NULL);
+	CreateDirectoryA(newRootPath, NULL);
 #else
-	mkdir(fRootPath, 0755);
+	mkdir(newRootPath, 0755);
 #endif
-
-	// initialize the mpeg path
-	if ( fMpegPath != NULL )
-		fStringsToDelete.push( fMpegPath );
-
-	fMpegPath = new char[(len + 12)];
-	snprintf(fMpegPath, len + 12, "%smpeg%c", fRootPath,PATH_SEPARATOR_C);
+    
+    setNewAndDeleteOldString(fRootPath, newRootPath);
+    
+	char *newMpegPath = new char[(len + 12)];
+    
+	snprintf(newMpegPath, len + 12, "%smpeg%c", newRootPath,PATH_SEPARATOR_C);
 #ifdef WIN32
-	CreateDirectoryA(fMpegPath, NULL);
+	CreateDirectoryA(newMpegPath, NULL);
 #else
-	mkdir(fMpegPath, 0755);
+	mkdir(newMpegPath, 0755);
 #endif
+    
+    setNewAndDeleteOldString(fMpegPath, newMpegPath);
 
-	// initialize the xml path
-	if ( fXmlPath != NULL )
-		fStringsToDelete.push( fXmlPath );
-
-	fXmlPath = new char[(len + 12)];
-	snprintf(fXmlPath, len + 12,"%sxml%c", fRootPath,PATH_SEPARATOR_C);
+    char *newXmlPath = new char[(len + 12)];
+	snprintf(newXmlPath, len + 12,"%sxml%c", newRootPath,PATH_SEPARATOR_C);
 #ifdef WIN32
-	CreateDirectoryA(fXmlPath, NULL);
+	CreateDirectoryA(newXmlPath, NULL);
 #else
-	mkdir(fXmlPath, 0755);
+	mkdir(newXmlPath, 0755);
 #endif
 
+    setNewAndDeleteOldString(fXmlPath, newXmlPath);
 
-	// initialize the jpeg path
-	if ( fJpegPath != NULL )
-		fStringsToDelete.push( fJpegPath );
-
-	fJpegPath = new char[(len + 12)];
-	snprintf(fJpegPath, len + 12,"%sjpeg%c", fRootPath,PATH_SEPARATOR_C);
+    char *newJpegPath = new char[(len + 12)];
+	snprintf(newJpegPath, len + 12,"%sjpeg%c", newRootPath,PATH_SEPARATOR_C);
 #ifdef WIN32
-	CreateDirectoryA(fJpegPath, NULL);
+	CreateDirectoryA(newJpegPath, NULL);
 #else
-	mkdir(fJpegPath, 0755);
+	mkdir(newJpegPath, 0755);
 #endif
+    
+    setNewAndDeleteOldString(fJpegPath, newJpegPath);
 }
 
 void Shepherd::setRole( const char *role )
 {
 	size_t len = strlen(role);
-	boost::mutex::scoped_lock lockthis( s_RoleMutex );
 
-	// initialize the proxy string
-	//
-	if(role != NULL)
-	{
-		fStringsToDelete.push( s_Role );
-	}
-	s_Role = new char[len + 1];
-	strcpy(s_Role, role);
+    char *newRole = new char[len + 1];
+	strcpy(newRole, role);
+    
+    setNewAndDeleteOldString(fRole, newRole);
 }
 
 const char *Shepherd::role()
 {
-	boost::mutex::scoped_lock lockthis( s_RoleMutex );
-
-	return s_Role;
+	return fRole.load(boost::memory_order_relaxed);
 }
 
 void
@@ -294,16 +279,11 @@ Shepherd::setRedirectServerName(const char *server)
 //
 {
 	size_t len = strlen(server);
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
-	// initialize the server name string
-	//
-	if(fRedirectServerName != NULL)
-	{
-		fStringsToDelete.push( fRedirectServerName );
-	}
-	fRedirectServerName = new char[len + 1];
-	strcpy(fRedirectServerName, server);
+	char *newRedirectServerName = new char[len + 1];
+	strcpy(newRedirectServerName, server);
+    
+    setNewAndDeleteOldString(fRedirectServerName, newRedirectServerName);
 }
 
 
@@ -316,16 +296,11 @@ Shepherd::setProxy(const char *proxy)
 //
 {
 	size_t len = strlen(proxy);
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
-	// initialize the proxy string
-	//
-	if(fProxy != NULL)
-	{
-		fStringsToDelete.push( fProxy );
-	}
-	fProxy = new char[len + 1];
-	strcpy(fProxy, proxy);
+	char *newProxy = new char[len + 1];
+	strcpy(newProxy, proxy);
+    
+    setNewAndDeleteOldString(fProxy, newProxy);
 }
 
 void
@@ -336,16 +311,11 @@ Shepherd::setProxyUserName(const char *userName)
 //
 {
 	size_t len = strlen(userName);
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
-	// initialize the proxy string
-	//
-	if(fProxyUser != NULL)
-	{
-		fStringsToDelete.push( fProxyUser );
-	}
-	fProxyUser = new char[len + 1];
-	strcpy(fProxyUser, userName);
+	char *newProxyUser = new char[len + 1];
+	strcpy(newProxyUser, userName);
+
+    setNewAndDeleteOldString(fProxyUser, newProxyUser);
 }
 
 void
@@ -356,16 +326,11 @@ Shepherd::setProxyPassword(const char *password)
 //
 {
 	size_t len = strlen(password);
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
 
-	// initialize the proxy string
-	//
-	if(fProxyPass != NULL)
-	{
-		fStringsToDelete.push( fProxyPass );
-	}
-	fProxyPass = new char[len + 1];
-	strcpy(fProxyPass, password);
+    char *newProxyPass = new char[len + 1];
+	strcpy(newProxyPass, password);
+
+    setNewAndDeleteOldString(fProxyPass, newProxyPass);
 }
 
 int
@@ -408,30 +373,22 @@ void Shepherd::addMessageText(const char *s, size_t len, time_t timeout)
 
 const char *Shepherd::rootPath()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fRootPath;
+    return fRootPath.load(boost::memory_order_relaxed);
 }
 
 const char *Shepherd::mpegPath()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fMpegPath;
+	return fMpegPath.load(boost::memory_order_relaxed);
 }
 
 const char *Shepherd::xmlPath()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fXmlPath;
+	return fXmlPath.load(boost::memory_order_relaxed);
 }
 
 const char *Shepherd::jpegPath()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fJpegPath;
+	return fJpegPath.load(boost::memory_order_relaxed);
 }
 
 std::string Shepherd::computeMD5( const std::string& str )
@@ -459,17 +416,17 @@ const char *Shepherd::serverName( bool allowServerQuery )
 	//just want to get current server name? We should not block!!!
 	if (!allowServerQuery)
 	{
-		boost::mutex::scoped_lock lockthis( s_GetServerNameMutex );
-
-		return fServerName;
+        return fServerName.load(boost::memory_order_relaxed);
 	}
 
 	{
 		boost::mutex::scoped_lock lockName( s_ComputeServerNameMutex );
-
-		if ( ( fServerName == NULL || (time(0) - s_LastRequestTime) > _24_HOURS ) )
+        
+        if ( ( fServerName.load(boost::memory_order_relaxed) == NULL || (time(0) - s_LastRequestTime) > _24_HOURS ) )
 		{
-			if (fRedirectServerName != NULL )
+            const char *redirectServerName = fRedirectServerName.load(boost::memory_order_relaxed);
+            
+            if ( redirectServerName != NULL )
 			{
 				std::string	nickEncoded = Network::CManager::Encode( SheepGenerator::nickName() );
 				std::string	passEncoded = Network::CManager::Encode( Shepherd::password() );
@@ -477,7 +434,7 @@ const char *Shepherd::serverName( bool allowServerQuery )
 				//	Create the url for getting the cp file to create the frame
 				char 	url[ MAXBUF*5 ];
 				snprintf( url, MAXBUF*5, "http://%s/query.php?q=redir&u=%s&p=%s&v=%s&i=%s",
-					fRedirectServerName,
+					redirectServerName,
 					nickEncoded.c_str(),
 					passEncoded.c_str(),
 					CLIENT_VERSION,
@@ -511,16 +468,15 @@ const char *Shepherd::serverName( bool allowServerQuery )
 
 						if ( host != NULL && *host != 0 )
 						{
-							boost::mutex::scoped_lock lockthis( s_GetServerNameMutex );
-
-							if ( fServerName == NULL || (strcmp( fServerName, host ) != 0) )
+                            const char *oldServerName = fServerName.load(boost::memory_order_relaxed);
+							
+                            if ( oldServerName == NULL || (strcmp( oldServerName, host ) != 0) )
 							{
-								if ( fServerName != NULL )
-									fStringsToDelete.push( fServerName );
+								char *newServerName = new char[ strlen(host) + 1 ];
 
-								fServerName = new char[ strlen(host) + 1 ];
-
-								strcpy( fServerName, host );
+								strcpy( newServerName, host );
+                                
+                                setNewAndDeleteOldString(fServerName, newServerName);
 							}
 
 						}
@@ -540,35 +496,24 @@ const char *Shepherd::serverName( bool allowServerQuery )
 		}
 	}
 
-
-	{
-		boost::mutex::scoped_lock lockthis( s_GetServerNameMutex );
-
-		return fServerName;
-	}
+    return fServerName.load(boost::memory_order_relaxed);
 }
 
 const char *Shepherd::proxy()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fProxy;
+    return fProxy.load(boost::memory_order_relaxed);
 }
 
 const char	*Shepherd::proxyUserName()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fProxyUser;
+	return fProxyUser.load(boost::memory_order_relaxed);
 }
 
 /*
 */
 const char	*Shepherd::proxyPassword()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fProxyPass;
+	return fProxyPass.load(boost::memory_order_relaxed);
 }
 
 /*
@@ -577,22 +522,17 @@ void	Shepherd::setPassword( const char *password )
 {
 	size_t len = strlen(password);
 
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	if ( fPassword != NULL )
-		fStringsToDelete.push( fPassword );
-
-	fPassword = new char[ len + 1 ];
-	strcpy( fPassword, password );
+	char *newPassword = new char[ len + 1 ];
+	strcpy( newPassword, password );
+    
+    setNewAndDeleteOldString(fPassword, newPassword);
 }
 
 /*
 */
 const char *Shepherd::password()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fPassword;
+	return fPassword.load(boost::memory_order_relaxed);
 }
 
 /*
@@ -785,28 +725,21 @@ void	Shepherd::setUniqueID( const char *uniqueID )
 	else
 		len = 16;
 
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	if( fUniqueID != NULL )
-	{
-		fStringsToDelete.push( fUniqueID );
-	}
-
-	fUniqueID = new char[ len + 1 ];
-	strcpy( fUniqueID, uniqueID );
+	char *newUniqueID = new char[ len + 1 ];
+	strcpy( newUniqueID, uniqueID );
+    
+    setNewAndDeleteOldString(fUniqueID, newUniqueID);
 }
 
 //	This method returns the unique ID to use.
 const char *Shepherd::uniqueID()
 {
-	boost::mutex::scoped_lock lockthis( s_ShepherdMutex );
-
-	return fUniqueID;
+    return fUniqueID.load(boost::memory_order_relaxed);
 }
 
 void Shepherd::setDownloadState( const std::string& state )
 {
-	boost::mutex::scoped_lock lockthis( s_DownloadStateMutex );
+    boost::upgrade_lock<boost::shared_mutex> lockthis( s_DownloadStateMutex );
 
 	s_DownloadState.assign( state );
 	
@@ -815,7 +748,7 @@ void Shepherd::setDownloadState( const std::string& state )
 
 std::string Shepherd::downloadState( bool &isnew )
 {
-	boost::mutex::scoped_lock lockthis( s_DownloadStateMutex );
+	boost::shared_lock<boost::shared_mutex> lockthis( s_DownloadStateMutex );
 	
 	isnew = s_IsDownloadStateNew;
 	
@@ -826,7 +759,7 @@ std::string Shepherd::downloadState( bool &isnew )
 
 void Shepherd::setRenderState( const std::string& state )
 {
-	boost::mutex::scoped_lock lockthis( s_RenderStateMutex );
+	boost::upgrade_lock<boost::shared_mutex> lockthis( s_RenderStateMutex );
 
 	s_RenderState.assign( state );
 	
@@ -835,7 +768,7 @@ void Shepherd::setRenderState( const std::string& state )
 
 std::string Shepherd::renderState( bool &isnew )
 {
-	boost::mutex::scoped_lock lockthis( s_RenderStateMutex );
+	boost::shared_lock<boost::shared_mutex> lockthis( s_RenderStateMutex );
 	
 	isnew = s_IsRenderStateNew;
 	

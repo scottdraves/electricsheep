@@ -24,6 +24,8 @@
 	<string>2.7b37</string>
 	<key>NSPrincipalClass</key>
 	<string>ESScreensaverView</string>
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+	<true/>
 	<key>SUFeedURL</key>
 	<string>http://sparkle.electricsheep.org/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>

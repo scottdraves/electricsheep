@@ -23,6 +23,8 @@
         NSOpenGLPFAColorSize, (NSOpenGLPixelFormatAttribute)32, // 32 bit color buffer
         NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute)16, // 32 bit depth buffer
 //		NSOpenGLPFAAlphaSize, (NSOpenGLPixelFormatAttribute)8,
+        NSOpenGLPFAAllowOfflineRenderers,
+        1262, //magical number to make sure integrated card is used on MBP-mid-2010
         (NSOpenGLPixelFormatAttribute)nil
     };
     return [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];

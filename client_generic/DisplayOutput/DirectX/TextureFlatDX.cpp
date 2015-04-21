@@ -72,8 +72,7 @@ CTextureFlatDX::~CTextureFlatDX()
 */
 bool	CTextureFlatDX::Upload( spCImage _spImage )
 {
-	if( m_spImage == NULL )
-		m_spImage = _spImage;
+	m_spImage = _spImage;
 
 	CImageFormat	format = m_spImage->GetFormat();
 
@@ -136,6 +135,8 @@ bool	CTextureFlatDX::Bind( const uint32 _index )
 		g_Log->Error( "Bind failed!" );
 		return( false );
 	}
+
+	m_bDirty = false;
 
 	return true;
 }

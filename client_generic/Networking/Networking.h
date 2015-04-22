@@ -170,7 +170,7 @@ class	CManager : public Base::CSingleton<CManager>
 			static std::string Encode( const std::string &_src );
 
 			//	Threadsafe.
-			static CManager *Instance( const char */*_pFileStr*/, const uint32 /*_line*/, const char */*_pFunc*/ )
+			static CManager *Instance( const char * /*_pFileStr*/, const uint32 /*_line*/, const char * /*_pFunc*/ )
 			{
 				//printf( "g_NetworkManager( %s(%d): %s )\n", _pFileStr, _line, _pFunc );
 				//fflush( stdout );

@@ -144,7 +144,7 @@ public:
 	{
 		return "DXDLLFun";
 	}
-	const bool Shutdown(void)
+	bool Shutdown(void)
 	{
 		if (d3dx9_hmodule != NULL)
 			FreeLibrary(d3dx9_hmodule);

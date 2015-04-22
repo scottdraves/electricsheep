@@ -76,7 +76,7 @@ CRendererDX::~CRendererDX()
 
 /*
 */
-const bool	CRendererDX::Initialize( spCDisplayOutput _spDisplay )
+bool	CRendererDX::Initialize( spCDisplayOutput _spDisplay )
 {
 	if( !CRenderer::Initialize( _spDisplay ) )
 		return false;
@@ -206,7 +206,7 @@ bool	CRendererDX::TestResetDevice()
 }
 /*
 */
-const bool	CRendererDX::BeginFrame( void )
+bool	CRendererDX::BeginFrame( void )
 {
 	if( !CRenderer::BeginFrame() )
 		return false;
@@ -226,7 +226,7 @@ const bool	CRendererDX::BeginFrame( void )
 
 /*
 */
-const bool	CRendererDX::EndFrame( bool drawn = true )
+bool	CRendererDX::EndFrame( bool drawn = true )
 {
 	if( !CRenderer::EndFrame() )
 		return false;

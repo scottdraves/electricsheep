@@ -12,7 +12,10 @@ template <typename T> class CBlockingQueue
 {
 public:
     typedef boost::shared_lock<boost::shared_mutex> reader_lock;
-    typedef boost::upgrade_lock<boost::shared_mutex> writer_lock;
+    typedef boost::unique_lock<boost::shared_mutex> writer_lock;
+	typedef boost::upgrade_lock<boost::shared_mutex> upg_reader_lock;
+	typedef boost::upgrade_to_unique_lock< boost::shared_mutex > upgrade_to_writer;
+
     
 	//typedef boost::mutex::scoped_lock   scoped_lock;
 
@@ -39,12 +42,15 @@ public:
 
 	bool peek( T& el, bool wait = false, bool popFront = true )
 	{
-		writer_lock lock(m_mutex);
+		upg_reader_lock lock(m_mutex);
 		
 		if ( wait )
 		{
-			while ( m_queue.empty() )
-				m_emptyCond.wait( lock );
+			while (m_queue.empty())
+			{
+				upgrade_to_writer wlock(lock);
+				m_emptyCond.wait(m_mutex);
+			}
 		}
 		else
 		{
@@ -81,19 +87,27 @@ public:
 
 	bool pop( T& el, bool wait = false, bool popFront = true )
 	{
-		writer_lock lock(m_mutex);
+		upg_reader_lock lock(m_mutex);
 		
 		if ( wait )
 		{
-			while ( m_queue.empty() )
-				m_emptyCond.wait( lock );
+			while (m_queue.empty())
+			{
+				upgrade_to_writer wlock(lock);
+				m_emptyCond.wait(m_mutex);
+			}
 		}
 		else
 		{
-			if ( m_queue.empty() )
+			if (m_queue.empty())
+			{
+				m_nonEmptyCond.notify_all();
 				return false;
+			}
 		}
 		
+		upgrade_to_writer wlock(lock);
+
 		if ( popFront )
 		{
 			el = m_queue.front();
@@ -160,11 +174,13 @@ public:
 	
 	bool waitForEmpty()
 	{
-		reader_lock lock( m_mutex );
+		upg_reader_lock lock( m_mutex );
 		
 		if (m_queue.empty())
 			return true;
 			
+		upgrade_to_writer wlock(lock); 
+
 		m_nonEmptyCond.wait( m_mutex );
 		
 		return true;

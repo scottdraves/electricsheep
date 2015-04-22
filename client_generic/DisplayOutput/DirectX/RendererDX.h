@@ -38,18 +38,18 @@ class CRendererDX : public CRenderer
 
 			IDirect3DDevice9	*Device()	{	return m_pDevice;	};
 
-			virtual const eRenderType	Type( void ) const {	return eDX9;	};
+			virtual eRenderType	Type( void ) const {	return eDX9;	};
 			virtual const std::string	Description( void ) const { return "DirectX 9"; };
 
 			//
-			const bool	Initialize( spCDisplayOutput _spDisplay );
+			bool	Initialize( spCDisplayOutput _spDisplay );
 
 			//
 			void	Defaults();
 
 			//
-			const bool	BeginFrame( void );
-			const bool	EndFrame( bool drawn );
+			bool	BeginFrame( void );
+			bool	EndFrame( bool drawn );
 
 			//
 			void	Apply();

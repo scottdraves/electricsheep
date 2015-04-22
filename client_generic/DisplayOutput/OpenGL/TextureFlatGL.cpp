@@ -140,8 +140,7 @@ CTextureFlatGL::~CTextureFlatGL()
 */
 bool	CTextureFlatGL::Upload( spCImage _spImage )
 {
-	if( m_spImage == NULL )
-		m_spImage = _spImage;
+    m_spImage = _spImage;
 
 	if (m_spImage==NULL) return false;
 

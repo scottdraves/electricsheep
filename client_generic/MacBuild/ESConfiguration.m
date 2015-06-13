@@ -283,7 +283,7 @@
 	CFStringRef urlpass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)md5_pass, NULL, NULL, kCFStringEncodingUTF8);
 	CFStringRef urlver = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, CFSTR(CLIENT_VERSION), NULL, NULL, kCFStringEncodingUTF8);
 	
-	NSString *urlstr = [NSString stringWithFormat:@"http://%s/query.php?q=redir&u=%@&p=%@&v=%@", REDIRECT_SERVER, urlnickname, urlpass, urlver ];
+	NSString *urlstr = [NSString stringWithFormat:@"%@/query.php?q=redir&u=%@&p=%@&v=%@", m_redirectServer, urlnickname, urlpass, urlver ];
 		
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlstr]];
 	
@@ -343,6 +343,14 @@
 
 - (void)loadSettings
 {
+    m_redirectServer = [NSString stringWithUTF8String: REDIRECT_SERVER_FULL]; //(__bridge_transfer NSString*)ESScreensaver_CopyGetStringSetting("settings.content.redirectserver", REDIRECT_SERVER_FULL);
+    
+    if (![m_redirectServer hasPrefix:@"http"])
+    {
+        m_redirectServer = [@"http://" stringByAppendingString: m_redirectServer];
+    }
+        
+    
 	[self htmlifyEditFields];
 	
 	[playerFPS setDoubleValue: ESScreensaver_GetDoubleSetting("settings.player.player_fps", 23.0)];

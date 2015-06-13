@@ -424,17 +424,25 @@ const char *Shepherd::serverName( bool allowServerQuery )
         
         if ( ( fServerName.load(boost::memory_order_relaxed) == NULL || (time(0) - s_LastRequestTime) > _24_HOURS ) )
 		{
-            const char *redirectServerName = fRedirectServerName.load(boost::memory_order_relaxed);
+            const char *redirectServerName = REDIRECT_SERVER_FULL; //fRedirectServerName.load(boost::memory_order_relaxed);
             
             if ( redirectServerName != NULL )
 			{
 				std::string	nickEncoded = Network::CManager::Encode( SheepGenerator::nickName() );
 				std::string	passEncoded = Network::CManager::Encode( Shepherd::password() );
+                
+                bool addHTTP = false;
+                
+                if (redirectServerName[0] != 'h' || redirectServerName[1] != 't' || redirectServerName[2] != 't' || redirectServerName[3] != 'p')
+                {
+                    addHTTP = true;
+                }
 
 				//	Create the url for getting the cp file to create the frame
 				char 	url[ MAXBUF*5 ];
-				snprintf( url, MAXBUF*5, "http://%s/query.php?q=redir&u=%s&p=%s&v=%s&i=%s",
-					redirectServerName,
+				snprintf( url, MAXBUF*5, "%s%s/query.php?q=redir&u=%s&p=%s&v=%s&i=%s",
+                    addHTTP ? "http://" : "",
+                    redirectServerName,
 					nickEncoded.c_str(),
 					passEncoded.c_str(),
 					CLIENT_VERSION,

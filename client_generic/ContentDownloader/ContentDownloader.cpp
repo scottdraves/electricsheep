@@ -81,7 +81,7 @@ bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyInstance 
 	g_Log->Info( "Attempting to start contentdownloader...", _bPreview );
 	Shepherd::initializeShepherd();
 
-	Shepherd::setRedirectServerName( g_Settings()->Get( "settings.content.redirectserver", std::string(REDIRECT_SERVER) ).c_str() );
+	Shepherd::setRedirectServerName( g_Settings()->Get( "settings.content.redirectserver", std::string(REDIRECT_SERVER_FULL) ).c_str() );
 	
 	std::string root = g_Settings()->Get( "settings.content.sheepdir", g_Settings()->Root() + "content" );
 	

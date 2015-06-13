@@ -31,6 +31,7 @@
 #define	CLIENT_SERVER				"v2d7c.sheepserver.net"
 //#define	CLIENT_SERVER_REGISTERED	"r2d7c.sheepserver.net"
 #define REDIRECT_SERVER				"community.sheepserver.net"
+#define REDIRECT_SERVER_FULL		"http://community.sheepserver.net"
 
 #define	BETA_RELEASE
 

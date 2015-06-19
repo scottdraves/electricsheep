@@ -237,7 +237,7 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
 	if (ovi->m_pVideoStream->nb_frames > 0)
 		ovi->m_totalFrameCount = static_cast<uint32>(ovi->m_pVideoStream->nb_frames);
 	else
-		ovi->m_totalFrameCount = uint32(((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) / av_q2d(ovi->m_pVideoStream->r_frame_rate) + .5));
+		ovi->m_totalFrameCount = uint32(((((double)ovi->m_pFormatContext->duration/(double)AV_TIME_BASE)) / av_q2d(ovi->m_pVideoStream->avg_frame_rate) + .5));
 		
 	ovi->m_ReadingTrailingFrames = false;
 
@@ -651,7 +651,7 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
 
         /*if (m_totalFrameCount > 0)
         {
-            //g_Log->Info("framcount %lu, %lf", (long)(((double)m_pFormatContext->duration/(double)AV_TIME_BASE)),av_q2d(m_pVideoStream->r_frame_rate));
+            //g_Log->Info("framcount %lu, %lf", (long)(((double)m_pFormatContext->duration/(double)AV_TIME_BASE)),av_q2d(m_pVideoStream->avg_frame_rate));
             if (m_iCurrentFileFrameCount == m_totalFrameCount - m_FadeCount)
             {
                 if (m_prevLast != m_nextFirst)

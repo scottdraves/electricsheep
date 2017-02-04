@@ -66,7 +66,7 @@
 	NSString *m_origNickname;
 	NSString *m_origPassword;
 	
-	NSString *m_roleString;
+	//NSString *m_roleString;
 	
 	NSMutableData *m_httpData;
 	

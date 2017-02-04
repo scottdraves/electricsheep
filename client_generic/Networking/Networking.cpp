@@ -150,7 +150,7 @@ void	CManager::Login( const std::string &_userName, const std::string &_password
 	boost::mutex::scoped_lock locker( m_Lock );
 
 	std::stringstream pu;
-	pu << Encode( _userName ) << ":" << Encode( _password );
+	pu << _userName << ":" << _password;
 	m_UserPass = pu.str();
 }
 
@@ -283,6 +283,9 @@ bool	CCurlTransfer::Perform( const std::string &_url )
 	
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_FOLLOWLOCATION, 1 ) ) )	return false;
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_MAXREDIRS, 5 ) ) )	return false;
+    
+    if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_SSL_VERIFYHOST, 0 ) ) )	return false;
+    if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_SSL_VERIFYPEER, 0 ) ) )	return false;
 
 	Status( "Active" );
 	//if( !Verify( curl_easy_perform( m_pCurl ) ) )

@@ -312,7 +312,7 @@ bool	CStorageLua::Config( const std::string &_url )
 {
 #ifndef  WIN32
     return true;
-#endif
+#else
 
 	//	Register IUP.
 //	lua_cpcall( m_pState->GetState(), iuplua_open, NULL );
@@ -329,6 +329,7 @@ bool	CStorageLua::Config( const std::string &_url )
 //	IupClose();
 
     return true;
+#endif
 }
 
 /*

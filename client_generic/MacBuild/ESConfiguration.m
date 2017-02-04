@@ -44,7 +44,7 @@
 	
 	m_checkTimer = nil;
 	
-	m_roleString = @"member";
+	//m_roleString = @"member";
 	
 	ESScreensaver_InitClientStorage();
 
@@ -168,13 +168,13 @@
 		{
 			[loginStatusImage setImage:greenImage];
 			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Logged in (role: %@).", rolestr ?: @"N/A"]];
-			m_roleString = rolestr;
+			//m_roleString = rolestr;
 		}
 		else
 		{
 			[loginStatusImage setImage:redImage];
-			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Login Failed."]];
-			m_roleString = @"member";
+			[loginTestStatusText setStringValue:[NSString stringWithFormat:@"Not logged in."]];
+			//m_roleString = @"member";
 		}
 
 		[self updateMembershipText:rolestr];
@@ -195,7 +195,7 @@
 {
 	if ([role isEqual:@"error"] || [role isEqual:@"none"])
 	{
-		[membershipText setStringValue:@"Become a member for access to our private server with more sheep,\nhigher resolution sheep, and other interactive features.\n"];
+		[membershipText setStringValue:@"Create an account on the server and upgrade to Gold for higher resolution and other benefits.\n"];
 	} else
 	if ([role isEqual:@"registered"])
 	{
@@ -203,11 +203,11 @@
 	} else
 	if ([role isEqual:@"member"])
 	{
-		[membershipText setStringValue:@"Thank you for your membership, you may upgrade to Gold for higher\nresolution and other benefits."];
+		[membershipText setStringValue:@"Create an account on the server and upgrade to Gold for higher resolution and other benefits."];
 	} else
 	if ([role isEqual:@"gold"])
 	{
-		[membershipText setStringValue:@"Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features."];
+		[membershipText setStringValue:@"Thank you for your membership. Please access the server to manage your account."];
 	}						
 }
 
@@ -251,6 +251,24 @@
     [m_httpData appendData:data];
 }
 
+- (BOOL)connection:(NSURLConnection *) __unused connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)space
+{
+    return [space.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+}
+
+- (void)connection:(NSURLConnection *) __unused connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+    
+    if ([challenge.protectionSpace.authenticationMethod
+         isEqualToString:NSURLAuthenticationMethodServerTrust])
+    {
+        NSURLCredential *credential =
+        [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+    }
+
+    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
 
 - (void)startTest:(NSTimer *)timer
 {
@@ -601,21 +619,7 @@
 
 - (IBAction)goToLearnMorePage:(id) __unused sender
 {
-	NSString *newNickname = [drupalLogin stringValue];
-	
-	NSString *md5_pass = [self md5Password];
-
-	CFStringRef urlnickname = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)newNickname, NULL, NULL, kCFStringEncodingUTF8);	
-	CFStringRef urlpass = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)md5_pass, NULL, NULL, kCFStringEncodingUTF8);
-	CFStringRef urlrole = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)m_roleString, NULL, NULL, kCFStringEncodingUTF8);
-	
-	NSString *urlstr = [NSString stringWithFormat:@"http://electricsheep.org/account/%@?u=%@&p=%@", urlrole, urlnickname, urlpass ];
-
-	CFRelease( urlnickname );
-    CFRelease( urlpass );
-    CFRelease( urlrole );
-    
-    NSURL *helpURL = [NSURL URLWithString: urlstr];
+    NSURL *helpURL = [NSURL URLWithString: @"https://electricsheep.org/learnmore"];
 	
 	[[NSWorkspace sharedWorkspace] openURL:helpURL];
 }

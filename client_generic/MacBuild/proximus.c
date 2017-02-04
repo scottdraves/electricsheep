@@ -100,7 +100,7 @@ Boolean get_proxy_for_server105( const UInt8 *server, UInt8 *host, const UInt32 
 						// CFNetworkCopyProxiesForURL initialise some state within CFNetwork 
 						// that is required by CFNetworkCopyProxiesForAutoConfigurationScript.
 						
-						CFRelease(CFNetworkCopyProxiesForURL(url, NULL));
+						CFRelease(CFNetworkCopyProxiesForURL(url, proxySettings));
 						
 						CFRunLoopSourceRef	rls = CFNetworkExecuteProxyAutoConfigurationURL(scriptURL, url, ResultCallback, &context);
 						if (rls == NULL) {

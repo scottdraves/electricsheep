@@ -196,7 +196,7 @@ class CContentDecoder
 	
 	sOpenVideoInfo		*m_SecondVideoInfo;
 	
-	PixelFormat		m_WantedPixelFormat;
+	AVPixelFormat		m_WantedPixelFormat;
 
 
 	spCPlaylist		m_spPlaylist;
@@ -230,7 +230,7 @@ class CContentDecoder
 	static int DumpError( int _err );
 
 	public:
-			CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, bool _bAllowTransitions, const uint32 _queueLenght, PixelFormat _wantedPixelFormat = PIX_FMT_RGB24 );
+			CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, bool _bAllowTransitions, const uint32 _queueLenght, AVPixelFormat _wantedPixelFormat = AV_PIX_FMT_RGB24 );
 			virtual ~CContentDecoder();
 
 			bool	Initialized() { return m_Initialized; }

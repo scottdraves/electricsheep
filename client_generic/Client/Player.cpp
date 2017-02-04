@@ -365,18 +365,18 @@ ContentDecoder::CContentDecoder *CPlayer::CreateContentDecoder( bool _bStartByRa
 		return NULL;
 	
 #ifndef LINUX_GNU
-	PixelFormat pf = PIX_FMT_RGB32;
+	AVPixelFormat pf = AV_PIX_FMT_RGB32;
 	
 	//On PowerPC machines we need to use different pixel format!
 #if defined(MAC) && defined(__BIG_ENDIAN__)
-	pf = PIX_FMT_BGR32_1;
+	pf = AV_PIX_FMT_BGR32_1;
 #endif
 
 #else
 
-	PixelFormat pf = PIX_FMT_BGR32;
+	AVPixelFormat pf = AV_PIX_FMT_BGR32;
 #if defined(__BIG_ENDIAN__)
-	pf = PIX_FMT_RGB32_1;
+	pf = AV_PIX_FMT_RGB32_1;
 #endif
 
 #endif

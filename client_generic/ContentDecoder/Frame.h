@@ -75,7 +75,7 @@ class CVideoFrame
 		AVFrame		*m_pFrame;
 
 	public:
-		CVideoFrame( AVCodecContext *_pCodecContext, PixelFormat _format, std::string _filename ) : m_pFrame(NULL)
+		CVideoFrame( AVCodecContext *_pCodecContext, AVPixelFormat _format, std::string _filename ) : m_pFrame(NULL)
 			{
 				assert( _pCodecContext );
 				if ( _pCodecContext == NULL)

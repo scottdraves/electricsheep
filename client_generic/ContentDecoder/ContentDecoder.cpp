@@ -38,7 +38,7 @@ namespace ContentDecoder
 	CContentDecoder.
 
 */
-CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, bool _bCalculateTransitions, const uint32 _queueLenght, PixelFormat _wantedFormat )
+CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom, bool _bCalculateTransitions, const uint32 _queueLenght, AVPixelFormat _wantedFormat )
 {
 	g_Log->Info( "CContentDecoder()" );
 	m_FadeCount = static_cast<uint32>(g_Settings()->Get("settings.player.fadecount", 30));

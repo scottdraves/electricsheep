@@ -19,8 +19,8 @@
 #include	<curl/easy.h>
 
 #ifdef WIN32
-#define CLIENT_HELP_LINKW  			L"http://electricsheep.org/client/WIN_2.7b31"
-#define CLIENT_HELP_LINK  			"http://electricsheep.org/client/WIN_2.7b31"
+#define CLIENT_HELP_LINKW  			L"http://electricsheep.org/client/WIN_3.0"
+#define CLIENT_HELP_LINK  			"http://electricsheep.org/client/WIN_3.0"
 #endif
 
 #ifdef LINUX_GNU

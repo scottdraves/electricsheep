@@ -32,7 +32,7 @@
 #define USE_NEW_FFMPEG_ALLOC_API
 #endif
 
-#ifdef MAC
+#if defined(MAC) || (defined(WIN32) && defined(_MSC_VER)) 
 #define USE_NEW_FFMPEG_API
 #endif
 

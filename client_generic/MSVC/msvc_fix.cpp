@@ -8,6 +8,7 @@
 extern "C"
 {
 
+#if !defined(_MSC_VER) || (_MSC_VER < 1900)
 int snprintf(char *buffer, size_t count, const char *fmt, ...)
 {
 	va_list ap;
@@ -20,6 +21,7 @@ int snprintf(char *buffer, size_t count, const char *fmt, ...)
 	va_end(ap);
 	return ret;
 }
+#endif
 
 #ifdef _WIN64
 void ___chkstk() // remove after ffmpeg stops using too big arrays on stack

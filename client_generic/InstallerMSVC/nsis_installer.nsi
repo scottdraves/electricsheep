@@ -4,7 +4,7 @@
 !define PRODUCT_NAME "Electric Sheep"
 !define PRODUCT_SCR_STRING "es.scr"
 !define PRODUCT_EXE_STRING "es.exe"
-!define PRODUCT_VERSION "2.7b34c"
+!define PRODUCT_VERSION "3.0"
 !define PRODUCT_PUBLISHER "Electricsheep"
 !define PRODUCT_WEB_SITE "http://www.electricsheep.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Flam3.exe"
@@ -90,6 +90,12 @@ Section "MainSection" SEC01
 	File "..\RuntimeMSVC\exchndl.dll" ; RPT debugging
 	
 	File "..\RuntimeMSVC\pthreadGC2.dll" ; for flam3
+
+	File "..\RuntimeMSVC\avcodec-57.dll"   ; for ffmpeg
+	File "..\RuntimeMSVC\avformat-57.dll"  ; for ffmpeg
+	File "..\RuntimeMSVC\avutil-55.dll"    ; for ffmpeg
+	File "..\RuntimeMSVC\swresample-2.dll" ; for ffmpeg
+	File "..\RuntimeMSVC\swscale-4.dll"    ; for ffmpeg
 	
 	SetOutPath "$INSTDIR"
 	
@@ -104,8 +110,8 @@ Section "MainSection" SEC01
 	File "..\RuntimeMSVC\License.rtf"
 	File "..\RuntimeMSVC\logo.png"
 	;exe files
-    File "..\RuntimeMSVC\flam3-animate.exe"
-    File "..\RuntimeMSVC\settingsgui.exe"
+    	File "..\RuntimeMSVC\flam3-animate.exe"
+    	File "..\RuntimeMSVC\settingsgui.exe"
 	;scripts
 	SetOutPath "$INSTDIR\Scripts"
 	File "..\RuntimeMSVC\Scripts\class.lua"
@@ -220,7 +226,14 @@ Section Uninstall
 	Delete "$WINDIR\${PRODUCT_SCR_STRING}"
 	Delete "$WINDIR\exchndl.dll"
 	
-	Delete "$WINDIR\pthreadGC2.dll" 
+	Delete "$WINDIR\pthreadGC2.dll"
+
+;delete ffmpeg;s dll
+	Delete "$WINDIR\avcodec-57.dll"
+	Delete "$WINDIR\avformat-57.dll"
+	Delete "$WINDIR\avutil-55.dll"
+	Delete "$WINDIR\swresample-2.dll"
+	Delete "$WINDIR\swscale-4.dll"
 	
 	RMDir /r "$INSTDIR"
 

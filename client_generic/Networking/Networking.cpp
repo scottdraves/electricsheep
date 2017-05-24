@@ -26,9 +26,11 @@ CCurlTransfer::CCurlTransfer( const std::string &_name ) : m_Name( _name ), m_St
 	m_pCurlM = curl_multi_init();
 	if( !m_pCurlM )
 		g_Log->Info( "Failed to init curl multi instance." );
-		
+
+#if defined(_MSC_VER) && (_MSC_VER != 1900)		
 	if ( m_pCurl != NULL && m_pCurlM != NULL )
 		curl_multi_add_handle( m_pCurlM, m_pCurl );
+#endif
 }
 
 /*
@@ -288,8 +290,11 @@ bool	CCurlTransfer::Perform( const std::string &_url )
     if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_SSL_VERIFYPEER, 0 ) ) )	return false;
 
 	Status( "Active" );
-	//if( !Verify( curl_easy_perform( m_pCurl ) ) )
+#if defined(_MSC_VER) && (_MSC_VER == 1900)		
+	if( !Verify( curl_easy_perform( m_pCurl ) ) )
+#else
 	if ( !InterruptiblePerform() )
+#endif
 	{
 		g_Log->Warning( errorBuffer );
 		Status( "Failed" );

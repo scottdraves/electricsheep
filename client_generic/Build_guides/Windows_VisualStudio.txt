@@ -1,0 +1,64 @@
+Install Git.
+Download project: git clone https://github.com/scottdraves/electricsheep.git 
+Copy folder electricsheep to c:\esmsvc
+
+Install Microsoft DirectX SDK (June 2010)
+Install MSVC 2015 Express
+
+Download wxWidgets-3.0.3 source. Unpack to c:\wxwidgets
+
+Modify .vcproj files to use /MT and /MTd instead of default /MD and /MDd (open C:\wxWidgets\build\msw\wx_vc12.sln, select all projects and modify)
+
+use C:\wxWidgets\build\msw\wx_vc12.sln to build unicode release and unicode debug targets.
+
+Copy wxzlib.lib and wxzlibd.lib from C:\wxWidgets\lib\vc_lib to c:\wxwidgets\src\zlib to build libcurl later.
+
+Download boost 1.64.0
+open vcvars from start menu (visual studio 2015 command prompt)
+cd c:\boost_1_64_0
+Run bootstrap.bat to build bjam
+Run bjam full build - requires ~5GB of space:
+bjam --build-type=complete stage
+
+Download libcurl curl-7.52.1.zip from https://curl.haxx.se/download/ and unpack it to folder c:\esmsvc\curl
+
+Edit file c:\esmsvc\curl\lib\makefile.vc14:
+ZLIBLIBS = zlib.lib
+replace with:
+ZLIBLIBS = wxzlib.lib
+ZLIBLIBSD = wxzlibd.lib
+
+Modify target debug-ssl-zlib to use ZLIBLIBSD
+
+Download openssl-1.0.2k source. Unpack to c:\esmsvc\openssl-1.0.2k
+Download nasm-2.13. Unpack nasm.exe to c:\esmsvc\openssl-1.0.2k
+Install Perl
+
+Use visual studio 2015 command prompt and go to folder c:\esmsvc\openssl-1.0.2k:
+perl Configure VC-WIN32 --prefix=C:\esmsvc\openssl-1.0.2k
+  
+ms\do_nasm
+nmake -f ms\nt.mak
+
+Use visual studio 2015 command prompt and go to folder c:\esmsvc\curl\lib then type:
+
+set ZLIB_PATH=c:\wxwidgets\src\zlib
+set OPENSSL_PATH=c:\esmsvc\openssl-1.0.2k
+nmake -f makefile.vc14 CFG=release-ssl-zlib RTLIBCFG=static
+nmake -f makefile.vc14 CFG=debug-ssl-zlib RTLIBCFG=static
+
+Build lua's lib  using C:\esmsvc\lua5.1\mak.vs2005\lua5.1.sln (only static lib!)
+
+Open tinyxml using C:\esmsvc\tinyXml\tinyxml.sln
+For debug version exchange output name: ( general->Target Name: $(ProjectName)->$(ProjectName)d )
+Build tinyxml release and debug targets
+
+Download Dev and Shared FFmpeg's binaries for Windows from https://ffmpeg.zeranoe.com/builds/
+Create folder c:\esmsvc\ffmpeg\ffmpeg-static
+Unpack Dev and copy include and lib folders to c:\esmsvc\ffmpeg\ffmpeg-static
+Unpack Shared and copy dll to C:\esmsvc\MSVC\Debug and C:\esmsvc\RuntimeMSVC
+
+Now you can build C:\esmsvc\MSVC\electricsheep.sln (main program) and/or C:\esmsvc\MSVC\SettingsGUI\SettingsGUI.sln (settings gui)
+
+Install NSIS from http://nsis.sourceforge.net + plugin AccessControl
+Using installer from C:\esmsvc\InstallerMSVC will build installer package, after you copy appropriate files from DirectX SDK redist folder

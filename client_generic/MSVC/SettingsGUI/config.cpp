@@ -78,7 +78,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText3 = new wxStaticText( m_Basic, wxID_ANY, wxT("User Name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3 = new wxStaticText(m_Basic, wxID_ANY, wxT("E-mail:"), wxDefaultPosition, wxDefaultSize, 0);
 	m_staticText3->Wrap( -1 );
 	bSizer6->Add( m_staticText3, 0, wxALL, 5 );
 	
@@ -138,7 +138,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText25 = new wxStaticText( m_Basic, wxID_ANY, wxT("Become a member for access to our private server with more sheep,\nhigher resolution sheep, and other interactive features.\n"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText25 = new wxStaticText(m_Basic, wxID_ANY, wxT("Create an account on the server and upgrade to Gold for higher \nresolution and other benefits.\n"), wxDefaultPosition, wxDefaultSize, 0);
 	m_staticText25->Wrap( -1 );
 	bSizer51->Add( m_staticText25, 0, wxALL, 5 );
 	

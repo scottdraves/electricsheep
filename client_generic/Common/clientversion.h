@@ -2,15 +2,15 @@
 #define CLIENTVERSION_H_INCLUDED
 
 #ifdef	WIN32
-	#define CLIENT_VERSIONW				L"WIN_2.7b34c"
-	#define	CLIENT_VERSION_PRETTYW		L"Windows 2.7 (Beta 34c)"
+	#define CLIENT_VERSIONW				L"WIN_3.0"
+	#define	CLIENT_VERSION_PRETTYW		L"Windows 3.0"
 	#define CLIENT_SETTINGSW			L"ElectricSheep"
 
-	#define CLIENT_VERSION				"WIN_2.7b34c"
-	#define	CLIENT_VERSION_PRETTY		"Windows 2.7 (Beta 34c)"
+	#define CLIENT_VERSION				"WIN_3.0"
+	#define	CLIENT_VERSION_PRETTY		"Windows 3.0"
 	#define CLIENT_SETTINGS				"ElectricSheep"
 
-	#define	CLIENT_VERSION_PRETTYW2		L"version 2.7 (Beta 34c)"
+	#define	CLIENT_VERSION_PRETTYW2		L"version 3.0"
 #else
 	#ifdef MAC
 		#define CLIENT_VERSION				"OSX_3.0"

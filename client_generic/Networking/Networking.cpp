@@ -183,6 +183,7 @@ bool	CCurlTransfer::InterruptiblePerform()
 		return true;
 
 	running_handles_last = running_handles;
+	_code = CURLM_CALL_MULTI_PERFORM;
 	
 	while( 1 )
 	{
@@ -208,6 +209,12 @@ bool	CCurlTransfer::InterruptiblePerform()
 		
 		if ( !VerifyM( _code ) )
 			return false;
+			
+		if (-1 == max_fd)
+		{
+			_code = CURLM_CALL_MULTI_PERFORM;
+			continue;
+		}
 			
 		timeout = -1;
 		
@@ -288,6 +295,7 @@ bool	CCurlTransfer::Perform( const std::string &_url )
     if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_SSL_VERIFYPEER, 0 ) ) )	return false;
 
 	Status( "Active" );
+
 	//if( !Verify( curl_easy_perform( m_pCurl ) ) )
 	if ( !InterruptiblePerform() )
 	{

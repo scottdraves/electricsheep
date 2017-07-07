@@ -318,6 +318,9 @@ bool	CCurlTransfer::Perform( const std::string &_url )
 		{
 			switch ( m_HttpCode )
 			{
+				case 500:
+					Status("Server error\n");
+					break;
 				case 401:
 					Status( "Authentication failed\n" );
 					break;

@@ -302,6 +302,13 @@ bool	SheepGenerator::getControlPoints( SheepUploader *uploader )
 																					1.0,
 																					1.0 );
 
+	// Convert "r3d0.sheepserver.net" to "v3d0.sheepserver.net" 
+	char *pChr = std::strchr(url, 'r');
+	if (NULL != pChr)
+	{
+		*pChr = 'v';
+	}
+
 	char tmp[ 128 ];
 	snprintf( tmp, 128, "Controlpoints for generator #%d", fGeneratorId );
 	Network::spCFileDownloader spDownload = new Network::CFileDownloader( tmp );

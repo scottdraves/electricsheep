@@ -43,6 +43,13 @@
 namespace ContentDownloader
 {
 
+enum eServerTargetType
+{
+	eHostServer,
+	eVoteServer,
+	eRenderServer
+};
+
 class	CMessageBody
 {
 	public:
@@ -105,6 +112,8 @@ class Shepherd
 	static atomic_char_ptr fJpegPath;
 	static atomic_char_ptr fRedirectServerName;
 	static atomic_char_ptr fServerName;
+	static atomic_char_ptr fVoteServerName;
+	static atomic_char_ptr fRenderServerName;
 	static atomic_char_ptr fProxy;
 	static atomic_char_ptr fProxyUser;
 	static atomic_char_ptr fProxyPass;
@@ -235,7 +244,7 @@ class Shepherd
 
 			//	Gets/sets the host name of the server to use.
 			static void setRedirectServerName( const char *server );
-			static const char *serverName( bool allowServerQuery = true );
+			static const char *serverName( bool allowServerQuery = true, eServerTargetType serverType = eHostServer);
 
 			//	Gets/sets the registration password.
 			static void setPassword( const char *password );

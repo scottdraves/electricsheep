@@ -53,7 +53,7 @@ void	CVote::ThreadFunc()
     {
         VotingInfo vi;
 		
-		const char *pServerName = ContentDownloader::Shepherd::serverName();
+		const char *pServerName = ContentDownloader::Shepherd::serverName( true, ContentDownloader::eVoteServer );
 		
 		if ( pServerName == NULL )
 			return;
@@ -87,13 +87,6 @@ void	CVote::ThreadFunc()
 			
 			//If we were interrupted before this point, we don't need to start the unnecessary transfer.
 			boost::this_thread::interruption_point();
-
-			// Convert "r3d0.sheepserver.net" to "v3d0.sheepserver.net" 
-			char *pChr = std::strchr(url, 'r');
-			if (NULL != pChr)
-			{
-				*pChr = 'v';
-			}
 
 			//	Send it...
 			if( !spRequest->Perform( url ) )

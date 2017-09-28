@@ -294,20 +294,13 @@ bool	SheepGenerator::getControlPoints( SheepUploader *uploader )
 
 	//	Create the url for getting the cp file to create the frame
 	char 	url[ MAXBUF*5 ];
-    snprintf( url, MAXBUF*5, "%scgi/get?n=%s&w=%s&v=%s&u=%s&r=%.3g&c=%.3g", ContentDownloader::Shepherd::serverName(),
+    snprintf( url, MAXBUF*5, "%scgi/get?n=%s&w=%s&v=%s&u=%s&r=%.3g&c=%.3g", ContentDownloader::Shepherd::serverName( true, ContentDownloader::eRenderServer ),
 																					nickEncoded.c_str(),
 																					urlEncoded.c_str(),
 																					CLIENT_VERSION,
 																					Shepherd::uniqueID(),
 																					1.0,
 																					1.0 );
-
-	// Convert "r3d0.sheepserver.net" to "v3d0.sheepserver.net" 
-	char *pChr = std::strchr(url, 'r');
-	if (NULL != pChr)
-	{
-		*pChr = 'v';
-	}
 
 	char tmp[ 128 ];
 	snprintf( tmp, 128, "Controlpoints for generator #%d", fGeneratorId );

@@ -53,7 +53,7 @@ void	CVote::ThreadFunc()
     {
         VotingInfo vi;
 		
-		const char *pServerName = ContentDownloader::Shepherd::serverName();
+		const char *pServerName = ContentDownloader::Shepherd::serverName( true, ContentDownloader::eVoteServer );
 		
 		if ( pServerName == NULL )
 			return;

@@ -24,10 +24,10 @@ class CRendererDD : public CRenderer
 			CRendererDD();
 			virtual ~CRendererDD();
 
-			virtual const eRenderType	Type( void ) const {	return eDX9;	};
+			virtual eRenderType	Type( void ) const {	return eDX9;	};
 			virtual const std::string	Description( void ) const { return "DirectX 7"; };
 
-			const bool	Initialize( spCDisplayOutput _spDisplay );
+			virtual bool	Initialize( spCDisplayOutput _spDisplay );
 
 			void	Defaults();
 
@@ -41,7 +41,7 @@ class CRendererDD : public CRenderer
 			spCShader		NewShader( const char *_pVertexShader, const char *_pFragmentShader );
 
 			void	DrawQuad( const Base::Math::CRect	&_rect, const Base::Math::CVector4 &_color, const Base::Math::CRect &_uvRect );
-			virtual const bool	CRendererDD::EndFrame( bool drawn = true );
+			virtual bool	CRendererDD::EndFrame( bool drawn = true );
 };
 
 MakeSmartPointers( CRendererDD );

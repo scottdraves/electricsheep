@@ -19,8 +19,8 @@
 #include	<curl/easy.h>
 
 #ifdef WIN32
-#define CLIENT_HELP_LINKW  			L"http://electricsheep.org/client/WIN_2.7b31"
-#define CLIENT_HELP_LINK  			"http://electricsheep.org/client/WIN_2.7b31"
+#define CLIENT_HELP_LINKW  			L"http://electricsheep.org/client/WIN_3.0.1"
+#define CLIENT_HELP_LINK  			"http://electricsheep.org/client/WIN_3.0.1"
 #endif
 
 #ifdef LINUX_GNU
@@ -380,10 +380,12 @@ void electricsheepguiMyDialog2::Login()
 	std::string nickencoded = Encode( g_Settings()->Get("settings.generator.nickname", std::string("")) );
 	std::string passencoded = Encode( g_Settings()->Get("settings.content.password_md5", std::string("")) );
 	
+
 	if (nickencoded == std::string("") || passencoded == std::string(""))
 	{
 		wxMutexGuiEnter();
-        FireLoginStatusUpdateEvent("...Failed!...");
+        FireLoginStatusUpdateEvent("");
+		FireLoginInfoUpdateEvent("Create an account on the server and upgrade to Gold for higher \nresolution and other benefits.\n");
 		wxMutexGuiLeave();
 		curl_easy_cleanup( pCurl );
 		curl_global_cleanup();
@@ -417,7 +419,7 @@ void electricsheepguiMyDialog2::Login()
     FireLoginStatusUpdateEvent("...talking...");
 	wxMutexGuiLeave();
 
-
+	m_Role == "error";
 	long code = 0;
 	m_Response.clear();
 	if (code = curl_easy_perform(pCurl) == CURLE_OK)
@@ -452,7 +454,7 @@ void electricsheepguiMyDialog2::Login()
 						wxMutexGuiEnter();
 						if (m_Role == "error" || m_Role == "none")
 						{
-                            FireLoginInfoUpdateEvent("Become a member for access to our private server with more sheep,\nhigher resolution sheep, and other interactive features.\n");
+                            FireLoginInfoUpdateEvent("Create an account on the server and upgrade to Gold for higher \nresolution and other benefits.\n");
 						} else
 						if (m_Role == "registered")
 						{
@@ -460,16 +462,16 @@ void electricsheepguiMyDialog2::Login()
 						} else
 						if (m_Role == "member")
 						{
-                            FireLoginInfoUpdateEvent("Thank you for your membership, you may upgrade to Gold for higher\nresolution and other benefits.");
+                            FireLoginInfoUpdateEvent("Create an account on the server and upgrade to Gold for higher \nresolution and other benefits.\n");
 						} else
 						if (m_Role == "gold")
 						{
-                            FireLoginInfoUpdateEvent("Thank you for registering, you may become a member for access to\nour private server with more sheep, higher resolution sheep,\nand other interactive features.");
+                            FireLoginInfoUpdateEvent("Thank you for your membership. Please access the server to manage \nyour account.");
 						}
 
-						if (m_Role == "registered" || m_Role == "member" || m_Role == "gold")
+						if (m_Role == "gold")
 						{
-                            FireLoginStatusUpdateEvent("...logged in!...");
+                            FireLoginStatusUpdateEvent("Logged in (role: "+m_Role+").");
 
 							g_Settings()->Set("settings.content.registered", true);
 							wxMutexGuiLeave();
@@ -490,7 +492,8 @@ void electricsheepguiMyDialog2::Login()
 	}
 	g_Settings()->Set("settings.content.registered", false);
 	wxMutexGuiEnter();
-    FireLoginStatusUpdateEvent("...Failed!...");
+	if (m_Role == "error") FireLoginStatusUpdateEvent("Not logged in.");
+    else FireLoginStatusUpdateEvent("Logged in but not gold");
 	wxMutexGuiLeave();
 
 	curl_slist_free_all(slist);

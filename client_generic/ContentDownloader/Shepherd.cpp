@@ -65,6 +65,8 @@ atomic_char_ptr Shepherd::fXmlPath(NULL);
 atomic_char_ptr Shepherd::fJpegPath(NULL);
 atomic_char_ptr Shepherd::fRedirectServerName(NULL);
 atomic_char_ptr Shepherd::fServerName(NULL);
+atomic_char_ptr Shepherd::fVoteServerName(NULL);
+atomic_char_ptr Shepherd::fRenderServerName(NULL);
 atomic_char_ptr Shepherd::fProxy(NULL);
 atomic_char_ptr Shepherd::fProxyUser(NULL);
 atomic_char_ptr Shepherd::fProxyPass(NULL);
@@ -152,6 +154,8 @@ void	Shepherd::notifyShepherdOfHisUntimleyDeath()
 	SAFE_DELETE_ARRAY( fJpegPath );
 	SAFE_DELETE_ARRAY( fRedirectServerName );
 	SAFE_DELETE_ARRAY( fServerName );
+	SAFE_DELETE_ARRAY( fVoteServerName );
+	SAFE_DELETE_ARRAY( fRenderServerName );
 	SAFE_DELETE_ARRAY( fPassword );
 	SAFE_DELETE_ARRAY( fProxy );
 	SAFE_DELETE_ARRAY( fProxyUser );
@@ -411,7 +415,7 @@ std::string Shepherd::computeMD5( const std::string& str )
 }
 
 
-const char *Shepherd::serverName( bool allowServerQuery )
+const char *Shepherd::serverName( bool allowServerQuery, eServerTargetType serverType)
 {
 	//just want to get current server name? We should not block!!!
 	if (!allowServerQuery)
@@ -464,6 +468,8 @@ const char *Shepherd::serverName( bool allowServerQuery )
 						TiXmlHandle hDoc(&doc);
 						TiXmlElement* listElement;
 						const char *host = NULL;
+						const char *vote = NULL;
+						const char *render = NULL;
 						const char *role = NULL;
 
 						listElement=hDoc.FirstChild( "query" ).FirstChild( "redir" ).Element();
@@ -471,8 +477,40 @@ const char *Shepherd::serverName( bool allowServerQuery )
 						if ( listElement != NULL )
 						{
 							host = listElement->Attribute("host");
+							vote = listElement->Attribute("vote");
+							render = listElement->Attribute("render");
 							role = listElement->Attribute("role");
 						}
+
+						if (vote != NULL && *vote != 0)
+						{
+							const char *oldVoteServerName = fVoteServerName.load(boost::memory_order_relaxed);
+
+							if (oldVoteServerName == NULL || (strcmp(oldVoteServerName, vote) != 0))
+							{
+								char *newVoteServerName = new char[strlen(vote) + 1];
+
+								strcpy(newVoteServerName, vote);
+
+								setNewAndDeleteOldString(fVoteServerName, newVoteServerName);
+							}
+						}
+
+
+						if (render != NULL && *render != 0)
+						{
+							const char *oldRenderServerName = fRenderServerName.load(boost::memory_order_relaxed);
+
+							if (oldRenderServerName == NULL || (strcmp(oldRenderServerName, render) != 0))
+							{
+								char *newRenderServerName = new char[strlen(render) + 1];
+
+								strcpy(newRenderServerName, render);
+
+								setNewAndDeleteOldString(fRenderServerName, newRenderServerName);
+							}
+						}
+
 
 						if ( host != NULL && *host != 0 )
 						{
@@ -488,6 +526,7 @@ const char *Shepherd::serverName( bool allowServerQuery )
 							}
 
 						}
+
 						if ( role != NULL && *role != 0 )
 						{
 							setRole(role);
@@ -504,7 +543,18 @@ const char *Shepherd::serverName( bool allowServerQuery )
 		}
 	}
 
+	switch (serverType)
+	{
+	case eVoteServer:
+		if (fVoteServerName.load(boost::memory_order_relaxed) != NULL) return fVoteServerName.load(boost::memory_order_relaxed);
+		else return fServerName.load(boost::memory_order_relaxed);
+	case eRenderServer:
+		if (fRenderServerName.load(boost::memory_order_relaxed) != NULL) return fRenderServerName.load(boost::memory_order_relaxed);
+		else return fServerName.load(boost::memory_order_relaxed);
+	case eHostServer:
+	default:
     return fServerName.load(boost::memory_order_relaxed);
+}
 }
 
 const char *Shepherd::proxy()

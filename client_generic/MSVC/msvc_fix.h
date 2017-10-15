@@ -7,7 +7,9 @@
 extern "C" 
 { 
 
+#if !defined(_MSC_VER) || (_MSC_VER < 1900)
 	int snprintf(char *buffer, size_t count, const char *fmt, ...);
+#endif
 #ifdef _WIN64
 	void ___chkstk();
 	void usleep(int ms);

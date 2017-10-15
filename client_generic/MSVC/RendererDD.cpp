@@ -20,7 +20,7 @@ CRendererDD::~CRendererDD()
 {
 }
 
-const bool	CRendererDD::Initialize( spCDisplayOutput _spDisplay )
+bool	CRendererDD::Initialize( spCDisplayOutput _spDisplay )
 {
 	if( !CRenderer::Initialize( _spDisplay ) )
 		return false;
@@ -177,7 +177,7 @@ void	CRendererDD::DrawQuad( const Base::Math::CRect &_rect, const Base::Math::CV
 	m_BackBufferPtr->DrawQuad( _rect, _color, _uvrect );
 }
 
-const bool	CRendererDD::EndFrame( bool drawn )
+bool	CRendererDD::EndFrame( bool drawn )
 {
 	m_BackBufferPtr->Blt();
 	return true ;

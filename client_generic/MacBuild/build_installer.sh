@@ -50,7 +50,7 @@ rm -f Package/Distribution.xml
 
 rm -rf "$DEST_TMP"
 
-hdiutil create -srcfolder "$DEST" "$DEST"
+hdiutil create -fs HFS+ -srcfolder "$DEST" "$DEST"
 
 cd -
 

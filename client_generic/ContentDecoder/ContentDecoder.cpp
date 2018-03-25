@@ -446,7 +446,7 @@ bool	CContentDecoder::NextSheepForPlaying( int32 _forceNext )
 	else
 		return false;
 		
-	if (m_bCalculateTransitions && m_SecondVideoInfo != NULL && !m_SecondVideoInfo->IsOpen() && m_MainVideoInfo->m_Last != m_SecondVideoInfo->m_SheepID && m_MainVideoInfo->m_SheepID != m_SecondVideoInfo->m_First && (m_MainVideoInfo->m_Generation / 10000) == (m_SecondVideoInfo->m_Generation / 10000))
+	if (m_bCalculateTransitions && m_SecondVideoInfo != NULL && !m_SecondVideoInfo->IsOpen() && m_MainVideoInfo->m_Last != m_SecondVideoInfo->m_SheepID && m_MainVideoInfo->m_SheepID != m_SecondVideoInfo->m_First && m_MainVideoInfo->m_Last != m_SecondVideoInfo->m_First && (m_MainVideoInfo->m_Generation / 10000) == (m_SecondVideoInfo->m_Generation / 10000))
 	{
 		Open( m_SecondVideoInfo );
 	}

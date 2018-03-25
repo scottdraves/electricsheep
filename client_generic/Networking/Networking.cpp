@@ -172,7 +172,7 @@ bool	CCurlTransfer::InterruptiblePerform()
 	fd_set fd_read, fd_write, fd_except;
 	int max_fd;
 	long timeout;
-	struct timeval tval;
+	struct timeval tval, orig_tval;
 
 	_code = curl_multi_perform( m_pCurlM, &running_handles );
 	
@@ -230,6 +230,8 @@ bool	CCurlTransfer::InterruptiblePerform()
 
 		tval.tv_sec = timeout / 1000;
 		tval.tv_usec = timeout % 1000 * 1000;
+        
+        orig_tval = tval;
 
 		int err;
 		
@@ -239,13 +241,16 @@ bool	CCurlTransfer::InterruptiblePerform()
 		while ( ( err = select( max_fd + 1, &fd_read, &fd_write, &fd_except, &tval ) ) < 0 )
 		{
 #ifndef WIN32
-			if ( err != EINTR )
+			if ( errno != EINTR )
 			{
 				return false;
 			}
 #endif
 			if (!g_NetworkManager->SingletonActive() || g_NetworkManager->IsAborted())
 				return false;
+            
+            //tval should be considered invalid after "select" returns
+            tval = orig_tval;
 		}
 
 		_code = CURLM_CALL_MULTI_PERFORM;

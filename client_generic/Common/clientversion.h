@@ -17,8 +17,8 @@
 		#define	CLIENT_VERSION_PRETTY		"macOS 3.0.2"
 		#define CLIENT_SETTINGS				"ElectricSheep"
 	#else
-		#define CLIENT_VERSION				"LNX_2.7b33"
-		#define	CLIENT_VERSION_PRETTY		"version 2.7b33"
+		#define CLIENT_VERSION				"LNX_3.0.2"
+		#define	CLIENT_VERSION_PRETTY		"version 3.0.2"
 		#define CLIENT_SETTINGS				"ElectricSheep"
 	#endif
 #endif

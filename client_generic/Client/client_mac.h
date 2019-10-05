@@ -98,7 +98,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 						CFRelease(resourcesURL);
 					}
 					
-					CFStringRef cfver = (CFStringRef)CFBundleGetValueForInfoDictionaryKey( bundle, CFSTR("CFBundleVersion") );
+					CFStringRef cfver = (CFStringRef)CFBundleGetValueForInfoDictionaryKey( bundle, CFSTR("CFBundleShortVersionString") );
 
 					char verstr[64];
 					
@@ -125,7 +125,7 @@ class	CElectricSheep_Mac : public CElectricSheep
 				if (bundle == NULL)
 					return NULL;
 				
-				CFStringRef verStr = (CFStringRef)CFBundleGetValueForInfoDictionaryKey( bundle, CFSTR("CFBundleVersion") );
+				CFStringRef verStr = (CFStringRef)CFBundleGetValueForInfoDictionaryKey( bundle, CFSTR("CFBundleShortVersionString") );
 				
 				CFRelease(bundle);
 				

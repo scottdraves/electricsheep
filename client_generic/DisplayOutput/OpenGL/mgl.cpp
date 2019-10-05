@@ -1,11 +1,8 @@
 #ifdef	MAC
 
-#include <string>
-
 #include "Log.h"
 #include "Settings.h"
 #include "mgl.h"
-
 
 #include	"Exception.h"
 

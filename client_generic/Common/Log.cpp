@@ -160,7 +160,6 @@ void	CLog::Log( const char *_pType, /*const char *_file, const uint32 _line, con
 	if (strcmp(_pStr, s_MessageSpam) == 0)
 	{
 		++s_MessageSpamCount;
-		return;
 	} else
 	{
 		if (s_MessageSpamCount > 0)
@@ -195,50 +194,8 @@ void	CLog::Log( const char *_pType, /*const char *_file, const uint32 _line, con
 		s_MessageSpamCount = 0;
 		memcpy(s_MessageSpam, _pStr, m_MaxMessageLength);
 		strcpy(s_MessageType, _pType);
-		return;
 	}
 	/* log spam end */
-
-	if( !m_bActive )
-	{
-		//	Not active/attached, dump to stdout.
-		//fprintf( stdout, "[%s]: %s - %s[%s(%d)]: '%s'\n", _pType, timeStamp, _file, _pFunc, m_Line, _pStr );
-		fprintf( stdout, "[%s-%s]: '%s'\n", _pType, timeStamp, _pStr );
-		fflush( stdout );
-	}
-	else
-	{
-		//fprintf( m_pFile, "[%s]: %s - %s[%s(%d)]: '%s'\n", _pType, timeStamp, _file, _pFunc, m_Line, _pStr );
-		fprintf( m_pFile, "[%s-%s]: '%s'\n", _pType, timeStamp, _pStr );
-		fflush( m_pFile );
-
-		/*lua_State *pState = m_pState->GetState();
-
-		uint32	stackSizeIn = lua_gettop( pState );
-		lua_getglobal( pState, "g_Log" );
-
-		lua_pushstring( pState, _pType );
-		lua_pushstring( pState, _file );
-		lua_pushstring( pState, _pFunc );
-		lua_pushinteger( pState, _line );
-		lua_pushstring( pState, timeStamp );
-		lua_pushstring( pState, _pStr );
-
-		luaL_checkstack( pState, 1, "Too many arguments" );
-
-		int status = lua_pcall( pState, 6, 0, 0 );
-		if( status != 0 )
-		{
-			if( !lua_isnil( pState, -1 ) )
-			fprintf( stdout, "LUA ERROR: %s\n", lua_tostring( pState, -1 ) );
-
-			fprintf( stdout, "[%s]: %s - %s[%s(%d)]: '%s'\n", _pType, timeStamp, _file, _pFunc, m_Line, _pStr );
-			fflush( stdout );
-
-			//	Detach.
-			Detach();
-		}*/
-	}
 }
 
 #define	grabvarargs	\

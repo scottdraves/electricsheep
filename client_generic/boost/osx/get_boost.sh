@@ -1,7 +1,7 @@
 #! /bin/bash
 
-DL_URL=http://sourceforge.net/projects/boost/files/boost/1.56.0/boost_1_56_0.tar.bz2/download
-ARCH_NAME=boost_1_56_0
+DL_URL=http://sourceforge.net/projects/boost/files/boost/1.70.0/boost_1_70_0.tar.bz2/download
+ARCH_NAME=boost_1_70_0
 
 CD=`dirname $0`
 

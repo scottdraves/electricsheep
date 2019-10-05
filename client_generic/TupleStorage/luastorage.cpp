@@ -311,6 +311,7 @@ bool	CStorageLua::Initialise( const std::string &_sRoot, const std::string &_sWo
 bool	CStorageLua::Config( const std::string &_url )
 {
 #ifndef  WIN32
+    (void)_url;
     return true;
 #else
 

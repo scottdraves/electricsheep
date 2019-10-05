@@ -21,10 +21,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include <sys/stat.h>
-//#include <curl.h>
 #include <zlib.h>
 #include <time.h>
-#include <list>
 #include <vector>
 #include <string>
 #if defined(WIN32) && defined(_MSC_VER)

@@ -16,7 +16,8 @@
 #include	"SheepDownloader.h"
 #include	"SheepGenerator.h"
 #ifdef MAC
-#include <CoreServices/CoreServices.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
 #endif
 
 namespace ContentDownloader
@@ -135,18 +136,22 @@ bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyInstance 
 		uint32 ncpus = 1;
 		if( g_Settings()->Get( "settings.generator.all_cores", false ) )
 		{
-#ifdef WIN32
+#if defined(WIN32)
 			SYSTEM_INFO sysInfo;
 			GetSystemInfo( &sysInfo );
 			ncpus = (uint32)sysInfo.dwNumberOfProcessors;
-#else
-	#ifdef MAC
-			ncpus = static_cast<uint32>(MPProcessors());
-        #else
-#ifdef LINUX_GNU
+#elsif defined(MAC)
+            int num = 1;
+            size_t dataLen = sizeof(num); // 'num' is an 'int'
+            int mib[2] = {CTL_HW, HW_NCPU};
+            int result = sysctl(mib, sizeof(mib)/sizeof(*mib), &num, &dataLen, NULL, 0);
+            if (result == -1)
+            {
+                num = 1;
+            }
+            ncpus = num;
+#elsif defined(LINUX_GNU)
 			ncpus = sysconf( _SC_NPROCESSORS_ONLN );
-#endif
-	#endif
 #endif
 		}
 

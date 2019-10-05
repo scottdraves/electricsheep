@@ -883,6 +883,9 @@ void	CImage::PutPixel( const int32 _x, const int32 _y, const fp4 _r, const fp4 _
 
 	uint32	nDestChannels = m_Format.GetChannels();
 	uint8	*pData = (GetData(0) + (static_cast<uint32>(_y) * GetPitch())) + (static_cast<uint32>(_x) * m_Format.getBPPixel() );
+    
+    if (pData == NULL)
+        return;
 
 	if( m_Format.isFloat() )
 	{
@@ -919,7 +922,11 @@ void	CImage::GetPixel( const int32 _x, const int32 _y, fp4 &_r, fp4 &_g, fp4 &_b
 	uint8	*pData = (GetData(0) + (static_cast<uint32>(_y) * GetPitch())) + (static_cast<uint32>(_x) * m_Format.getBPPixel() );
 	fp4		rgba[4];
     
+    _r = _g = _b = _a = 0;
     rgba[0] = rgba[1] = rgba[2] = rgba[3] = 0.0f;
+    
+    if (pData == NULL)
+        return;
 
 	if( m_Format.isFloat() )
 	{

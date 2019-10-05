@@ -6,7 +6,6 @@
 #include	<dirent.h>
 #endif
 #include	<math.h>
-#include	<sstream>
 #include	<string.h>
 
 #ifndef WIN32

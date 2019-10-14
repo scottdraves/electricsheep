@@ -164,8 +164,9 @@ AC_SUBST(AVUTIL_LIBS)
 
 dnl Check for lua
 
-PKG_CHECK_MODULES([LUA], [lua5.1],, 
-	[PKG_CHECK_MODULES([LUA], [lua >= 5.1])
+PKG_CHECK_MODULES([LUA], [lua5.1],,
+	[PKG_CHECK_MODULES([LUA], [lua-5.1],,
+		[PKG_CHECK_MODULES([LUA], [lua >= 5.1])])
 ])
 
 AC_SUBST(LUA_CFLAGS)

@@ -45,9 +45,6 @@ CContentDecoder::CContentDecoder( spCPlaylist _spPlaylist, bool _bStartByRandom,
 	//	We want errors!
 	av_log_set_level( AV_LOG_ERROR );
 
-	//	Register all formats and codecs.
-	av_register_all();
-	
     m_pScaler = NULL;
     m_ScalerWidth = 0;
     m_ScalerHeight = 0;

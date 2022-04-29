@@ -179,7 +179,7 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
 	ovi->m_VideoStreamID = -1;
     for( uint32 i=0; i<ovi->m_pFormatContext->nb_streams; i++ )
     {
-        if( ovi->m_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
+        if( ovi->m_pFormatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO )
         {
             ovi->m_pVideoStream = ovi->m_pFormatContext->streams[i];
             ovi->m_VideoStreamID = static_cast<int32>(i);

@@ -105,21 +105,12 @@ struct sOpenVideoInfo
 
 		if( m_pFormatContext )
 		{
-#ifdef USE_NEW_FFMPEG_API
 			avformat_close_input( &m_pFormatContext );
-#else
-			av_close_input_file( m_pFormatContext );
-			m_pFormatContext = NULL;
-#endif  // USE_NEW_FFMPEG_API
 		}
 		
 		if ( m_pFrame )
 		{
-#ifdef USE_NEW_FFMPEG_ALLOC_API
 			av_frame_free( &m_pFrame );
-#else
-			avcodec_free_frame( &m_pFrame );
-#endif
 			m_pFrame = NULL;
 		}
 	}

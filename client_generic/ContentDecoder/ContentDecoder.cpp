@@ -535,7 +535,7 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
 			if ( av_read_frame( pFormatContext, &packet ) < 0 )
 			{
 				ovi->m_ReadingTrailingFrames = true;
-				av_free_packet(&packet);
+				av_packet_unref(&packet);
 				continue;
 			}
 		}
@@ -567,7 +567,7 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
             break;
         }
         
-		av_free_packet(&packet);
+		av_packet_unref(&packet);
     }
 
     //	Do we have a fresh frame?
@@ -622,7 +622,7 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
         ovi->m_NextIsSeam = false;
     }
 
-    av_free_packet( &packet );
+    av_packet_unref( &packet );
     return pVideoFrame;
 }
 

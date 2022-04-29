@@ -28,6 +28,7 @@ extern "C"{
 #if defined(WIN32) || defined(MAC) || defined (LINUX_GNU)
 	#include "libavcodec/avcodec.h"
 	#include "libavformat/avformat.h"
+	#include "libavutil/imgutils.h"
 	#include "libswscale/swscale.h"
 #else
 	#include "avcodec.h"

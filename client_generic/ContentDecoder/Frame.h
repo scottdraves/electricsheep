@@ -103,9 +103,9 @@ class CVideoFrame
 				
 				if (m_pFrame != NULL)
 				{
-					int32 numBytes = avpicture_get_size( _format, _pCodecContext->width, _pCodecContext->height );
+					int32 numBytes = av_image_get_buffer_size( _format, _pCodecContext->width, _pCodecContext->height, 1 );
 					m_spBuffer = new Base::CAlignedBuffer( static_cast<uint32>(numBytes) * sizeof(uint8) );
-					avpicture_fill( (AVPicture *)m_pFrame, m_spBuffer->GetBufferPtr(), _format, _pCodecContext->width, _pCodecContext->height );
+					av_image_fill_arrays( m_pFrame->data, m_pFrame->linesize, m_spBuffer->GetBufferPtr(), _format, _pCodecContext->width, _pCodecContext->height, 1 );
 				} else
 					g_Log->Error( "m_pFrame == NULL" );
 			}

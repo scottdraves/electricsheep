@@ -57,6 +57,7 @@ struct sOpenVideoInfo
 	:	m_pFrame(NULL),
 		m_pFormatContext(NULL),
 		m_pVideoCodecContext(NULL),
+		m_pVideoCodecParameters(NULL),
 		m_pVideoCodec(NULL),
 		m_pVideoStream(NULL),
 		m_VideoStreamID(-1),
@@ -78,6 +79,7 @@ struct sOpenVideoInfo
 	:	m_pFrame(NULL),
 		m_pFormatContext(NULL),
 		m_pVideoCodecContext(NULL),
+		m_pVideoCodecParameters(NULL),
 		m_pVideoCodec(NULL),
 		m_pVideoStream(NULL),
 		m_VideoStreamID(-1),
@@ -101,6 +103,11 @@ struct sOpenVideoInfo
 		{
 			avcodec_close( m_pVideoCodecContext );
 			m_pVideoCodecContext = NULL;
+		}
+
+		if( m_pVideoCodecParameters )
+		{
+		    avcodec_parameters_free(&m_pVideoCodecParameters);
 		}
 
 		if( m_pFormatContext )
@@ -137,7 +144,8 @@ struct sOpenVideoInfo
 	AVFrame			*m_pFrame;
 	AVFormatContext	*m_pFormatContext;
 	AVCodecContext	*m_pVideoCodecContext;
-	AVCodec			*m_pVideoCodec;
+	AVCodecParameters	*m_pVideoCodecParameters;
+	const AVCodec			*m_pVideoCodec;
 	AVStream		*m_pVideoStream;
 	int32			m_VideoStreamID;
 	uint32			m_totalFrameCount;

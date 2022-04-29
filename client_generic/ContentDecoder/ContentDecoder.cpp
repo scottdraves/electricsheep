@@ -180,16 +180,24 @@ bool	CContentDecoder::Open( sOpenVideoInfo *ovi )
         g_Log->Error( "Could not find video stream in %s", _filename.c_str() );
         return false;
     }
-
-	//	Find video codec.
-    ovi->m_pVideoCodecContext = ovi->m_pFormatContext->streams[ ovi->m_VideoStreamID ]->codec;
-    if( ovi->m_pVideoCodecContext == NULL )
+    
+    ovi->m_pVideoCodecParameters = ovi->m_pFormatContext->streams[ ovi->m_VideoStreamID ]->codecpar;
+    if( ovi->m_pVideoCodecParameters == NULL )
     {
-        g_Log->Error( "Video CodecContext not found for %s", _filename.c_str() );
+        g_Log->Error( "Video CodecParameters not found for %s", _filename.c_str() );
         return false;
     }
 
-    ovi->m_pVideoCodec = avcodec_find_decoder( ovi->m_pVideoCodecContext->codec_id );
+    ovi->m_pVideoCodec = avcodec_find_decoder( ovi->m_pVideoCodecParameters->codec_id );
+	if ( ovi->m_pVideoCodec == NULL)
+    {
+        g_Log->Error( "Video Codec not found for %s", _filename.c_str() );
+        return false;
+    }
+    
+    //	Find video codec.
+    ovi->m_pVideoCodecContext = avcodec_alloc_context3(ovi->m_pVideoCodec);
+
 
     if( ovi->m_pVideoCodec == NULL )
     {

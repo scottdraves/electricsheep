@@ -42,7 +42,7 @@ extern "C"{
 #include	"boost/thread/thread.hpp"
 #include	"boost/thread/mutex.hpp"
 #include	"boost/thread/xtime.hpp"
-#include	"boost/bind.hpp"
+#include	"boost/bind/bind.hpp"
 #include	"Frame.h"
 #include	"Playlist.h"
 #include	"BlockingQueue.h"

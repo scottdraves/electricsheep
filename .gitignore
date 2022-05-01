@@ -10,8 +10,10 @@ client_generic/Makefile
 client_generic/Makefile.in
 client_generic/Client/Makefile
 client_generic/Client/Makefile.in
+client_generic/Client/electricsheep
 client_generic/MSVC/SettingsGUI/Makefile
 client_generic/MSVC/SettingsGUI/Makefile.in
+client_generic/MSVC/SettingsGUI/electricsheep-preferences
 client_generic/autom4te.cache/
 client_generic/aclocal.m4
 client_generic/m4/
@@ -26,4 +28,3 @@ client_generic/depcomp
 client_generic/install-sh
 client_generic/libtool
 client_generic/ltmain.sh
-

@@ -105,11 +105,6 @@ struct sOpenVideoInfo
 			m_pVideoCodecContext = NULL;
 		}
 
-		if( m_pVideoCodecParameters )
-		{
-		    avcodec_parameters_free(&m_pVideoCodecParameters);
-		}
-
 		if( m_pFormatContext )
 		{
 			avformat_close_input( &m_pFormatContext );

@@ -4,11 +4,6 @@ if IS_LINUX_GNU
 linux_CFLAGS=-DLINUX_GNU=1 -DSHAREDIR=\"$(prefix)/share/electricsheep/\"
 endif
 
-if HAVE_AVC_VID2
-AVC_DEFS=-DHAVE_AVC_VID2=1
-endif
-
-
 AM_CPPFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \

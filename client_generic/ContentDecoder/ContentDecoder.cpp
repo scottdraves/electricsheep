@@ -517,57 +517,66 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
 	if( !pFormatContext )
         return NULL;
 
-    AVPacket packet;
+    AVPacket* packet;
     int	frameDecoded = 0;
 	AVFrame *pFrame = ovi->m_pFrame;
     AVCodecContext	*pVideoCodecContext = ovi->m_pVideoCodecContext;
 	CVideoFrame *pVideoFrame = NULL;
 
-	while(true)
-    {
-		av_init_packet(&packet);
-		
-		packet.data = NULL;
-		packet.size = 0;
-        
-		if (!ovi->m_ReadingTrailingFrames)
-		{
-			if ( av_read_frame( pFormatContext, &packet ) < 0 )
-			{
-				ovi->m_ReadingTrailingFrames = true;
-				av_packet_unref(&packet);
-				continue;
-			}
-		}
-		
-        if( packet.stream_index != ovi->m_VideoStreamID )
-        {
-            g_Log->Error("Mismatching stream ID");
-			break;
-		}
-		
-
-#if (!defined(LINUX_GNU) || defined(HAVE_AVC_VID2))
-        int32 bytesDecoded = avcodec_decode_video2( pVideoCodecContext, pFrame, &frameDecoded, &packet );
-#else
-        int32 bytesDecoded = avcodec_decode_video( pVideoCodecContext, pFrame, &frameDecoded, packet.data, packet.size );
-#endif
-                        
-        if ( bytesDecoded < 0 )
-		{
-            g_Log->Warning( "Failed to decode video frame: bytesDecoded < 0" );
-			break;
-		}
-
-		//at the beginning of each file we can get few frames with frameDecoded==0 (multi-thread delay)
-		//all frames will be delayed and the few remaining frames come at the end when ovi->m_ReadingTrailingFrames == true
-		//only when frameDecoded == 0 and ovi->m_ReadingTrailingFrames == true, we are finally done with the file.
-		if ( frameDecoded != 0 || ovi->m_ReadingTrailingFrames )
-        {
+    while(true)
+      {
+        int receiveFrameResult = avcodec_receive_frame( pVideoCodecContext, pFrame );
+        if (receiveFrameResult == 0)
+          {
+            frameDecoded = 1;
             break;
+          }
+        else if (receiveFrameResult == AVERROR(EAGAIN))
+          {
+            // decoder expects more input
+          }
+        else if (receiveFrameResult == AVERROR_EOF)
+          {
+            // no more frames
+            break;
+          }
+        else
+          {
+            g_Log->Warning( "Failed to decode video frame: avcodec_receive_frame() == %d", receiveFrameResult );
+            break;
+          }
+        
+        // read new packet
+        packet = av_packet_alloc();
+        
+        packet->data = NULL;
+        packet->size = 0;
+        
+        if (ovi->m_ReadingTrailingFrames) {
+          // all frames were read, and no new packets can be sent
+          break;
         }
         
-		av_packet_unref(&packet);
+        if ( av_read_frame( pFormatContext, packet ) < 0 )
+          {
+            ovi->m_ReadingTrailingFrames = true;
+            av_packet_unref(packet);
+            continue;
+          }
+            
+        if( packet->stream_index != ovi->m_VideoStreamID )
+          {
+            g_Log->Error("Mismatching stream ID");
+            break;
+          }
+        
+        if ( avcodec_send_packet( pVideoCodecContext, packet ) < 0 )
+          {
+            g_Log->Warning( "Failed to decode video frame: avcodec_send_packet() < 0" );
+            break;
+          }
+        
+        av_packet_unref(packet);
     }
 
     //	Do we have a fresh frame?
@@ -602,13 +611,12 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
                 g_Log->Warning( "scaler == null" );
         }
 
-        pVideoFrame = new CVideoFrame( pVideoCodecContext, m_WantedPixelFormat, std::string(pFormatContext->filename) );
+        pVideoFrame = new CVideoFrame( pVideoCodecContext, m_WantedPixelFormat, std::string(ovi->m_Path) );
         AVFrame	*pDest = pVideoFrame->Frame();
 
         sws_scale( m_pScaler, pFrame->data, pFrame->linesize, 0, pVideoCodecContext->height, pDest->data, pDest->linesize );
         
-        if ( pVideoCodecContext->refcounted_frames )
-            av_frame_unref( pFrame );
+        av_frame_unref( pFrame );
         
 		ovi->m_iCurrentFileFrameCount++;
 
@@ -622,7 +630,7 @@ CVideoFrame *CContentDecoder::ReadOneFrame(sOpenVideoInfo *ovi)
         ovi->m_NextIsSeam = false;
     }
 
-    av_packet_unref( &packet );
+    av_packet_unref( packet );
     return pVideoFrame;
 }
 

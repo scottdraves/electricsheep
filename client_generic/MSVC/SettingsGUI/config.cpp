@@ -268,11 +268,11 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_spinDecodeFps->SetMaxLength( 5 ); 
 	m_spinDecodeFps->SetToolTip( wxT("Frames per second (FPS)") );
 	
-	bSizer10->Add( m_spinDecodeFps, 0, wxALIGN_RIGHT|wxALL|wxSHAPED, 3 );
+	bSizer10->Add( m_spinDecodeFps, 0, wxALL|wxSHAPED, 3 );
 	
 	m_staticText11 = new wxStaticText( m_Playback, wxID_ANY, wxT("FPS"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	bSizer10->Add( m_staticText11, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizer10->Add( m_staticText11, 0, wxALL, 5 );
 	
 	bSizer40->Add( bSizer10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
@@ -362,7 +362,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_radioDisplayMode->SetSelection( 1 );
 	m_radioDisplayMode->SetToolTip( wxT("Linear and Cubic interpolation\nallow display speed (above) to\nbe higher than decode speed\n(under the Playback tab)") );
 	
-	bSizer16->Add( m_radioDisplayMode, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
+	bSizer16->Add( m_radioDisplayMode, 0, wxALL|wxEXPAND, 5 );
 	
 	bSizer77->Add( bSizer16, 0, wxALIGN_RIGHT, 5 );
 	
@@ -502,7 +502,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_checkKeepFrames->SetValue(true); 
 	m_checkKeepFrames->SetToolTip( wxT("Stores the rendered\nframes on your harddrive") );
 	
-	bSizer20->Add( m_checkKeepFrames, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizer20->Add( m_checkKeepFrames, 0, wxALL, 5 );
 	
 	bSizer31->Add( bSizer20, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
@@ -513,7 +513,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_checkNegVoteDeletes->SetValue(true); 
 	m_checkNegVoteDeletes->SetToolTip( wxT("If you press the down arrow key,\nthen delete the currently displayed\nsheep in addition to notifying the\nserver not to make more sheep like it") );
 	
-	bSizer21->Add( m_checkNegVoteDeletes, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizer21->Add( m_checkNegVoteDeletes, 0, wxALL, 5 );
 	
 	bSizer31->Add( bSizer21, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
@@ -555,7 +555,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	bSizer33->Add( bSizer34, 1, wxEXPAND, 5 );
 	
-	bSizer13->Add( bSizer33, 1, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizer13->Add( bSizer33, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_Advanced, wxID_ANY, wxT("Content directory") ), wxHORIZONTAL );
@@ -568,7 +568,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	sbSizer3->Add( m_buttonOpenContent, 0, wxALL, 5 );
 	
-	bSizer13->Add( sbSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bSizer13->Add( sbSizer3, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer6;
 	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( m_Advanced, wxID_ANY, wxT("Flock choice") ), wxVERTICAL );
@@ -579,7 +579,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_choicePlaybackMixingMode->SetSelection( 0 );
 	sbSizer6->Add( m_choicePlaybackMixingMode, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
-	bSizer13->Add( sbSizer6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bSizer13->Add( sbSizer6, 0, wxALL|wxEXPAND, 5 );
 	
 	bSizer12->Add( bSizer13, 0, wxALL|wxEXPAND, 5 );
 	
@@ -615,7 +615,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_Cancel = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Cancel->SetToolTip( wxT("Discard all changes and exit") );
 	
-	bSizer22->Add( m_Cancel, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	bSizer22->Add( m_Cancel, 0, wxALL, 5 );
 	
 	bSizer1->Add( bSizer22, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	

@@ -411,7 +411,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText31->Wrap( -1 );
 	bSizer61->Add( m_staticText31, 0, wxALL, 5 );
 	
-	m_textProxyHost = new wxTextCtrl( m_Proxy, wxID_PROXY_HOST_NAME, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE );
+	m_textProxyHost = new wxTextCtrl( m_Proxy, wxID_PROXY_HOST_NAME, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PROCESS_ENTER );
 	m_textProxyHost->SetMaxLength( 256 ); 
 	bSizer61->Add( m_textProxyHost, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
@@ -424,7 +424,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText411->Wrap( -1 );
 	bSizer71->Add( m_staticText411, 0, wxALL, 5 );
 	
-	m_textProxyUser = new wxTextCtrl( m_Proxy, wxID_PROXY_USER_NAME, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
+	m_textProxyUser = new wxTextCtrl( m_Proxy, wxID_PROXY_USER_NAME, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD|wxTE_PROCESS_ENTER );
 	m_textProxyUser->SetMaxLength( 256 ); 
 	bSizer71->Add( m_textProxyUser, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
@@ -437,7 +437,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	m_staticText412->Wrap( -1 );
 	bSizer72->Add( m_staticText412, 0, wxALL, 5 );
 	
-	m_textProxyPassword = new wxTextCtrl( m_Proxy, wxID_PROXY_PASSWORD, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD );
+	m_textProxyPassword = new wxTextCtrl( m_Proxy, wxID_PROXY_PASSWORD, wxEmptyString, wxDefaultPosition, wxSize( 256,-1 ), wxTE_CENTRE|wxTE_PASSWORD|wxTE_PROCESS_ENTER );
 	m_textProxyPassword->SetMaxLength( 256 ); 
 	bSizer72->Add( m_textProxyPassword, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	

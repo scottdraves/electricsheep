@@ -32,13 +32,13 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	m_staticText4 = new wxStaticText( this, wxID_ANY, wxT("Electric Sheep"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	m_staticText4->SetFont( wxFont( 20, 70, 93, 92, false, wxT("Nice") ) );
+    m_staticText4->SetFont( wxFont( 20, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxT("Nice") ) );
 	
 	bSizer2->Add( m_staticText4, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticVersion = new wxStaticText( this, wxID_ANY, wxT("version"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticVersion->Wrap( -1 );
-	m_staticVersion->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 93, 90, false, wxEmptyString ) );
+	m_staticVersion->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
 	bSizer2->Add( m_staticVersion, 0, wxALL, 5 );
 	
@@ -48,7 +48,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_RunButton = new wxButton( this, wxID_ANY, wxT("Run"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_RunButton->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+	m_RunButton->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_RunButton->SetToolTip( wxT("Run in a window") );
 	
 	bSizer3->Add( m_RunButton, 0, wxALL, 1 );
@@ -113,7 +113,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	m_staticText6 = new wxStaticText( m_Basic, wxID_ANY, wxT("not yet tested"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText6->Wrap( -1 );
-	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 93, 90, false, wxEmptyString ) );
+	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_staticText6->SetToolTip( wxT("Authentication status") );
 	
 	bSizer47->Add( m_staticText6, 0, wxALIGN_LEFT|wxALL, 5 );
@@ -148,7 +148,7 @@ MyDialog2::MyDialog2( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer50 = new wxBoxSizer( wxVERTICAL );
 	
 	m_CreateAccountButton = new wxButton( m_Basic, wxID_ANY, wxT("Learn More"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_CreateAccountButton->SetFont( wxFont( 10, 70, 90, wxBOLD, false, wxEmptyString ) );
+	m_CreateAccountButton->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer50->Add( m_CreateAccountButton, 0, wxALIGN_RIGHT|wxALL, 5 );
 	

@@ -226,7 +226,7 @@ class	CLuaPlaylist : public CPlaylist
 			atime = fs.st_atime;
 		}
 
-		m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Add", "ssiiiii", (fullPath.branch_path().string() + std::string("/")).c_str(), fullPath.filename().string().c_str(), Generation, ID, First, Last, atime ) );
+		m_pState->Pop( Base::Script::Call( m_pState->GetState(), "Add", "ssiiiii", (fullPath.parent_path().string() + std::string("/")).c_str(), fullPath.filename().string().c_str(), Generation, ID, First, Last, atime ) );
 		m_numSheep++;
 	}
 

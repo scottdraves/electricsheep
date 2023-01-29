@@ -50,7 +50,7 @@ class	CCurlTransfer
 		CCurlTransfer( const std::string &_name );
 		virtual ~CCurlTransfer();
 
-		static int32 customProgressCallback( void *_pUserData, fp8 _downTotal, fp8 _downNow, fp8 _upTotal, fp8 _upNow );
+		static int32 customProgressCallback( void *_pUserData, curl_off_t _downTotal, curl_off_t _downNow, curl_off_t _upTotal, curl_off_t _upNow );
 
 		virtual bool	InterruptiblePerform();
 		

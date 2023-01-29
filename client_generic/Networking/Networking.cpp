@@ -93,7 +93,7 @@ bool CCurlTransfer::VerifyM( CURLMcode _code )
 
 /*
 */
-int CCurlTransfer::customProgressCallback( void *_pUserData, fp8 _downTotal, fp8 _downNow, fp8 _upTotal, fp8 _upNow )
+int CCurlTransfer::customProgressCallback( void *_pUserData, curl_off_t _downTotal, curl_off_t _downNow, curl_off_t _upTotal, curl_off_t _upNow )
 {
 	//g_Log->Info( "customProgressCallback()" );
 
@@ -108,7 +108,7 @@ int CCurlTransfer::customProgressCallback( void *_pUserData, fp8 _downTotal, fp8
 	}
 
 	if (g_NetworkManager)
-		g_NetworkManager->UpdateProgress( pOut, ((_downTotal+_upTotal) > 0) ? ((_downNow+_upNow) / (_downTotal+_upTotal) * 100) : 0, _downNow + _upNow );
+      g_NetworkManager->UpdateProgress( pOut, ((_downTotal+_upTotal) > 0) ? ((fp8) (_downNow+_upNow) / (_downTotal+_upTotal) * 100) : 0, _downNow + _upNow );
 	return 0;
 }
 
@@ -289,7 +289,7 @@ bool	CCurlTransfer::Perform( const std::string &_url )
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_URL, url.c_str() ) ) )	return false;
 
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_NOPROGRESS, 0 )	) )	return false;
-	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_PROGRESSFUNCTION, &CCurlTransfer::customProgressCallback ) ) )	return false;
+	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_XFERINFOFUNCTION, &CCurlTransfer::customProgressCallback ) ) )	return false;
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_PROGRESSDATA, this ) ) )	return false;
 	if( !Verify( curl_easy_setopt( m_pCurl, CURLOPT_ERRORBUFFER, errorBuffer ) ) )	return false;
 	
@@ -349,10 +349,10 @@ bool	CCurlTransfer::Perform( const std::string &_url )
 		}
 	}
 
-	fp8 speedUp = 0;
-	fp8 speedDown = 0;
-	if( !Verify( curl_easy_getinfo( m_pCurl, CURLINFO_SPEED_UPLOAD, &speedDown ) ) ) return false;
-	if( !Verify( curl_easy_getinfo( m_pCurl, CURLINFO_SPEED_DOWNLOAD, &speedUp ) ) ) return false;
+	curl_off_t speedUp = 0;
+	curl_off_t speedDown = 0;
+	if( !Verify( curl_easy_getinfo( m_pCurl, CURLINFO_SPEED_UPLOAD_T, &speedDown ) ) ) return false;
+	if( !Verify( curl_easy_getinfo( m_pCurl, CURLINFO_SPEED_DOWNLOAD_T, &speedUp ) ) ) return false;
 
 	std::stringstream statusres;
 	statusres << "~" << (uint32)((speedUp+speedDown)/1000) << " kb/s";

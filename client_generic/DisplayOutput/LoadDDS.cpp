@@ -49,11 +49,14 @@ bool	CImage::LoadDDS( const std::string &_fileName, const bool _wantMipMaps )
 		return( false );
 	}
 
-	fread( &header, sizeof(header), 1, pFileData );
-	if( header.ddsIdentifier != MCHAR4('D', 'D', 'S', ' ') )
-	{
-		ThrowStr( ("CImage::LoadDDS() No valid header in " + _fileName) );
-		return( false );
+	size_t nmemb_read = fread( &header, sizeof(header), 1, pFileData );
+    if (nmemb_read < 1) {
+      ThrowStr(("CImage::LoadDDS() fread failed on " + _fileName).c_str());
+      return( false );
+    }
+	if (header.ddsIdentifier != MCHAR4('D', 'D', 'S', ' ')) {
+      ThrowStr(("CImage::LoadDDS() No valid header in " + _fileName).c_str());
+      return( false );
 	}
 
 	m_Width    = header.width;
@@ -110,7 +113,11 @@ bool	CImage::LoadDDS( const std::string &_fileName, const bool _wantMipMaps )
 		size = readSize;
 
 	m_spData = new Base::CAlignedBuffer( size );
-	fread( m_spData->GetBufferPtr(), readSize, 1, pFileData );
+	size_t spData_nmemb_read = fread( m_spData->GetBufferPtr(), readSize, 1, pFileData );
+    if (spData_nmemb_read < 1) {
+      ThrowStr( ("CImage::LoadDDS() failed to fread spData from pFileData " + _fileName).c_str());
+      return( false );
+    }
 
 	/*if( m_Format.is( eImage_RGB8 ) || m_Format.is( eImage_RGBA8 ) )
 	{

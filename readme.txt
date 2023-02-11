@@ -1,4 +1,4 @@
-# Introduction
+<h1> Introduction </h1>
 
 The Electric Sheep is a cyborg mind. It harnesses the collective intelligence of 450,000 computers and people to create abstract art with mathematics and Darwinian evolution. The result is seamless, organic, and infinite. 
 

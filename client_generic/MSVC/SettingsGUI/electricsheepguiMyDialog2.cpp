@@ -206,7 +206,7 @@ using namespace boost::filesystem;
 
 uint64 GetFlockSizeBytes(wxString mpegpath, int sheeptype)
 {
-	if (mpegpath.substr(mpegpath.size() - 1, 1) != wxT("/"))
+	if (mpegpath.substr(mpegpath.size() - 1, 1).ToStdWstring() != wxT("/"))
 		mpegpath += wxT("/");
 	uint64 retval = 0;
 
@@ -311,7 +311,7 @@ void electricsheepguiMyDialog2::LoadSettings()
 	m_ReverseDisplays->SetValue( g_Settings()->Get( "settings.player.reversedisplays", false ) );
 
 	m_textDrupalName->ChangeValue( g_Settings()->Get( "settings.generator.nickname", std::string("") ) );
-	if (m_textDrupalName->GetValue() != wxEmptyString)
+	if (m_textDrupalName->GetValue().ToStdWstring() != wxEmptyString)
 		m_textDrupalPassword->ChangeValue( g_Settings()->Get( "settings.content.password_md5", std::string("") ) );
 
 	/*if (g_Settings()->Get( "settings.content.registered", false ) == true )
@@ -332,7 +332,7 @@ void electricsheepguiMyDialog2::LoadSettings()
 	m_textProxyUser->SetValue( g_Settings()->Get( "settings.content.proxy_username", std::string("")) );
 	m_textProxyPassword->SetValue( g_Settings()->Get( "settings.content.proxy_password", std::string("")) );
 
-	if (m_textProxyHost->GetValue() != wxT(""))
+	if (m_textProxyHost->GetValue().ToStdWstring() != wxT(""))
 		g_Settings()->Set( "settings.content.use_proxy", true);
 	else
 		g_Settings()->Set( "settings.content.use_proxy", false);
@@ -871,7 +871,7 @@ void electricsheepguiMyDialog2::OnOpenClick( wxCommandEvent& event )
 
 void electricsheepguiMyDialog2::OnDecodeFpsKillFocus( wxFocusEvent& event )
 {
-	if (m_spinDecodeFps->GetValue() == wxEmptyString)
+	if (m_spinDecodeFps->GetValue().ToStdWstring() == wxEmptyString)
 		m_spinDecodeFps->ChangeValue(wxT("20"));
 	double val = 0;
 	m_spinDecodeFps->GetValue().ToDouble(&val);
@@ -904,7 +904,7 @@ void electricsheepguiMyDialog2::OnDecodeFpsTextUpdated( wxCommandEvent& event )
 
 void electricsheepguiMyDialog2::OnPlayerFpsKillFocus( wxFocusEvent& event )
 {
-	if (m_spinDisplayFps->GetValue() == wxEmptyString)
+	if (m_spinDisplayFps->GetValue().ToStdWstring() == wxEmptyString)
 		m_spinDisplayFps->ChangeValue(wxT("60"));
 	double val = 0;
 	m_spinDisplayFps->GetValue().ToDouble(&val);
@@ -938,7 +938,7 @@ void electricsheepguiMyDialog2::OnPlayerFpsTextUpdated( wxCommandEvent& event )
 void electricsheepguiMyDialog2::OnProxyTextEnter( wxCommandEvent& event )
 {
 	g_Settings()->Set( "settings.content.proxy", std::string(m_textProxyHost->GetValue()));
-	if (m_textProxyHost->GetValue() != wxT(""))
+	if (m_textProxyHost->GetValue().ToStdWstring() != wxT(""))
 		g_Settings()->Set( "settings.content.use_proxy", true);
 	else
 		g_Settings()->Set( "settings.content.use_proxy", false);

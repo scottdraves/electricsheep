@@ -185,7 +185,7 @@ if test "$HAVE_GLEE" = "false"; then
       AC_CHECK_HEADERS(GLee.h GL/GLee.h)
 
       if test "x$ac_cv_header_GLee_h" = "xno"; then
-      	 if test "xac_cv_header_GL_GLee_h" = "xno"; then
+      	 if test "x$ac_cv_header_GL_GLee_h" = "xno"; then
       	    AC_MSG_ERROR([neither GLee.h nor GL/GLee.h were found. Please make sure you have GLee.h installed in your include path.])
       	 fi
       	 dnl found GLee.h in GL subdir

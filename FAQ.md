@@ -7,6 +7,7 @@
   * [Why don't I render?](FAQ#Not_Rendering.md)
   * [Do the Sheep put my computer at risk to viruses?](FAQ#Security_and_Viruses.md)
   * [Why not use BitTorrent?](FAQ#BitTorrent.md)
+  * [What Are Supported Command Line Arguments?](FAQ#Command_Flags.md)
 <p><br>
 <hr />
 <p><br>
@@ -80,3 +81,20 @@ The screensaver client does access a number of servers over the internet, in ord
 We tried that already and only 10-15% of our users were able to seed, which wasn't enough to make it work. Instead we are focusing on the HTTP which is much more reliable, and adding a subscription system to pay for our bandwidth. Our goal is to keep it free for everyone, and at the same time make it sustainable ie pay our own bills. This is the <a href='http://en.wikipedia.org/wiki/Freemium'>freemium</a> model.<br>
 <br>
 See <a href='http://community.electricsheep.org/node/787'>http://community.electricsheep.org/node/787</a>
+
+
+<p><br>
+<hr />
+<p><br>
+<h2>Command Flags</h2>
+
+<h3>What Are Supported Command Line Arguments?</h3>
+
+On Windows, the arguments to the electric sheep executable (es.exe in C:\Windows\) are as follows:<br>
+<ul>
+  <li>None - Starts the settings window</li>
+  <li>'R' - Start in fullscreen</li>
+  <li>'T' - Start windowed</li>
+  <li>'X' - Same as above, but allows multiple instances</li>
+  <li>'S' - Starts in screensafer mode</li>
+ </ul>

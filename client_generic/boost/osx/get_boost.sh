@@ -1,7 +1,7 @@
 #! /bin/bash
 
-DL_URL=http://sourceforge.net/projects/boost/files/boost/1.70.0/boost_1_70_0.tar.bz2/download
-ARCH_NAME=boost_1_70_0
+DL_URL=http://sourceforge.net/projects/boost/files/boost/1.84.0/boost_1_84_0.tar.bz2/download
+ARCH_NAME=boost_1_84_0
 
 CD=`dirname $0`
 
@@ -31,3 +31,9 @@ tar -xy --strip-components=1 -C "$INCLUDE_ROOT" -f "$CD/$ARCH_NAME.tar.bz2" $ARC
 rm "$CD/$ARCH_NAME.tar.bz2"
 
 touch "$TEST_FILE"
+
+#build boost :
+#./bootstrap.sh --with-libraries=system,filesystem,thread --with-toolset=clang
+#./b2 --with-filesystem --with-system --with-thread --with-atomic variant=release threading=multi link=static --prefix=/Users/Shared/Toolkits/boost-1_84-arm64/ architecture=arm address-model=64 cflags="-mmacos-version-min=11.0 -arch arm64" runtime-link=static -a install
+#./b2 --with-filesystem --with-system --with-thread --with-atomic variant=release threading=multi link=static --prefix=/Users/Shared/Toolkits/boost-1_84-x64/ architecture=x86 address-model=64 cflags="-mmacos-version-min=11.0 -arch x86_64" runtime-link=static -a install
+#lipo -create -output ...

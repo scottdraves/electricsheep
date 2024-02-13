@@ -140,8 +140,8 @@ bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyInstance 
 			SYSTEM_INFO sysInfo;
 			GetSystemInfo( &sysInfo );
 			ncpus = (uint32)sysInfo.dwNumberOfProcessors;
-#elsif defined(MAC)
-            int num = 1;
+#elif defined(MAC)
+            unsigned int num = 1;
             size_t dataLen = sizeof(num); // 'num' is an 'int'
             int mib[2] = {CTL_HW, HW_NCPU};
             int result = sysctl(mib, sizeof(mib)/sizeof(*mib), &num, &dataLen, NULL, 0);
@@ -150,7 +150,7 @@ bool	CContentDownloader::Startup( const bool _bPreview, bool _bReadOnlyInstance 
                 num = 1;
             }
             ncpus = num;
-#elsif defined(LINUX_GNU)
+#elif defined(LINUX_GNU)
 			ncpus = sysconf( _SC_NPROCESSORS_ONLN );
 #endif
 		}

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -160,6 +160,16 @@
 		2161F1940ECF8CEF00FE48E9 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 212B1AD90E8E6E0100CE185C /* libz.1.2.5.dylib */; };
 		2169AE7F11397EF700689B02 /* isaac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2169AE7E11397EF700689B02 /* isaac.cpp */; };
 		2169AE8011397EF700689B02 /* isaac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2169AE7E11397EF700689B02 /* isaac.cpp */; };
+		217EC5842B7B921300B660E4 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5832B7B921300B660E4 /* AudioToolbox.framework */; };
+		217EC5872B7B924C00B660E4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5852B7B924C00B660E4 /* CoreMedia.framework */; };
+		217EC5882B7B924C00B660E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5862B7B924C00B660E4 /* Security.framework */; };
+		217EC58A2B7B927D00B660E4 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5892B7B927D00B660E4 /* VideoToolbox.framework */; };
+		217EC58C2B7B92A800B660E4 /* liblzma.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC58B2B7B92A800B660E4 /* liblzma.tbd */; };
+		217EC5912B7B961D00B660E4 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5832B7B921300B660E4 /* AudioToolbox.framework */; };
+		217EC5922B7B961D00B660E4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5852B7B924C00B660E4 /* CoreMedia.framework */; };
+		217EC5932B7B961D00B660E4 /* liblzma.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC58B2B7B92A800B660E4 /* liblzma.tbd */; };
+		217EC5942B7B961D00B660E4 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5892B7B927D00B660E4 /* VideoToolbox.framework */; };
+		217EC5952B7B966100B660E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217EC5862B7B924C00B660E4 /* Security.framework */; };
 		2181FAF00ECF42820078FDDA /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2181FAEF0ECF42820078FDDA /* libswscale.a */; };
 		2187F3860F463AA20004F8F9 /* TrebuchetMS-24.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */; };
 		2187F3870F463AB50004F8F9 /* TrebuchetMS-24.glf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */; };
@@ -532,6 +542,13 @@
 		2160FE420F30F82800B2C27A /* pq.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pq.lua; sourceTree = "<group>"; };
 		2160FE430F30F82800B2C27A /* serialize.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = serialize.lua; sourceTree = "<group>"; };
 		2169AE7E11397EF700689B02 /* isaac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = isaac.cpp; path = ../Common/isaac.cpp; sourceTree = SOURCE_ROOT; };
+		217EC5832B7B921300B660E4 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		217EC5852B7B924C00B660E4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		217EC5862B7B924C00B660E4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		217EC5892B7B927D00B660E4 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		217EC58B2B7B92A800B660E4 /* liblzma.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = liblzma.tbd; path = usr/lib/liblzma.tbd; sourceTree = SDKROOT; };
+		217EC58F2B7B948600B660E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		217EC5902B7B948700B660E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Base; path = ../Base.lproj/ElectricSheep.nib; sourceTree = "<group>"; };
 		2181FAEF0ECF42820078FDDA /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = ../ffmpeg/osx/lib/libswscale.a; sourceTree = SOURCE_ROOT; };
 		2187F3850F463A740004F8F9 /* TrebuchetMS-24.glf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TrebuchetMS-24.glf"; sourceTree = "<group>"; };
 		218878D00EC6CD7E001ABD2E /* Electric Sheep.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Electric Sheep.saver"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -564,8 +581,6 @@
 		21DE7CA6101901E900E77D68 /* Instructions.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Instructions.rtf; sourceTree = "<group>"; };
 		21E6A55110B5F96800DAF0FF /* electricsheep-attr.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "electricsheep-attr.png"; sourceTree = "<group>"; };
 		21EE633410139BCC000CE53E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		21EE633610139BD8000CE53E /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = ElectricSheep.nib; sourceTree = "<group>"; };
-		21EE634E10139BEF000CE53E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		21EE63941013A674000CE53E /* ESWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESWindow.h; sourceTree = "<group>"; };
 		21EE63951013A674000CE53E /* ESWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -575,6 +590,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				217EC58C2B7B92A800B660E4 /* liblzma.tbd in Frameworks */,
+				217EC58A2B7B927D00B660E4 /* VideoToolbox.framework in Frameworks */,
+				217EC5872B7B924C00B660E4 /* CoreMedia.framework in Frameworks */,
+				217EC5882B7B924C00B660E4 /* Security.framework in Frameworks */,
+				217EC5842B7B921300B660E4 /* AudioToolbox.framework in Frameworks */,
 				213D540311F79C9800CF500D /* IOKit.framework in Frameworks */,
 				2160FC9D0F30F48200B2C27A /* CoreFoundation.framework in Frameworks */,
 				2160FC9E0F30F48200B2C27A /* GLUT.framework in Frameworks */,
@@ -606,6 +626,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				217EC5952B7B966100B660E4 /* Security.framework in Frameworks */,
+				217EC5912B7B961D00B660E4 /* AudioToolbox.framework in Frameworks */,
+				217EC5922B7B961D00B660E4 /* CoreMedia.framework in Frameworks */,
+				217EC5932B7B961D00B660E4 /* liblzma.tbd in Frameworks */,
+				217EC5942B7B961D00B660E4 /* VideoToolbox.framework in Frameworks */,
 				213D535111F79C8D00CF500D /* IOKit.framework in Frameworks */,
 				2197D56519B06FC300EFA1F2 /* libswresample.a in Frameworks */,
 				2188A6D017EB94F30078C91C /* ApplicationServices.framework in Frameworks */,
@@ -647,6 +672,7 @@
 				21293B890F71751E00406DD4 /* proximus */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				19C28FBDFE9D53C911CA2CBB /* Products */,
+				217EC5822B7B921300B660E4 /* Frameworks */,
 			);
 			name = ElectricSheep;
 			sourceTree = "<group>";
@@ -926,6 +952,18 @@
 			path = logging;
 			sourceTree = "<group>";
 		};
+		217EC5822B7B921300B660E4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				217EC58B2B7B92A800B660E4 /* liblzma.tbd */,
+				217EC5892B7B927D00B660E4 /* VideoToolbox.framework */,
+				217EC5852B7B924C00B660E4 /* CoreMedia.framework */,
+				217EC5862B7B924C00B660E4 /* Security.framework */,
+				217EC5832B7B921300B660E4 /* AudioToolbox.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		21AAA0390F703FDB00AC23A8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -994,7 +1032,8 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1100;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					211E8EA61ADB403700C0B833 = {
 						CreatedOnToolsVersion = 6.3;
@@ -1011,13 +1050,14 @@
 			};
 			buildConfigurationList = 1DEB924B08733DCA0010E9CD /* Build configuration list for PBXProject "ElectricSheep" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				English,
-				Japanese,
-				French,
-				German,
+				ja,
+				en,
+				fr,
+				de,
+				Base,
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* ElectricSheep */;
 			projectDirPath = "";
@@ -1069,10 +1109,11 @@
 			inputPaths = (
 			);
 			outputPaths = (
+				"${PROJECT_DIR}/../boost/osx/include/boost_1_84_0",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${PROJECT_DIR}/../boost/osx/get_boost.sh";
+			shellScript = "${PROJECT_DIR}/../boost/osx/get_boost.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1222,7 +1263,7 @@
 		21AAA09E0F70400D00AC23A8 /* ElectricSheep.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				21EE633610139BD8000CE53E /* English */,
+				217EC5902B7B948700B660E4 /* Base */,
 			);
 			name = ElectricSheep.nib;
 			path = English.lproj;
@@ -1231,7 +1272,7 @@
 		21EE634D10139BEF000CE53E /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				21EE634E10139BEF000CE53E /* English */,
+				217EC58F2B7B948600B660E4 /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -1243,18 +1284,29 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = build/Debug;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				FRAMEWORK_SEARCH_PATHS = Frameworks;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1319,17 +1371,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = build/Release;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				FRAMEWORK_SEARCH_PATHS = Frameworks;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1391,6 +1454,9 @@
 		211E8EA71ADB403700C0B833 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				DEAD_CODE_STRIPPING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1398,6 +1464,9 @@
 		211E8EA81ADB403700C0B833 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				DEAD_CODE_STRIPPING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1406,20 +1475,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5ZJTFJRCQW;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_BUILTIN_FUNCTIONS = NO;
-				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1441,15 +1510,14 @@
 					"\"$(SRCROOT)/../boost/osx/lib\"",
 					"\"$(SRCROOT)/../lua5.1/src\"",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 3.0.4;
 				ONLY_ACTIVE_ARCH = NO;
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.elecricsheep.ElectricSheep.app;
 				PRODUCT_NAME = "Electric Sheep";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				STRIP_INSTALLED_PRODUCT = NO;
-				VALID_ARCHS = "i386 ppc x86_64";
 			};
 			name = Debug;
 		};
@@ -1457,8 +1525,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1467,10 +1534,10 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5ZJTFJRCQW;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_BUILTIN_FUNCTIONS = NO;
-				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -1486,7 +1553,8 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 3.0.4;
 				ONLY_ACTIVE_ARCH = NO;
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.elecricsheep.ElectricSheep.app;
@@ -1494,8 +1562,6 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				STRIP_INSTALLED_PRODUCT = YES;
-				VALID_ARCHS = "i386 ppc x86_64";
 			};
 			name = Release;
 		};
@@ -1504,20 +1570,19 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUILD_VARIANTS = normal;
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = build/Debug;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 5ZJTFJRCQW;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -1535,7 +1600,8 @@
 				INSTALL_PATH = "$(HOME)/Library/ScreenSavers";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 3.0.4;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-read_only_relocs",
@@ -1546,7 +1612,6 @@
 				PRODUCT_NAME = "Electric Sheep";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				VALID_ARCHS = "i386 ppc x86_64";
 				WRAPPER_EXTENSION = saver;
 			};
 			name = Debug;
@@ -1556,7 +1621,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUILD_VARIANTS = normal;
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1569,7 +1634,6 @@
 				DEVELOPMENT_TEAM = 5ZJTFJRCQW;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
-				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
@@ -1589,7 +1653,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINKER_DISPLAYS_MANGLED_NAMES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 3.0.4;
 				OTHER_LDFLAGS = (
 					"-read_only_relocs",
 					suppress,
@@ -1602,9 +1667,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SEPARATE_STRIP = NO;
-				STRIP_INSTALLED_PRODUCT = YES;
-				STRIP_STYLE = all;
-				VALID_ARCHS = "i386 ppc x86_64";
 				WRAPPER_EXTENSION = saver;
 			};
 			name = Release;
@@ -1612,9 +1674,12 @@
 		21A36C28101FA2850086E7C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = All;
 			};
@@ -1623,8 +1688,11 @@
 		21A36C29101FA2850086E7C8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = All;
 				ZERO_LINK = NO;

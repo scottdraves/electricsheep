@@ -18,6 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+/**
+ * @file
+ * @ingroup lavu_crc32
+ * Public header for CRC hash function implementation.
+ */
+
 #ifndef AVUTIL_CRC_H
 #define AVUTIL_CRC_H
 
@@ -26,8 +32,14 @@
 #include "attributes.h"
 
 /**
- * @defgroup lavu_crc32 CRC32
- * @ingroup lavu_crypto
+ * @defgroup lavu_crc32 CRC
+ * @ingroup lavu_hash
+ * CRC (Cyclic Redundancy Check) hash function implementation.
+ *
+ * This module supports numerous CRC polynomials, in addition to the most
+ * widely used CRC-32-IEEE. See @ref AVCRCId for a list of available
+ * polynomials.
+ *
  * @{
  */
 
@@ -40,7 +52,8 @@ typedef enum {
     AV_CRC_32_IEEE,
     AV_CRC_32_IEEE_LE,  /*< reversed bitorder version of AV_CRC_32_IEEE */
     AV_CRC_16_ANSI_LE,  /*< reversed bitorder version of AV_CRC_16_ANSI */
-    AV_CRC_24_IEEE = 12,
+    AV_CRC_24_IEEE,
+    AV_CRC_8_EBU,
     AV_CRC_MAX,         /*< Not part of public API! Do not use outside libavutil. */
 }AVCRCId;
 
@@ -71,7 +84,10 @@ const AVCRC *av_crc_get_table(AVCRCId crc_id);
 
 /**
  * Calculate the CRC of a block.
+ * @param ctx initialized AVCRC array (see av_crc_init())
  * @param crc CRC of previous blocks if any or initial value for CRC
+ * @param buffer buffer whose CRC to calculate
+ * @param length length of the buffer
  * @return CRC updated with the data from the given block
  *
  * @see av_crc_init() "le" parameter

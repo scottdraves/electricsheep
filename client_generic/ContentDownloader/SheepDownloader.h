@@ -59,8 +59,6 @@ class SheepDownloader
 	
 	bool m_bAborted;
 	
-	Network::spCFileDownloader m_spSheepDownloader;
-	
 	boost::mutex m_AbortMutex;
 	
 	protected:

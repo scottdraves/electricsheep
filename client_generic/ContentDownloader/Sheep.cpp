@@ -107,8 +107,10 @@ Sheep::setURL(const char *url)
 
 	if(url)
 	{
-		fURL = new char[strlen(url) + 1];
-		strcpy(fURL, url);
+        //we should use only https://
+        fURL = new char[strlen(url) + 2];
+        strcpy(fURL, "https");
+		strcat(fURL, strchr(url, ':'));
 	}
 }
 

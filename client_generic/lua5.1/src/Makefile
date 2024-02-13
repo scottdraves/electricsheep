@@ -116,7 +116,7 @@ solaris:
 	$(MAKE) all MYCFLAGS="-DLUA_USE_POSIX -DLUA_USE_DLOPEN" MYLIBS="-ldl"
 	
 macosx:
-	$(MAKE) all MYCFLAGS="-DLUA_USE_POSIX -DLUA_USE_DLOPENÊ-mmacosx-version-min=10.4Ê-isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386" "MYLDFLAGS=-Wl -syslibroot,/Developer/SDKs/MacOSX10.4u.sdk -arch i386"
+	$(MAKE) all MYCFLAGS="-DLUA_USE_POSIX -DLUA_USE_DLOPEN -mmacos-version-min=11.0 -arch x86_64" MYLDFLAGS="-mmacos-version-min=11.0 -arch x86_64"
 
 
 # list targets that do not create files (but not all makes understand .PHONY)

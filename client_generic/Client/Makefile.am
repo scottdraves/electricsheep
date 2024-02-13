@@ -7,6 +7,7 @@ endif
 AM_CPPFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
+	-DGL_GLEXT_PROTOTYPES \
 	-I $(top_srcdir) \
 	-iquote ../DisplayOutput/OpenGL \
 	-I ../Common \

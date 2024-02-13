@@ -3,7 +3,7 @@
 #include	<list>
 
 #include	<boost/thread.hpp>
-#include	<boost/bind.hpp>
+#include	<boost/bind/bind.hpp>
 
 #include	<curl/curl.h>
 #include	<curl/easy.h>

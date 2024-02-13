@@ -202,7 +202,6 @@ void electricsheepguiMyDialog2::SaveSettings()
 }
 
 #include <boost/filesystem.hpp>
-using namespace boost::filesystem;
 
 uint64 GetFlockSizeBytes(wxString mpegpath, int sheeptype)
 {
@@ -213,12 +212,12 @@ uint64 GetFlockSizeBytes(wxString mpegpath, int sheeptype)
 	try {
 	boost::filesystem::path p(mpegpath.ToStdString());
 
-	directory_iterator end_itr; // default construction yields past-the-end
-	for ( directory_iterator itr( p );
+	boost::filesystem::directory_iterator end_itr; // default construction yields past-the-end
+	for ( boost::filesystem::directory_iterator itr( p );
 			itr != end_itr;
 			++itr )
 	{
-		if (!is_directory(itr->status()))
+		if (!boost::filesystem::is_directory(itr->status()))
 		{
 			std::string fname(itr->path().filename().string());
 			if (itr->path().extension() == std::string(".avi"))

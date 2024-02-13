@@ -127,11 +127,6 @@ dnl Check for avcodec
 
 PKG_CHECK_MODULES([AVCODEC],[libavcodec])
 
-dnl Check for avcodec_decode_video2
-AC_CHECK_LIB([avcodec],[avcodec_decode_video2],HAVE_AVC_VID2=true,HAVE_AVC_VID2=false)
-
-AM_CONDITIONAL(HAVE_AVC_VID2,$HAVE_AVC_VID2)
-
 AC_SUBST(AVCODEC_CFLAGS)
 AC_SUBST(AVCODEC_LIBS)
 
@@ -143,8 +138,6 @@ PKG_CHECK_MODULES(AVFORMAT,libavformat)
 
 AC_SUBST(AVFORMAT_CFLAGS)
 AC_SUBST(AVFORMAT_LIBS)
-
-AC_CHECK_LIB([avformat], [av_open_input_file], AC_DEFINE([USE_OLD_FFMPEG_API]), AC_DEFINE([USE_NEW_FFMPEG_API]))
 
 dnl Check for swscale
 

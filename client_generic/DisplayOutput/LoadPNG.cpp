@@ -42,7 +42,11 @@ bool	CImage::LoadPNG( const std::string &_fileName, const bool _wantMipMaps )
 	}
 
 	// first check the eight byte PNG signature
-	fread( pbSig, 1, 8, file );
+	size_t signature_nmemb_read = fread(pbSig, 1, 8, file);
+    if (signature_nmemb_read < 8) {
+      g_Log->Warning("Failed to read PNG signature from %s", _fileName.c_str());
+      return false;
+    }
 	if( png_sig_cmp( pbSig, 0, 8 ) != 0)
 	{
 		g_Log->Warning( "%s doesn't have a valid png signature...", _fileName.c_str() );

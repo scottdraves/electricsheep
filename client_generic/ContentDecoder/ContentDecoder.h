@@ -28,6 +28,7 @@ extern "C"{
 #if defined(WIN32) || defined(MAC) || defined (LINUX_GNU)
 	#include "libavcodec/avcodec.h"
 	#include "libavformat/avformat.h"
+	#include "libavutil/imgutils.h"
 	#include "libswscale/swscale.h"
 #else
 	#include "avcodec.h"
@@ -42,7 +43,7 @@ extern "C"{
 #include	"boost/thread/thread.hpp"
 #include	"boost/thread/mutex.hpp"
 #include	"boost/thread/xtime.hpp"
-#include	"boost/bind.hpp"
+#include	"boost/bind/bind.hpp"
 #include	"Frame.h"
 #include	"Playlist.h"
 #include	"BlockingQueue.h"
@@ -56,6 +57,7 @@ struct sOpenVideoInfo
 	:	m_pFrame(NULL),
 		m_pFormatContext(NULL),
 		m_pVideoCodecContext(NULL),
+		m_pVideoCodecParameters(NULL),
 		m_pVideoCodec(NULL),
 		m_pVideoStream(NULL),
 		m_VideoStreamID(-1),
@@ -77,6 +79,7 @@ struct sOpenVideoInfo
 	:	m_pFrame(NULL),
 		m_pFormatContext(NULL),
 		m_pVideoCodecContext(NULL),
+		m_pVideoCodecParameters(NULL),
 		m_pVideoCodec(NULL),
 		m_pVideoStream(NULL),
 		m_VideoStreamID(-1),
@@ -104,21 +107,12 @@ struct sOpenVideoInfo
 
 		if( m_pFormatContext )
 		{
-#ifdef USE_NEW_FFMPEG_API
 			avformat_close_input( &m_pFormatContext );
-#else
-			av_close_input_file( m_pFormatContext );
-			m_pFormatContext = NULL;
-#endif  // USE_NEW_FFMPEG_API
 		}
 		
 		if ( m_pFrame )
 		{
-#ifdef USE_NEW_FFMPEG_ALLOC_API
 			av_frame_free( &m_pFrame );
-#else
-			avcodec_free_frame( &m_pFrame );
-#endif
 			m_pFrame = NULL;
 		}
 	}
@@ -145,7 +139,8 @@ struct sOpenVideoInfo
 	AVFrame			*m_pFrame;
 	AVFormatContext	*m_pFormatContext;
 	AVCodecContext	*m_pVideoCodecContext;
-	AVCodec			*m_pVideoCodec;
+	AVCodecParameters	*m_pVideoCodecParameters;
+	const AVCodec			*m_pVideoCodec;
 	AVStream		*m_pVideoStream;
 	int32			m_VideoStreamID;
 	uint32			m_totalFrameCount;

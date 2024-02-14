@@ -8,7 +8,7 @@
 # Introduction
 The Electric Sheep is a cyborg mind. It harnesses the collective intelligence of 450,000 computers and people to create abstract art with mathematics and Darwinian evolution. The result is seamless, organic, and infinite. 
 
-Electric Sheep is an open source project for anyone to use to customize and personalize their screen savers. By compiling and running the instructions of this project, you will have access to different artworks, or Sheeps which will appear on your computer after it falls asleep. Visit the official main website at http://electricsheep.org or the founder's website at http://scottdraves.comfor more detailed information on this project! 
+Electric Sheep is an open source project for anyone to use to customize and personalize their screen savers. By compiling and running the instructions of this project, you will have access to different artworks, or Sheeps which will appear on your computer after it falls asleep. Visit the official main website at http://electricsheep.org or the founder's website at http://scottdraves.com for more detailed information on this project! 
 
 # How to Use
 In this current Github, you will find some executable files an

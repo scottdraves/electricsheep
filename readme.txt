@@ -1,3 +1,6 @@
+Project has moved to https://github.com/e-dream-ai/client
+This repository is now an archive only.
+
 # Table of Contents
 -Introduction
 -How to Use

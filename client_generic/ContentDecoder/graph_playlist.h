@@ -13,13 +13,11 @@
 
 #include	"boost/filesystem/path.hpp"
 #include	"boost/filesystem/operations.hpp"
-#include	"boost/filesystem/convenience.hpp"
 
 using boost::filesystem::path;
 using boost::filesystem::exists;
 using boost::filesystem::no_check;
 using boost::filesystem::directory_iterator;
-using boost::filesystem::extension;
 
 namespace ContentDecoder
 {
@@ -116,7 +114,7 @@ class	CGraphPlaylist : public CPlaylist
 		for( directory_iterator i( _dir ), end; i != end; ++i )
 		{
 			#warning TODO (Keffo#1#): Remove hardcoded extension...
-			if( extension(*i) != ".avi" )
+			if( i->extension().string() != ".avi" )
 				continue;
 
 			std::string file = i->string();

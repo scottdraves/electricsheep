@@ -4,7 +4,7 @@
 #ifndef LINUX_GNU
 #include "GLee.h"
 #else
-#include <GLee.h>
+#include <GL/glew.h>
 #endif
 #ifdef MAC
 #include <OpenGL/CGLMacro.h>
@@ -210,9 +210,9 @@ bool	CTextureFlatGL::Upload( spCImage _spImage )
 #endif
 			
 #ifndef LINUX_GNU
-			if( GLEE_ARB_texture_non_power_of_two || m_TexTarget == GL_TEXTURE_RECTANGLE_EXT )
+			if( GLEW_ARB_texture_non_power_of_two || m_TexTarget == GL_TEXTURE_RECTANGLE_EXT )
 #else
-			if( GLEE_ARB_texture_non_power_of_two || m_TexTarget == GL_TEXTURE_RECTANGLE_ARB )
+			if( GLEW_ARB_texture_non_power_of_two || m_TexTarget == GL_TEXTURE_RECTANGLE_ARB )
 
 #endif
 			{

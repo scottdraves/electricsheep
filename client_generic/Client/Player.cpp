@@ -12,7 +12,7 @@
 #ifndef LINUX_GNU
 #include	"GLee.h"
 #else
-#include <GLee.h>
+#include <GL/glew.h>
 #include <endian.h>
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define __LITTLE_ENDIAN__ __LITTLE_ENDIAN
@@ -231,7 +231,16 @@ bool CPlayer::AddDisplay( uint32 screen )
 		return false;
 #endif
 	
- 	spRenderer = new CRendererGL();
+
+	// Initialize GLEW now that we have a GL context
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		g_Log->Error("GLEW Init failed: %s", (const char*)glewGetErrorString(err));
+		return false;
+	}
+
+	spRenderer = new CRendererGL();
 #endif
 
 	//	Start renderer & set window title.
@@ -643,9 +652,10 @@ bool	CPlayer::Update(uint32 displayUnit, bool &bPlayNoSheepIntro)
 		du = m_displayUnits[ displayUnit ];
 	}
 
-	du->spRenderer->Reset( eEverything );
-	du->spRenderer->Orthographic();
-	du->spRenderer->Apply();
+	// No longer needed, as we're using GLEW to initialize the GL context
+	//du->spRenderer->Reset( eEverything );
+	//du->spRenderer->Orthographic();
+	//du->spRenderer->Apply();
 	
 	{
 		boost::mutex::scoped_lock lockthis( m_updateMutex );

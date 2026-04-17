@@ -13,7 +13,8 @@
 #ifndef LINUX_GNU
 #include "GLee.h"
 #else
-#include <GLee.h>
+#include <GL/glew.h>
+#include <GL/glx.h>
 #endif
 #include "DisplayOutput.h"
 

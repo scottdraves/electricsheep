@@ -418,7 +418,7 @@ void electricsheepguiMyDialog2::Login()
     FireLoginStatusUpdateEvent("...talking...");
 	wxMutexGuiLeave();
 
-	m_Role == "error";
+	m_Role = "error";
 	long code = 0;
 	m_Response.clear();
 	if (code = curl_easy_perform(pCurl) == CURLE_OK)

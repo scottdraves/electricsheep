@@ -3,7 +3,7 @@
 #ifndef LINUX_GNU
 #include	"./OpenGL/GLee.h"
 #else
-#include <GLee.h>
+#include <GL/glew.h>
 #endif
 #ifdef MAC
 #include	<OpenGL/CGLMacro.h>

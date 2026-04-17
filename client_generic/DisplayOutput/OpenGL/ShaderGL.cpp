@@ -6,7 +6,7 @@
 #include	"./OpenGL/GLee.h"
 #include <OpenGL/CGLMacro.h>
 #else
-#include<GLee.h>
+#include <GL/glew.h>
 #endif
 
 #include	"Exception.h"
@@ -97,7 +97,7 @@ bool	CShaderGL::Build( const char *_pVertexShader, const char *_pFragmentShader 
 	GLint len, infoLogPos = 0;
 
 	//	Compile to the highest supported language version.
-	if( GLEE_ARB_shading_language_100 )
+	if( GLEW_ARB_shading_language_100 )
 	{
 		static char versionString[ 16 ];
 		static bool bFirst = true;
@@ -369,8 +369,8 @@ bool	CShaderUniformGL::SetData( void *_pData, const uint32 _size )
 	return true;
 }
 
-typedef GLvoid (APIENTRY *Uniform_Func)(GLint location, GLsizei count, const void *value);
-typedef GLvoid (APIENTRY *Uniform_MatrixFunc)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+typedef GLvoid (*Uniform_Func)(GLint location, GLsizei count, const void *value);
+typedef GLvoid (*Uniform_MatrixFunc)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
 
 /*
 */

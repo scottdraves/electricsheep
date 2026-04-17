@@ -464,14 +464,22 @@ void CUnixGL::alwaysOnTop()
 */
 void CUnixGL::toggleVSync()
 {
-    m_VSync = !m_VSync;
-
-    if( GLEE_GLX_SGI_swap_control )
+    // Check if the swap control extension is available
+    const char *extensions = glXQueryExtensionsString(m_pDisplay, DefaultScreen(m_pDisplay));
+    if (strstr(extensions, "GLX_EXT_swap_control") != NULL)
     {
-        if( m_VSync )
-            glXSwapIntervalSGI(1);
-        else
-            glXSwapIntervalSGI(2);
+        // Get the function pointer for glXSwapIntervalEXT
+        PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT =
+            (PFNGLXSWAPINTERVALEXTPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalEXT");
+
+        if (glXSwapIntervalEXT)
+        {
+            int interval = 0;
+            if (m_VSync == 1) interval = 1;
+            else if (m_VSync == 2) interval = 2;
+
+            glXSwapIntervalEXT(m_pDisplay, m_GlxWindow, interval);
+        }
     }
 }
 

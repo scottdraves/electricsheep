@@ -212,13 +212,6 @@ AC_SUBST(PNG_LIBS)
 
 
 
-dnl Check for Xrender
-
-PKG_CHECK_MODULES(XRENDER,xrender)
-
-AC_SUBST(XRENDER_CFLAGS)
-AC_SUBST(XRENDER_LIBS)
-
 
 # Check for flam3-animate
 AC_PATH_PROG(FLAM3_ANIMATE, flam3-animate, no)
@@ -332,9 +325,78 @@ AC_CHECK_LIB([rt],[clock_gettime],,
 	[AC_MSG_ERROR([you must install librt to compile electricsheep.])
 ])
 
+dnl Add flag x11
+AC_ARG_WITH([x11],
+            [AS_HELP_STRING([--with-x11], [Build with X11 support])],
+            [with_x11=$withval], [with_x11=yes])
 
+AM_CONDITIONAL([WITH_X11], [test "$with_x11" = "yes"])
 
-AC_OUTPUT([ 
+dnl Check for Xrender
+if test "$with_x11" = "yes"; then
+    AC_CHECK_HEADERS([X11/Xlib.h], , AC_MSG_ERROR([Xlib.h not found. Install X11 development libraries.]))
+    PKG_CHECK_MODULES(XRENDER, xrender)
+    PKG_CHECK_MODULES([XRENDER], xrender, [
+      AC_DEFINE([HAVE_X11], [1], [Define if X11 is available])
+      XRENDER_CFLAGS="$XRENDER_CFLAGS"
+      XRENDER_LIBS="$XRENDER_LIBS"
+    ])
+    AC_SUBST(XRENDER_CFLAGS)
+    AC_SUBST(XRENDER_LIBS)
+fi
+
+dnl Add flag wayland
+AC_ARG_WITH([wayland],
+            [AS_HELP_STRING([--with-wayland], [Build with Wayland support])],
+            [with_wayland=$withval], [with_wayland=no])
+AM_CONDITIONAL([WITH_WAYLAND], [test "$with_wayland" = "yes"])
+
+dnl Check for Wayland and EGL
+if test "$with_wayland" = "yes"; then
+  PKG_CHECK_MODULES([WAYLAND], [wayland-client >= 1.0 wayland-egl >= 1.0 egl >= 1.0], [
+    AC_DEFINE([HAVE_WAYLAND], [1], [Define if Wayland and EGL are available])
+    WAYLAND_CFLAGS="$WAYLAND_CFLAGS"
+    WAYLAND_LIBS="$WAYLAND_LIBS"
+  ])
+
+  AC_SUBST(WAYLAND_CFLAGS)
+  AC_SUBST(WAYLAND_LIBS)
+
+  dnl check for wayland scanner and save its path
+  PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner >= 1.14.0])
+  AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner], [no])
+  if test "x$WAYLAND_SCANNER" = "xno"; then
+    AC_MSG_ERROR([wayland-scanner is required but not found. Please install wayland-scanner.])
+  fi
+  AC_SUBST([WAYLAND_SCANNER])
+
+  dnl check for libxkbcommon
+  PKG_CHECK_MODULES([XKBCOMMON], [xkbcommon >= 0.5.0])
+  AC_SUBST(XKBCOMMON_CFLAGS)
+  AC_SUBST(XKBCOMMON_LIBS)
+
+  dnl Add flag libdecor
+  AC_ARG_WITH([libdecor],
+    [AS_HELP_STRING([--with-libdecor],
+    [Use libdecor for client side window decoration if compositor does not support server side decorations])],
+    [use_libdecor=$withval], [use_libdecor=yes])
+
+  dnl Check for libdecor
+  if test "x$use_libdecor" = "xyes"; then
+    PKG_CHECK_MODULES([LIBDECOR], [libdecor-0])
+    AC_SUBST([LIBDECOR_CFLAGS])
+    AC_SUBST([LIBDECOR_LIBS])
+    AC_DEFINE([HAVE_LIBDECOR], [1], [Define if libdecor is available])
+  else
+    AC_MSG_WARN([Building for wayland without libdecor support. Window will not have title bar compositors that do not support server side decorations.])
+  fi
+fi
+
+if test "$IS_LINUX_GNU" = "true" && test "$with_x11" = "no" && test "$with_wayland" = "no"; then
+    AC_MSG_ERROR([On GNU/Linux, either --with-x11 or --with-wayland must be set.])
+fi
+
+AC_OUTPUT([
 Makefile
 Client/Makefile
 MSVC/SettingsGUI/Makefile

@@ -28,3 +28,6 @@ client_generic/depcomp
 client_generic/install-sh
 client_generic/libtool
 client_generic/ltmain.sh
+client_generic/configure\~
+client_generic/DisplayOutput/OpenGL/*protocol.c
+client_generic/DisplayOutput/OpenGL/*protocol.h

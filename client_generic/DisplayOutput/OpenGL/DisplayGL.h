@@ -11,6 +11,9 @@
 	#include	"mgl.h"
 #else
 	#include	"glx.h"
+#ifdef HAVE_WAYLAND
+	#include	"egl.h"
+#endif
 #endif
 #endif
 

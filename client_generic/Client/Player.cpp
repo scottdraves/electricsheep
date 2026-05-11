@@ -58,9 +58,14 @@
 #include	"LinearFrameDisplay.h"
 #include	"CubicFrameDisplay.h"
 
+#include	<boost/version.hpp>
 #include	"boost/filesystem/path.hpp"
 #include	"boost/filesystem/operations.hpp"
+#if BOOST_VERSION < 108500
 #include	"boost/filesystem/convenience.hpp"
+#else // BOOST_VERSION >= 1.85
+#include	"boost/filesystem/directory.hpp"
+#endif
 
 #if defined(MAC) || defined(WIN32)
 	#define HONOR_VBL_SYNC
@@ -69,7 +74,9 @@
 using boost::filesystem::path;
 using boost::filesystem::exists;
 using boost::filesystem::directory_iterator;
+#if BOOST_VERSION < 108500
 using boost::filesystem::extension;
+#endif
 
 using namespace DisplayOutput;
 
